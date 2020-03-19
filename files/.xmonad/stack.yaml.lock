@@ -18,6 +18,13 @@ packages:
       sha256: f867a93991b791adf4c65bb91f385effee7e18bd78d8e0a61fd03f42f6073705
   original:
     hackage: iwlib-0.1.0
+- completed:
+    hackage: netlink-1.1.1.0@sha256:d83424b5ba9921191449e4b1f53c7cba7f4375f2c55a9b737c77e982e1f40d00,3689
+    pantry-tree:
+      size: 1598
+      sha256: 42a57a2db0d8b44e04a04905ed56994b7293d2f244595bf3e65480c36d114ac3
+  original:
+    hackage: netlink-1.1.1.0
 snapshots:
 - completed:
     size: 491163

@@ -1,6 +1,8 @@
 {-# Language ScopedTypeVariables #-}
 -- Imports -------------------------------------------------------- {{{ 
 import qualified Data.Map as M
+import qualified Data.Maybe as Maybe
+import qualified System.IO as SysIO
 import Text.Read (readMaybe)
 import Data.Char (isDigit)
 import qualified Data.Monoid
@@ -9,31 +11,33 @@ import qualified DBus.Client as D
 import qualified Codec.Binary.UTF8.String as UTF8
 
 import XMonad hiding ((|||))
+import qualified XMonad.Util.Dmenu as Dmenu
 import qualified XMonad.StackSet as W
-import XMonad.ManageHook
-import XMonad.Util.NamedScratchpad
-import XMonad.Hooks.ManageDocks
-import XMonad.Hooks.DynamicLog
-import XMonad.Hooks.FadeInactive
-import XMonad.Hooks.SetWMName (setWMName)
-import XMonad.Hooks.DynamicProperty
+import XMonad.Actions.CopyWindow
+import XMonad.Actions.Submap
 import XMonad.Config.Desktop
-import qualified XMonad.Layout.LayoutCombinators as LayoutCombinators
-import XMonad.Layout.LayoutCombinators ((|||))
+import XMonad.Hooks.DynamicLog
+import XMonad.Hooks.DynamicProperty
+import XMonad.Hooks.FadeInactive
+import XMonad.Hooks.ManageDocks
+import XMonad.Hooks.SetWMName (setWMName)
 import XMonad.Layout.Gaps
+import XMonad.Layout.Grid               -- for additional grid layout
+import XMonad.Layout.LayoutCombinators ((|||))
+import XMonad.Layout.MouseResizableTile -- for mouse control
+import XMonad.Layout.NoBorders          -- for fullscreen without borders
 import XMonad.Layout.Renamed
-import XMonad.Layout.ToggleLayouts
+import XMonad.Layout.ResizableTile      -- for resizeable tall layout
 import XMonad.Layout.Spacing
 import XMonad.Layout.Spiral
-import XMonad.Layout.ResizableTile      -- for resizeable tall layout
-import XMonad.Layout.MouseResizableTile -- for mouse control
 import XMonad.Layout.ThreeColumns       -- for three column layout
-import XMonad.Layout.Grid               -- for additional grid layout
-import XMonad.Layout.NoBorders          -- for fullscreen without borders
+import XMonad.Layout.ToggleLayouts
+import XMonad.ManageHook
 import XMonad.Util.EZConfig (additionalKeys, additionalKeysP)
-import XMonad.Util.Run (safeSpawn)
+import XMonad.Util.NamedScratchpad
+import XMonad.Util.Run (safeSpawn, spawnPipe, runProcessWithInput)
 import XMonad.Util.SpawnOnce (spawnOnce)
-import XMonad.Actions.CopyWindow
+import qualified XMonad.Layout.LayoutCombinators as LayoutCombinators
 
 -- }}} 
 
@@ -131,14 +135,31 @@ myKeys = [ ("M-<Up>",     sendMessage MirrorExpand)
          , ("M-S-p",      spawn "rofi -combi-modi drun,window -show combi")
          , ("M-b",        spawn myBrowser)
          , ("M-s",        spawn "/home/leon/scripts/rofi-search.sh")
-         ] ++ [("M-C-" ++ wsp, windows $ copy wsp) | wsp <- map show [1..9]]
+
+         , ("M-e",        promptExecute)
+         ] ++ copyToWorkspaceMappings
   where
+    copyToWorkspaceMappings :: [(String, X())]
+    copyToWorkspaceMappings = [("M-C-" ++ wsp, windows $ copy wsp) | wsp <- map show [1..9]]
+
     toggleFullscreen :: X ()
     toggleFullscreen = do
       sendMessage ToggleLayout                  -- toggle fullscreen layout
       sendMessage ToggleStruts                  -- bar is hidden -> no need to make place for it
       sendMessage ToggleGaps                    -- show a small gap around the window
       safeSpawn "polybar-msg" ["cmd", "toggle"] -- toggle polybar visibility
+
+
+    specialCommands :: [(String,  X ())]
+    specialCommands =
+      [ ("toggleSpacing", toggleWindowSpacingEnabled)
+      , ("toggleGaps",    sendMessage ToggleGaps)
+      ]
+
+    promptExecute :: X ()
+    promptExecute = do
+      selection <- Dmenu.menuMapArgs "rofi" ["-dmenu", "-i"] $ M.fromList specialCommands -- -i -> case-insensitive
+      Maybe.fromMaybe (return ()) selection
 
 -- }}}
 
@@ -176,8 +197,6 @@ main = do
 
 -- POLYBAR Kram -------------------------------------- {{{
 
-foo :: String 
-foo = 12
 
 polybarPP :: D.Client -> PP
 polybarPP dbus = namedScratchpadFilterOutWorkspacePP $ def

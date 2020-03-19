@@ -39,6 +39,7 @@ packages:
 extra-deps:
  - dbus-1.2.12
  - iwlib-0.1.0 # for xmobar with all_extensions
+ - netlink-1.1.1.0 # for xmobar with all_extensions
 # - acme-missiles-0.3
 # - git: https://github.com/commercialhaskell/stack.git
 #   commit: e7b331f14bcffb8367cd58fbfc8b40ec7642100a
