@@ -1,5 +1,5 @@
 {-# Language ScopedTypeVariables #-}
--- Imports -------------------------------------------------------- {{{
+-- Imports -------------------------------------------------------- {{{ 
 import qualified Data.Map as M
 import Text.Read (readMaybe)
 import Data.Char (isDigit)
@@ -42,7 +42,7 @@ import XMonad.Actions.CopyWindow
 myModMask  = mod4Mask
 myLauncher = "rofi -show run"
 myTerminal = "termite"
-myBrowser = "chromium"
+myBrowser = "google-chrome-stable"
 --yBar = "xmobar"
 --myXmobarPP= xmobarPP { ppCurrent = xmobarColor "#429942" "" . wrap "<" ">" }
 
@@ -50,7 +50,7 @@ scratchpads :: [NamedScratchpad]
 scratchpads = 
   [ NS "terminal" (myTerminal ++ " --class scratchpad_term") (className =? "scratchpad_term") 
     (customFloating $ W.RationalRect 0 0.7 1 0.3)
-  , NS "ghci"   (myTerminal ++ " -e ghci --class scratchpad_ghci") (className =? "scratchpad_ghci") 
+  , NS "ghci"   (myTerminal ++ " -e \"stack exec -- ghci\" --class scratchpad_ghci") (className =? "scratchpad_ghci") 
     (customFloating $ W.RationalRect 0 0.7 1 0.3)
   ]
 
@@ -176,6 +176,9 @@ main = do
 
 -- POLYBAR Kram -------------------------------------- {{{
 
+foo :: String 
+foo = 12
+
 polybarPP :: D.Client -> PP
 polybarPP dbus = namedScratchpadFilterOutWorkspacePP $ def
   { ppOutput  = dbusOutput dbus
@@ -211,3 +214,4 @@ dbusOutput dbus str = do
     memberName = D.memberName_ "Update"
 
 -- }}}
+

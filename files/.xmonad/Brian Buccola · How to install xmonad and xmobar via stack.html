@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<!-- saved from url=(0068)https://brianbuccola.com/how-to-install-xmonad-and-xmobar-via-stack/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Site info -->
+        <title>Brian Buccola · How to install xmonad and xmobar via stack</title>
+        
+
+        <!-- Styling -->
+        <link rel="stylesheet" href="./Brian Buccola · How to install xmonad and xmobar via stack_files/default.css">
+        <link rel="stylesheet" href="./Brian Buccola · How to install xmonad and xmobar via stack_files/syntax.css">
+
+        <!-- Feeds -->
+        <link rel="alternate" type="application/atom+xml" href="https://brianbuccola.com/atom.xml" title="Brian Buccola">
+        <link rel="alternate" type="application/rss+xml" href="https://brianbuccola.com/rss.xml" title="Brian Buccola">
+
+        <!-- Fonts -->
+        <link href="./Brian Buccola · How to install xmonad and xmobar via stack_files/css" rel="stylesheet">
+        <link href="./Brian Buccola · How to install xmonad and xmobar via stack_files/css(1)" rel="stylesheet">
+        <link href="./Brian Buccola · How to install xmonad and xmobar via stack_files/css(2)" rel="stylesheet">
+
+        <!-- MathJax -->
+        <script async="" src="./Brian Buccola · How to install xmonad and xmobar via stack_files/analytics.js"></script><script type="text/javascript" async="" src="./Brian Buccola · How to install xmonad and xmobar via stack_files/latest.js">
+        </script>
+
+        <!-- Google Analytics -->
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-70938601-1', 'auto');
+            ga('send', 'pageview');
+        </script><script type="text/javascript" async="" src="./Brian Buccola · How to install xmonad and xmobar via stack_files/MathJax.js"></script><style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Menu_Button .MathJax_Hover_Arrow {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -khtml-border-radius: 4px; font-family: 'Courier New',Courier; font-size: 9px; color: #F0F0F0}
+.MathJax_Menu_Button .MathJax_Hover_Arrow span {display: block; background-color: #AAA; border: 1px solid; border-radius: 3px; line-height: 0; padding: 4px}
+.MathJax_Hover_Arrow:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_Hover_Arrow:hover span {background-color: #CCC!important}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_About.MathJax_MousePost {outline: none}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 5px 0px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 5px; -webkit-border-radius: 5px; -moz-border-radius: 5px; -khtml-border-radius: 5px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 1px 2em; background: transparent}
+.MathJax_MenuArrow {position: absolute; right: .5em; padding-top: .25em; color: #666666; font-size: .75em}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuArrow.RTL {left: .5em; right: auto}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuRadioCheck {position: absolute; left: .7em}
+.MathJax_MenuRadioCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuLabel {padding: 1px 2em 3px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #DDDDDD; margin: 4px 3px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: #606872; color: white}
+.MathJax_MenuDisabled:focus, .MathJax_MenuLabel:focus {background-color: #E8E8E8}
+.MathJax_ContextMenu:focus {outline: none}
+.MathJax_ContextMenu .MathJax_MenuItem:focus {outline: none}
+#MathJax_AboutClose {top: .2em; right: .2em}
+.MathJax_Menu .MathJax_MenuClose {top: -10px; left: -10px}
+.MathJax_MenuClose {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; font-family: 'Courier New',Courier; font-size: 24px; color: #F0F0F0}
+.MathJax_MenuClose span {display: block; background-color: #AAA; border: 1.5px solid; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; line-height: 0; padding: 8px 0 6px}
+.MathJax_MenuClose:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_MenuClose:hover span {background-color: #CCC!important}
+.MathJax_MenuClose:hover:focus {outline: none}
+</style><style type="text/css">.MathJax_Preview .MJXf-math {color: inherit!important}
+</style><style type="text/css">.MJX_Assistive_MathML {position: absolute!important; top: 0; left: 0; clip: rect(1px, 1px, 1px, 1px); padding: 1px 0 0 0!important; border: 0!important; height: 1px!important; width: 1px!important; overflow: hidden!important; display: block!important; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none}
+.MJX_Assistive_MathML.MJX_Assistive_MathML_Block {width: 100%!important}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomFrame {position: relative; display: inline-block; height: 0; width: 0}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1em; bottom: 1.5em; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style>
+    <script src="./Brian Buccola · How to install xmonad and xmobar via stack_files/embed.js" data-timestamp="1584623604585"></script><style type="text/css">.MJXp-script {font-size: .8em}
+.MJXp-right {-webkit-transform-origin: right; -moz-transform-origin: right; -ms-transform-origin: right; -o-transform-origin: right; transform-origin: right}
+.MJXp-bold {font-weight: bold}
+.MJXp-italic {font-style: italic}
+.MJXp-scr {font-family: MathJax_Script,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-frak {font-family: MathJax_Fraktur,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-sf {font-family: MathJax_SansSerif,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-cal {font-family: MathJax_Caligraphic,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-mono {font-family: MathJax_Typewriter,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-largeop {font-size: 150%}
+.MJXp-largeop.MJXp-int {vertical-align: -.2em}
+.MJXp-math {display: inline-block; line-height: 1.2; text-indent: 0; font-family: 'Times New Roman',Times,STIXGeneral,serif; white-space: nowrap; border-collapse: collapse}
+.MJXp-display {display: block; text-align: center; margin: 1em 0}
+.MJXp-math span {display: inline-block}
+.MJXp-box {display: block!important; text-align: center}
+.MJXp-box:after {content: " "}
+.MJXp-rule {display: block!important; margin-top: .1em}
+.MJXp-char {display: block!important}
+.MJXp-mo {margin: 0 .15em}
+.MJXp-mfrac {margin: 0 .125em; vertical-align: .25em}
+.MJXp-denom {display: inline-table!important; width: 100%}
+.MJXp-denom > * {display: table-row!important}
+.MJXp-surd {vertical-align: top}
+.MJXp-surd > * {display: block!important}
+.MJXp-script-box > *  {display: table!important; height: 50%}
+.MJXp-script-box > * > * {display: table-cell!important; vertical-align: top}
+.MJXp-script-box > *:last-child > * {vertical-align: bottom}
+.MJXp-script-box > * > * > * {display: block!important}
+.MJXp-mphantom {visibility: hidden}
+.MJXp-munderover, .MJXp-munder {display: inline-table!important}
+.MJXp-over {display: inline-block!important; text-align: center}
+.MJXp-over > * {display: block!important}
+.MJXp-munderover > *, .MJXp-munder > * {display: table-row!important}
+.MJXp-mtable {vertical-align: .25em; margin: 0 .125em}
+.MJXp-mtable > * {display: inline-table!important; vertical-align: middle}
+.MJXp-mtr {display: table-row!important}
+.MJXp-mtd {display: table-cell!important; text-align: center; padding: .5em 0 0 .5em}
+.MJXp-mtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-mlabeledtr {display: table-row!important}
+.MJXp-mlabeledtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mlabeledtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MJXp-scale0 {-webkit-transform: scaleX(.0); -moz-transform: scaleX(.0); -ms-transform: scaleX(.0); -o-transform: scaleX(.0); transform: scaleX(.0)}
+.MJXp-scale1 {-webkit-transform: scaleX(.1); -moz-transform: scaleX(.1); -ms-transform: scaleX(.1); -o-transform: scaleX(.1); transform: scaleX(.1)}
+.MJXp-scale2 {-webkit-transform: scaleX(.2); -moz-transform: scaleX(.2); -ms-transform: scaleX(.2); -o-transform: scaleX(.2); transform: scaleX(.2)}
+.MJXp-scale3 {-webkit-transform: scaleX(.3); -moz-transform: scaleX(.3); -ms-transform: scaleX(.3); -o-transform: scaleX(.3); transform: scaleX(.3)}
+.MJXp-scale4 {-webkit-transform: scaleX(.4); -moz-transform: scaleX(.4); -ms-transform: scaleX(.4); -o-transform: scaleX(.4); transform: scaleX(.4)}
+.MJXp-scale5 {-webkit-transform: scaleX(.5); -moz-transform: scaleX(.5); -ms-transform: scaleX(.5); -o-transform: scaleX(.5); transform: scaleX(.5)}
+.MJXp-scale6 {-webkit-transform: scaleX(.6); -moz-transform: scaleX(.6); -ms-transform: scaleX(.6); -o-transform: scaleX(.6); transform: scaleX(.6)}
+.MJXp-scale7 {-webkit-transform: scaleX(.7); -moz-transform: scaleX(.7); -ms-transform: scaleX(.7); -o-transform: scaleX(.7); transform: scaleX(.7)}
+.MJXp-scale8 {-webkit-transform: scaleX(.8); -moz-transform: scaleX(.8); -ms-transform: scaleX(.8); -o-transform: scaleX(.8); transform: scaleX(.8)}
+.MJXp-scale9 {-webkit-transform: scaleX(.9); -moz-transform: scaleX(.9); -ms-transform: scaleX(.9); -o-transform: scaleX(.9); transform: scaleX(.9)}
+.MathJax_PHTML .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style><link rel="prefetch" as="style" href="https://c.disquscdn.com/next/embed/styles/lounge.91790a929b2fba6bf8967d2204d948d5.css"><link rel="prefetch" as="script" href="https://c.disquscdn.com/next/embed/common.bundle.b9167d06dc7bd01b59d6d6332d6aafa1.js"><link rel="prefetch" as="script" href="https://c.disquscdn.com/next/embed/lounge.bundle.b9f55e00ac59a682cfbac91eadf883d4.js"><link rel="prefetch" as="script" href="https://disqus.com/next/config.js"><script src="./Brian Buccola · How to install xmonad and xmobar via stack_files/alfie.f51946af45e0b561c60f768335c9eb79.js" async="" charset="UTF-8"></script></head>
+    <body>
+        <header>
+            <div class="logo">
+                <a href="https://brianbuccola.com/">Brian Buccola</a>
+            </div>
+            <nav class="nav">
+                <a class="nav" href="https://brianbuccola.com/">Home</a>
+                <a class="nav" href="https://brianbuccola.com/work/">Work</a>
+                <a class="nav" href="https://brianbuccola.com/cv/">CV</a>
+                <a class="nav" href="https://brianbuccola.com/blog/">Blog</a>
+            </nav>
+        </header>
+
+        <main role="main">
+            <h1>How to install xmonad and xmobar via stack</h1>
+            <article>
+    <section class="header">
+        <div class="info">
+            October  4, 2017
+            
+        </div>
+    </section>
+    <section>
+        <p>Arch Linux recently changed their Haskell packages (no more static linking), which broke a bunch of stuff. Specifically, upgrading <code>xmonad-0.13-8</code> → <code>xmonad-0.13-9</code> produces errors when recompiling xmonad, and only downgrading seems to fix the issue; and using <code>cabal-install</code> (<code>cabal install xmonad</code>) with Arch’s <code>ghc</code> likewise produces errors, failing to install xmonad. For those of you coming from Google, the errors are of the format <code>Could not find module ...</code>. See <a href="https://bbs.archlinux.org/viewtopic.php?pid=1739920">here</a> and <a href="https://www.reddit.com/r/xmonad/comments/73z1ew/could_not_find_module/">here</a>, for example.</p>
+<p>In addition, Arch’s xmobar (with <code>xmonad-0.13-8</code>) has been crashing sporadically (segmentation faults), for some reason. See <a href="https://www.reddit.com/r/archlinux/comments/72hf42/xmonadcontrib013_dependency/">here</a>, for instance.</p>
+<p>In this post, I’ll explain how I got xmonad (and xmonad-contrib) and xmobar installed and working – and no xmobar crashes, so far – via <a href="https://www.haskellstack.org/">stack</a>. I’ll try to keep it as short and simple as possible. No in-depth explanations; just a straightforward, step-by-step rundown of what I did. The usual disclaimers (YMMV, etc.) apply.</p>
+<p>I’ll assume you already have an <code>~/.xmonad</code> directory with an <code>xmonad.hs</code> config file. If you don’t use xmobar, this post can still be useful; just ignore the lines/steps that refer to xmobar.</p>
+<h2 id="step-1-get-stack">Step 1: Get stack</h2>
+<p>There are couple ways to get stack. I installed <a href="https://aur.archlinux.org/packages/stack-static/">stack-static</a> from the AUR, because it doesn’t come with any Haskell dependencies.</p>
+<p>If you don’t care about tracking stack with your package manager, then, as the <a href="https://docs.haskellstack.org/en/stable/README/#how-to-install">stack how-to-install</a> explains, just run</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb1-1" title="1"><span class="ex">curl</span> -sSL https://get.haskellstack.org/ <span class="kw">|</span> <span class="fu">sh</span></a></code></pre></div>
+<p>or</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb2-1" title="1"><span class="fu">wget</span> -qO- https://get.haskellstack.org/ <span class="kw">|</span> <span class="fu">sh</span></a></code></pre></div>
+<h2 id="step-2-install-ghc-with-stack">Step 2: Install GHC with stack</h2>
+<p>To build and install Haskell packages, we need GHC. Simply run</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb3-1" title="1"><span class="ex">stack</span> setup</a></code></pre></div>
+<p>to install GHC into <code>~/.stack</code>. Useful for the kind of sandboxing projects that we’re doing with xmonad.</p>
+<p><strong>NB:</strong> You can run <code>stack ghc</code> to do things with GHC, <code>stack ghci</code> to fire up interactive GHC, and so on.</p>
+<h2 id="step-3-get-xmonad-xmonad-contrib-and-xmobar">Step 3: Get xmonad, xmonad-contrib, and xmobar</h2>
+<p>We’ll be turning our <code>~/.xmonad</code> directory into a stack project, so first, head over there.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb4-1" title="1"><span class="bu">cd</span> ~/.xmonad</a></code></pre></div>
+<p>For the remainder of this post, I’ll assume you’re inside <code>~/.xmonad</code>.</p>
+<p>Next, download the xmonad, xmonad-contrib, and xmobar Git repositories, which contain the <code>.cabal</code> and <code>.yaml</code> files that stack will look for in the next step. I like to add <code>-git</code> to their directory names, just as a reminder.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb5-1" title="1"><span class="co"># From inside ~/.xmonad.</span></a>
+<a class="sourceLine" id="cb5-2" title="2"><span class="fu">git</span> clone <span class="st">"https://github.com/xmonad/xmonad"</span> xmonad-git</a>
+<a class="sourceLine" id="cb5-3" title="3"><span class="fu">git</span> clone <span class="st">"https://github.com/xmonad/xmonad-contrib"</span> xmonad-contrib-git</a>
+<a class="sourceLine" id="cb5-4" title="4"><span class="fu">git</span> clone <span class="st">"https://github.com/jaor/xmobar"</span> xmobar-git</a></code></pre></div>
+<p>Your <code>~/.xmonad</code> directory should now contain <code>xmonad-git</code>, <code>xmonad-contrib-git</code>, and <code>xmobar-git</code>, each of which contains a <code>.cabal</code> file and a <code>.yaml</code> file.</p>
+<h2 id="step-4-initialize-stack">Step 4: Initialize stack</h2>
+<p>This step is easy: just run</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb6-1" title="1"><span class="co"># From inside ~/.xmonad.</span></a>
+<a class="sourceLine" id="cb6-2" title="2"><span class="ex">stack</span> init</a></code></pre></div>
+<p>Stack will find the <code>.cabal</code> and <code>.yaml</code> files and auto-create the file <code>stack.yaml</code> for you. It’ll look like this:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode yaml"><code class="sourceCode yaml"><a class="sourceLine" id="cb7-1" title="1"><span class="co"># ~/.xmonad/stack.yaml</span></a>
+<a class="sourceLine" id="cb7-2" title="2"><span class="fu">resolver:</span><span class="at"> lts-9.6</span></a>
+<a class="sourceLine" id="cb7-3" title="3"><span class="fu">packages:</span></a>
+<a class="sourceLine" id="cb7-4" title="4"><span class="kw">-</span> xmobar-git</a>
+<a class="sourceLine" id="cb7-5" title="5"><span class="kw">-</span> xmonad-git</a>
+<a class="sourceLine" id="cb7-6" title="6"><span class="kw">-</span> xmonad-contrib-git</a>
+<a class="sourceLine" id="cb7-7" title="7"><span class="fu">extra-deps:</span><span class="at"> </span><span class="kw">[]</span></a>
+<a class="sourceLine" id="cb7-8" title="8"><span class="fu">flags:</span><span class="at"> </span><span class="kw">{}</span></a>
+<a class="sourceLine" id="cb7-9" title="9"><span class="fu">extra-package-dbs:</span><span class="at"> </span><span class="kw">[]</span></a></code></pre></div>
+<p>At this point, you can modify <code>stack.yaml</code> to add flags, etc. The only change I made was to add the flag <code>all_extensions</code> to xmobar, by changing</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode yaml"><code class="sourceCode yaml"><a class="sourceLine" id="cb8-1" title="1"><span class="fu">flags:</span><span class="at"> </span><span class="kw">{}</span></a></code></pre></div>
+<p>to</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode yaml"><code class="sourceCode yaml"><a class="sourceLine" id="cb9-1" title="1"><span class="fu">flags:</span></a>
+<a class="sourceLine" id="cb9-2" title="2">  <span class="fu">xmobar:</span></a>
+<a class="sourceLine" id="cb9-3" title="3">    <span class="fu">all_extensions:</span><span class="at"> </span><span class="ch">true</span></a></code></pre></div>
+<p>This flag provides all the xmobar bells &amp; whistles, like support for xft, mpd, battery, wifi, etc.</p>
+<p><strong>NB:</strong> If you add the <code>with_iwlib</code> flag (or <code>all_extensions</code>), you’ll need to also install the <a href="http://www.hpl.hp.com/personal/Jean_Tourrilhes/Linux/Tools.html">iwlib</a> C library and headers. In Arch Linux, just install <code>wireless_tools</code>; in Debian-based systems, <code>libiw-dev</code>. Or, in your <code>stack.yaml</code>, change</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode yaml"><code class="sourceCode yaml"><a class="sourceLine" id="cb10-1" title="1"><span class="fu">extra_deps:</span><span class="at"> </span><span class="kw">[]</span></a></code></pre></div>
+<p>to</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode yaml"><code class="sourceCode yaml"><a class="sourceLine" id="cb11-1" title="1"><span class="fu">extra_deps:</span></a>
+<a class="sourceLine" id="cb11-2" title="2">    <span class="kw">-</span> iwlib-0.1.0</a></code></pre></div>
+<p>(The specific version you’ll need will change over time. If <code>stack install</code> from step 5 produces an error, just see what stack recommends.)</p>
+<h2 id="step-5-build-and-install-everything">Step 5: Build and install everything</h2>
+<p>Next, run</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb12-1" title="1"><span class="co"># From inside ~/.xmonad.</span></a>
+<a class="sourceLine" id="cb12-2" title="2"><span class="ex">stack</span> install</a></code></pre></div>
+<p>to build and install xmonad, xmonad-contrib, and xmobar (and all their dependencies). You’ll now have two new binaries, <code>xmonad</code> and <code>xmobar</code>, installed into <code>~/.local/bin</code>.</p>
+<p><strong>NB:</strong> You’ll want to add <code>~/.local/bin</code> to your <code>PATH</code>, if it isn’t already. (If you use a login manager, see Step 9 below.)</p>
+<h2 id="step-6-write-a-build-file">Step 6: Write a build file</h2>
+<p>Since we’re doing everything via stack, rather than ghc directly, <code>xmonad --recompile</code> won’t quite work yet. As of xmonad 0.13, we can write a custom build script, named <code>build</code> and located inside <code>~/.xmonad</code>, which will use stack ghc to recompile xmonad. (Borrowed from <a href="https://github.com/pbrisbin/dotfiles/blob/master/xmonad/build">pbrisbin</a>.)</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb13-1" title="1"><span class="co"># ~/.xmonad/build</span></a>
+<a class="sourceLine" id="cb13-2" title="2"><span class="co">#!/bin/sh</span></a>
+<a class="sourceLine" id="cb13-3" title="3"><span class="bu">exec</span> stack ghc -- \</a>
+<a class="sourceLine" id="cb13-4" title="4">  --make xmonad.hs \</a>
+<a class="sourceLine" id="cb13-5" title="5">  -i \</a>
+<a class="sourceLine" id="cb13-6" title="6">  -ilib \</a>
+<a class="sourceLine" id="cb13-7" title="7">  -fforce-recomp \</a>
+<a class="sourceLine" id="cb13-8" title="8">  -main-is main \</a>
+<a class="sourceLine" id="cb13-9" title="9">  -v0 \</a>
+<a class="sourceLine" id="cb13-10" title="10">  -o <span class="st">"</span><span class="va">$1</span><span class="st">"</span></a></code></pre></div>
+<p>Make sure it’s executable:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb14-1" title="1"><span class="fu">chmod</span> a+x build</a></code></pre></div>
+<h2 id="step-7-recompile-and-restart-xmonad">Step 7: Recompile and restart xmonad</h2>
+<p>You should now be able to recompile and restart xmonad (and xmobar) with</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb15-1" title="1"><span class="ex">xmonad</span> --recompile <span class="kw">&amp;&amp;</span> <span class="ex">xmonad</span> --restart</a></code></pre></div>
+<p><strong>NB:</strong> I had to restart my computer in order for xmobar to start up properly – probably because xmonad couldn’t find the xmobar binary.</p>
+<h2 id="step-8-updating">Step 8: Updating</h2>
+<p>Whenever you update your xmonad, xmonad-contrib, or xmobar repositories, just <code>cd ~/.xmonad</code> and run</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb16-1" title="1"><span class="ex">stack</span> install</a></code></pre></div>
+<p>to rebuild and reinstall everything.</p>
+<p><strong>NB:</strong> If you add a new flag or extra dependencies (in <code>stack.yaml</code>), you may need to run <code>stack clean</code> first.</p>
+<h2 id="step-9-loose-ends-with-login-managers">(Step 9: Loose ends with login managers)</h2>
+<p>If you use a login manager, such as LightDM, then you may need to take some additional steps. I don’t use a login manager, nor do I know much about them, but I’ll use LightDM as the working example since I’ve read a little about it.</p>
+<p>First off, LightDM uses <code>*.desktop</code> files located <code>/usr/share/xsessions</code> to know which desktop environments (or window managers) you have available to choose from. So, you’ll probably need to create <code>xmonad.desktop</code>. The xmonad package from the official Arch repos installs the following file, so you can just copy it verbatim and place it into <code>/usr/share/xsessions</code>:</p>
+<pre class="desktop"><code>[Desktop Entry]
+Encoding=UTF-8
+Type=Application
+Name=Xmonad
+Comment=Lightweight X11 tiled window manager written in Haskell
+Exec=xmonad
+Icon=xmonad
+Terminal=false
+StartupNotify=false
+Categories=Application;</code></pre>
+<p>Second, running <code>xmonad --recompile</code> may not work yet. If it doesn’t, make sure that you’ve added <code>~/.local/bin</code> to your <code>PATH</code> by adding it to one of your shell <em>profile</em> files, such as <code>~/.profile</code> or (if you only use one shell, e.g. Bash) <code>~/.bash_profile</code>, and <em>not</em> to your shell’s configuration file (e.g. <code>~/.bashrc</code>). The reason is that LightDM (and by extension xmonad) is invoked from a login shell, which sources <em>profile</em> files like <code>~/.profile</code>, but not (necessarily) shell config files like <code>~/.bashrc</code>. See <a href="https://superuser.com/questions/183870/difference-between-bashrc-and-bash-profile/183980#183980">this SE thread</a> and <a href="https://www.quora.com/What-is-profile-file-in-Linux">this Quora answer</a> to learn more about the difference.</p>
+<p>If that still doesn’t work, then it’s possible that your login manager doesn’t even source <code>~/.profile</code> (see the end of the SE thread linked above). In that case, a possible fix is to just manually symlink <code>~/.local/bin/xmonad</code> to <code>/usr/bin</code> (since the latter is definitely in your <code>PATH</code>; thanks to Ashesh in the comments below for this fix):</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb18-1" title="1"><span class="fu">ln</span> -s ~/.local/bin/xmonad /usr/bin</a></code></pre></div>
+    </section>
+</article>
+
+<div id="disqus_thread"><iframe id="dsq-app6112" name="dsq-app6112" allowtransparency="true" frameborder="0" scrolling="no" tabindex="0" title="Disqus" width="100%" src="./Brian Buccola · How to install xmonad and xmobar via stack_files/saved_resource.html" style="width: 1px !important; min-width: 100% !important; border: none !important; overflow: hidden !important; height: 388px !important;" horizontalscrolling="no" verticalscrolling="no"></iframe></div>
+<script>
+
+/**
+*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+**/
+
+var disqus_config = function () {
+this.page.url = 'https://brianbuccola.com/./how-to-install-xmonad-and-xmobar-via-stack/';  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = '/./how-to-install-xmonad-and-xmobar-via-stack/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://brianbuccola.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+        </main>
+
+        <footer>
+            Site proudly generated by
+            <a href="https://jaspervdj.be/hakyll">Hakyll</a>
+            and
+            <a href="https://pandoc.org/">Pandoc</a>
+            and served by
+            <a href="https://pages.github.com/">Github Pages</a>.
+        </footer>
+    
+
+<iframe style="display: none;" src="./Brian Buccola · How to install xmonad and xmobar via stack_files/saved_resource(1).html"></iframe></body></html>

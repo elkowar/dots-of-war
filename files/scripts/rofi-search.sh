@@ -12,5 +12,5 @@ if [ $selection = "hoogle" ]; then
   #notify-send "hoogle" "$result"
 elif [ $selection = "google" ]; then
   query=$( rofi -p "search google" -dmenu )
-  firefox "https://google.de/search?q=$query" &
+  $BROWSER "https://google.de/search?q=$query" &
 fi
