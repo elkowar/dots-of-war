@@ -1,10 +1,12 @@
 {-# Language ScopedTypeVariables #-}
 -- Imports -------------------------------------------------------- {{{ 
 import qualified Data.Map as M
+import Data.List (isInfixOf)
 import qualified Data.Maybe as Maybe
 import qualified System.IO as SysIO
 import Text.Read (readMaybe)
 import Data.Char (isDigit)
+import System.Exit (exitWith, ExitCode(ExitSuccess))
 import qualified Data.Monoid
 import qualified DBus as D
 import qualified DBus.Client as D
@@ -16,12 +18,16 @@ import qualified XMonad.StackSet as W
 import XMonad.Actions.CopyWindow
 import XMonad.Actions.Submap
 import XMonad.Config.Desktop
+
+import XMonad.Hooks.EwmhDesktops (ewmh)
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.DynamicProperty
 import XMonad.Hooks.FadeInactive
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.SetWMName (setWMName)
 import XMonad.Layout.Gaps
+import XMonad.Layout.LayoutHints
+import XMonad.Layout.Accordion
 import XMonad.Layout.Grid               -- for additional grid layout
 import XMonad.Layout.LayoutCombinators ((|||))
 import XMonad.Layout.MouseResizableTile -- for mouse control
@@ -33,9 +39,9 @@ import XMonad.Layout.Spiral
 import XMonad.Layout.ThreeColumns       -- for three column layout
 import XMonad.Layout.ToggleLayouts
 import XMonad.ManageHook
-import XMonad.Util.EZConfig (additionalKeys, additionalKeysP)
+import XMonad.Util.EZConfig (additionalKeys, additionalKeysP, removeKeysP)
 import XMonad.Util.NamedScratchpad
-import XMonad.Util.Run (safeSpawn, spawnPipe, runProcessWithInput)
+import XMonad.Util.Run 
 import XMonad.Util.SpawnOnce (spawnOnce)
 import qualified XMonad.Layout.LayoutCombinators as LayoutCombinators
 
@@ -56,7 +62,12 @@ scratchpads =
     (customFloating $ W.RationalRect 0 0.7 1 0.3)
   , NS "ghci"   (myTerminal ++ " -e \"stack exec -- ghci\" --class scratchpad_ghci") (className =? "scratchpad_ghci") 
     (customFloating $ W.RationalRect 0 0.7 1 0.3)
+  , NS "whatsapp" ("gtk-launch chrome-hnpfjngllnobngcgfapefoaidbinmjnm-Default.desktop") (("WhatsApp" `isInfixOf`) <$> title) defaultFloating
   ]
+
+{-| adds the scripts-directory path to the filename of a script |-}
+scriptFile :: String -> String
+scriptFile script = "/home/leon/scripts/" ++ script
 
 -- Colors ------ {{{
 fg        = "#ebdbb2"
@@ -80,7 +91,7 @@ aqua      = "#8ec07c"
 -- }}}
 
 -- Layout ---------------------------------------- {{{
-myLayout =  smartBorders $ withGaps $ withSpacing $ toggleLayouts Full
+myLayout =  smartBorders $ withGaps $ toggleLayouts Full $ withSpacing $ layoutHints 
                       ( ResizableTall 1 (3/100) (1/2) []
                     ||| Mirror (ResizableTall 1 (3/100) (3/4) [])
                     ||| spiral (6/7) -- Grid
@@ -90,12 +101,7 @@ myLayout =  smartBorders $ withGaps $ withSpacing $ toggleLayouts Full
   where 
     -- add spacing between windows
     withSpacing = spacingRaw True (Border 0 0 0 0) True (Border 10 10 10 10) True
-
-    -- add gaps that are disabled by default. 
-    -- these get enabled when fullscreen-mode is toggled, 
-    -- creating a small gap around the window's edges in Fullscreen.
-    withGaps    = gaps' [((L, 10), False),((U, 10), False), ((D, 10), False), ((R, 10), False)]
-
+    withGaps    = gaps' [((L, 10), True),((U, 10), True), ((D, 10), True), ((R, 10), True )]
 -- }}}
 
 -- Loghook -------------------------------------- {{{
@@ -118,25 +124,28 @@ myStartupHook = do
 
 -- Keymap --------------------------------------- {{{
 
+-- Default mappings that need to be removed
+removedKeys :: [String]
+removedKeys = ["M-S-c", "M-S-q"]
+
 myKeys :: [(String, X ())]
-myKeys = [ ("M-<Up>",     sendMessage MirrorExpand)
-         , ("M-<Down>",   sendMessage MirrorShrink)
-         , ("M-S-h",      sendMessage MirrorExpand)
-         , ("M-S-l",      sendMessage MirrorShrink)
+myKeys = [ ("M-C-k",      sendMessage MirrorExpand)
+         , ("M-C-j",      sendMessage MirrorShrink)
          , ("M-f",        toggleFullscreen)
-         -- for copyWindow
-         , ("M-S-c",      kill1)
+         , ("M-S-C-c",    kill1)
          , ("M-S-C-a",    windows copyToAll) -- windows: Modify the current window list with a pure function, and refresh
          , ("M-C-c",      killAllOtherCopies)
+         , ("M-S-C-q",    io $ exitWith ExitSuccess)
+
          -- programs
-         , ("M-g",        namedScratchpadAction scratchpads "terminal")
-         , ("M-S-g",      namedScratchpadAction scratchpads "ghci")
          , ("M-p",        spawn myLauncher)
          , ("M-S-p",      spawn "rofi -combi-modi drun,window -show combi")
+         , ("M-S-e",      spawn "rofi -show emoji -modi emoji")
          , ("M-b",        spawn myBrowser)
-         , ("M-s",        spawn "/home/leon/scripts/rofi-search.sh")
+         , ("M-s",        spawn $ scriptFile "rofi-search.sh")
+         , ("M-n",        (spawn "echo 'n: terminal, h: ghci, w: WhatsApp' | dzen2 -p 1") >> scratchpadSubmap)
+         , ("M-e",        promptExecute specialCommands)
 
-         , ("M-e",        promptExecute)
          ] ++ copyToWorkspaceMappings
   where
     copyToWorkspaceMappings :: [(String, X())]
@@ -146,19 +155,26 @@ myKeys = [ ("M-<Up>",     sendMessage MirrorExpand)
     toggleFullscreen = do
       sendMessage ToggleLayout                  -- toggle fullscreen layout
       sendMessage ToggleStruts                  -- bar is hidden -> no need to make place for it
-      sendMessage ToggleGaps                    -- show a small gap around the window
+      --sendMessage ToggleGaps                    -- show a small gap around the window
       safeSpawn "polybar-msg" ["cmd", "toggle"] -- toggle polybar visibility
 
+    scratchpadSubmap :: X ()
+    scratchpadSubmap = submap $ M.fromList
+      [ ((myModMask, xK_n), namedScratchpadAction scratchpads "terminal")
+      , ((myModMask, xK_h), namedScratchpadAction scratchpads "ghci") 
+      , ((myModMask, xK_w), namedScratchpadAction scratchpads "whatsapp") ]
+     
 
     specialCommands :: [(String,  X ())]
     specialCommands =
       [ ("toggleSpacing", toggleWindowSpacingEnabled)
       , ("toggleGaps",    sendMessage ToggleGaps)
+      , ("screenshot",    spawn $ scriptFile "screenshot.sh")
       ]
 
-    promptExecute :: X ()
-    promptExecute = do
-      selection <- Dmenu.menuMapArgs "rofi" ["-dmenu", "-i"] $ M.fromList specialCommands -- -i -> case-insensitive
+    promptExecute :: [(String, X ())] -> X ()
+    promptExecute commands = do
+      selection <- Dmenu.menuMapArgs "rofi" ["-dmenu", "-i"] $ M.fromList commands -- -i -> case-insensitive
       Maybe.fromMaybe (return ()) selection
 
 -- }}}
@@ -179,7 +195,7 @@ main = do
   D.requestName dbus (D.busName_ "org.xmonad.Log")
       [D.nameAllowReplacement, D.nameReplaceExisting, D.nameDoNotQueue]
 
-  xmonad $ desktopConfig 
+  xmonad $ ewmh $ desktopConfig 
     { terminal    = myTerminal
     , modMask     = myModMask
     , borderWidth = 1
@@ -189,7 +205,7 @@ main = do
     , manageHook  = manageDocks <+> myManageHook <+> (namedScratchpadManageHook scratchpads) <+> manageHook defaultConfig
     , focusedBorderColor = aqua
     , normalBorderColor = "#282828"
-    } `additionalKeysP` myKeys
+    } `removeKeysP` removedKeys `additionalKeysP` myKeys
 
 -- xmonad =<< statusBar myBar myPP toggleStrutsKey myConfig
 

@@ -7,9 +7,9 @@ if [ $selection = "hoogle" ]; then
   package=$( echo $input | sed 's/.*p=//g' )
   [ $package = $query ] && package=""
   #firefox --new-window "https://hoogle.haskell.org/?hoogle=$query&scope=package:$package" &
-  surf "https://hoogle.haskell.org/?hoogle=$query&scope=package:$package" &
-  #result=$( hoogle $query | rofi -p "select" -dmenu | sed 's/^\(.*\) :: .*$/\1/' | sed 's/\ /./g' | xargs hoogle --info )
-  #notify-send "hoogle" "$result"
+  #surf "https://hoogle.haskell.org/?hoogle=$query&scope=package:$package" &
+  result=$( hoogle $query | rofi -p "select" -dmenu | sed 's/^\(.*\) :: .*$/\1/' | sed 's/\ /./g' | xargs hoogle --info )
+  notify-send "hoogle" "$result"
 elif [ $selection = "google" ]; then
   query=$( rofi -p "search google" -dmenu )
   $BROWSER "https://google.de/search?q=$query" &

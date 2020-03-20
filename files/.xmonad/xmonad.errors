@@ -1,20 +1,10 @@
 Stack has not been tested with GHC versions above 8.6, and using 8.8.3, this may fail
 Stack has not been tested with Cabal versions above 2.4, but version 3.0.1.0 was found, this may fail
 
-xmonad.hs:162:7: error:
-    • Couldn't match type ‘Maybe ()’ with ‘()’
-      Expected type: X ()
-        Actual type: X (Maybe ())
-    • In a stmt of a 'do' block: sequenceA selection
-      In the expression:
-        do selection <- Dmenu.menuMapArgs "rofi" ["-dmenu", "-i"]
-                          $ M.fromList specialCommands
-           sequenceA selection
-      In an equation for ‘promptExecute’:
-          promptExecute
-            = do selection <- Dmenu.menuMapArgs "rofi" ["-dmenu", ....]
-                                $ M.fromList specialCommands
-                 sequenceA selection
+xmonad.hs:205:109: warning: [-Wdeprecations]
+    In the use of ‘defaultConfig’
+    (imported from XMonad, but defined in XMonad.Config):
+    Deprecated: "Use def (from Data.Default, and re-exported by XMonad and XMonad.Config) instead."
     |
-162 |       sequenceA selection
-    |       ^^^^^^^^^^^^^^^^^^^
+205 |     , manageHook  = manageDocks <+> myManageHook <+> (namedScratchpadManageHook scratchpads) <+> manageHook defaultConfig
+    |                                                                                                             ^^^^^^^^^^^^^
