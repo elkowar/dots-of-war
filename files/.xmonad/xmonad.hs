@@ -1,7 +1,7 @@
 {-# Language ScopedTypeVariables #-}
 -- Imports -------------------------------------------------------- {{{ 
 import qualified Data.Map as M
-import Data.List (isInfixOf)
+import Data.List (isSuffixOf)
 import qualified Data.Maybe as Maybe
 import qualified System.IO as SysIO
 import Text.Read (readMaybe)
@@ -21,6 +21,7 @@ import XMonad.Config.Desktop
 
 import XMonad.Hooks.EwmhDesktops (ewmh)
 import XMonad.Hooks.DynamicLog
+import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.DynamicProperty
 import XMonad.Hooks.FadeInactive
 import XMonad.Hooks.ManageDocks
@@ -62,7 +63,7 @@ scratchpads =
     (customFloating $ W.RationalRect 0 0.7 1 0.3)
   , NS "ghci"   (myTerminal ++ " -e \"stack exec -- ghci\" --class scratchpad_ghci") (className =? "scratchpad_ghci") 
     (customFloating $ W.RationalRect 0 0.7 1 0.3)
-  , NS "whatsapp" ("gtk-launch chrome-hnpfjngllnobngcgfapefoaidbinmjnm-Default.desktop") (("WhatsApp" `isInfixOf`) <$> title) defaultFloating
+  , NS "whatsapp" ("gtk-launch chrome-hnpfjngllnobngcgfapefoaidbinmjnm-Default.desktop") (("WhatsApp" `isSuffixOf`) <$> title) defaultFloating
   ]
 
 {-| adds the scripts-directory path to the filename of a script |-}
@@ -115,10 +116,10 @@ myLogHook = do
 -- Startuphook ----------------------------- {{{
 
 myStartupHook = do
-  setWMName "LG3D" -- Java stuff hack
   spawnOnce "picom --config ~/.config/picom.conf --no-fading-openclose"
   spawnOnce "pasystray"
   spawn "/home/leon/.config/polybar/launch.sh"
+  setWMName "LG3D" -- Java stuff hack
 
 -- }}}
 
@@ -195,14 +196,15 @@ main = do
   D.requestName dbus (D.busName_ "org.xmonad.Log")
       [D.nameAllowReplacement, D.nameReplaceExisting, D.nameDoNotQueue]
 
-  xmonad $ ewmh $ desktopConfig 
+-- $ ewmh  (kills IntelliJ)
+  xmonad $ desktopConfig 
     { terminal    = myTerminal
     , modMask     = myModMask
     , borderWidth = 1
     , layoutHook  = avoidStruts $ myLayout
     , logHook     = myLogHook <+> logHook desktopConfig  <+> dynamicLogWithPP (polybarPP dbus)
     , startupHook = myStartupHook <+> startupHook desktopConfig
-    , manageHook  = manageDocks <+> myManageHook <+> (namedScratchpadManageHook scratchpads) <+> manageHook defaultConfig
+    , manageHook  = manageDocks <+> myManageHook <+> (namedScratchpadManageHook scratchpads) <+> manageHook defaultConfig <+> (isFullscreen --> doF W.focusDown <+> doFullFloat)
     , focusedBorderColor = aqua
     , normalBorderColor = "#282828"
     } `removeKeysP` removedKeys `additionalKeysP` myKeys
@@ -220,12 +222,12 @@ polybarPP dbus = namedScratchpadFilterOutWorkspacePP $ def
   , ppCurrent = withBG bg2
   , ppVisible = withBG bg2 
   , ppUrgent  = withFG red
-  , ppLayout  = removeWord "Spacing" . withFG purple
+  , ppLayout  = removeWord "Hinted" . removeWord "Spacing" . withFG purple
   , ppHidden  = wrap " " " " . unwords . map wrapOpenWorkspaceCmd . words
   , ppWsSep   = ""
   , ppSep     = " | "
   , ppExtras  = []
-  , ppTitle   = (shorten 40) . withFG aqua
+  , ppTitle   = withFG aqua . (shorten 40)
   }
     where
       removeWord substr = unwords . filter (/= substr) . words 

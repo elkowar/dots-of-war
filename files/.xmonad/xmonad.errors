@@ -1,10 +1,10 @@
 Stack has not been tested with GHC versions above 8.6, and using 8.8.3, this may fail
 Stack has not been tested with Cabal versions above 2.4, but version 3.0.1.0 was found, this may fail
 
-xmonad.hs:205:109: warning: [-Wdeprecations]
+xmonad.hs:207:109: warning: [-Wdeprecations]
     In the use of ‘defaultConfig’
     (imported from XMonad, but defined in XMonad.Config):
     Deprecated: "Use def (from Data.Default, and re-exported by XMonad and XMonad.Config) instead."
     |
-205 |     , manageHook  = manageDocks <+> myManageHook <+> (namedScratchpadManageHook scratchpads) <+> manageHook defaultConfig
+207 |     , manageHook  = manageDocks <+> myManageHook <+> (namedScratchpadManageHook scratchpads) <+> manageHook defaultConfig <+> (isFullscreen --> doF W.focusDown <+> doFullFloat)
     |                                                                                                             ^^^^^^^^^^^^^
