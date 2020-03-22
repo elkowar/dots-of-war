@@ -1,0 +1,15 @@
+name:                my-xmonad
+version:             0.1.0.0
+build-type:          Simple
+cabal-version:       >=1.10
+
+executable my-xmonad
+  main-is:             ../xmonad.hs
+  -- other-modules lists custom modules in my ~/.xmonad/lib/ directory
+  other-modules:
+  build-depends:       base
+                     , xmonad >= 0.13
+                     , xmonad-contrib >= 0.13
+  hs-source-dirs:      lib
+  default-language:    Haskell2010
+  ghc-options:         -Wall -Werror -fno-warn-missing-signatures -threaded

@@ -52,7 +52,8 @@ import qualified XMonad.Layout.LayoutCombinators as LayoutCombinators
 
 myModMask  = mod4Mask
 myLauncher = "rofi -show run"
-myTerminal = "termite"
+--myTerminal = "termite"
+myTerminal = "kitty --single-instance"
 myBrowser = "google-chrome-stable"
 --yBar = "xmobar"
 --myXmobarPP= xmobarPP { ppCurrent = xmobarColor "#429942" "" . wrap "<" ">" }

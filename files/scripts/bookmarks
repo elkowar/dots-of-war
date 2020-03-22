@@ -1,0 +1,3 @@
+d coding ~/coding
+f xmonad ~/.xmonad/xmonad.hs
+f polybar ~/.config/polybar/config.ini
