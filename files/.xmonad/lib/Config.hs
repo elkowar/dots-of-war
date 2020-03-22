@@ -1,6 +1,8 @@
 {-# Language ScopedTypeVariables #-}
-module Config (main) where
 -- Imports -------------------------------------------------------- {{{ 
+module Config (main) where
+
+
 import qualified Data.Map as M
 import Data.List (isSuffixOf)
 import qualified Data.Maybe as Maybe
@@ -22,6 +24,7 @@ import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.FadeInactive
 import XMonad.Hooks.ManageDocks
+import XMonad.Hooks.EwmhDesktops (fullscreenEventHook)
 import XMonad.Hooks.SetWMName (setWMName)
 import XMonad.Layout.Gaps
 import XMonad.Layout.LayoutHints
@@ -43,8 +46,8 @@ import XMonad.Util.SpawnOnce (spawnOnce)
 
 myModMask  = mod4Mask
 myLauncher = "rofi -show run"
---myTerminal = "termite"
-myTerminal = "kitty --single-instance"
+myTerminal = "termite"
+--myTerminal = "kitty --single-instance"
 myBrowser = "google-chrome-stable"
 --yBar = "xmobar"
 --myXmobarPP= xmobarPP { ppCurrent = xmobarColor "#429942" "" . wrap "<" ">" }
@@ -84,7 +87,7 @@ aqua      = "#8ec07c"
 -- }}}
 
 -- Layout ---------------------------------------- {{{
-myLayout =  smartBorders $ withGaps $ toggleLayouts Full $ withSpacing $ layoutHints 
+myLayout =  smartBorders $ toggleLayouts Full $ withSpacing $ layoutHints 
                       ( ResizableTall 1 (3/100) (1/2) []
                     ||| Mirror (ResizableTall 1 (3/100) (3/4) [])
                     ||| spiral (6/7) -- Grid
@@ -93,8 +96,8 @@ myLayout =  smartBorders $ withGaps $ toggleLayouts Full $ withSpacing $ layoutH
                     -- mouseResizableTile ||| Mirror mouseResizableTile
   where 
     -- add spacing between windows
-    withSpacing = spacingRaw True (Border 0 0 0 0) True (Border 10 10 10 10) True
-    withGaps    = gaps' [((L, 10), True),((U, 10), True), ((D, 10), True), ((R, 10), True )]
+    withSpacing = spacingRaw True (Border 10 10 10 10) True (Border 10 10 10 10) True
+    --withGaps    = gaps' [((L, 10), True),((U, 10), True), ((D, 10), True), ((R, 10), True )]
 -- }}}
 
 -- Loghook -------------------------------------- {{{
@@ -102,11 +105,12 @@ myLayout =  smartBorders $ withGaps $ toggleLayouts Full $ withSpacing $ layoutH
 myLogHook :: X ()
 myLogHook = do
   fadeInactiveLogHook 0.95 -- opacity of unfocused windows
-  --(W.StackSet _ layout _ _ ) <- gets windowset
+
 -- }}}
 
 -- Startuphook ----------------------------- {{{
 
+myStartupHook :: X ()
 myStartupHook = do
   spawnOnce "picom --config ~/.config/picom.conf --no-fading-openclose"
   spawnOnce "pasystray"
@@ -117,8 +121,7 @@ myStartupHook = do
 
 -- Keymap --------------------------------------- {{{
 
--- Default mappings that need to be removed
-removedKeys :: [String]
+-- Default mappings that need to be removed removedKeys :: [String]
 removedKeys = ["M-S-c", "M-S-q"]
 
 myKeys :: [(String, X ())]
@@ -136,7 +139,7 @@ myKeys = [ ("M-C-k",      sendMessage MirrorExpand)
          , ("M-S-e",      spawn "rofi -show emoji -modi emoji")
          , ("M-b",        spawn myBrowser)
          , ("M-s",        spawn $ scriptFile "rofi-search.sh")
-         , ("M-n",        (spawn "echo 'n: terminal, h: ghci, w: WhatsApp' | dzen2 -p 1") >> scratchpadSubmap)
+         , ("M-n",        spawn "echo 'n: terminal, h: ghci, w: WhatsApp' | dzen2 -p 1" >> scratchpadSubmap)
          , ("M-e",        promptExecute specialCommands)
 
          ] ++ copyToWorkspaceMappings
@@ -176,12 +179,16 @@ myKeys = [ ("M-C-k",      sendMessage MirrorExpand)
 
 myManageHook :: Query (Data.Monoid.Endo WindowSet)
 myManageHook = composeAll
-  [ resource =? "Dialog" --> doFloat ]
+  [ resource =? "Dialog" --> doFloat
+  , isFullscreen --> doF W.focusDown <+> doFullFloat
+  , manageDocks 
+  , namedScratchpadManageHook scratchpads 
+  ]
 
 -- }}}
 
 -- Main ------------------------------------ {{{
-
+main :: IO ()
 main = do
   dbus <- D.connectSession
   -- Request access to the DBus name
@@ -190,18 +197,17 @@ main = do
 
 -- $ ewmh  (kills IntelliJ)
   xmonad $ desktopConfig 
-    { terminal    = myTerminal
-    , modMask     = myModMask
-    , borderWidth = 1
-    , layoutHook  = avoidStruts $ myLayout
-    , logHook     = myLogHook <+> logHook desktopConfig  <+> dynamicLogWithPP (polybarPP dbus)
-    , startupHook = myStartupHook <+> startupHook desktopConfig
-    , manageHook  = manageDocks <+> myManageHook <+> (namedScratchpadManageHook scratchpads) <+> manageHook def <+> (isFullscreen --> doF W.focusDown <+> doFullFloat)
+    { terminal           = myTerminal
+    , modMask            = myModMask
+    , borderWidth        = 1
+    , layoutHook         = avoidStruts myLayout
+    , logHook            = myLogHook <+> dynamicLogWithPP (polybarPP dbus) <+> logHook def 
+    , startupHook        = myStartupHook <+> startupHook def
+    , manageHook         = myManageHook <+> manageHook def
+    --, handleEventHook    = fullscreenEventHook
     , focusedBorderColor = aqua
-    , normalBorderColor = "#282828"
+    , normalBorderColor  = "#282828"
     } `removeKeysP` removedKeys `additionalKeysP` myKeys
-
--- xmonad =<< statusBar myBar myPP toggleStrutsKey myConfig
 
 -- }}}
 
