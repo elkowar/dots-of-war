@@ -1,5 +1,7 @@
 [options]
 font = Iosevka Medium 14
+;font = Victor mono 13
+# font = jetbrains mono 13
 # font = monospace 13
 
 [colors]

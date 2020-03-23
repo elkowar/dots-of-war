@@ -4,7 +4,7 @@ module Config (main) where
 
 
 import qualified Data.Map as M
-import Data.List (isSuffixOf)
+import Data.List (isSuffixOf, isPrefixOf)
 import qualified Data.Maybe as Maybe
 import Data.Char (isDigit)
 import System.Exit (exitWith, ExitCode(ExitSuccess))
@@ -46,8 +46,7 @@ import XMonad.Util.SpawnOnce (spawnOnce)
 
 myModMask  = mod4Mask
 myLauncher = "rofi -show run"
-myTerminal = "termite"
---myTerminal = "kitty --single-instance"
+myTerminal = "kitty --single-instance"
 myBrowser = "google-chrome-stable"
 --yBar = "xmobar"
 --myXmobarPP= xmobarPP { ppCurrent = xmobarColor "#429942" "" . wrap "<" ">" }
@@ -59,6 +58,7 @@ scratchpads =
   , NS "ghci"   (myTerminal ++ " -e \"stack exec -- ghci\" --class scratchpad_ghci") (className =? "scratchpad_ghci") 
     (customFloating $ W.RationalRect 0 0.7 1 0.3)
   , NS "whatsapp" ("gtk-launch chrome-hnpfjngllnobngcgfapefoaidbinmjnm-Default.desktop") (("WhatsApp" `isSuffixOf`) <$> title) defaultFloating
+  , NS "slack" ("slack") (("Slack | " `isPrefixOf`) <$> title) defaultFloating
   ]
 
 {-| adds the scripts-directory path to the filename of a script |-}
@@ -96,7 +96,7 @@ myLayout =  smartBorders $ toggleLayouts Full $ withSpacing $ layoutHints
                     -- mouseResizableTile ||| Mirror mouseResizableTile
   where 
     -- add spacing between windows
-    withSpacing = spacingRaw True (Border 10 10 10 10) True (Border 10 10 10 10) True
+    withSpacing = spacingRaw True (Border 10 10 10 10) True (Border 7 7 7 7) True
     --withGaps    = gaps' [((L, 10), True),((U, 10), True), ((D, 10), True), ((R, 10), True )]
 -- }}}
 
@@ -135,11 +135,12 @@ myKeys = [ ("M-C-k",      sendMessage MirrorExpand)
 
          -- programs
          , ("M-p",        spawn myLauncher)
-         , ("M-S-p",      spawn "rofi -combi-modi drun,window -show combi")
+         , ("M-S-p",      spawn "rofi -combi-modi drun,window,ssh -show combi")
          , ("M-S-e",      spawn "rofi -show emoji -modi emoji")
          , ("M-b",        spawn myBrowser)
          , ("M-s",        spawn $ scriptFile "rofi-search.sh")
-         , ("M-n",        spawn "echo 'n: terminal, h: ghci, w: WhatsApp' | dzen2 -p 1" >> scratchpadSubmap)
+         , ("M-S-s",      spawn $ "cat " ++ scriptFile "bookmarks" ++ " | rofi -p open -dmenu | bash")
+         , ("M-n",        spawn "echo 'n: terminal, h: ghci, w: WhatsApp, s: slack' | dzen2 -p 1" >> scratchpadSubmap)
          , ("M-e",        promptExecute specialCommands)
 
          ] ++ copyToWorkspaceMappings
@@ -158,7 +159,8 @@ myKeys = [ ("M-C-k",      sendMessage MirrorExpand)
     scratchpadSubmap = submap $ M.fromList
       [ ((myModMask, xK_n), namedScratchpadAction scratchpads "terminal")
       , ((myModMask, xK_h), namedScratchpadAction scratchpads "ghci") 
-      , ((myModMask, xK_w), namedScratchpadAction scratchpads "whatsapp") ]
+      , ((myModMask, xK_w), namedScratchpadAction scratchpads "whatsapp")
+      , ((myModMask, xK_s), namedScratchpadAction scratchpads "slack") ]
      
 
     specialCommands :: [(String,  X ())]

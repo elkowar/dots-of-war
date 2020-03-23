@@ -1,3 +1,6 @@
-d coding ~/coding
-f xmonad ~/.xmonad/xmonad.hs
-f polybar ~/.config/polybar/config.ini
+google-chrome-stable ilias.hs-heilbronn.de
+google-chrome-stable youtube.de
+google-chrome-stable jira-student.it.hs-heilbronn.de/secure/RapidBoard.jspa?projectKey=RUNDUM
+google-chrome-stable https://confluence-student.it.hs-heilbronn.de/display/AIB/AIB_LabSWP_2020_SS_Rundum_Studium+Home
+google-chrome-stable https://bitbucket-student.it.hs-heilbronn.de/projects/LABAIB
+xfce4-terminal --command "ssh -p 8888 docker@srv-fin.xware-gmbh.de"
