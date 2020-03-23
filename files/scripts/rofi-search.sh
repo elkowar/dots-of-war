@@ -1,16 +1,24 @@
-#!/bin/bash
-# todo combine selection with query by using first word as selection and rest as query
-selection=$( echo -e "hoogle\ngoogle" | rofi -dmenu )
-if [ $selection = "hoogle" ]; then
-  input=$( rofi -p "search hoogle" -dmenu )
-  query=$( echo $input | sed 's/ p=.*$//g' )
-  package=$( echo $input | sed 's/.*p=//g' )
-  [ $package = $query ] && package=""
-  #firefox --new-window "https://hoogle.haskell.org/?hoogle=$query&scope=package:$package" &
-  #surf "https://hoogle.haskell.org/?hoogle=$query&scope=package:$package" &
-  result=$( hoogle $query | rofi -p "select" -dmenu | sed 's/^\(.*\) :: .*$/\1/' | sed 's/\ /./g' | xargs hoogle --info )
-  notify-send "hoogle" "$result"
-elif [ $selection = "google" ]; then
-  query=$( rofi -p "search google" -dmenu )
-  $BROWSER "https://google.de/search?q=$query" &
-fi
+#!/bin/dash
+openDetailsAction() {
+  echo "Details:surf https://hoogle.haskell.org/?hoogle=$1&scope=package:$2"
+}
+
+query=$( echo "h\ng" | rofi -dmenu )
+selection=$( echo "$query" | awk '{print $1}' )
+input=$( echo "$query" | awk '{print $2}' )
+
+case "$selection" in
+  "h") 
+    query=$(   echo "$input" | sed 's/ p=.*$//g' )
+    package=$( echo "$input" | sed 's/.*p=//g' )
+    [ "$package" = "$query" ] && package=""
+
+    selection=$( hoogle "$query" | rofi -p "select" -dmenu | sed 's/^\(.*\) :: .*$/\1/' | sed 's/\ /./g' )
+    result=$( echo "$selection" | xargs hoogle --info )
+    notify-send.sh --icon="dialog-information" --action="$(openDetailsAction "$query" "$package")" "Hoogle" "$result"
+  ;;
+  "g")
+    $BROWSER "https://google.de/search?q=$input" &
+  ;;
+esac
+
