@@ -1,7 +1,7 @@
 {-# Language ScopedTypeVariables #-}
--- Imports -------------------------------------------------------- {{{ 
+{-# OPTIONS_GHC -fno-warn-missing-signatures -fno-warn-unused-binds #-}
+-- Imports -------------------------------------------------------- {{{
 module Config (main) where
-
 
 import qualified Data.Map as M
 import Data.List (isSuffixOf, isPrefixOf)
@@ -21,26 +21,26 @@ import XMonad.Actions.Submap
 import XMonad.Config.Desktop
 
 import XMonad.Hooks.DynamicLog
-import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.FadeInactive
 import XMonad.Hooks.ManageDocks
-import XMonad.Hooks.EwmhDesktops (fullscreenEventHook)
 import XMonad.Hooks.SetWMName (setWMName)
 import XMonad.Layout.Gaps
-import XMonad.Layout.LayoutHints
 import XMonad.Layout.LayoutCombinators ((|||))
 import XMonad.Layout.NoBorders          -- for fullscreen without borders
 import XMonad.Layout.ResizableTile      -- for resizeable tall layout
+import XMonad.Layout.MouseResizableTile
 import XMonad.Layout.Spacing
 import XMonad.Layout.Spiral
+import XMonad.Layout.Renamed (renamed, Rename(Replace))
 import XMonad.Layout.ThreeColumns       -- for three column layout
 import XMonad.Layout.ToggleLayouts
+import XMonad.Layout.ZoomRow
 import XMonad.Util.EZConfig (additionalKeysP, removeKeysP)
 import XMonad.Util.NamedScratchpad
-import XMonad.Util.Run 
+import XMonad.Util.Run
 import XMonad.Util.SpawnOnce (spawnOnce)
 
--- }}} 
+-- }}}
 
 -- Values -------------------- {{{
 
@@ -52,14 +52,16 @@ myBrowser = "google-chrome-stable"
 --myXmobarPP= xmobarPP { ppCurrent = xmobarColor "#429942" "" . wrap "<" ">" }
 
 scratchpads :: [NamedScratchpad]
-scratchpads = 
-  [ NS "terminal" (myTerminal ++ " --class scratchpad_term") (className =? "scratchpad_term") 
-    (customFloating $ W.RationalRect 0 0.7 1 0.3)
-  , NS "ghci"   (myTerminal ++ " -e \"stack exec -- ghci\" --class scratchpad_ghci") (className =? "scratchpad_ghci") 
-    (customFloating $ W.RationalRect 0 0.7 1 0.3)
-  , NS "whatsapp" ("gtk-launch chrome-hnpfjngllnobngcgfapefoaidbinmjnm-Default.desktop") (("WhatsApp" `isSuffixOf`) <$> title) defaultFloating
-  , NS "slack" ("slack") (("Slack | " `isPrefixOf`) <$> title) defaultFloating
+scratchpads =
+  [ NS "terminal" launchTerminal (className =? "scratchpad_term")      (customFloating $ W.RationalRect 0 0.7 1 0.3)
+  , NS "ghci"     launchGHCI     (className =? "scratchpad_ghci")      (customFloating $ W.RationalRect 0 0.7 1 0.3)
+  , NS "whatsapp" launchWhatsapp (("WhatsApp" `isSuffixOf`) <$> title) defaultFloating
+  , NS "slack"    "slack"        (("Slack | " `isPrefixOf`) <$> title) defaultFloating
   ]
+    where 
+      launchTerminal = myTerminal ++ " --class scratchpad_term"
+      launchGHCI     = myTerminal ++ " -e \"stack exec -- ghci\" --class scratchpad_ghci" 
+      launchWhatsapp = "gtk-launch chrome-hnpfjngllnobngcgfapefoaidbinmjnm-Default.desktop"
 
 {-| adds the scripts-directory path to the filename of a script |-}
 scriptFile :: String -> String
@@ -87,17 +89,23 @@ aqua      = "#8ec07c"
 -- }}}
 
 -- Layout ---------------------------------------- {{{
-myLayout =  smartBorders $ toggleLayouts Full $ withSpacing $ layoutHints 
-                      ( ResizableTall 1 (3/100) (1/2) []
-                    ||| Mirror (ResizableTall 1 (3/100) (3/4) [])
-                    ||| spiral (6/7) -- Grid
-                    ||| ThreeColMid 1 (3/100) (1/2)
-                      )
-                    -- mouseResizableTile ||| Mirror mouseResizableTile
-  where 
-    -- add spacing between windows
-    withSpacing = spacingRaw True (Border 10 10 10 10) True (Border 7 7 7 7) True
-    --withGaps    = gaps' [((L, 10), True),((U, 10), True), ((D, 10), True), ((R, 10), True )]
+--layoutHints .
+myLayout = avoidStruts . smartBorders . toggleLayouts Full  $ layouts
+  where
+    layouts = ((rename "tall"     $ withGaps (gap * 2) $ mouseResizableTile         {draggerType = dragger}) -- ResizableTall 1 (3/100) (1/2) []
+          ||| (rename "horizon"  $ withGaps (gap * 2) $ mouseResizableTileMirrored {draggerType = dragger}) -- Mirror $ ResizableTall 1 (3/100) (3/4) []
+          ||| (rename "row"      $ withGaps gap $ spacing gap zoomRow)
+          ||| (rename "threeCol" $ withGaps gap $ spacing gap $ ThreeColMid 1 (3/100) (1/2))
+          ||| (rename "spiral"   $ withGaps gap $ spacing gap $ spiral (9/21)))
+          -- ||| (rename "spiral"  $ spiral (6/7)))
+          -- Grid
+
+    withGaps width = gaps [ (dir, width) | dir <- [L, R, D, U] ]
+    rename name    = renamed [Replace name]
+
+    gap     = 7
+    dragger = FixedDragger (fromIntegral gap * 2) (fromIntegral gap * 2)
+
 -- }}}
 
 -- Loghook -------------------------------------- {{{
@@ -125,23 +133,27 @@ myStartupHook = do
 removedKeys = ["M-S-c", "M-S-q"]
 
 myKeys :: [(String, X ())]
-myKeys = [ ("M-C-k",      sendMessage MirrorExpand)
-         , ("M-C-j",      sendMessage MirrorShrink)
-         , ("M-f",        toggleFullscreen)
-         , ("M-S-C-c",    kill1)
-         , ("M-S-C-a",    windows copyToAll) -- windows: Modify the current window list with a pure function, and refresh
-         , ("M-C-c",      killAllOtherCopies)
-         , ("M-S-C-q",    io $ exitWith ExitSuccess)
+myKeys = [ ("M-C-k",         sendMessage MirrorExpand >> sendMessage ShrinkSlave )
+         , ("M-C-j",         sendMessage MirrorShrink >> sendMessage ExpandSlave )
+         , ("M-+",           sendMessage zoomIn)
+         , ("M--",           sendMessage zoomOut)
+         , ("M-<Backspace>", sendMessage zoomReset)
+
+         , ("M-f",           toggleFullscreen)
+         , ("M-S-C-c",       kill1)
+         , ("M-S-C-a",       windows copyToAll) -- windows: Modify the current window list with a pure function, and refresh
+         , ("M-C-c",         killAllOtherCopies)
+         , ("M-S-C-q",       io $ exitWith ExitSuccess)
 
          -- programs
-         , ("M-p",        spawn myLauncher)
-         , ("M-S-p",      spawn "rofi -combi-modi drun,window,ssh -show combi")
-         , ("M-S-e",      spawn "rofi -show emoji -modi emoji")
-         , ("M-b",        spawn myBrowser)
-         , ("M-s",        spawn $ scriptFile "rofi-search.sh")
-         , ("M-S-s",      spawn $ "cat " ++ scriptFile "bookmarks" ++ " | rofi -p open -dmenu | bash")
-         , ("M-n",        spawn "echo 'n: terminal, h: ghci, w: WhatsApp, s: slack' | dzen2 -p 1" >> scratchpadSubmap)
-         , ("M-e",        promptExecute specialCommands)
+         , ("M-p",           spawn myLauncher)
+         , ("M-S-p",         spawn "rofi -combi-modi drun,window,ssh -show combi")
+         , ("M-S-e",         spawn "rofi -show emoji -modi emoji")
+         , ("M-b",           spawn myBrowser)
+         , ("M-s",           spawn $ scriptFile "rofi-search.sh")
+         , ("M-S-s",         spawn $ "cat " ++ scriptFile "bookmarks" ++ " | rofi -p open -dmenu | bash")
+         , ("M-n",           spawn "echo 'n: terminal, h: ghci, w: WhatsApp, s: slack' | dzen2 -p 1" >> scratchpadSubmap)
+         , ("M-e",           promptExecute specialCommands)
 
          ] ++ copyToWorkspaceMappings
   where
@@ -158,10 +170,10 @@ myKeys = [ ("M-C-k",      sendMessage MirrorExpand)
     scratchpadSubmap :: X ()
     scratchpadSubmap = submap $ M.fromList
       [ ((myModMask, xK_n), namedScratchpadAction scratchpads "terminal")
-      , ((myModMask, xK_h), namedScratchpadAction scratchpads "ghci") 
+      , ((myModMask, xK_h), namedScratchpadAction scratchpads "ghci")
       , ((myModMask, xK_w), namedScratchpadAction scratchpads "whatsapp")
       , ((myModMask, xK_s), namedScratchpadAction scratchpads "slack") ]
-     
+
 
     specialCommands :: [(String,  X ())]
     specialCommands =
@@ -182,9 +194,9 @@ myKeys = [ ("M-C-k",      sendMessage MirrorExpand)
 myManageHook :: Query (Data.Monoid.Endo WindowSet)
 myManageHook = composeAll
   [ resource =? "Dialog" --> doFloat
-  , isFullscreen --> doF W.focusDown <+> doFullFloat
-  , manageDocks 
-  , namedScratchpadManageHook scratchpads 
+  -- , isFullscreen --> doF W.focusDown <+> doFullFloat
+  , manageDocks
+  , namedScratchpadManageHook scratchpads
   ]
 
 -- }}}
@@ -198,12 +210,12 @@ main = do
       [D.nameAllowReplacement, D.nameReplaceExisting, D.nameDoNotQueue]
 
 -- $ ewmh  (kills IntelliJ)
-  xmonad $ desktopConfig 
+  xmonad $ desktopConfig
     { terminal           = myTerminal
     , modMask            = myModMask
     , borderWidth        = 1
-    , layoutHook         = avoidStruts myLayout
-    , logHook            = myLogHook <+> dynamicLogWithPP (polybarPP dbus) <+> logHook def 
+    , layoutHook         = myLayout
+    , logHook            = myLogHook <+> dynamicLogWithPP (polybarPP dbus) <+> logHook def
     , startupHook        = myStartupHook <+> startupHook def
     , manageHook         = myManageHook <+> manageHook def
     --, handleEventHook    = fullscreenEventHook
@@ -220,7 +232,7 @@ polybarPP :: D.Client -> PP
 polybarPP dbus = namedScratchpadFilterOutWorkspacePP $ def
   { ppOutput  = dbusOutput dbus
   , ppCurrent = withBG bg2
-  , ppVisible = withBG bg2 
+  , ppVisible = withBG bg2
   , ppUrgent  = withFG red
   , ppLayout  = removeWord "Hinted" . removeWord "Spacing" . withFG purple
   , ppHidden  = wrap " " " " . unwords . map wrapOpenWorkspaceCmd . words
@@ -230,10 +242,10 @@ polybarPP dbus = namedScratchpadFilterOutWorkspacePP $ def
   , ppTitle   = withFG aqua . (shorten 40)
   }
     where
-      removeWord substr = unwords . filter (/= substr) . words 
+      removeWord substr = unwords . filter (/= substr) . words
       withBG col = wrap ("%{B" ++ col ++ "} ") " %{B-}"
       withFG col = wrap ("%{F" ++ col ++ "} ") " %{F-}"
-      wrapOpenWorkspaceCmd wsp 
+      wrapOpenWorkspaceCmd wsp
         | all isDigit wsp = wrapOnClickCmd ("xdotool key super+" ++ wsp) wsp
         | otherwise = wsp
       wrapOnClickCmd command = wrap ("%{A1:" ++ command ++ ":}") "%{A}"
@@ -251,3 +263,4 @@ dbusOutput dbus str = do
     memberName = D.memberName_ "Update"
 
 -- }}}
+
