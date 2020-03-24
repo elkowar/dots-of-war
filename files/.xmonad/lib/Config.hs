@@ -57,9 +57,10 @@ scratchpads :: [NamedScratchpad]
 scratchpads =
   [ NS "terminal" launchTerminal (className =? "scratchpad_term")      (customFloating $ W.RationalRect 0 0.7 1 0.3)
   , NS "ghci"     launchGHCI     (className =? "scratchpad_ghci")      (customFloating $ W.RationalRect 0 0.7 1 0.3)
+  , NS "spotify"  "spotify"      (appName   =? "spotify")              defaultFloating
+  , NS "discord"  "discord"      (appName   =? "discord")              defaultFloating
   , NS "whatsapp" launchWhatsapp (("WhatsApp" `isSuffixOf`) <$> title) defaultFloating
   , NS "slack"    "slack"        (("Slack | " `isPrefixOf`) <$> title) defaultFloating
-  , NS "spotify"  "spotify"      (appName =? "spotify")                defaultFloating
   ]
     where 
       launchTerminal = myTerminal ++ " --class scratchpad_term"
@@ -172,16 +173,17 @@ myKeys = [ ("M-C-k",         sendMessage MirrorExpand >> sendMessage ShrinkSlave
       safeSpawn "polybar-msg" ["cmd", "toggle"] -- toggle polybar visibility
 
     scratchpadSubmap :: X ()
-    scratchpadSubmap = describedSubmap
-      [ ((myModMask, xK_n),  "<M-n> terminal", namedScratchpadAction scratchpads "terminal")
-      , ((myModMask, xK_h),  "<M-h> ghci",     namedScratchpadAction scratchpads "ghci")
-      , ((myModMask, xK_w),  "<M-w> whatsapp", namedScratchpadAction scratchpads "whatsapp")
-      , ((myModMask, xK_s),  "<M-s> slack",    namedScratchpadAction scratchpads "slack")
-      , ((myModMask, xK_m),  "<M-m> spotify",  namedScratchpadAction scratchpads "spotify")
+    scratchpadSubmap = describedSubmap "Scratchpads"
+      [ ((myModMask, xK_n), "<M-n> terminal", namedScratchpadAction scratchpads "terminal")
+      , ((myModMask, xK_h), "<M-h> ghci",     namedScratchpadAction scratchpads "ghci")
+      , ((myModMask, xK_w), "<M-w> whatsapp", namedScratchpadAction scratchpads "whatsapp")
+      , ((myModMask, xK_s), "<M-s> slack",    namedScratchpadAction scratchpads "slack")
+      , ((myModMask, xK_m), "<M-m> spotify",  namedScratchpadAction scratchpads "spotify")
+      , ((myModMask, xK_d), "<M-m> discord",  namedScratchpadAction scratchpads "discord")
       ]
 
     mediaSubmap :: X ()
-    mediaSubmap = describedSubmap
+    mediaSubmap = describedSubmap "Media"
       [ ((myModMask, xK_m), "<M-m> play/pause", spawn "playerctl play-pause")
       , ((myModMask, xK_l), "<M-l> next",       spawn "playerctl next")
       , ((myModMask, xK_l), "<M-h> previous",   spawn "playerctl previous")
@@ -195,12 +197,12 @@ myKeys = [ ("M-C-k",         sendMessage MirrorExpand >> sendMessage ShrinkSlave
       , ("screenshot",    spawn $ scriptFile "screenshot.sh")
       ]
 
-    describedSubmap :: [((KeyMask, KeySym), String, X ())] -> X ()
-    describedSubmap mappings = showDzen hintText mySubMap
+    describedSubmap :: String -> [((KeyMask, KeySym), String, X ())] -> X ()
+    describedSubmap title mappings = showDzen hintText mySubMap
       where
         mySubMap     = submap $ M.fromList $ map (\(k, _, f) -> (k, f)) mappings
         descriptions = map (\(_,x,_) -> x) mappings
-        hintText     = "\n" ++ unlines descriptions
+        hintText     = unlines (title : descriptions)
         showDzen message action = do
           let lineCount = show $ length $ lines message
               font      = "-*-iosevka-medium-r-s*--16-87-*-*-*-*-iso10???-1"
