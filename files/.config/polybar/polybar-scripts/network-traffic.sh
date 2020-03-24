@@ -54,7 +54,8 @@ while true; do
         bytes[past_tx_$interface]=${bytes[now_tx_$interface]}
     done
 
-    echo "D: $(print_bytes $down) U: $(print_bytes $up)"
+    echo "%{F#f00}  %{F-}$(print_bytes $down) %{F#0f0}  %{F-}$(print_bytes $up)"
+    #echo "D: $(print_bytes $down) U: $(print_bytes $up)"
     #echo "Download: $(print_bytes $down) / Upload: $(print_bytes $up)"
     # echo "Download: $(print_bit $down) / Upload: $(print_bit $up)"
 
