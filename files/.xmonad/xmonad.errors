@@ -1,4 +1,0 @@
-
---  While building package my-xmonad-0.1.0.0 using:
-      /home/leon/.stack/setup-exe-cache/x86_64-linux-tinfo6/Cabal-simple_mPHDZzAJ_3.0.1.0_ghc-8.8.2 --builddir=.stack-work/dist/x86_64-linux-tinfo6/Cabal-3.0.1.0 build exe:my-xmonad --ghc-options ""
-    Process exited with code: ExitFailure 1
