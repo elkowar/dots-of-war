@@ -36,8 +36,8 @@ promptMap :: MonadIO m => RofiConfig -> M.Map String a -> m (Maybe a)
 promptMap config = Dmenu.menuMapArgs rofiCmd ("-dmenu" : toArgList config)
 
 -- |Display a list of commands, of which the chosen one will be executed. See `Xmonad.Actions.Commands.runCommandConfig`
-promptRunCommand :: [(String, X ())] -> X ()
-promptRunCommand = XCommands.runCommandConfig $ Rofi.promptSimple def
+promptRunCommand :: RofiConfig -> [(String, X ())] -> X ()
+promptRunCommand config = XCommands.runCommandConfig $ Rofi.promptSimple config
 
 -- |prompt a single rofi mode. ex: `showNormal def "run"`
 showNormal :: RofiConfig -> String -> X ()

@@ -4,30 +4,27 @@
 module Config (main) where
 import qualified Rofi as Rofi
 
-import Data.List (isSuffixOf, isPrefixOf, elem)
+import Data.List (isSuffixOf, isPrefixOf)
 import Data.Char (isDigit)
 import System.Exit (exitSuccess)
 
 import qualified System.IO as SysIO
 import qualified Data.Map as M
-import qualified Data.Maybe as Maybe
 import qualified Data.Monoid
 import qualified DBus as D
 import qualified DBus.Client as D
 import qualified Codec.Binary.UTF8.String as UTF8
 
 import XMonad hiding ((|||))
-import qualified XMonad.Util.Dmenu as Dmenu
 import qualified XMonad.StackSet as W
 import XMonad.Actions.CopyWindow
 import XMonad.Actions.Submap
 import XMonad.Config.Desktop
-
 import XMonad.Layout.BinarySpacePartition
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.FadeInactive
 import XMonad.Hooks.ManageDocks
-import XMonad.Hooks.EwmhDesktops (ewmh, fullscreenEventHook)
+import XMonad.Hooks.EwmhDesktops (ewmh)
 import XMonad.Hooks.SetWMName (setWMName)
 import XMonad.Layout.Gaps
 import XMonad.Layout.LayoutCombinators ((|||))
@@ -35,13 +32,11 @@ import XMonad.Layout.NoBorders          -- for fullscreen without borders
 import XMonad.Layout.ResizableTile      -- for resizeable tall layout
 import XMonad.Layout.MouseResizableTile
 import XMonad.Layout.Spacing (spacingRaw, Border(..), toggleWindowSpacingEnabled)
-import XMonad.Layout.Spiral
 import XMonad.Layout.Renamed (renamed, Rename(Replace))
-import XMonad.Layout.ThreeColumns       -- for three column layout
 import XMonad.Layout.ToggleLayouts
 import XMonad.Layout.ZoomRow
 import XMonad.Layout.BorderResize
-import XMonad.Util.EZConfig (additionalKeysP, removeKeysP)
+import XMonad.Util.EZConfig (additionalKeysP, removeKeysP, checkKeymap)
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run
 import XMonad.Util.SpawnOnce (spawnOnce)
@@ -49,7 +44,6 @@ import qualified XMonad.Actions.Navigation2D as Nav2d
 -- Minimize stuff
 import XMonad.Layout.Minimize
 import qualified XMonad.Layout.BoringWindows as BoringWindows
-import XMonad.Hooks.Minimize
 import XMonad.Actions.Minimize
 import XMonad.Actions.WindowBringer
 import XMonad.Actions.Commands
@@ -172,27 +166,23 @@ myKeys = [ ("M-C-k",    sendMessage MirrorExpand >> sendMessage ShrinkSlave )
          , ("M-S-p",    Rofi.showCombi def [ "drun", "window", "ssh" ])
          , ("M-S-e",    Rofi.showNormal def "emoji" )
          , ("M-s",      spawn $ scriptFile "rofi-search.sh")
-         , ("M-S-s",    spawn $ "cat " ++ scriptFile "bookmarks" 
-                                ++ " | " ++ Rofi.asCommand def ["-dmenu", "-p open"] 
-                                ++ " | bash")
+         , ("M-S-s",    spawn $ "cat " ++ scriptFile "bookmarks" ++ " | " ++ Rofi.asCommand def ["-dmenu", "-p open"] ++ " | bash")
          , ("M-n",      scratchpadSubmap )
          , ("M-m",      mediaSubmap )
-         , ("M-e",      Rofi.promptRunCommand specialCommands)
-         , ("M-C-e",    Rofi.promptRunCommand =<< defaultCommands )
-
+         , ("M-e",      Rofi.promptRunCommand def specialCommands)
+         , ("M-C-e",    Rofi.promptRunCommand def =<< defaultCommands )
 
          -- BSP
-         , ("M-M1-h",            sendMessage $ ExpandTowards L)
-         , ("M-M1-l",            sendMessage $ ExpandTowards R)
-         , ("M-M1-k",            sendMessage $ ExpandTowards U)
-         , ("M-M1-j",            sendMessage $ ExpandTowards D)
-         , ("M-<Backspace>",     sendMessage $ Swap)
-         , ("M-M1-<Backspace>",  sendMessage $ Rotate)
-
-         , ("M-S-M1-h", Nav2d.windowGo L False)
-         , ("M-S-M1-l", Nav2d.windowGo R False)
-         , ("M-S-M1-k", Nav2d.windowGo U False)
-         , ("M-S-M1-j", Nav2d.windowGo D False)
+         , ("M-M1-h",           sendMessage $ ExpandTowards L)
+         , ("M-M1-l",           sendMessage $ ExpandTowards R)
+         , ("M-M1-k",           sendMessage $ ExpandTowards U)
+         , ("M-M1-j",           sendMessage $ ExpandTowards D)
+         , ("M-<Backspace>",    sendMessage $ Swap)
+         , ("M-M1-<Backspace>", sendMessage $ Rotate)
+         , ("M-S-M1-h",         Nav2d.windowGo L False)
+         , ("M-S-M1-l",         Nav2d.windowGo R False)
+         , ("M-S-M1-k",         Nav2d.windowGo U False)
+         , ("M-S-M1-j",         Nav2d.windowGo D False)
 
          -- Minimization
          , ("M-k",       BoringWindows.focusUp)
@@ -200,11 +190,14 @@ myKeys = [ ("M-C-k",    sendMessage MirrorExpand >> sendMessage ShrinkSlave )
          , ("M-ü",       withFocused minimizeWindow)
          , ("M-S-ü",     withLastMinimized maximizeWindow)
          , ("M-C-ü",     promptRestoreWindow)
-         , ("M1-<Tab>",  cycleMinimizedWindow)
-         ] ++ copyToWorkspaceMappings
+         , ("M1-<Tab>", cycleMinimizedWindow)
+         ] ++ concat generatedMappings
   where
-    copyToWorkspaceMappings :: [(String, X())]
-    copyToWorkspaceMappings = [("M-C-" ++ wsp, windows $ copy wsp) | wsp <- map show [1..9]]
+    generatedMappings :: [[(String, X ())]]
+    generatedMappings = 
+      [ [("M-C-" ++ wsp, windows $ copy wsp) | wsp <- map show [1..9]] -- Copy to workspace
+      ]
+        --where hjklDirPairs = [("h", L), ("j", D), ("k", U), ("l", R) ]
 
     cycleMinimizedWindow :: X ()
     cycleMinimizedWindow = withLastMinimized $ \window -> do 
@@ -214,14 +207,13 @@ myKeys = [ ("M-C-k",    sendMessage MirrorExpand >> sendMessage ShrinkSlave )
     promptRestoreWindow = do
       wm <- windowMap
       shownWindows <- withMinimized (\minimizedWindows -> pure $ M.filter (`elem` minimizedWindows) wm)
-      w <- Rofi.promptSimple def (M.keys shownWindows)
-      whenJust (M.lookup w wm) (\w -> maximizeWindow w >> (windows $ bringWindow w))
+      win <- Rofi.promptSimple def (M.keys shownWindows)
+      whenJust (M.lookup win wm) (\w -> maximizeWindow w >> (windows $ bringWindow w))
 
     toggleFullscreen :: X ()
     toggleFullscreen = do
       sendMessage ToggleLayout                  -- toggle fullscreen layout
       sendMessage ToggleStruts                  -- bar is hidden -> no need to make place for it
-      --sendMessage ToggleGaps                    -- show a small gap around the window
       safeSpawn "polybar-msg" ["cmd", "toggle"] -- toggle polybar visibility
 
 
@@ -281,25 +273,30 @@ main = do
   _ <- D.requestName dbus (D.busName_ "org.xmonad.Log")
       [D.nameAllowReplacement, D.nameReplaceExisting, D.nameDoNotQueue]
 
-
 -- $ ewmh  (kills IntelliJ)
   xmonad 
     $ ewmh
     $ Nav2d.withNavigation2DConfig def { Nav2d.defaultTiledNavigation = Nav2d.sideNavigation }
-    $ desktopConfig
+    $ myConfig dbus
+
+myConfig dbus = desktopConfig
       { terminal           = myTerminal
       , modMask            = myModMask
       , borderWidth        = 1
       , layoutHook         = myLayout
       , logHook            = myLogHook <+> dynamicLogWithPP (polybarPP dbus) <+> logHook def
-      , startupHook        = myStartupHook <+> startupHook def
+      , startupHook        = myStartupHook <+> startupHook def <+> return () >> checkKeymap (myConfig dbus ) myKeys
       , manageHook         = myManageHook <+> manageHook def
       -- , handleEventHook    = minimizeEventHook <+> handleEventHook def -- fullscreenEventHook
       , focusedBorderColor = aqua
       , normalBorderColor  = "#282828"
       } `removeKeysP` removedKeys `additionalKeysP` myKeys
 
+
+
 -- }}}
+
+
 
 -- POLYBAR Kram -------------------------------------- {{{
 
