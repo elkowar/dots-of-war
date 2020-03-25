@@ -25,6 +25,13 @@ packages:
       sha256: 4dabb3bf0b86adc529116f22cb552ebc68e05f41017bd266797694129716192f
   original:
     hackage: dbus-1.2.12
+- completed:
+    hackage: text-1.2.4.0@sha256:8c24450feb8e3bbb7ea3e17af24ef57e85db077c4bf53e5bcc345b283d1b1d5b,10081
+    pantry-tree:
+      size: 7457
+      sha256: 3437b0a73ce2ae1a81aa8b3438d41a85981c00894cdbee0d6d6d6873046a5d5d
+  original:
+    hackage: text-1.2.4.0
 snapshots:
 - completed:
     size: 491373

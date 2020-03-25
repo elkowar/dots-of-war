@@ -1,9 +1,10 @@
-{-# Language ScopedTypeVariables #-}
+{-# Language ScopedTypeVariables, LambdaCase #-}
 {-# OPTIONS_GHC -fno-warn-missing-signatures -fno-warn-unused-binds #-}
 -- Imports -------------------------------------------------------- {{{
 module Config (main) where
+import qualified Rofi as Rofi
 
-import Data.List (isSuffixOf, isPrefixOf)
+import Data.List (isSuffixOf, isPrefixOf, elem)
 import Data.Char (isDigit)
 import System.Exit (exitSuccess)
 
@@ -50,12 +51,14 @@ import XMonad.Layout.Minimize
 import qualified XMonad.Layout.BoringWindows as BoringWindows
 import XMonad.Hooks.Minimize
 import XMonad.Actions.Minimize
+import XMonad.Actions.WindowBringer
+import XMonad.Actions.Commands
 -- }}}
 
 -- Values -------------------- {{{
 
 myModMask  = mod4Mask
-myLauncher = "rofi -show run -theme /home/leon/scripts/rofi-scripts/launcher_grid_full_style.rasi"
+myLauncher = Rofi.asCommand def ["-show run"] -- "rofi -show run -theme /home/leon/scripts/rofi-scripts/launcher_grid_full_style.rasi"
 myTerminal = "kitty --single-instance"
 myBrowser = "google-chrome-stable"
 --yBar = "xmobar"
@@ -162,14 +165,17 @@ myKeys = [ ("M-C-k",    sendMessage MirrorExpand >> sendMessage ShrinkSlave )
 
          -- programs
          , ("M-p",      spawn myLauncher)
-         , ("M-S-p",    spawn "rofi -combi-modi drun,window,ssh -show combi -theme /home/leon/scripts/rofi-scripts/launcher_grid_full_style.rasi")
-         , ("M-S-e",    spawn "rofi -show emoji -modi emoji -theme /home/leon/scripts/rofi-scripts/launcher_grid_full_style.rasi")
          , ("M-b",      spawn myBrowser)
+         , ("M-S-p",    Rofi.showCombi def [ "drun", "window", "ssh" ])
+         , ("M-S-e",    Rofi.showNormal def "emoji" )
          , ("M-s",      spawn $ scriptFile "rofi-search.sh")
-         , ("M-S-s",    spawn $ "cat " ++ scriptFile "bookmarks" ++ " | rofi -p open -dmenu | bash")
-         , ("M-n",      scratchpadSubmap)
-         , ("M-m",      mediaSubmap)
-         , ("M-e",      promptExecute specialCommands)
+         , ("M-S-s",    spawn $ "cat " ++ scriptFile "bookmarks" 
+                                ++ " | " ++ Rofi.asCommand def ["-dmenu", "-p open"] 
+                                ++ " | bash")
+         , ("M-n",      scratchpadSubmap )
+         , ("M-m",      mediaSubmap )
+         , ("M-e",      Rofi.promptRunCommand specialCommands)
+         , ("M-C-e",    Rofi.promptRunCommand =<< defaultCommands )
 
 
          -- BSP
@@ -186,15 +192,27 @@ myKeys = [ ("M-C-k",    sendMessage MirrorExpand >> sendMessage ShrinkSlave )
          , ("M-S-M1-j", Nav2d.windowGo D False)
 
          -- Minimization
-         , ("M-k",    BoringWindows.focusUp)
-         , ("M-j",    BoringWindows.focusDown)
-         , ("M-ü",    withFocused minimizeWindow)
-         , ("M-S-ü",  withLastMinimized maximizeWindow)
-
+         , ("M-k",       BoringWindows.focusUp)
+         , ("M-j",       BoringWindows.focusDown)
+         , ("M-ü",       withFocused minimizeWindow)
+         , ("M-S-ü",     withLastMinimized maximizeWindow)
+         , ("M-C-ü",     promptRestoreWindow)
+         , ("M1-<Tab>",  cycleMinimizedWindow)
          ] ++ copyToWorkspaceMappings
   where
     copyToWorkspaceMappings :: [(String, X())]
     copyToWorkspaceMappings = [("M-C-" ++ wsp, windows $ copy wsp) | wsp <- map show [1..9]]
+
+    cycleMinimizedWindow :: X ()
+    cycleMinimizedWindow = withLastMinimized $ \window -> do 
+        withFocused minimizeWindow
+        maximizeWindowAndFocus window
+
+    promptRestoreWindow = do
+      wm <- windowMap
+      shownWindows <- withMinimized (\minimizedWindows -> pure $ M.filter (`elem` minimizedWindows) wm)
+      w <- Rofi.promptSimple def (M.keys shownWindows)
+      whenJust (M.lookup w wm) (\w -> maximizeWindow w >> (windows $ bringWindow w))
 
     toggleFullscreen :: X ()
     toggleFullscreen = do
@@ -202,6 +220,7 @@ myKeys = [ ("M-C-k",    sendMessage MirrorExpand >> sendMessage ShrinkSlave )
       sendMessage ToggleStruts                  -- bar is hidden -> no need to make place for it
       --sendMessage ToggleGaps                    -- show a small gap around the window
       safeSpawn "polybar-msg" ["cmd", "toggle"] -- toggle polybar visibility
+
 
     scratchpadSubmap :: X ()
     scratchpadSubmap = describedSubmap "Scratchpads"
@@ -235,13 +254,6 @@ myKeys = [ ("M-C-k",    sendMessage MirrorExpand >> sendMessage ShrinkSlave )
       where
         mySubmap     = submap $ M.fromList $ map (\(k, _, f) -> (k, f)) mappings
         descriptions = map (\(_,x,_) -> x) mappings
-
-    promptExecute :: [(String, X ())] -> X ()
-    promptExecute commands = do
-      selection <- Dmenu.menuMapArgs "rofi" ["-dmenu", "-i"] $ M.fromList commands -- -i -> case-insensitive
-      Maybe.fromMaybe (return ()) selection
-
-
 
 -- }}}
 
