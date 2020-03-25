@@ -3,12 +3,13 @@
 -- Imports -------------------------------------------------------- {{{
 module Config (main) where
 
+import Data.List (isSuffixOf, isPrefixOf)
+import Data.Char (isDigit)
+import System.Exit (exitSuccess)
+
 import qualified System.IO as SysIO
 import qualified Data.Map as M
-import Data.List (isSuffixOf, isPrefixOf)
 import qualified Data.Maybe as Maybe
-import Data.Char (isDigit)
-import System.Exit (exitWith, ExitCode(ExitSuccess))
 import qualified Data.Monoid
 import qualified DBus as D
 import qualified DBus.Client as D
@@ -21,6 +22,7 @@ import XMonad.Actions.CopyWindow
 import XMonad.Actions.Submap
 import XMonad.Config.Desktop
 
+import XMonad.Layout.BinarySpacePartition
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.FadeInactive
 import XMonad.Hooks.ManageDocks
@@ -31,16 +33,18 @@ import XMonad.Layout.LayoutCombinators ((|||))
 import XMonad.Layout.NoBorders          -- for fullscreen without borders
 import XMonad.Layout.ResizableTile      -- for resizeable tall layout
 import XMonad.Layout.MouseResizableTile
-import XMonad.Layout.Spacing
+import XMonad.Layout.Spacing (spacingRaw, Border(..), toggleWindowSpacingEnabled)
 import XMonad.Layout.Spiral
 import XMonad.Layout.Renamed (renamed, Rename(Replace))
 import XMonad.Layout.ThreeColumns       -- for three column layout
 import XMonad.Layout.ToggleLayouts
 import XMonad.Layout.ZoomRow
+import XMonad.Layout.BorderResize
 import XMonad.Util.EZConfig (additionalKeysP, removeKeysP)
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run
 import XMonad.Util.SpawnOnce (spawnOnce)
+import qualified XMonad.Actions.Navigation2D as Nav2d
 
 -- }}}
 
@@ -53,6 +57,10 @@ myBrowser = "google-chrome-stable"
 --yBar = "xmobar"
 --myXmobarPP= xmobarPP { ppCurrent = xmobarColor "#429942" "" . wrap "<" ">" }
 
+{-| adds the scripts-directory path to the filename of a script |-}
+scriptFile :: String -> String
+scriptFile script = "/home/leon/scripts/" ++ script
+
 scratchpads :: [NamedScratchpad]
 scratchpads =
   [ NS "terminal" launchTerminal (className =? "scratchpad_term")      (customFloating $ W.RationalRect 0 0.7 1 0.3)
@@ -62,14 +70,11 @@ scratchpads =
   , NS "whatsapp" launchWhatsapp (("WhatsApp" `isSuffixOf`) <$> title) defaultFloating
   , NS "slack"    "slack"        (("Slack | " `isPrefixOf`) <$> title) defaultFloating
   ]
-    where 
+    where
       launchTerminal = myTerminal ++ " --class scratchpad_term"
-      launchGHCI     = myTerminal ++ " -e \"stack exec -- ghci\" --class scratchpad_ghci" 
+      launchGHCI     = myTerminal ++ " -e \"stack exec -- ghci\" --class scratchpad_ghci"
       launchWhatsapp = "gtk-launch chrome-hnpfjngllnobngcgfapefoaidbinmjnm-Default.desktop"
 
-{-| adds the scripts-directory path to the filename of a script |-}
-scriptFile :: String -> String
-scriptFile script = "/home/leon/scripts/" ++ script
 
 -- Colors ------ {{{
 fg        = "#ebdbb2"
@@ -96,27 +101,29 @@ aqua      = "#8ec07c"
 --layoutHints .
 myLayout = avoidStruts . smartBorders . toggleLayouts Full  $ layouts
   where
-    layouts = ((rename "tall"     $ withGaps (gap * 2) $ mouseResizableTile         {draggerType = dragger}) -- ResizableTall 1 (3/100) (1/2) []
-          ||| (rename "horizon"  $ withGaps (gap * 2) $ mouseResizableTileMirrored {draggerType = dragger}) -- Mirror $ ResizableTall 1 (3/100) (3/4) []
-          ||| (rename "row"      $ withGaps gap $ spacing gap zoomRow)
-          ||| (rename "threeCol" $ withGaps gap $ spacing gap $ ThreeColMid 1 (3/100) (1/2))
-          ||| (rename "spiral"   $ withGaps gap $ spacing gap $ spiral (9/21)))
-          -- ||| (rename "spiral"  $ spiral (6/7)))
+    layouts =((rename "tall"     $ onlyGaps       $ mouseResizableTile         {draggerType = dragger}) -- ResizableTall 1 (3/100) (1/2) []
+          ||| (rename "horizon"  $ onlyGaps       $ mouseResizableTileMirrored {draggerType = dragger}) -- Mirror                           $ ResizableTall 1 (3/100) (3/4) []
+          ||| (rename "row"      $ spacingAndGaps $ zoomRow)
+          ||| (rename "bsp"      $ spacingAndGaps $ borderResize $ emptyBSP))
+          -- ||| (rename "threeCol" $ spacingAndGaps $ ThreeColMid 1 (3/100) (1/2))
+          -- ||| (rename "spiral"   $ spacingAndGaps $ spiral (9/21))
+          -- ||| (rename "spiral" $ spiral (6/7)))
           -- Grid
 
-    withGaps width = gaps [ (dir, width) | dir <- [L, R, D, U] ]
-    rename name    = renamed [Replace name]
+    rename n = renamed [Replace n]
 
-    gap     = 7
-    dragger = FixedDragger (fromIntegral gap * 2) (fromIntegral gap * 2)
+    gap            = 7
+    spacingBorder  = let x = fromIntegral gap in Border x x x x
+    spacingAndGaps = onlyGaps . spacingRaw True spacingBorder False spacingBorder True
+    onlyGaps       = gaps [ (dir, (gap*2)) | dir <- [L, R, D, U] ]  -- gaps are included in mouseResizableTile
+    dragger        = FixedDragger (fromIntegral gap*2) (fromIntegral gap * 2)
 
 -- }}}
 
 -- Loghook -------------------------------------- {{{
 
 myLogHook :: X ()
-myLogHook = do
-  fadeInactiveLogHook 0.95 -- opacity of unfocused windows
+myLogHook = fadeInactiveLogHook 0.95 -- opacity of unfocused windows
 
 -- }}}
 
@@ -137,28 +144,42 @@ myStartupHook = do
 removedKeys = ["M-S-c", "M-S-q"]
 
 myKeys :: [(String, X ())]
-myKeys = [ ("M-C-k",         sendMessage MirrorExpand >> sendMessage ShrinkSlave )
-         , ("M-C-j",         sendMessage MirrorShrink >> sendMessage ExpandSlave )
-         , ("M-+",           sendMessage zoomIn)
-         , ("M--",           sendMessage zoomOut)
-         , ("M-<Backspace>", sendMessage zoomReset)
+myKeys = [ ("M-C-k",    sendMessage MirrorExpand >> sendMessage ShrinkSlave )
+         , ("M-C-j",    sendMessage MirrorShrink >> sendMessage ExpandSlave )
+         , ("M-+",      sendMessage zoomIn)
+         , ("M--",      sendMessage zoomOut)
+         , ("M-#",      sendMessage zoomReset)
 
-         , ("M-f",           toggleFullscreen)
-         , ("M-S-C-c",       kill1)
-         , ("M-S-C-a",       windows copyToAll) -- windows: Modify the current window list with a pure function, and refresh
-         , ("M-C-c",         killAllOtherCopies)
-         , ("M-S-C-q",       io $ exitWith ExitSuccess)
+         , ("M-f",      toggleFullscreen)
+         , ("M-S-C-c",  kill1)
+         , ("M-S-C-a",  windows copyToAll) -- windows: Modify the current window list with a pure function, and refresh
+         , ("M-C-c",    killAllOtherCopies)
+         , ("M-S-C-q",  io $ exitSuccess)
 
          -- programs
-         , ("M-p",           spawn myLauncher)
-         , ("M-S-p",         spawn "rofi -combi-modi drun,window,ssh -show combi -theme /home/leon/scripts/rofi-scripts/launcher_grid_full_style.rasi")
-         , ("M-S-e",         spawn "rofi -show emoji -modi emoji -theme /home/leon/scripts/rofi-scripts/launcher_grid_full_style.rasi")
-         , ("M-b",           spawn myBrowser)
-         , ("M-s",           spawn $ scriptFile "rofi-search.sh")
-         , ("M-S-s",         spawn $ "cat " ++ scriptFile "bookmarks" ++ " | rofi -p open -dmenu | bash")
-         , ("M-n",           scratchpadSubmap)
-         , ("M-m",           mediaSubmap)
-         , ("M-e",           promptExecute specialCommands)
+         , ("M-p",      spawn myLauncher)
+         , ("M-S-p",    spawn "rofi -combi-modi drun,window,ssh -show combi -theme /home/leon/scripts/rofi-scripts/launcher_grid_full_style.rasi")
+         , ("M-S-e",    spawn "rofi -show emoji -modi emoji -theme /home/leon/scripts/rofi-scripts/launcher_grid_full_style.rasi")
+         , ("M-b",      spawn myBrowser)
+         , ("M-s",      spawn $ scriptFile "rofi-search.sh")
+         , ("M-S-s",    spawn $ "cat " ++ scriptFile "bookmarks" ++ " | rofi -p open -dmenu | bash")
+         , ("M-n",      scratchpadSubmap)
+         , ("M-m",      mediaSubmap)
+         , ("M-e",      promptExecute specialCommands)
+
+
+         -- BSP
+         , ("M-M1-h",   sendMessage $ ExpandTowards L)
+         , ("M-M1-l",   sendMessage $ ExpandTowards R)
+         , ("M-M1-k",   sendMessage $ ExpandTowards U)
+         , ("M-M1-j",   sendMessage $ ExpandTowards D)
+         , ("M-<Backspace>",    sendMessage $ Swap)
+         , ("M-M1-<Backspace>", sendMessage $ Rotate)
+
+         , ("M-S-M1-h", Nav2d.windowGo L False)
+         , ("M-S-M1-l", Nav2d.windowGo R False)
+         , ("M-S-M1-k", Nav2d.windowGo U False)
+         , ("M-S-M1-j", Nav2d.windowGo D False)
 
          ] ++ copyToWorkspaceMappings
   where
@@ -184,37 +205,33 @@ myKeys = [ ("M-C-k",         sendMessage MirrorExpand >> sendMessage ShrinkSlave
 
     mediaSubmap :: X ()
     mediaSubmap = describedSubmap "Media"
-      [ ((myModMask, xK_m), "<M-m> play/pause", spawn "playerctl play-pause")
-      , ((myModMask, xK_l), "<M-l> next",       spawn "playerctl next")
-      , ((myModMask, xK_l), "<M-h> previous",   spawn "playerctl previous")
+      [ ((myModMask, xK_m), "<M-m> play/pause",      spawn "playerctl play-pause")
+      , ((myModMask, xK_l), "<M-l> next",            spawn "playerctl next")
+      , ((myModMask, xK_l), "<M-h> previous",        spawn "playerctl previous")
+      , ((myModMask, xK_k), "<M-k> increase volume", spawn "amixer sset Master 5%+")
+      , ((myModMask, xK_j), "<M-j> decrease volume", spawn "amixer sset Master 5%-")
       ]
 
 
     specialCommands :: [(String,  X ())]
     specialCommands =
-      [ ("toggleSpacing", toggleWindowSpacingEnabled)
+      [ ("screenshot",    spawn $ scriptFile "screenshot.sh")
+      , ("toggleSpacing", toggleWindowSpacingEnabled)
       , ("toggleGaps",    sendMessage ToggleGaps)
-      , ("screenshot",    spawn $ scriptFile "screenshot.sh")
       ]
 
     describedSubmap :: String -> [((KeyMask, KeySym), String, X ())] -> X ()
-    describedSubmap title mappings = showDzen hintText mySubMap
+    describedSubmap submapTitle mappings = promptDzenWhileRunning submapTitle descriptions mySubmap
       where
-        mySubMap     = submap $ M.fromList $ map (\(k, _, f) -> (k, f)) mappings
+        mySubmap     = submap $ M.fromList $ map (\(k, _, f) -> (k, f)) mappings
         descriptions = map (\(_,x,_) -> x) mappings
-        hintText     = unlines (title : descriptions)
-        showDzen message action = do
-          let lineCount = show $ length $ lines message
-              font      = "-*-iosevka-medium-r-s*--16-87-*-*-*-*-iso10???-1"
-          handle <- spawnPipe $ "sleep 1 && dzen2 -e onstart=uncollapse -l " ++ lineCount ++ " -fn '" ++ font ++ "'"
-          io $ SysIO.hPutStrLn handle message
-          _ <- action
-          io $ SysIO.hClose handle
 
     promptExecute :: [(String, X ())] -> X ()
     promptExecute commands = do
       selection <- Dmenu.menuMapArgs "rofi" ["-dmenu", "-i"] $ M.fromList commands -- -i -> case-insensitive
       Maybe.fromMaybe (return ()) selection
+
+
 
 -- }}}
 
@@ -223,6 +240,7 @@ myKeys = [ ("M-C-k",         sendMessage MirrorExpand >> sendMessage ShrinkSlave
 myManageHook :: Query (Data.Monoid.Endo WindowSet)
 myManageHook = composeAll
   [ resource =? "Dialog" --> doFloat
+  , appName =? "pavucontrol" --> doFloat
   -- , isFullscreen --> doF W.focusDown <+> doFullFloat
   , manageDocks
   , namedScratchpadManageHook scratchpads
@@ -238,19 +256,23 @@ main = do
   _ <- D.requestName dbus (D.busName_ "org.xmonad.Log")
       [D.nameAllowReplacement, D.nameReplaceExisting, D.nameDoNotQueue]
 
+
 -- $ ewmh  (kills IntelliJ)
-  xmonad $ ewmh $ desktopConfig
-    { terminal           = myTerminal
-    , modMask            = myModMask
-    , borderWidth        = 1
-    , layoutHook         = myLayout
-    , logHook            = myLogHook <+> dynamicLogWithPP (polybarPP dbus) <+> logHook def
-    , startupHook        = myStartupHook <+> startupHook def
-    , manageHook         = myManageHook <+> manageHook def
-    --, handleEventHook    = fullscreenEventHook
-    , focusedBorderColor = aqua
-    , normalBorderColor  = "#282828"
-    } `removeKeysP` removedKeys `additionalKeysP` myKeys
+  xmonad 
+    $ ewmh
+    $ Nav2d.withNavigation2DConfig def { Nav2d.defaultTiledNavigation = Nav2d.sideNavigation }
+    $ desktopConfig
+      { terminal           = myTerminal
+      , modMask            = myModMask
+      , borderWidth        = 1
+      , layoutHook         = myLayout
+      , logHook            = myLogHook <+> dynamicLogWithPP (polybarPP dbus) <+> logHook def
+      , startupHook        = myStartupHook <+> startupHook def
+      , manageHook         = myManageHook <+> manageHook def
+      --, handleEventHook    = fullscreenEventHook
+      , focusedBorderColor = aqua
+      , normalBorderColor  = "#282828"
+      } `removeKeysP` removedKeys `additionalKeysP` myKeys
 
 -- }}}
 
@@ -293,3 +315,18 @@ dbusOutput dbus str = do
 
 -- }}}
 
+
+
+-- Utilities --------------------------------------------------- {{{
+promptDzenWhileRunning :: String -> [String] -> X () -> X ()
+promptDzenWhileRunning promptTitle options action = do
+  handle <- spawnPipe $ "sleep 1 && dzen2 -e onstart=uncollapse -l " ++ lineCount ++ " -fn '" ++ font ++ "'"
+  io $ SysIO.hPutStrLn handle (promptTitle ++ unlines options)
+  _ <- action
+  io $ SysIO.hClose handle
+  where
+    lineCount = show $ length options
+    font      = "-*-iosevka-medium-r-s*--16-87-*-*-*-*-iso10???-1"
+
+
+-- }}}
