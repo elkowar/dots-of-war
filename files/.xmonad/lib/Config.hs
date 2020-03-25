@@ -26,7 +26,7 @@ import XMonad.Layout.BinarySpacePartition
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.FadeInactive
 import XMonad.Hooks.ManageDocks
-import XMonad.Hooks.EwmhDesktops (ewmh)
+import XMonad.Hooks.EwmhDesktops (ewmh, fullscreenEventHook)
 import XMonad.Hooks.SetWMName (setWMName)
 import XMonad.Layout.Gaps
 import XMonad.Layout.LayoutCombinators ((|||))
@@ -45,7 +45,11 @@ import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run
 import XMonad.Util.SpawnOnce (spawnOnce)
 import qualified XMonad.Actions.Navigation2D as Nav2d
-
+-- Minimize stuff
+import XMonad.Layout.Minimize
+import qualified XMonad.Layout.BoringWindows as BoringWindows
+import XMonad.Hooks.Minimize
+import XMonad.Actions.Minimize
 -- }}}
 
 -- Values -------------------- {{{
@@ -99,7 +103,7 @@ aqua      = "#8ec07c"
 
 -- Layout ---------------------------------------- {{{
 --layoutHints .
-myLayout = avoidStruts . smartBorders . toggleLayouts Full  $ layouts
+myLayout = BoringWindows.boringWindows . minimize . avoidStruts .  smartBorders . toggleLayouts Full  $ layouts
   where
     layouts =((rename "tall"     $ onlyGaps       $ mouseResizableTile         {draggerType = dragger}) -- ResizableTall 1 (3/100) (1/2) []
           ||| (rename "horizon"  $ onlyGaps       $ mouseResizableTileMirrored {draggerType = dragger}) -- Mirror                           $ ResizableTall 1 (3/100) (3/4) []
@@ -169,17 +173,23 @@ myKeys = [ ("M-C-k",    sendMessage MirrorExpand >> sendMessage ShrinkSlave )
 
 
          -- BSP
-         , ("M-M1-h",   sendMessage $ ExpandTowards L)
-         , ("M-M1-l",   sendMessage $ ExpandTowards R)
-         , ("M-M1-k",   sendMessage $ ExpandTowards U)
-         , ("M-M1-j",   sendMessage $ ExpandTowards D)
-         , ("M-<Backspace>",    sendMessage $ Swap)
-         , ("M-M1-<Backspace>", sendMessage $ Rotate)
+         , ("M-M1-h",            sendMessage $ ExpandTowards L)
+         , ("M-M1-l",            sendMessage $ ExpandTowards R)
+         , ("M-M1-k",            sendMessage $ ExpandTowards U)
+         , ("M-M1-j",            sendMessage $ ExpandTowards D)
+         , ("M-<Backspace>",     sendMessage $ Swap)
+         , ("M-M1-<Backspace>",  sendMessage $ Rotate)
 
          , ("M-S-M1-h", Nav2d.windowGo L False)
          , ("M-S-M1-l", Nav2d.windowGo R False)
          , ("M-S-M1-k", Nav2d.windowGo U False)
          , ("M-S-M1-j", Nav2d.windowGo D False)
+
+         -- Minimization
+         , ("M-k",    BoringWindows.focusUp)
+         , ("M-j",    BoringWindows.focusDown)
+         , ("M-ü",    withFocused minimizeWindow)
+         , ("M-S-ü",  withLastMinimized maximizeWindow)
 
          ] ++ copyToWorkspaceMappings
   where
@@ -269,7 +279,7 @@ main = do
       , logHook            = myLogHook <+> dynamicLogWithPP (polybarPP dbus) <+> logHook def
       , startupHook        = myStartupHook <+> startupHook def
       , manageHook         = myManageHook <+> manageHook def
-      --, handleEventHook    = fullscreenEventHook
+      -- , handleEventHook    = minimizeEventHook <+> handleEventHook def -- fullscreenEventHook
       , focusedBorderColor = aqua
       , normalBorderColor  = "#282828"
       } `removeKeysP` removedKeys `additionalKeysP` myKeys
