@@ -137,6 +137,7 @@ myStartupHook :: X ()
 myStartupHook = do
   spawnOnce "picom --config ~/.config/picom.conf --no-fading-openclose"
   spawnOnce "pasystray"
+  spawnOnce "nm-applet"
   spawn "/home/leon/.config/polybar/launch.sh"
   setWMName "LG3D" -- Java stuff hack
 
