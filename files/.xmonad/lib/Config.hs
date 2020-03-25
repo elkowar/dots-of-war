@@ -108,10 +108,10 @@ aqua      = "#8ec07c"
 --layoutHints .
 myLayout = BoringWindows.boringWindows . minimize . avoidStruts .  smartBorders . toggleLayouts Full  $ layouts
   where
-    layouts =((rename "tall"     $ onlyGaps       $ mouseResizableTile         {draggerType = dragger}) -- ResizableTall 1 (3/100) (1/2) []
-          ||| (rename "horizon"  $ onlyGaps       $ mouseResizableTileMirrored {draggerType = dragger}) -- Mirror                           $ ResizableTall 1 (3/100) (3/4) []
-          ||| (rename "row"      $ spacingAndGaps $ zoomRow)
-          ||| (rename "bsp"      $ spacingAndGaps $ borderResize $ emptyBSP))
+    layouts =((rename "Tall"     $ onlyGaps       $ mouseResizableTile         {draggerType = dragger}) -- ResizableTall 1 (3/100) (1/2) []
+          ||| (rename "Horizon"  $ onlyGaps       $ mouseResizableTileMirrored {draggerType = dragger}) -- Mirror                           $ ResizableTall 1 (3/100) (3/4) []
+          ||| (rename "Row"      $ spacingAndGaps $ zoomRow)
+          ||| (rename "Bsp"      $ spacingAndGaps $ borderResize $ emptyBSP))
           -- ||| (rename "threeCol" $ spacingAndGaps $ ThreeColMid 1 (3/100) (1/2))
           -- ||| (rename "spiral"   $ spacingAndGaps $ spiral (9/21))
           -- ||| (rename "spiral" $ spiral (6/7)))
@@ -120,10 +120,13 @@ myLayout = BoringWindows.boringWindows . minimize . avoidStruts .  smartBorders 
     rename n = renamed [Replace n]
 
     gap            = 7
-    spacingBorder  = let x = fromIntegral gap in Border x x x x
-    spacingAndGaps = onlyGaps . spacingRaw True spacingBorder False spacingBorder True
     onlyGaps       = gaps [ (dir, (gap*2)) | dir <- [L, R, D, U] ]  -- gaps are included in mouseResizableTile
-    dragger        = FixedDragger (fromIntegral gap*2) (fromIntegral gap * 2)
+    dragger        = let x = fromIntegral gap * 2 
+                     in FixedDragger x x
+    spacingAndGaps = let intGap        = fromIntegral gap
+                         spacingBorder = Border intGap intGap intGap intGap 
+                     in onlyGaps . spacingRaw True spacingBorder False spacingBorder True
+        
 
 -- }}}
 
@@ -307,7 +310,7 @@ polybarPP dbus = namedScratchpadFilterOutWorkspacePP $ def
   , ppCurrent = withBG bg2
   , ppVisible = withBG bg2
   , ppUrgent  = withFG red
-  , ppLayout  = removeWord "Hinted" . removeWord "Spacing" . withFG purple
+  , ppLayout  = removeWord "Minimize" . removeWord "Hinted" . removeWord "Spacing" . withFG purple
   , ppHidden  = wrap " " " " . unwords . map wrapOpenWorkspaceCmd . words
   , ppWsSep   = ""
   , ppSep     = " | "
