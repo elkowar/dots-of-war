@@ -1,8 +1,8 @@
 [options]
-font = Iosevka Medium 14
+font = Iosevka Nerd Font Medium 12
 ;font = Victor mono 13
-# font = jetbrains mono 13
-# font = monospace 13
+;font = jetbrains mono Nerd Font 12
+;font = monospace 13
 
 [colors]
 # hard contrast: background = #1d2021

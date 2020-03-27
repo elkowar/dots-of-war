@@ -9,7 +9,7 @@
 OSD="no"  # On Screen Display message for KDE if enabled
 INC=2  # Increment when lowering/rising the volume
 MAX_VOL=130  # Maximum volume
-AUTOSYNC="no"  # All programs have the same volume if enabled
+AUTOSYNC="yes"  # All programs have the same volume if enabled
 VOLUME_ICONS=("🔈 " "🔉 " "🔊 ")
 MUTED_ICON=" "  # Muted volume icon
 MUTED_COLOR="%{F#6b6b6b}"  # Color when the audio is muted

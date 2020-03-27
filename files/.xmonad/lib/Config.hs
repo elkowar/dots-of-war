@@ -2,7 +2,7 @@
 {-# OPTIONS_GHC -fno-warn-missing-signatures -fno-warn-unused-binds #-}
 -- Imports -------------------------------------------------------- {{{
 module Config (main) where
-import qualified Rofi as Rofi
+import qualified Rofi
 
 import Data.List (isSuffixOf, isPrefixOf)
 import Data.Char (isDigit)
@@ -24,7 +24,7 @@ import XMonad.Layout.BinarySpacePartition
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.FadeInactive
 import XMonad.Hooks.ManageDocks
-import XMonad.Hooks.EwmhDesktops (ewmh)
+import qualified XMonad.Hooks.EwmhDesktops as Ewmh
 import XMonad.Hooks.SetWMName (setWMName)
 import XMonad.Layout.Gaps
 import XMonad.Layout.LayoutCombinators ((|||))
@@ -53,7 +53,7 @@ import XMonad.Actions.Commands
 
 myModMask  = mod4Mask
 myLauncher = Rofi.asCommand def ["-show run"] -- "rofi -show run -theme /home/leon/scripts/rofi-scripts/launcher_grid_full_style.rasi"
-myTerminal = "kitty --single-instance"
+myTerminal = "kitty --single-instance" -- try alacritty
 myBrowser = "google-chrome-stable"
 --yBar = "xmobar"
 --myXmobarPP= xmobarPP { ppCurrent = xmobarColor "#429942" "" . wrap "<" ">" }
@@ -100,7 +100,7 @@ aqua      = "#8ec07c"
 
 -- Layout ---------------------------------------- {{{
 --layoutHints .
-myLayout = BoringWindows.boringWindows . minimize . avoidStruts .  smartBorders . toggleLayouts Full  $ layouts
+myLayout = BoringWindows.boringWindows . minimize . avoidStruts . smartBorders . toggleLayouts Full  $ layouts
   where
     layouts =((rename "Tall"     $ onlyGaps       $ mouseResizableTile         {draggerType = dragger}) -- ResizableTall 1 (3/100) (1/2) []
           ||| (rename "Horizon"  $ onlyGaps       $ mouseResizableTileMirrored {draggerType = dragger}) -- Mirror                           $ ResizableTall 1 (3/100) (3/4) []
@@ -115,12 +115,12 @@ myLayout = BoringWindows.boringWindows . minimize . avoidStruts .  smartBorders 
 
     gap            = 7
     onlyGaps       = gaps [ (dir, (gap*2)) | dir <- [L, R, D, U] ]  -- gaps are included in mouseResizableTile
-    dragger        = let x = fromIntegral gap * 2 
+    dragger        = let x = fromIntegral gap * 2
                      in FixedDragger x x
     spacingAndGaps = let intGap        = fromIntegral gap
-                         spacingBorder = Border intGap intGap intGap intGap 
+                         spacingBorder = Border intGap intGap intGap intGap
                      in onlyGaps . spacingRaw True spacingBorder False spacingBorder True
-        
+
 
 -- }}}
 
@@ -138,6 +138,7 @@ myStartupHook = do
   spawnOnce "picom --config ~/.config/picom.conf --no-fading-openclose"
   spawnOnce "pasystray"
   spawnOnce "nm-applet"
+  spawn "xset r rate 300 30" -- make key repeat quicker
   spawn "/home/leon/.config/polybar/launch.sh"
   setWMName "LG3D" -- Java stuff hack
 
@@ -161,29 +162,21 @@ myKeys = [ ("M-C-k",    sendMessage MirrorExpand >> sendMessage ShrinkSlave )
          , ("M-C-c",    killAllOtherCopies)
          , ("M-S-C-q",  io $ exitSuccess)
 
+         -- Binary space partitioning
+         , ("M-<Backspace>",    sendMessage $ Swap)
+         , ("M-M1-<Backspace>", sendMessage $ Rotate)
+
          -- programs
          , ("M-p",      spawn myLauncher)
          , ("M-b",      spawn myBrowser)
          , ("M-S-p",    Rofi.showCombi def [ "drun", "window", "ssh" ])
          , ("M-S-e",    Rofi.showNormal def "emoji" )
          , ("M-s",      spawn $ scriptFile "rofi-search.sh")
-         , ("M-S-s",    spawn $ "cat " ++ scriptFile "bookmarks" ++ " | " ++ Rofi.asCommand def ["-dmenu", "-p open"] ++ " | bash")
+         , ("M-S-s",    spawn $ scriptFile "rofi-open.sh")
          , ("M-n",      scratchpadSubmap )
          , ("M-m",      mediaSubmap )
          , ("M-e",      Rofi.promptRunCommand def specialCommands)
          , ("M-C-e",    Rofi.promptRunCommand def =<< defaultCommands )
-
-         -- BSP
-         , ("M-M1-h",           sendMessage $ ExpandTowards L)
-         , ("M-M1-l",           sendMessage $ ExpandTowards R)
-         , ("M-M1-k",           sendMessage $ ExpandTowards U)
-         , ("M-M1-j",           sendMessage $ ExpandTowards D)
-         , ("M-<Backspace>",    sendMessage $ Swap)
-         , ("M-M1-<Backspace>", sendMessage $ Rotate)
-         , ("M-S-M1-h",         Nav2d.windowGo L False)
-         , ("M-S-M1-l",         Nav2d.windowGo R False)
-         , ("M-S-M1-k",         Nav2d.windowGo U False)
-         , ("M-S-M1-j",         Nav2d.windowGo D False)
 
          -- Minimization
          , ("M-k",       BoringWindows.focusUp)
@@ -192,16 +185,26 @@ myKeys = [ ("M-C-k",    sendMessage MirrorExpand >> sendMessage ShrinkSlave )
          , ("M-S-ü",     withLastMinimized maximizeWindow)
          , ("M-C-ü",     promptRestoreWindow)
          , ("M1-<Tab>", cycleMinimizedWindow)
-         ] ++ concat generatedMappings
+         ] ++ generatedMappings
   where
-    generatedMappings :: [[(String, X ())]]
-    generatedMappings = 
-      [ [("M-C-" ++ wsp, windows $ copy wsp) | wsp <- map show [1..9]] -- Copy to workspace
-      ]
-        --where hjklDirPairs = [("h", L), ("j", D), ("k", U), ("l", R) ]
+    generatedMappings :: [(String, X ())]
+    generatedMappings = copyToWorkspaceMappings ++ bspMappings
+        where
+          copyToWorkspaceMappings = 
+              [ ("M-C-" ++ wsp, windows $ copy wsp) 
+              | wsp <- map show [1..9 :: Int] 
+              ]
+          bspMappings = concat
+              [ [ ("M-M1-"   ++ key, sendMessage $ ExpandTowards dir)
+                , ("M-S-M1-" ++ key, Nav2d.windowGo   dir False)
+                , ("M-C-M1-" ++ key, Nav2d.windowSwap dir False)
+                ]
+              | (key, dir) <- [("h", L), ("j", D), ("k", U), ("l", R) ]
+              ]
+
 
     cycleMinimizedWindow :: X ()
-    cycleMinimizedWindow = withLastMinimized $ \window -> do 
+    cycleMinimizedWindow = withLastMinimized $ \window -> do
         withFocused minimizeWindow
         maximizeWindowAndFocus window
 
@@ -275,8 +278,8 @@ main = do
       [D.nameAllowReplacement, D.nameReplaceExisting, D.nameDoNotQueue]
 
 -- $ ewmh  (kills IntelliJ)
-  xmonad 
-    $ ewmh
+  xmonad
+    $ Ewmh.ewmh
     $ Nav2d.withNavigation2DConfig def { Nav2d.defaultTiledNavigation = Nav2d.sideNavigation }
     $ myConfig dbus
 
@@ -289,6 +292,7 @@ myConfig dbus = desktopConfig
       , startupHook        = myStartupHook <+> startupHook def <+> return () >> checkKeymap (myConfig dbus ) myKeys
       , manageHook         = myManageHook <+> manageHook def
       -- , handleEventHook    = minimizeEventHook <+> handleEventHook def -- fullscreenEventHook
+      --, handleEventHook = handleEventHook def <+> Ewmh.fullscreenEventHook
       , focusedBorderColor = aqua
       , normalBorderColor  = "#282828"
       } `removeKeysP` removedKeys `additionalKeysP` myKeys
@@ -296,8 +300,6 @@ myConfig dbus = desktopConfig
 
 
 -- }}}
-
-
 
 -- POLYBAR Kram -------------------------------------- {{{
 
@@ -337,7 +339,6 @@ dbusOutput dbus str = do
     memberName = D.memberName_ "Update"
 
 -- }}}
-
 
 
 -- Utilities --------------------------------------------------- {{{
