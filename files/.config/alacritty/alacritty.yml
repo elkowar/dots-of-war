@@ -38,7 +38,7 @@ scrolling:
 dynamic_title: true
 
 cursor:
-  style: Beam # ▇ Block, _ Underline, | Beam
+  style: Block # ▇ Block, _ Underline, | Beam
   unfocused_hollow: true
   # Live config reload (changes require restart)
 live_config_reload: true

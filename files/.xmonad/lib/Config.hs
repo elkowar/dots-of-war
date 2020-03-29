@@ -24,6 +24,7 @@ import XMonad.Layout.BinarySpacePartition
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.FadeInactive
 import XMonad.Hooks.ManageDocks
+import qualified XMonad.Hooks.ManageHelpers as ManageHelpers
 import qualified XMonad.Hooks.EwmhDesktops as Ewmh
 import XMonad.Hooks.SetWMName (setWMName)
 import XMonad.Layout.Gaps
@@ -33,6 +34,7 @@ import XMonad.Layout.ResizableTile      -- for resizeable tall layout
 import XMonad.Layout.MouseResizableTile
 import XMonad.Layout.Spacing (spacingRaw, Border(..), toggleWindowSpacingEnabled)
 import XMonad.Layout.Renamed (renamed, Rename(Replace))
+import XMonad.Layout.LayoutHints
 import XMonad.Layout.ToggleLayouts
 import XMonad.Layout.ZoomRow
 import XMonad.Layout.BorderResize
@@ -54,7 +56,8 @@ import XMonad.Actions.Commands
 myModMask  = mod4Mask
 myLauncher = Rofi.asCommand (def { Rofi.theme = Rofi.bigTheme }) ["-show run"]
 myTerminal = "kitty --single-instance" -- try alacritty
-myBrowser = "google-chrome-stable"
+myBrowser = "qutebrowser"
+--myBrowser = "google-chrome-stable"
 
 {-| adds the scripts-directory path to the filename of a script |-}
 scriptFile :: String -> String
@@ -98,7 +101,7 @@ aqua      = "#8ec07c"
 
 -- Layout ---------------------------------------- {{{
 --layoutHints .
-myLayout = BoringWindows.boringWindows . minimize . avoidStruts . smartBorders . toggleLayouts Full  $ layouts
+myLayout = avoidStruts . BoringWindows.boringWindows . minimize . smartBorders . toggleLayouts Full . layoutHintsToCenter $ layouts
   where
     layouts =((rename "Tall"     $ onlyGaps       $ mouseResizableTile         {draggerType = dragger}) -- ResizableTall 1 (3/100) (1/2) []
           ||| (rename "Horizon"  $ onlyGaps       $ mouseResizableTileMirrored {draggerType = dragger}) -- Mirror                           $ ResizableTall 1 (3/100) (3/4) []
@@ -156,13 +159,15 @@ myKeys = [ ("M-C-k",    sendMessage MirrorExpand >> sendMessage ShrinkSlave )
 
          , ("M-f",      toggleFullscreen)
          , ("M-S-C-c",  kill1)
-         , ("M-S-C-a",  windows copyToAll) -- windows: Modify the current window list with a pure function, and refresh
-         , ("M-C-c",    killAllOtherCopies)
          , ("M-S-C-q",  io $ exitSuccess)
 
          -- Binary space partitioning
          , ("M-<Backspace>",    sendMessage $ Swap)
          , ("M-M1-<Backspace>", sendMessage $ Rotate)
+
+         -- Media
+         , ("<XF86AudioRaiseVolume>", spawn "amixer sset Master 5%+")
+         , ("<XF86AudioLowerVolume>", spawn "amixer sset Master 5%-")
 
          -- programs
          , ("M-p",      spawn myLauncher)
@@ -241,9 +246,11 @@ myKeys = [ ("M-C-k",    sendMessage MirrorExpand >> sendMessage ShrinkSlave )
 
     specialCommands :: [(String,  X ())]
     specialCommands =
-      [ ("screenshot",    spawn $ scriptFile "screenshot.sh")
-      , ("toggleSpacing", toggleWindowSpacingEnabled)
-      , ("toggleGaps",    sendMessage ToggleGaps)
+      [ ("screenshot",              spawn $ scriptFile "screenshot.sh")
+      , ("toggleSpacing",           toggleWindowSpacingEnabled)
+      , ("toggleGaps",              sendMessage ToggleGaps)
+      , ("Copy to all workspaces",  windows copyToAll)           -- windows: Modify the current window list with a pure function, and refresh
+      , ("Kill all other copies",   killAllOtherCopies)
       ]
 
     describedSubmap :: String -> [((KeyMask, KeySym), String, X ())] -> X ()
@@ -258,8 +265,9 @@ myKeys = [ ("M-C-k",    sendMessage MirrorExpand >> sendMessage ShrinkSlave )
 
 myManageHook :: Query (Data.Monoid.Endo WindowSet)
 myManageHook = composeAll
-  [ resource =? "Dialog" --> doFloat
-  , appName =? "pavucontrol" --> doFloat
+  [ resource =? "Dialog" --> ManageHelpers.doCenterFloat
+  , appName =? "pavucontrol" --> ManageHelpers.doCenterFloat
+  , className =? "mpv" --> ManageHelpers.doRectFloat (W.RationalRect 0.9 0.9 0.1 0.1)
   -- , isFullscreen --> doF W.focusDown <+> doFullFloat
   , manageDocks
   , namedScratchpadManageHook scratchpads
@@ -290,7 +298,7 @@ myConfig dbus = desktopConfig
       , startupHook        = myStartupHook <+> startupHook def <+> return () >> checkKeymap (myConfig dbus ) myKeys
       , manageHook         = myManageHook <+> manageHook def
       -- , handleEventHook    = minimizeEventHook <+> handleEventHook def -- fullscreenEventHook
-      --, handleEventHook = handleEventHook def <+> Ewmh.fullscreenEventHook
+      --, handleEventHook = handleEventHook def <+> hintsEventHook -- <+> Ewmh.fullscreenEventHook
       , focusedBorderColor = aqua
       , normalBorderColor  = "#282828"
       } `removeKeysP` removedKeys `additionalKeysP` myKeys
