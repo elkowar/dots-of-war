@@ -6,6 +6,12 @@
 
 config_version: 2
 settings:
+  colors.webpage.bg:
+    global: null
+  colors.webpage.prefers_color_scheme_dark:
+    global: true
+  fonts.default_family:
+    global: null
   scrolling.smooth:
     global: true
   statusbar.hide:

@@ -23,8 +23,22 @@ c.tabs.show_switching_delay = 1000
 
 c.statusbar.hide = False
 c.fonts.statusbar = "default_size Iosevka"
+c.fonts.default_family = ["JetBrainsMono"]
 
 c.editor.command  = ["alacritty", "-e", "vim", "{file}"]
 
 
+c.auto_save.session = True
+
+c.url.searchengines = { 
+    "DEFAULT": "https://duckduckgo.com/?q={}", 
+    "wa": "https://wiki.archlinux.org/?search={}", 
+    "y": "https://youtube.com/results?search_query={}", 
+    "g": "https://google.com/search?q={}",
+    "h": "https://hoogle.haskell.org/?hoogle={}",
+    "w": "https://wikipedia.org/wiki/Special:Search/{}"
+}
+
+
+c.colors.webpage.prefers_color_scheme_dark = True
 c.statusbar.padding = {"bottom": 1, "left": 8, "right": 8, "top": 1}
