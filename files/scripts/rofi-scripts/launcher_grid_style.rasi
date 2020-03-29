@@ -25,7 +25,7 @@ configuration {
 	sidebar-mode: false;
 }
 
-@import "./colorschemes/gruvbox.rasi"
+@import "./colors.rasi"
 
 * {
   text-font:                            "Iosevka 12";

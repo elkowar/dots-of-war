@@ -52,11 +52,9 @@ import XMonad.Actions.Commands
 -- Values -------------------- {{{
 
 myModMask  = mod4Mask
-myLauncher = Rofi.asCommand def ["-show run"] -- "rofi -show run -theme /home/leon/scripts/rofi-scripts/launcher_grid_full_style.rasi"
+myLauncher = Rofi.asCommand (def { Rofi.theme = Rofi.bigTheme }) ["-show run"]
 myTerminal = "kitty --single-instance" -- try alacritty
 myBrowser = "google-chrome-stable"
---yBar = "xmobar"
---myXmobarPP= xmobarPP { ppCurrent = xmobarColor "#429942" "" . wrap "<" ">" }
 
 {-| adds the scripts-directory path to the filename of a script |-}
 scriptFile :: String -> String
@@ -169,8 +167,8 @@ myKeys = [ ("M-C-k",    sendMessage MirrorExpand >> sendMessage ShrinkSlave )
          -- programs
          , ("M-p",      spawn myLauncher)
          , ("M-b",      spawn myBrowser)
-         , ("M-S-p",    Rofi.showCombi def [ "drun", "window", "ssh" ])
-         , ("M-S-e",    Rofi.showNormal def "emoji" )
+         , ("M-S-p",    Rofi.showCombi (def { Rofi.theme = Rofi.bigTheme }) [ "drun", "window", "ssh" ])
+         , ("M-S-e",    Rofi.showNormal (def { Rofi.theme = Rofi.bigTheme }) "emoji" )
          , ("M-s",      spawn $ scriptFile "rofi-search.sh")
          , ("M-S-s",    spawn $ scriptFile "rofi-open.sh")
          , ("M-n",      scratchpadSubmap )

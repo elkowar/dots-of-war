@@ -1,5 +1,16 @@
 {-# LANGUAGE RecordWildCards, OverloadedStrings #-}
-module Rofi (asCommand, promptSimple, promptMap, promptRunCommand, showNormal, showCombi) where
+module Rofi
+  ( asCommand
+  , promptSimple
+  , promptMap
+  , promptRunCommand
+  , showNormal
+  , showCombi
+  , smallTheme
+  , bigTheme
+  , RofiConfig(..)
+  )
+where
 
 import           Data.List                      ( intercalate )
 import qualified Data.Map                      as M
@@ -15,13 +26,19 @@ data RofiConfig
 
 instance Default RofiConfig where
   def = RofiConfig
-    { theme = "/home/leon/scripts/rofi-scripts/launcher_grid_full_style.rasi"
+    { theme = smallTheme
     , caseInsensitive = True
     }
 
+smallTheme :: String
+smallTheme = "/home/leon/scripts/rofi-scripts/launcher_grid_style.rasi"
+
+bigTheme :: String 
+bigTheme = "/home/leon/scripts/rofi-scripts/launcher_grid_full_style.rasi"
+
 toArgList :: RofiConfig -> [String]
 toArgList RofiConfig {..} =
-  ["-theme " ++ theme, if caseInsensitive then "-i" else ""]
+  ["-theme", theme, if caseInsensitive then "-i" else ""]
 
 -- |given an array of arguments, generate a string that would call rofi with the configuration and arguments
 asCommand :: RofiConfig -> [String] -> String
@@ -37,7 +54,7 @@ promptMap config = Dmenu.menuMapArgs rofiCmd ("-dmenu" : toArgList config)
 
 -- |Display a list of commands, of which the chosen one will be executed. See `Xmonad.Actions.Commands.runCommandConfig`
 promptRunCommand :: RofiConfig -> [(String, X ())] -> X ()
-promptRunCommand config = XCommands.runCommandConfig $ Rofi.promptSimple config
+promptRunCommand config = XCommands.runCommandConfig (Rofi.promptSimple config)
 
 -- |prompt a single rofi mode. ex: `showNormal def "run"`
 showNormal :: RofiConfig -> String -> X ()
