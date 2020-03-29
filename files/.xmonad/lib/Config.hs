@@ -247,6 +247,7 @@ myKeys = [ ("M-C-k",    sendMessage MirrorExpand >> sendMessage ShrinkSlave )
     specialCommands :: [(String,  X ())]
     specialCommands =
       [ ("screenshot",              spawn $ scriptFile "screenshot.sh")
+      , ("toggleOptimal",           sendMessage ToggleGaps >> toggleWindowSpacingEnabled)
       , ("toggleSpacing",           toggleWindowSpacingEnabled)
       , ("toggleGaps",              sendMessage ToggleGaps)
       , ("Copy to all workspaces",  windows copyToAll)           -- windows: Modify the current window list with a pure function, and refresh

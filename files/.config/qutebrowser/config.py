@@ -18,7 +18,7 @@ config.bind("<Ctrl-L>", "set-cmd-text -s :open")
 config.bind(",y", "hint links spawn mpv {hint-url}")
 config.bind(",Y", "spawn mpv {url}")
 
-c.tabs.show = "always"
+c.tabs.show = "multiple"
 c.tabs.show_switching_delay = 1000
 
 c.statusbar.hide = False
