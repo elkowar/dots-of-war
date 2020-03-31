@@ -43,6 +43,7 @@ import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run
 import XMonad.Util.SpawnOnce (spawnOnce)
 import qualified XMonad.Actions.Navigation2D as Nav2d
+import qualified XMonad.Util.XSelection as XSel
 -- Minimize stuff
 import XMonad.Layout.Minimize
 import qualified XMonad.Layout.BoringWindows as BoringWindows
@@ -55,7 +56,7 @@ import XMonad.Actions.Commands
 
 myModMask  = mod4Mask
 myLauncher = Rofi.asCommand (def { Rofi.theme = Rofi.bigTheme }) ["-show run"]
-myTerminal = "kitty --single-instance" -- try alacritty
+myTerminal = "kitty --single-instance"
 myBrowser = "qutebrowser"
 --myBrowser = "google-chrome-stable"
 
@@ -180,6 +181,8 @@ myKeys = [ ("M-C-k",    sendMessage MirrorExpand >> sendMessage ShrinkSlave )
          , ("M-m",      mediaSubmap )
          , ("M-e",      Rofi.promptRunCommand def specialCommands)
          , ("M-C-e",    Rofi.promptRunCommand def =<< defaultCommands )
+         , ("M-o",      Rofi.promptRunCommand def withSelectionCommands)
+
 
          -- Minimization
          , ("M-k",       BoringWindows.focusUp)
@@ -243,6 +246,13 @@ myKeys = [ ("M-C-k",    sendMessage MirrorExpand >> sendMessage ShrinkSlave )
       , ((myModMask, xK_j), "<M-j> decrease volume", spawn "amixer sset Master 5%-")
       ]
 
+    withSelectionCommands :: [(String, X ())]
+    withSelectionCommands = 
+      [ ("Google",        XSel.transformPromptSelection  ("https://google.com/search?q=" ++) "qutebrowser")
+      , ("Hoogle",        XSel.transformPromptSelection  ("https://hoogle.haskell.org/?hoogle=" ++) "qutebrowser")
+      , ("Translate",     XSel.transformPromptSelection  ("https://translate.google.com/#view=home&op=translate&sl=auto&tl=en&text=" ++) "qutebrowser")
+      ]
+
 
     specialCommands :: [(String,  X ())]
     specialCommands =
@@ -253,6 +263,7 @@ myKeys = [ ("M-C-k",    sendMessage MirrorExpand >> sendMessage ShrinkSlave )
       , ("Copy to all workspaces",  windows copyToAll)           -- windows: Modify the current window list with a pure function, and refresh
       , ("Kill all other copies",   killAllOtherCopies)
       ]
+
 
     describedSubmap :: String -> [((KeyMask, KeySym), String, X ())] -> X ()
     describedSubmap submapTitle mappings = promptDzenWhileRunning submapTitle descriptions mySubmap

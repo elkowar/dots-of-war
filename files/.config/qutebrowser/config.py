@@ -18,6 +18,9 @@ config.bind("<Ctrl-L>", "set-cmd-text -s :open")
 config.bind(",y", "hint links spawn mpv {hint-url}")
 config.bind(",Y", "spawn mpv {url}")
 
+config.bind("<Alt-j>", "scroll-px 0 40")
+config.bind("<Alt-k>", "scroll-px 0 -40")
+
 c.tabs.show = "multiple"
 c.tabs.show_switching_delay = 1000
 
