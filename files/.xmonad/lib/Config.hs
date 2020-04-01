@@ -1,6 +1,8 @@
 {-# Language ScopedTypeVariables, LambdaCase #-}
 {-# OPTIONS_GHC -fno-warn-missing-signatures -fno-warn-unused-binds #-}
 -- Imports -------------------------------------------------------- {{{
+
+
 module Config (main) where
 import qualified Rofi
 
@@ -29,8 +31,8 @@ import qualified XMonad.Hooks.EwmhDesktops as Ewmh
 import XMonad.Hooks.SetWMName (setWMName)
 import XMonad.Layout.Gaps
 import XMonad.Layout.LayoutCombinators ((|||))
-import XMonad.Layout.NoBorders          -- for fullscreen without borders
-import XMonad.Layout.ResizableTile      -- for resizeable tall layout
+import XMonad.Layout.NoBorders
+import XMonad.Layout.ResizableTile
 import XMonad.Layout.MouseResizableTile
 import XMonad.Layout.Spacing (spacingRaw, Border(..), toggleWindowSpacingEnabled)
 import XMonad.Layout.Renamed (renamed, Rename(Replace))
@@ -47,10 +49,12 @@ import qualified XMonad.Util.XSelection as XSel
 -- Minimize stuff
 import XMonad.Layout.Minimize
 import qualified XMonad.Layout.BoringWindows as BoringWindows
-import XMonad.Actions.Minimize
-import XMonad.Actions.WindowBringer
 import XMonad.Actions.Commands
 -- }}}
+
+{-# ANN module "HLint: ignore Redundant $" #-}
+{-# ANN module "HLint: ignore Redundant bracket" #-}
+{-# ANN module "HLint: ignore Move brackets to avoid $" #-}
 
 -- Values -------------------- {{{
 
@@ -104,10 +108,10 @@ aqua      = "#8ec07c"
 --layoutHints .
 myLayout = avoidStruts . BoringWindows.boringWindows . minimize . smartBorders . toggleLayouts Full . layoutHintsToCenter $ layouts
   where
-    layouts =((rename "Tall"     $ onlyGaps       $ mouseResizableTile         {draggerType = dragger}) -- ResizableTall 1 (3/100) (1/2) []
+    layouts =((rename "Bsp"      $ spacingAndGaps $ borderResize $ emptyBSP)
+          ||| (rename "Tall"     $ onlyGaps       $ mouseResizableTile         {draggerType = dragger}) -- ResizableTall 1 (3/100) (1/2) []
           ||| (rename "Horizon"  $ onlyGaps       $ mouseResizableTileMirrored {draggerType = dragger}) -- Mirror                           $ ResizableTall 1 (3/100) (3/4) []
-          ||| (rename "Row"      $ spacingAndGaps $ zoomRow)
-          ||| (rename "Bsp"      $ spacingAndGaps $ borderResize $ emptyBSP))
+          ||| (rename "Row"      $ spacingAndGaps $ zoomRow))
           -- ||| (rename "threeCol" $ spacingAndGaps $ ThreeColMid 1 (3/100) (1/2))
           -- ||| (rename "spiral"   $ spacingAndGaps $ spiral (9/21))
           -- ||| (rename "spiral" $ spiral (6/7)))
@@ -148,23 +152,33 @@ myStartupHook = do
 
 -- Keymap --------------------------------------- {{{
 
--- Default mappings that need to be removed removedKeys :: [String]
-removedKeys = ["M-S-c", "M-S-q"]
+-- Default mappings that need to be removed
+removedKeys :: [String]
+removedKeys = ["M-S-c", "M-S-q", "M-h", "M-l"]
 
 myKeys :: [(String, X ())]
-myKeys = [ ("M-C-k",    sendMessage MirrorExpand >> sendMessage ShrinkSlave )
-         , ("M-C-j",    sendMessage MirrorShrink >> sendMessage ExpandSlave )
+myKeys = [ ("M-C-k",    sendMessage MirrorExpand >> sendMessage ShrinkSlave)
+         , ("M-C-j",    sendMessage MirrorShrink >> sendMessage ExpandSlave)
+         , ("M-C-h",    sendMessage Shrink)
+         , ("M-C-l",    sendMessage Expand)
+
          , ("M-+",      sendMessage zoomIn)
          , ("M--",      sendMessage zoomOut)
          , ("M-#",      sendMessage zoomReset)
 
          , ("M-f",      toggleFullscreen)
+
+         --, ("M-h", Nav2d.windowGo L False)
+         --, ("M-l", Nav2d.windowGo R False)
+         --, ("M-j", Nav2d.windowGo D False)
+         --, ("M-k", Nav2d.windowGo U False)
+
          , ("M-S-C-c",  kill1)
-         , ("M-S-C-q",  io $ exitSuccess)
+         , ("M-S-C-q",  io exitSuccess)
 
          -- Binary space partitioning
-         , ("M-<Backspace>",    sendMessage $ Swap)
-         , ("M-M1-<Backspace>", sendMessage $ Rotate)
+         , ("M-<Backspace>",    sendMessage Swap)
+         , ("M-M1-<Backspace>", sendMessage Rotate)
 
          -- Media
          , ("<XF86AudioRaiseVolume>", spawn "amixer sset Master 5%+")
@@ -173,7 +187,7 @@ myKeys = [ ("M-C-k",    sendMessage MirrorExpand >> sendMessage ShrinkSlave )
          -- programs
          , ("M-p",      spawn myLauncher)
          , ("M-b",      spawn myBrowser)
-         , ("M-S-p",    Rofi.showCombi (def { Rofi.theme = Rofi.bigTheme }) [ "drun", "window", "ssh" ])
+         , ("M-S-p",    Rofi.showCombi  (def { Rofi.theme = Rofi.bigTheme }) [ "drun", "window", "ssh" ])
          , ("M-S-e",    Rofi.showNormal (def { Rofi.theme = Rofi.bigTheme }) "emoji" )
          , ("M-s",      spawn $ scriptFile "rofi-search.sh")
          , ("M-S-s",    spawn $ scriptFile "rofi-open.sh")
@@ -182,44 +196,22 @@ myKeys = [ ("M-C-k",    sendMessage MirrorExpand >> sendMessage ShrinkSlave )
          , ("M-e",      Rofi.promptRunCommand def specialCommands)
          , ("M-C-e",    Rofi.promptRunCommand def =<< defaultCommands )
          , ("M-o",      Rofi.promptRunCommand def withSelectionCommands)
-
-
-         -- Minimization
-         , ("M-k",       BoringWindows.focusUp)
-         , ("M-j",       BoringWindows.focusDown)
-         , ("M-ü",       withFocused minimizeWindow)
-         , ("M-S-ü",     withLastMinimized maximizeWindow)
-         , ("M-C-ü",     promptRestoreWindow)
-         , ("M1-<Tab>", cycleMinimizedWindow)
          ] ++ generatedMappings
   where
     generatedMappings :: [(String, X ())]
     generatedMappings = copyToWorkspaceMappings ++ bspMappings
         where
-          copyToWorkspaceMappings = 
-              [ ("M-C-" ++ wsp, windows $ copy wsp) 
-              | wsp <- map show [1..9 :: Int] 
+          copyToWorkspaceMappings =
+              [ ("M-C-" ++ wsp, windows $ copy wsp)
+              | wsp <- map show [1..9 :: Int]
               ]
           bspMappings = concat
-              [ [ ("M-M1-"   ++ key, sendMessage $ ExpandTowards dir)
-                , ("M-S-M1-" ++ key, Nav2d.windowGo   dir False)
-                , ("M-C-M1-" ++ key, Nav2d.windowSwap dir False)
+              [ [ ("M-C-M1-" ++ key, sendMessage $ ExpandTowards dir)
+                , ("M-M1-"   ++ key, Nav2d.windowGo   dir False)
+                , ("M-S-M1-" ++ key, Nav2d.windowSwap dir False)
                 ]
               | (key, dir) <- [("h", L), ("j", D), ("k", U), ("l", R) ]
               ]
-
-
-    cycleMinimizedWindow :: X ()
-    cycleMinimizedWindow = withLastMinimized $ \window -> do
-        withFocused minimizeWindow
-        maximizeWindowAndFocus window
-
-    promptRestoreWindow = do
-      wm <- windowMap
-      shownWindows <- withMinimized (\minimizedWindows -> pure $ M.filter (`elem` minimizedWindows) wm)
-      win <- Rofi.promptSimple def (M.keys shownWindows)
-      whenJust (M.lookup win wm) (\w -> maximizeWindow w >> (windows $ bringWindow w))
-
     toggleFullscreen :: X ()
     toggleFullscreen = do
       sendMessage ToggleLayout                  -- toggle fullscreen layout
@@ -247,7 +239,7 @@ myKeys = [ ("M-C-k",    sendMessage MirrorExpand >> sendMessage ShrinkSlave )
       ]
 
     withSelectionCommands :: [(String, X ())]
-    withSelectionCommands = 
+    withSelectionCommands =
       [ ("Google",        XSel.transformPromptSelection  ("https://google.com/search?q=" ++) "qutebrowser")
       , ("Hoogle",        XSel.transformPromptSelection  ("https://hoogle.haskell.org/?hoogle=" ++) "qutebrowser")
       , ("Translate",     XSel.transformPromptSelection  ("https://translate.google.com/#view=home&op=translate&sl=auto&tl=en&text=" ++) "qutebrowser")
