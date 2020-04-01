@@ -31,7 +31,6 @@ import XMonad.Layout.BorderResize
 import XMonad.Layout.Gaps
 import XMonad.Layout.LayoutCombinators ((|||))
 import XMonad.Layout.LayoutHints
-import XMonad.Layout.Minimize
 import XMonad.Layout.MouseResizableTile
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Renamed (renamed, Rename(Replace))
@@ -159,22 +158,11 @@ removedKeys :: [String]
 removedKeys = ["M-S-c", "M-S-q", "M-h", "M-l"]
 
 myKeys :: [(String, X ())]
-myKeys = [ 
---("M-C-k",    sendMessage MirrorExpand >> sendMessage ShrinkSlave)
-         --, ("M-C-j",    sendMessage MirrorShrink >> sendMessage ExpandSlave)
-         --, ("M-C-h",    sendMessage Shrink)
-         --, ("M-C-l",    sendMessage Expand)
-
-          ("M-+",      sendMessage zoomIn)
+myKeys = [ ("M-+",      sendMessage zoomIn)
          , ("M--",      sendMessage zoomOut)
          , ("M-#",      sendMessage zoomReset)
 
          , ("M-f",      toggleFullscreen)
-
-         --, ("M-h", Nav2d.windowGo L False)
-         --, ("M-l", Nav2d.windowGo R False)
-         --, ("M-j", Nav2d.windowGo D False)
-         --, ("M-k", Nav2d.windowGo U False)
 
          , ("M-S-C-c",  kill1)
          , ("M-S-C-q",  io exitSuccess)
@@ -202,34 +190,20 @@ myKeys = [
          ] ++ generatedMappings
   where
     generatedMappings :: [(String, X ())]
-    generatedMappings = copyToWorkspaceMappings ++ bspMappings
+    generatedMappings = copyToWorkspaceMappings ++ windowGoMappings ++ windowSwapMappings ++ resizeMappings
         where
-          copyToWorkspaceMappings =
-              [ ("M-C-" ++ wsp, windows $ copy wsp)
-              | wsp <- map show [1..9 :: Int]
+          copyToWorkspaceMappings = [ ("M-C-" ++ wsp, windows $ copy wsp) | wsp <- map show [1..9 :: Int] ]
+
+          keyDirPairs = [("h", L), ("j", D), ("k", U), ("l", R)]
+
+          windowGoMappings   = [ ("M-M1-"   ++ key, Nav2d.windowGo   dir False) | (key, dir) <- keyDirPairs ]
+          windowSwapMappings = [ ("M-S-M1-" ++ key, Nav2d.windowSwap dir False) | (key, dir) <- keyDirPairs ]
+          resizeMappings = 
+              [ ("M-C-h", ifLayoutIs "BSP" (sendMessage $ ExpandTowards L) (sendMessage Shrink))
+              , ("M-C-j", ifLayoutIs "BSP" (sendMessage $ ExpandTowards D) (sendMessage MirrorShrink >> sendMessage ExpandSlave))
+              , ("M-C-k", ifLayoutIs "BSP" (sendMessage $ ExpandTowards U) (sendMessage MirrorExpand >> sendMessage ShrinkSlave))
+              , ("M-C-l", ifLayoutIs "BSP" (sendMessage $ ExpandTowards R) (sendMessage Expand))
               ]
-          bspMappings =
-              let 
-                resizeActions :: [(String, X ())]
-                resizeActions = 
-                  map (\(key, (bsp, other)) -> (key, getActiveLayoutDescription >>= (\layout -> if layout == "BSP" then bsp else other))) $ -- TODO fix name
-                    [ ("M-C-h", (sendMessage $ ExpandTowards L, sendMessage Shrink))
-                    , ("M-C-j", (sendMessage $ ExpandTowards D, sendMessage MirrorShrink >> sendMessage ExpandSlave))
-                    , ("M-C-k", (sendMessage $ ExpandTowards U, sendMessage MirrorExpand >> sendMessage ShrinkSlave))
-                    , ("M-C-l", (sendMessage $ ExpandTowards R, sendMessage Expand))
-                    ]
-              in
-              resizeActions ++ concat [ [ ("M-M1-"   ++ key, Nav2d.windowGo   dir False)
-                                        , ("M-S-M1-" ++ key, Nav2d.windowSwap dir False)
-                                        ] 
-                                        | (key, dir) <- [("h", L), ("j", D), ("k", U), ("l", R)]
-                                      ] 
-                             
-
-
-    -- Get the name of the active layout.
-    getActiveLayoutDescription :: X String
-    getActiveLayoutDescription = (description . W.layout . W.workspace . W.current) <$> gets windowset
 
     toggleFullscreen :: X ()
     toggleFullscreen = do
@@ -320,10 +294,9 @@ myConfig dbus = desktopConfig
       , logHook            = myLogHook <+> dynamicLogWithPP (polybarPP dbus) <+> logHook def
       , startupHook        = myStartupHook <+> startupHook def <+> return () >> checkKeymap (myConfig dbus ) myKeys
       , manageHook         = myManageHook <+> manageHook def
-      -- , handleEventHook    = minimizeEventHook <+> handleEventHook def -- fullscreenEventHook
-      --, handleEventHook = handleEventHook def <+> hintsEventHook -- <+> Ewmh.fullscreenEventHook
       , focusedBorderColor = aqua
       , normalBorderColor  = "#282828"
+      --, handleEventHook = minimizeEventHook <+> handleEventHook def <+> hintsEventHook -- <+> Ewmh.fullscreenEventHook
       } `removeKeysP` removedKeys `additionalKeysP` myKeys
 
 
@@ -369,7 +342,6 @@ dbusOutput dbus str = do
 
 -- }}}
 
-
 -- Utilities --------------------------------------------------- {{{
 promptDzenWhileRunning :: String -> [String] -> X () -> X ()
 promptDzenWhileRunning promptTitle options action = do
@@ -381,5 +353,13 @@ promptDzenWhileRunning promptTitle options action = do
     lineCount = show $ length options
     font      = "-*-iosevka-medium-r-s*--16-87-*-*-*-*-iso10???-1"
 
+ifLayoutIs :: String -> X a -> X a -> X a
+ifLayoutIs layoutAName onLayoutA onLayoutB = do
+  layout <- getActiveLayoutDescription
+  if (layout == layoutAName) then onLayoutA else onLayoutB
+
+-- Get the name of the active layout.
+getActiveLayoutDescription :: X String
+getActiveLayoutDescription = (description . W.layout . W.workspace . W.current) <$> gets windowset
 
 -- }}}
