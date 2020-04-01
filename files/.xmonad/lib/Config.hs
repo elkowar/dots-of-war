@@ -108,9 +108,9 @@ aqua      = "#8ec07c"
 
 -- Layout ---------------------------------------- {{{
 --layoutHints .
-myLayout = avoidStruts . BoringWindows.boringWindows . minimize . smartBorders . toggleLayouts Full . layoutHintsToCenter $ layouts
+myLayout = avoidStruts . BoringWindows.boringWindows . smartBorders . toggleLayouts Full . layoutHintsToCenter $ layouts
   where
-    layouts =((rename "Bsp"      $ spacingAndGaps $ borderResize $ emptyBSP)
+    layouts =((rename "BSP"      $ spacingAndGaps $ borderResize $ emptyBSP)
           ||| (rename "Tall"     $ onlyGaps       $ mouseResizableTile         {draggerType = dragger}) -- ResizableTall 1 (3/100) (1/2) []
           ||| (rename "Horizon"  $ onlyGaps       $ mouseResizableTileMirrored {draggerType = dragger}) -- Mirror                           $ ResizableTall 1 (3/100) (3/4) []
           ||| (rename "Row"      $ spacingAndGaps $ zoomRow)
@@ -159,12 +159,13 @@ removedKeys :: [String]
 removedKeys = ["M-S-c", "M-S-q", "M-h", "M-l"]
 
 myKeys :: [(String, X ())]
-myKeys = [ ("M-C-k",    sendMessage MirrorExpand >> sendMessage ShrinkSlave)
-         , ("M-C-j",    sendMessage MirrorShrink >> sendMessage ExpandSlave)
-         , ("M-C-h",    sendMessage Shrink)
-         , ("M-C-l",    sendMessage Expand)
+myKeys = [ 
+--("M-C-k",    sendMessage MirrorExpand >> sendMessage ShrinkSlave)
+         --, ("M-C-j",    sendMessage MirrorShrink >> sendMessage ExpandSlave)
+         --, ("M-C-h",    sendMessage Shrink)
+         --, ("M-C-l",    sendMessage Expand)
 
-         , ("M-+",      sendMessage zoomIn)
+          ("M-+",      sendMessage zoomIn)
          , ("M--",      sendMessage zoomOut)
          , ("M-#",      sendMessage zoomReset)
 
@@ -207,13 +208,29 @@ myKeys = [ ("M-C-k",    sendMessage MirrorExpand >> sendMessage ShrinkSlave)
               [ ("M-C-" ++ wsp, windows $ copy wsp)
               | wsp <- map show [1..9 :: Int]
               ]
-          bspMappings = concat
-              [ [ ("M-C-M1-" ++ key, sendMessage $ ExpandTowards dir)
-                , ("M-M1-"   ++ key, Nav2d.windowGo   dir False)
-                , ("M-S-M1-" ++ key, Nav2d.windowSwap dir False)
-                ]
-              | (key, dir) <- [("h", L), ("j", D), ("k", U), ("l", R) ]
-              ]
+          bspMappings =
+              let 
+                resizeActions :: [(String, X ())]
+                resizeActions = 
+                  map (\(key, (bsp, other)) -> (key, getActiveLayoutDescription >>= (\layout -> if layout == "BSP" then bsp else other))) $ -- TODO fix name
+                    [ ("M-C-h", (sendMessage $ ExpandTowards L, sendMessage Shrink))
+                    , ("M-C-j", (sendMessage $ ExpandTowards D, sendMessage MirrorShrink >> sendMessage ExpandSlave))
+                    , ("M-C-k", (sendMessage $ ExpandTowards U, sendMessage MirrorExpand >> sendMessage ShrinkSlave))
+                    , ("M-C-l", (sendMessage $ ExpandTowards R, sendMessage Expand))
+                    ]
+              in
+              resizeActions ++ concat [ [ ("M-M1-"   ++ key, Nav2d.windowGo   dir False)
+                                        , ("M-S-M1-" ++ key, Nav2d.windowSwap dir False)
+                                        ] 
+                                        | (key, dir) <- [("h", L), ("j", D), ("k", U), ("l", R)]
+                                      ] 
+                             
+
+
+    -- Get the name of the active layout.
+    getActiveLayoutDescription :: X String
+    getActiveLayoutDescription = (description . W.layout . W.workspace . W.current) <$> gets windowset
+
     toggleFullscreen :: X ()
     toggleFullscreen = do
       sendMessage ToggleLayout                  -- toggle fullscreen layout
