@@ -2,59 +2,61 @@
 {-# OPTIONS_GHC -fno-warn-missing-signatures -fno-warn-unused-binds #-}
 -- Imports -------------------------------------------------------- {{{
 
-
 module Config (main) where
-import qualified Rofi
 
-import Data.List (isSuffixOf, isPrefixOf)
 import Data.Char (isDigit)
+import Data.List (isSuffixOf, isPrefixOf)
 import System.Exit (exitSuccess)
 
-import qualified System.IO as SysIO
-import qualified Data.Map as M
-import qualified Data.Monoid
+import qualified Rofi
+
+import qualified Codec.Binary.UTF8.String as UTF8
 import qualified DBus as D
 import qualified DBus.Client as D
-import qualified Codec.Binary.UTF8.String as UTF8
+import qualified Data.Map as M
+import qualified Data.Monoid
+import qualified System.IO as SysIO
 
 import XMonad hiding ((|||))
-import qualified XMonad.StackSet as W
+import XMonad.Actions.Commands
 import XMonad.Actions.CopyWindow
 import XMonad.Actions.Submap
 import XMonad.Config.Desktop
-import XMonad.Layout.BinarySpacePartition
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.FadeInactive
 import XMonad.Hooks.ManageDocks
-import qualified XMonad.Hooks.ManageHelpers as ManageHelpers
-import qualified XMonad.Hooks.EwmhDesktops as Ewmh
 import XMonad.Hooks.SetWMName (setWMName)
+import XMonad.Layout.BinarySpacePartition
+import XMonad.Layout.BorderResize
 import XMonad.Layout.Gaps
 import XMonad.Layout.LayoutCombinators ((|||))
-import XMonad.Layout.NoBorders
-import XMonad.Layout.ResizableTile
-import XMonad.Layout.MouseResizableTile
-import XMonad.Layout.Spacing (spacingRaw, Border(..), toggleWindowSpacingEnabled)
-import XMonad.Layout.Renamed (renamed, Rename(Replace))
 import XMonad.Layout.LayoutHints
+import XMonad.Layout.Minimize
+import XMonad.Layout.MouseResizableTile
+import XMonad.Layout.NoBorders
+import XMonad.Layout.Renamed (renamed, Rename(Replace))
+import XMonad.Layout.ResizableTile
+import XMonad.Layout.Spacing (spacingRaw, Border(..), toggleWindowSpacingEnabled)
+import XMonad.Layout.Spiral (spiral)
 import XMonad.Layout.ToggleLayouts
 import XMonad.Layout.ZoomRow
-import XMonad.Layout.BorderResize
 import XMonad.Util.EZConfig (additionalKeysP, removeKeysP, checkKeymap)
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run
 import XMonad.Util.SpawnOnce (spawnOnce)
 import qualified XMonad.Actions.Navigation2D as Nav2d
-import qualified XMonad.Util.XSelection as XSel
--- Minimize stuff
-import XMonad.Layout.Minimize
+import qualified XMonad.Hooks.EwmhDesktops as Ewmh
+import qualified XMonad.Hooks.ManageHelpers as ManageHelpers
 import qualified XMonad.Layout.BoringWindows as BoringWindows
-import XMonad.Actions.Commands
--- }}}
+import qualified XMonad.StackSet as W
+import qualified XMonad.Util.XSelection as XSel
 
 {-# ANN module "HLint: ignore Redundant $" #-}
 {-# ANN module "HLint: ignore Redundant bracket" #-}
 {-# ANN module "HLint: ignore Move brackets to avoid $" #-}
+{-# ANN module "HLint: ignore Unused LANGUAGE pragma" #-}
+
+-- }}}
 
 -- Values -------------------- {{{
 
@@ -111,10 +113,10 @@ myLayout = avoidStruts . BoringWindows.boringWindows . minimize . smartBorders .
     layouts =((rename "Bsp"      $ spacingAndGaps $ borderResize $ emptyBSP)
           ||| (rename "Tall"     $ onlyGaps       $ mouseResizableTile         {draggerType = dragger}) -- ResizableTall 1 (3/100) (1/2) []
           ||| (rename "Horizon"  $ onlyGaps       $ mouseResizableTileMirrored {draggerType = dragger}) -- Mirror                           $ ResizableTall 1 (3/100) (3/4) []
-          ||| (rename "Row"      $ spacingAndGaps $ zoomRow))
+          ||| (rename "Row"      $ spacingAndGaps $ zoomRow)
+          ||| (rename "spiral"   $ spacingAndGaps $ spiral (6/7)))
           -- ||| (rename "threeCol" $ spacingAndGaps $ ThreeColMid 1 (3/100) (1/2))
           -- ||| (rename "spiral"   $ spacingAndGaps $ spiral (9/21))
-          -- ||| (rename "spiral" $ spiral (6/7)))
           -- Grid
 
     rename n = renamed [Replace n]
