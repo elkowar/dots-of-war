@@ -17,6 +17,9 @@ import qualified Data.Map as M
 import qualified Data.Monoid
 import qualified System.IO as SysIO
 
+import XMonad.Layout.HintedGrid
+import XMonad.Layout.TwoPanePersistent
+
 import XMonad hiding ((|||))
 import XMonad.Actions.Commands
 import XMonad.Actions.CopyWindow
@@ -113,7 +116,7 @@ myLayout = avoidStruts . BoringWindows.boringWindows . smartBorders . toggleLayo
           ||| (rename "Tall"     $ onlyGaps       $ mouseResizableTile         {draggerType = dragger}) -- ResizableTall 1 (3/100) (1/2) []
           ||| (rename "Horizon"  $ onlyGaps       $ mouseResizableTileMirrored {draggerType = dragger}) -- Mirror                           $ ResizableTall 1 (3/100) (3/4) []
           ||| (rename "Row"      $ spacingAndGaps $ zoomRow)
-          ||| (rename "spiral"   $ spacingAndGaps $ spiral (6/7)))
+          ||| (rename "grid"     $ spacingAndGaps $ Grid False))
           -- ||| (rename "threeCol" $ spacingAndGaps $ ThreeColMid 1 (3/100) (1/2))
           -- ||| (rename "spiral"   $ spacingAndGaps $ spiral (9/21))
           -- Grid
@@ -126,7 +129,7 @@ myLayout = avoidStruts . BoringWindows.boringWindows . smartBorders . toggleLayo
                      in FixedDragger x x
     spacingAndGaps = let intGap        = fromIntegral gap
                          spacingBorder = Border intGap intGap intGap intGap
-                     in onlyGaps . spacingRaw True spacingBorder False spacingBorder True
+                     in spacingRaw True spacingBorder False spacingBorder True
 
 
 -- }}}
@@ -145,6 +148,7 @@ myStartupHook = do
   spawnOnce "picom --config ~/.config/picom.conf --no-fading-openclose"
   spawnOnce "pasystray"
   spawnOnce "nm-applet"
+  spawnOnce "clipmenud"
   spawn "xset r rate 300 30" -- make key repeat quicker
   spawn "/home/leon/.config/polybar/launch.sh"
   setWMName "LG3D" -- Java stuff hack
@@ -198,7 +202,7 @@ myKeys = [ ("M-+",      sendMessage zoomIn)
 
           windowGoMappings   = [ ("M-M1-"   ++ key, Nav2d.windowGo   dir False) | (key, dir) <- keyDirPairs ]
           windowSwapMappings = [ ("M-S-M1-" ++ key, Nav2d.windowSwap dir False) | (key, dir) <- keyDirPairs ]
-          resizeMappings = 
+          resizeMappings =
               [ ("M-C-h", ifLayoutIs "BSP" (sendMessage $ ExpandTowards L) (sendMessage Shrink))
               , ("M-C-j", ifLayoutIs "BSP" (sendMessage $ ExpandTowards D) (sendMessage MirrorShrink >> sendMessage ExpandSlave))
               , ("M-C-k", ifLayoutIs "BSP" (sendMessage $ ExpandTowards U) (sendMessage MirrorExpand >> sendMessage ShrinkSlave))
@@ -242,6 +246,9 @@ myKeys = [ ("M-+",      sendMessage zoomIn)
     specialCommands :: [(String,  X ())]
     specialCommands =
       [ ("screenshot",              spawn $ scriptFile "screenshot.sh")
+      , ("screenshot to file",      spawn $ scriptFile "screenshot.sh --tofile")
+      , ("screenshot full to file", spawn $ scriptFile "screenshot.sh --tofile --fullscreen")
+      , ("clipboard history",       spawn $ "clipmenu")
       , ("toggleOptimal",           sendMessage ToggleGaps >> toggleWindowSpacingEnabled)
       , ("toggleSpacing",           toggleWindowSpacingEnabled)
       , ("toggleGaps",              sendMessage ToggleGaps)

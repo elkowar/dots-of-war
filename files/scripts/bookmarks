@@ -1,9 +1,0 @@
-ilias      google-chrome-stable ilias.hs-heilbronn.de
-splan      google-chrome-stable "https://splan.hs-heilbronn.de/splan/?acc=false&og=725&pg=AIB4"
-youtube    google-chrome-stable youtube.de
-jira       google-chrome-stable jira-student.it.hs-heilbronn.de/secure/RapidBoard.jspa?projectKey=RUNDUM
-confluence google-chrome-stable https://confluence-student.it.hs-heilbronn.de/display/AIB/AIB_LabSWP_2020_SS_Rundum_Studium+Home
-bitbucket  google-chrome-stable https://bitbucket-student.it.hs-heilbronn.de/projects/LABAIB
-mosh-fin   xfce4-terminal --command "mosh --ssh='ssh -p 8888' -p 60000 docker@srv-fin.xware-gmbh.de"
-ssh-fin    xfce4-terminal --command "ssh -p 8888 docker@srv-fin.xware-gmbh.de"
-ssh-swlab  xfce4-terminal --command "ssh -l docker rundum-studium.it-stud.hs-heilbronn.de"

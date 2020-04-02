@@ -1,6 +1,11 @@
 #!/bin/bash
 
-selection=$( cat ~/scripts/bookmarks | sed -r 's/^([^ ]*) .*$/\1/' | rofi -p open -theme /home/leon/scripts/rofi-scripts/default_theme.rasi -dmenu -no-custom )
+
+
+groups=$(ls "$HOME/scripts/bookmarks")
+group_selection=$(echo -e "$groups" | rofi -i -p open -dmenu -no-custom -theme /home/leon/scripts/rofi-scripts/default_theme.rasi )
+
+selection=$( cat "$HOME/scripts/bookmarks/$group_selection" | sed -r 's/^([^ ]*) .*$/\1/' | rofi -p open -dmenu -i -no-custom -theme /home/leon/scripts/rofi-scripts/default_theme.rasi )
 [ -z "$selection" ] && exit 1
 
-cat ~/scripts/bookmarks | sed -n -r "s/^$selection (.*)$/\1/p" | bash
+cat "$HOME/scripts/bookmarks/$group_selection" | sed -n -r "s/^$selection (.*)$/\1/p" | bash
