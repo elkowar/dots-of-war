@@ -112,9 +112,9 @@ aqua      = "#8ec07c"
 --layoutHints .
 myLayout = avoidStruts . BoringWindows.boringWindows . smartBorders . toggleLayouts Full . layoutHintsToCenter $ layouts
   where
-    layouts =((rename "BSP"      $ spacingAndGaps $ borderResize $ emptyBSP)
-          ||| (rename "Tall"     $ onlyGaps       $ mouseResizableTile         {draggerType = dragger}) -- ResizableTall 1 (3/100) (1/2) []
+    layouts =((rename "Tall"     $ onlyGaps       $ mouseResizableTile         {draggerType = dragger}) -- ResizableTall 1 (3/100) (1/2) []
           ||| (rename "Horizon"  $ onlyGaps       $ mouseResizableTileMirrored {draggerType = dragger}) -- Mirror                           $ ResizableTall 1 (3/100) (3/4) []
+          ||| (rename "BSP"      $ spacingAndGaps $ borderResize $ emptyBSP)
           ||| (rename "Row"      $ spacingAndGaps $ zoomRow)
           ||| (rename "grid"     $ spacingAndGaps $ Grid False))
           -- ||| (rename "threeCol" $ spacingAndGaps $ ThreeColMid 1 (3/100) (1/2))
@@ -149,7 +149,7 @@ myStartupHook = do
   spawnOnce "pasystray"
   spawnOnce "nm-applet"
   spawnOnce "clipmenud"
-  spawn "xset r rate 300 30" -- make key repeat quicker
+  spawn "xset r rate 300 50" -- make key repeat quicker
   spawn "/home/leon/.config/polybar/launch.sh"
   setWMName "LG3D" -- Java stuff hack
 
@@ -254,6 +254,7 @@ myKeys = [ ("M-+",      sendMessage zoomIn)
       , ("toggleGaps",              sendMessage ToggleGaps)
       , ("Copy to all workspaces",  windows copyToAll)           -- windows: Modify the current window list with a pure function, and refresh
       , ("Kill all other copies",   killAllOtherCopies)
+      , ("toggle polybar",          safeSpawn "polybar-msg" ["cmd", "toggle"])
       ]
 
 
