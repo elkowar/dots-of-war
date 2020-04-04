@@ -7,10 +7,12 @@ dracula.draw.blood(c, {
     }
 })
 
-config.load_autoconfig()
+# config.load_autoconfig()
 c.backend = 'webengine'
 
 config.unbind("<Ctrl-tab>")
+config.unbind("d")
+config.bind("Q", "tab-close")
 config.bind("<Ctrl-Tab>", "tab-next")
 config.bind("<Ctrl-Shift-Tab>", "tab-prev")
 config.bind("<Ctrl-L>", "set-cmd-text -s :open")

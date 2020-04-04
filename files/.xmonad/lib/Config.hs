@@ -74,8 +74,8 @@ scriptFile script = "/home/leon/scripts/" ++ script
 
 scratchpads :: [NamedScratchpad]
 scratchpads =
-  [ NS "terminal" launchTerminal (className =? "scratchpad_term")      (customFloating $ W.RationalRect 0 0.7 1 0.3)
-  , NS "ghci"     launchGHCI     (className =? "scratchpad_ghci")      (customFloating $ W.RationalRect 0 0.7 1 0.3)
+  [ NS "terminal" launchTerminal (className =? "scratchpad_term")      (customFloating $ W.RationalRect 0.66 0.7 0.34 0.3)
+  , NS "ghci"     launchGHCI     (className =? "scratchpad_ghci")      (customFloating $ W.RationalRect 0.66 0.7 0.34 0.3)
   , NS "spotify"  "spotify"      (appName   =? "spotify")              defaultFloating
   , NS "discord"  "discord"      (appName   =? "discord")              defaultFloating
   , NS "whatsapp" launchWhatsapp (("WhatsApp" `isSuffixOf`) <$> title) defaultFloating
@@ -83,7 +83,7 @@ scratchpads =
   ]
     where
       launchTerminal = myTerminal ++ " --class scratchpad_term"
-      launchGHCI     = myTerminal ++ " -e \"stack exec -- ghci\" --class scratchpad_ghci"
+      launchGHCI     = myTerminal ++ " --class scratchpad_ghci stack exec -- ghci"
       launchWhatsapp = "gtk-launch chrome-hnpfjngllnobngcgfapefoaidbinmjnm-Default.desktop"
 
 
@@ -137,7 +137,7 @@ myLayout = avoidStruts . BoringWindows.boringWindows . smartBorders . toggleLayo
 -- Loghook -------------------------------------- {{{
 
 myLogHook :: X ()
-myLogHook = fadeInactiveLogHook 0.95 -- opacity of unfocused windows
+myLogHook = return () -- fadeInactiveLogHook 0.95 -- opacity of unfocused windows
 
 -- }}}
 
@@ -145,7 +145,7 @@ myLogHook = fadeInactiveLogHook 0.95 -- opacity of unfocused windows
 
 myStartupHook :: X ()
 myStartupHook = do
-  spawnOnce "picom --config ~/.config/picom.conf --no-fading-openclose"
+  spawnOnce "picom --config ~/.config/picom.conf --experimental-backends --no-fading-openclose"
   spawnOnce "pasystray"
   spawnOnce "nm-applet"
   spawnOnce "clipmenud"

@@ -22,23 +22,26 @@ rofiCmd :: String
 rofiCmd = "rofi"
 
 data RofiConfig
-  = RofiConfig { theme :: String, caseInsensitive :: Bool } deriving (Show, Eq)
+  = RofiConfig { theme :: String, caseInsensitive :: Bool, fuzzy :: Bool } deriving (Show, Eq)
 
 instance Default RofiConfig where
-  def = RofiConfig
-    { theme = smallTheme
-    , caseInsensitive = True
-    }
+  def = RofiConfig { theme = smallTheme, caseInsensitive = True, fuzzy = True }
 
 smallTheme :: String
 smallTheme = "/home/leon/scripts/rofi-scripts/launcher_grid_style.rasi"
 
-bigTheme :: String 
+bigTheme :: String
 bigTheme = "/home/leon/scripts/rofi-scripts/launcher_grid_full_style.rasi"
 
 toArgList :: RofiConfig -> [String]
-toArgList RofiConfig {..} =
-  ["-theme", theme, if caseInsensitive then "-i" else ""]
+toArgList RofiConfig {..} = concat
+  [ ["-theme", theme]
+  , addIf caseInsensitive ["-i"]
+  , addIf fuzzy           ["-matching", "fuzzy"]
+  ]
+  where addIf check list = if check then list else []
+
+
 
 -- |given an array of arguments, generate a string that would call rofi with the configuration and arguments
 asCommand :: RofiConfig -> [String] -> String
