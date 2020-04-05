@@ -28,6 +28,8 @@ config.bind("<Alt-k>", "scroll-px 0 -40")
 c.tabs.show = "multiple"
 c.tabs.show_switching_delay = 1000
 
+c.url.open_base_url = True
+
 c.statusbar.hide = False
 c.fonts.statusbar = "default_size Iosevka"
 c.fonts.default_family = ["JetBrainsMono"]
