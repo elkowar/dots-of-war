@@ -19,6 +19,8 @@ config.bind("<Ctrl-L>", "set-cmd-text -s :open")
 
 config.bind(",y", "hint links spawn mpv {hint-url}")
 config.bind(",Y", "spawn mpv {url}")
+config.bind(",p", "hint links spawn evince {url}")
+
 
 config.bind("<Alt-j>", "scroll-px 0 40")
 config.bind("<Alt-k>", "scroll-px 0 -40")
@@ -33,7 +35,7 @@ c.fonts.default_family = ["JetBrainsMono"]
 c.editor.command  = ["alacritty", "-e", "vim", "{file}"]
 
 
-c.auto_save.session = True
+# c.auto_save.session = True
 
 c.url.searchengines = { 
     "DEFAULT": "https://duckduckgo.com/?q={}", 
