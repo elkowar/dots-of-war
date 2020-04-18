@@ -151,6 +151,7 @@ myStartupHook = do
   spawnOnce "clipmenud"
   spawn "xset r rate 300 50" -- make key repeat quicker
   spawn "/home/leon/.config/polybar/launch.sh"
+  spawn "feh --bg-fill /home/leon/Bilder/wallpapers/wp2121816-mazda-miata-wallpapers.jpg"
   setWMName "LG3D" -- Java stuff hack
 
 -- }}}
@@ -191,6 +192,7 @@ myKeys = [ ("M-+",      sendMessage zoomIn)
          , ("M-e",      Rofi.promptRunCommand def specialCommands)
          , ("M-C-e",    Rofi.promptRunCommand def =<< defaultCommands )
          , ("M-o",      Rofi.promptRunCommand def withSelectionCommands)
+         , ("M-S-C-g",  spawn "killall -INT -g giph" >> spawn "notify-send gif 'saved gif in ~/Bilder/gifs'") -- stop gif recording
          ] ++ generatedMappings
   where
     generatedMappings :: [(String, X ())]
@@ -248,6 +250,7 @@ myKeys = [ ("M-+",      sendMessage zoomIn)
       [ ("screenshot",              spawn $ scriptFile "screenshot.sh")
       , ("screenshot to file",      spawn $ scriptFile "screenshot.sh --tofile")
       , ("screenshot full to file", spawn $ scriptFile "screenshot.sh --tofile --fullscreen")
+      , ("screengif to file",       spawn (scriptFile "screengif.sh") >> spawn "notify-send gif 'stop gif-recording with M-S-C-g'")
       , ("clipboard history",       spawn $ "clipmenu")
       , ("toggleOptimal",           sendMessage ToggleGaps >> toggleWindowSpacingEnabled)
       , ("toggleSpacing",           toggleWindowSpacingEnabled)
@@ -273,6 +276,7 @@ myManageHook = composeAll
   [ resource =? "Dialog" --> ManageHelpers.doCenterFloat
   , appName =? "pavucontrol" --> ManageHelpers.doCenterFloat
   , className =? "mpv" --> ManageHelpers.doRectFloat (W.RationalRect 0.9 0.9 0.1 0.1)
+  , title =? "Something" --> doFloat
   -- , isFullscreen --> doF W.focusDown <+> doFullFloat
   , manageDocks
   , namedScratchpadManageHook scratchpads
@@ -297,7 +301,7 @@ main = do
 myConfig dbus = desktopConfig
       { terminal           = myTerminal
       , modMask            = myModMask
-      , borderWidth        = 1
+      , borderWidth        = 2
       , layoutHook         = myLayout
       , logHook            = myLogHook <+> dynamicLogWithPP (polybarPP dbus) <+> logHook def
       , startupHook        = myStartupHook <+> startupHook def <+> return () >> checkKeymap (myConfig dbus ) myKeys

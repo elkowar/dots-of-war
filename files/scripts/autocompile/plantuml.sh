@@ -1,5 +1,5 @@
 #!/bin/bash
-pngfile=$(echo "$1" | sed 's/\.plantuml$/.png/g')
+pngfile="${1//.plantuml/.png}"
 
 function finish {
   rm "$pngfile"

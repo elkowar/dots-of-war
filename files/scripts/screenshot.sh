@@ -13,7 +13,6 @@ done
 select_flag="-s"
 [ $fullscreen -eq 1 ] && select_flag=""
 
-
 if [ $to_file -eq 1 ]; then
   file="$HOME/Bilder/screenshots/screenshot_$(date +%s).png"
   echo "$file"

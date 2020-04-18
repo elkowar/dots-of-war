@@ -26,9 +26,12 @@ config.bind("<Alt-j>", "scroll-px 0 40")
 config.bind("<Alt-k>", "scroll-px 0 -40")
 
 c.tabs.show = "multiple"
+c.tabs.background = True
 c.tabs.show_switching_delay = 1000
 
 c.url.open_base_url = True
+
+c.input.insert_mode.auto_enter = True
 
 c.statusbar.hide = False
 c.fonts.statusbar = "default_size Iosevka"
@@ -48,6 +51,7 @@ c.url.searchengines = {
     "w": "https://wikipedia.org/wiki/Special:Search/{}"
 }
 
+# c.content.user_stylesheets = "user.css"
 
 c.colors.webpage.prefers_color_scheme_dark = True
 c.statusbar.padding = {"bottom": 1, "left": 8, "right": 8, "top": 1}
