@@ -112,8 +112,8 @@ aqua      = "#8ec07c"
 --layoutHints .
 myLayout = avoidStruts . BoringWindows.boringWindows . smartBorders . toggleLayouts Full . layoutHintsToCenter $ layouts
   where
-    layouts =((rename "Tall"     $ onlyGaps       $ mouseResizableTile         {draggerType = dragger}) -- ResizableTall 1 (3/100) (1/2) []
-          ||| (rename "Horizon"  $ onlyGaps       $ mouseResizableTileMirrored {draggerType = dragger}) -- Mirror                           $ ResizableTall 1 (3/100) (3/4) []
+    layouts =((rename "Tall"     $ onlySpacing    $ mouseResizableTile         {draggerType = dragger}) -- ResizableTall 1 (3/100) (1/2) []
+          ||| (rename "Horizon"  $ onlySpacing    $ mouseResizableTileMirrored {draggerType = dragger}) -- Mirror                           $ ResizableTall 1 (3/100) (3/4) []
           ||| (rename "BSP"      $ spacingAndGaps $ borderResize $ emptyBSP)
           ||| (rename "Row"      $ spacingAndGaps $ zoomRow)
           ||| (rename "grid"     $ spacingAndGaps $ Grid False))
@@ -124,7 +124,7 @@ myLayout = avoidStruts . BoringWindows.boringWindows . smartBorders . toggleLayo
     rename n = renamed [Replace n]
 
     gap            = 7
-    onlyGaps       = gaps [ (dir, (gap*2)) | dir <- [L, R, D, U] ]  -- gaps are included in mouseResizableTile
+    onlySpacing = gaps [ (dir, (gap*2)) | dir <- [L, R, D, U] ]  -- gaps are included in mouseResizableTile
     dragger        = let x = fromIntegral gap * 2
                      in FixedDragger x x
     spacingAndGaps = let intGap        = fromIntegral gap
@@ -145,7 +145,7 @@ myLogHook = return () -- fadeInactiveLogHook 0.95 -- opacity of unfocused window
 
 myStartupHook :: X ()
 myStartupHook = do
-  spawnOnce "picom --config ~/.config/picom.conf --experimental-backends --no-fading-openclose"
+  spawnOnce "picom --config ~/.config/picom.conf --experimental-backends"  --no-fading-openclose"
   spawnOnce "pasystray"
   spawnOnce "nm-applet"
   spawnOnce "clipmenud"
@@ -329,7 +329,7 @@ polybarPP dbus = namedScratchpadFilterOutWorkspacePP $ def
   , ppWsSep   = ""
   , ppSep     = " | "
   , ppExtras  = []
-  , ppTitle   = withFG aqua . (shorten 40)
+  , ppTitle   = const "" -- withFG aqua . (shorten 40)
   }
     where
       removeWord substr = unwords . filter (/= substr) . words
