@@ -151,7 +151,7 @@ myStartupHook = do
   spawnOnce "clipmenud"
   spawn "xset r rate 300 50" -- make key repeat quicker
   spawn "/home/leon/.config/polybar/launch.sh"
-  spawn "feh --bg-fill /home/leon/Bilder/wallpapers/wp2121816-mazda-miata-wallpapers.jpg"
+  spawn "feh --bg-fill /home/leon/Bilder/wallpapers/abstract_mountain.png"
   setWMName "LG3D" -- Java stuff hack
 
 -- }}}
