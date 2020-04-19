@@ -16,8 +16,10 @@ select_flag="-s"
 if [ $to_file -eq 1 ]; then
   file="$HOME/Bilder/screenshots/screenshot_$(date +%s).png"
   echo "$file"
+  [ -z "$select_flag" ] && sleep 1
   maim $select_flag --format png "$file"
   echo "$file" | xclip -selection clipboard 
 else
+  [ -z "$select_flag" ] && sleep 1
   maim "$select_flag" --format png /dev/stdout | xclip -selection clipboard -t image/png -i
 fi
