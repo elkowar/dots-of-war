@@ -44,7 +44,7 @@ function getCurSink() {
 
 # Saves the sink passed by parameter's volume into a variable named `curVol`.
 function getCurVol() {
-    curVol=$(pacmd list-sinks | grep -A 15 'index: '"$1"'' | grep 'volume:' | grep -E -v 'base volume:' | awk -F : '{print $3}' | grep -o -P '.{0,3}%' | sed s/.$// | tr -d ' ')
+    curVol=$(pacmd list-sinks | grep -A 15 'index: '"$1"'' | grep 'volume:' | grep -E -v 'base volume:' | awk -F : '{print $3}' | grep -o -P '.{0,3}%' | sed 's/.$//' | tr -d ' ')
 }
 
 
@@ -288,9 +288,9 @@ function output() {
 
     # Showing the formatted message
     if [ "$isMuted" = "yes" ]; then
-        echo "${MUTED_COLOR}${MUTED_ICON}${curVol}%   ${SINK_ICON}${nickname}${END_COLOR}"
+        echo "${MUTED_COLOR}${nickname} ${curVol}%${END_COLOR}"
     else
-        echo "${volIcon}${curVol}%   ${SINK_ICON}${nickname}"
+        echo "${nickname} ${curVol}%"
     fi
 }
 
