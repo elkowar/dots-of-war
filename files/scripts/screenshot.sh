@@ -23,3 +23,7 @@ else
   [ -z "$select_flag" ] && sleep 1
   maim "$select_flag" --format png /dev/stdout | xclip -selection clipboard -t image/png -i
 fi
+
+
+# phisch's ultimate screenshot script. saves to file, uploads to 0x0.st and to clipboard.
+# maim -s | tee >(xclip -selection clipboard -t image/png) ~/Pictures/screenshots/$(date +%s).png | curl -F "file=@-" 0x0.st | xclip -selection primary

@@ -1,6 +1,6 @@
-import dracula.draw
+import gruvboxy.draw
 
-dracula.draw.blood(c, {
+gruvboxy.draw.blood(c, {
     'spacing': {
         'vertical': 4,
         'horizontal': 8
