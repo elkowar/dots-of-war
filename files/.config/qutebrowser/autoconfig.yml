@@ -7,6 +7,4 @@
 config_version: 2
 settings:
   content.notifications:
-    https://calendar.google.com: true
-  content.register_protocol_handler:
-    https://calendar.google.com?cid=%25s: true
+    https://www.reddit.com: false

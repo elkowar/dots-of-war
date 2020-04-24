@@ -128,8 +128,9 @@ myLayout = avoidStruts . BoringWindows.boringWindows . smartBorders . toggleLayo
     dragger        = let x = fromIntegral gap * 2
                      in FixedDragger x x
     spacingAndGaps = let intGap        = fromIntegral gap
-                         spacingBorder = Border intGap intGap intGap intGap
-                     in spacingRaw True spacingBorder False spacingBorder True
+                         spacingBorder = Border (intGap) (intGap) (intGap) (intGap)
+                         gapBorder     = Border intGap intGap intGap intGap
+                     in spacingRaw True spacingBorder True gapBorder True
 
 
 -- }}}
