@@ -1,3 +1,6 @@
+# check    c.colors.statusbar.insert.bg = palette['background-alt']
+# was: background-attention
+
 def blood(c, options = {}):
     palette = {
         'background': '#282828',
@@ -180,7 +183,7 @@ def blood(c, options = {}):
     c.colors.statusbar.command.private.fg = palette['foreground-alt']
 
     ## Background color of the statusbar in insert mode.
-    c.colors.statusbar.insert.bg = palette['background-attention']
+    c.colors.statusbar.insert.bg = palette['background-alt']
 
     ## Foreground color of the statusbar in insert mode.
     c.colors.statusbar.insert.fg = palette['foreground-attention']

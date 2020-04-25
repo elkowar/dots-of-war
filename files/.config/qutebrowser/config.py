@@ -10,6 +10,9 @@ gruvboxy.draw.blood(c, {
 # config.load_autoconfig()
 c.backend = 'webengine'
 
+c.scrolling.bar = "always" # "when-searching"
+c.content.user_stylesheets = "user.css"
+
 config.unbind("<Ctrl-tab>")
 config.unbind("d")
 config.bind("Q", "tab-close")

@@ -1,3 +1,5 @@
+*.background:   #282828
+
 rofi.lines: 5
 rofi.eh: 2
 rofi.padding: 200
