@@ -64,7 +64,7 @@ import qualified XMonad.Util.XSelection as XSel
 
 myModMask  = mod4Mask
 myLauncher = Rofi.asCommand (def { Rofi.theme = Rofi.bigTheme }) ["-show run"]
-myTerminal = "kitty --single-instance"
+myTerminal = "termite"
 myBrowser = "qutebrowser"
 --myBrowser = "google-chrome-stable"
 
@@ -216,7 +216,7 @@ myKeys = [ ("M-+",      sendMessage zoomIn)
     toggleFullscreen = do
       sendMessage ToggleLayout                  -- toggle fullscreen layout
       sendMessage ToggleStruts                  -- bar is hidden -> no need to make place for it
-      safeSpawn "polybar-msg" ["cmd", "toggle"] -- toggle polybar visibility
+      --safeSpawn "polybar-msg" ["cmd", "toggle"] -- toggle polybar visibility
 
 
     scratchpadSubmap :: X ()

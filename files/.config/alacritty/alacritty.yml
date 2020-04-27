@@ -12,8 +12,8 @@ window:
   #  y: 0
 
   padding:
-    x: 0
-    y: 0
+    x: 10
+    y: 10
 
    #Spread additional padding evenly around the terminal content.
   dynamic_padding: true
@@ -301,8 +301,9 @@ schemes:
 # }}}
 
 # https://github.com/alacritty/alacritty/wiki/Color-schemes
-colors: *onedark
-background_opacity: 0.95
+colors: *gruvbox
+#background_opacity: 0.95
+background_opacity: 1
 
 font:
   size: 13
