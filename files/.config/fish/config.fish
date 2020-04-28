@@ -7,6 +7,8 @@ abbr --add --global tsh trash
 abbr --add --global clear "clear && ls"
 abbr --add --global cxmonad "nvim /home/leon/.xmonad/lib/Config.hs"
 
+tmux
+
 
 
 abbr --add --global gaa "git add --all"
