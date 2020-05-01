@@ -4,12 +4,14 @@ fish_vi_key_bindings
 alias ls=lsd
 abbr --add --global vim nvim
 abbr --add --global tsh trash
-abbr --add --global clear "clear && ls"
+#abbr --add --global clear "clear && ls"
 abbr --add --global cxmonad "nvim /home/leon/.xmonad/lib/Config.hs"
 
-tmux
 
-
+if status is-interactive
+and not set -q TMUX
+    exec tmux
+end
 
 abbr --add --global gaa "git add --all"
 abbr --add --global gc "git commit -m "
@@ -29,4 +31,13 @@ end
 
 bind \ca run_stuff
 
+
+# fff file manager cd on exit
+function f
+    fff $argv
+    set -q XDG_CACHE_HOME; or set XDG_CACHE_HOME $HOME/.cache
+    cd (cat $XDG_CACHE_HOME/fff/.fff_d)
+end
+set -x EDITOR "nvim"
+set -x FFF_TRASH_CMD "trash" # make fff's trash function use trash-cli
 

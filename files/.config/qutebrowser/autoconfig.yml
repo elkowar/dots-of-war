@@ -6,5 +6,11 @@
 
 config_version: 2
 settings:
-  content.notifications:
-    https://joyofandroid.com: false
+  statusbar.widgets:
+    global:
+    - keypress
+    - url
+    - scroll
+    - history
+    - tabs
+    - progress

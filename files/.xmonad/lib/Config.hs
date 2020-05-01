@@ -151,6 +151,7 @@ myStartupHook = do
   spawnOnce "nm-applet"
   spawnOnce "xfce4-clipman"
   spawnOnce "mailspring --background"
+  spawnOnce "redshift -P -O 5000"
   spawn "xset r rate 300 50" -- make key repeat quicker
   spawn "/home/leon/.config/polybar/launch.sh"
   spawn "feh --bg-fill /home/leon/Bilder/wallpapers/mountains_with_clounds.jpg"
