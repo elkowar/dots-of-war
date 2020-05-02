@@ -1,5 +1,12 @@
 # This file contains fish universal variable definitions.
 # VERSION: 3.0
+SETUVAR FZF_DEFAULT_OPTS:\x2d\x2dheight\x2040\x25
+SETUVAR FZF_ENABLE_OPEN_PREVIEW:1
+SETUVAR FZF_LEGACY_KEYBINDINGS:0
+SETUVAR FZF_PREVIEW_DIR_CMD:ls
+SETUVAR FZF_PREVIEW_FILE_CMD:head\x20\x2dn\x2010\x20\x7c\x20bat\x20\x2d\x2dcolor\x3dalways\x20\x2d\x2ddecorations\x3dnever
+SETUVAR FZF_TMUX:1
+SETUVAR FZF_TMUX_HEIGHT:40\x25
 SETUVAR SXHKD_SHELL:sh
 SETUVAR __fish_initialized:3100
 SETUVAR dangerous_colors:000000\x1e083743\x1e445659\x1efdf6e3\x1eb58900\x1ecb4b16\x1edc121f\x1eaf005f\x1e6c71c4\x1e268bd2\x1e2aa198\x1e859900

@@ -1,6 +1,10 @@
 fish_vi_key_bindings
 # fish_default_key_bindings
 
+set -U FZF_TMUX 1
+set -U FZF_PREVIEW_FILE_CMD "head -n 10 | bat --color=always --decorations=never"
+
+
 alias ls=lsd
 abbr --add --global vim nvim
 abbr --add --global tsh trash
