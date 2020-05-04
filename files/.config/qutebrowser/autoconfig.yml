@@ -6,11 +6,5 @@
 
 config_version: 2
 settings:
-  statusbar.widgets:
-    global:
-    - keypress
-    - url
-    - scroll
-    - history
-    - tabs
-    - progress
+  content.notifications:
+    https://www.reddit.com: false

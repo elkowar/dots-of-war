@@ -1,0 +1,23 @@
+#!/bin/bash
+#Creates a clip of the currently watched streamer, opens the editor with xdg-open
+#In case we're calling the clipit function without watching a stream first
+cd $(dirname "$0")
+config=$(readlink -f config)
+source $config
+oauth="$(cat oauth|tr -d '\n')"
+broadcast_id=$(cat bId.txt)
+clip=$(curl -s \
+	-H "Client-ID: $client_id" \
+	-H "Authorization: Bearer $oauth" \
+	-X POST "https://api.twitch.tv/helix/clips?broadcaster_id=$broadcast_id" | jq -c '.data[] | {"":.edit_url}' | tr -d '\"\{\}')
+if [[ -z $clip ]];then
+    notify-send "Theatron" "Either the streamer isn't online or you're not watching anyone"
+fi
+
+#Delete the first character(:)
+clip="${clip:1}"
+xdg-open $clip
+# vim: ft=sh
+#
+
+#curl -H "Authorization: OAuth <access token>" https://id.twitch.tv/oauth2/validate

@@ -186,6 +186,7 @@ myKeys = [ ("M-+",      sendMessage zoomIn)
          -- programs
          , ("M-p",      spawn myLauncher)
          , ("M-b",      spawn myBrowser)
+         , ("M-C-p",    spawn (myTerminal ++ " --class termite_floating -e fff"))
          , ("M-S-p",    Rofi.showCombi  (def { Rofi.theme = Rofi.bigTheme }) [ "drun", "window", "ssh" ])
          , ("M-S-e",    Rofi.showNormal (def { Rofi.theme = Rofi.bigTheme }) "emoji" )
          , ("M-s",      spawn $ scriptFile "rofi-search.sh")
@@ -280,6 +281,7 @@ myManageHook = composeAll
   , appName =? "pavucontrol" --> ManageHelpers.doCenterFloat
   , className =? "mpv" --> ManageHelpers.doRectFloat (W.RationalRect 0.9 0.9 0.1 0.1)
   , title =? "Something" --> doFloat
+  , className =? "termite_floating" --> ManageHelpers.doRectFloat(W.RationalRect 0.2 0.2 0.6 0.6)
   -- , isFullscreen --> doF W.focusDown <+> doFullFloat
   , manageDocks
   , namedScratchpadManageHook scratchpads
