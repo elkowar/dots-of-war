@@ -10,7 +10,9 @@ for arg in "$@"; do
   esac
 done
 
-select_flag="-s"
+# Do not quote this, this is multiple flags
+select_flag="-s --highlight --color 1,1,1,0.2"
+
 [ $fullscreen -eq 1 ] && select_flag=""
 
 if [ $to_file -eq 1 ]; then
@@ -21,7 +23,7 @@ if [ $to_file -eq 1 ]; then
   echo "$file" | xclip -selection clipboard 
 else
   [ -z "$select_flag" ] && sleep 1
-  maim "$select_flag" --format png /dev/stdout | xclip -selection clipboard -t image/png -i
+  maim $select_flag --format png /dev/stdout | xclip -selection clipboard -t image/png -i
 fi
 
 
