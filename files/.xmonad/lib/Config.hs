@@ -154,6 +154,7 @@ myStartupHook = do
   spawnOnce "redshift -P -O 5000"
   spawn "xset r rate 300 50" -- make key repeat quicker
   spawn "/home/leon/.config/polybar/launch.sh"
+  spawn "/home/leon/.screenlayout/dualscreen.sh"
   spawn "feh --bg-fill /home/leon/Bilder/wallpapers/mountains_with_clounds.jpg"
   setWMName "LG3D" -- Java stuff hack
 
@@ -164,6 +165,14 @@ myStartupHook = do
 -- Default mappings that need to be removed
 removedKeys :: [String]
 removedKeys = ["M-S-c", "M-S-q", "M-h", "M-l"]
+
+multiMonitorOperation :: (WorkspaceId -> WindowSet -> WindowSet) -> ScreenId -> X ()
+multiMonitorOperation operation n = do
+  monitor <- screenWorkspace n
+  case monitor of 
+    Just mon -> windows $ operation  mon
+    Nothing -> return ()
+
 
 myKeys :: [(String, X ())]
 myKeys = [ ("M-+",      sendMessage zoomIn)
@@ -183,14 +192,20 @@ myKeys = [ ("M-+",      sendMessage zoomIn)
          , ("<XF86AudioRaiseVolume>", spawn "amixer sset Master 5%+")
          , ("<XF86AudioLowerVolume>", spawn "amixer sset Master 5%-")
 
+         -- Multi monitor
+         , ("M-s",   multiMonitorOperation W.view 0)
+         , ("M-d",   multiMonitorOperation W.view 1)
+         , ("M-S-s", (multiMonitorOperation W.shift 0) >> multiMonitorOperation W.view 0)
+         , ("M-S-d", (multiMonitorOperation W.shift 1) >> multiMonitorOperation W.view 1)
+
          -- programs
          , ("M-p",      spawn myLauncher)
          , ("M-b",      spawn myBrowser)
          , ("M-C-p",    spawn (myTerminal ++ " --class termite_floating -e fff"))
          , ("M-S-p",    Rofi.showCombi  (def { Rofi.theme = Rofi.bigTheme }) [ "drun", "window", "ssh" ])
          , ("M-S-e",    Rofi.showNormal (def { Rofi.theme = Rofi.bigTheme }) "emoji" )
-         , ("M-s",      spawn $ scriptFile "rofi-search.sh")
-         , ("M-S-s",    spawn $ scriptFile "rofi-open.sh")
+         --, ("M-s",      spawn $ scriptFile "rofi-search.sh")
+         , ("M-S-o",    spawn $ scriptFile "rofi-open.sh")
          , ("M-n",      scratchpadSubmap )
          , ("M-m",      mediaSubmap )
          , ("M-e",      Rofi.promptRunCommand def specialCommands)
@@ -209,10 +224,10 @@ myKeys = [ ("M-+",      sendMessage zoomIn)
           windowGoMappings   = [ ("M-M1-"   ++ key, Nav2d.windowGo   dir False) | (key, dir) <- keyDirPairs ]
           windowSwapMappings = [ ("M-S-M1-" ++ key, Nav2d.windowSwap dir False) | (key, dir) <- keyDirPairs ]
           resizeMappings =
-              [ ("M-C-h", ifLayoutIs "BSP" (sendMessage $ ExpandTowards L) (sendMessage Shrink))
-              , ("M-C-j", ifLayoutIs "BSP" (sendMessage $ ExpandTowards D) (sendMessage MirrorShrink >> sendMessage ExpandSlave))
-              , ("M-C-k", ifLayoutIs "BSP" (sendMessage $ ExpandTowards U) (sendMessage MirrorExpand >> sendMessage ShrinkSlave))
-              , ("M-C-l", ifLayoutIs "BSP" (sendMessage $ ExpandTowards R) (sendMessage Expand))
+              [ ("M-C-h", ifLayoutIs "BSP" (sendMessage $ ExpandTowards L) (ifLayoutIs "Horizon" (sendMessage ShrinkSlave) (sendMessage Shrink)))
+              , ("M-C-j", ifLayoutIs "BSP" (sendMessage $ ExpandTowards D) (ifLayoutIs "Horizon" (sendMessage Expand)      (sendMessage MirrorShrink >> sendMessage ExpandSlave)))
+              , ("M-C-k", ifLayoutIs "BSP" (sendMessage $ ExpandTowards U) (ifLayoutIs "Horizon" (sendMessage Shrink)      (sendMessage MirrorExpand >> sendMessage ShrinkSlave)))
+              , ("M-C-l", ifLayoutIs "BSP" (sendMessage $ ExpandTowards R) (ifLayoutIs "Horizon" (sendMessage ExpandSlave) (sendMessage Expand)))
               ]
 
     toggleFullscreen :: X ()
