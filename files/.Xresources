@@ -1,5 +1,8 @@
 *.background:   #282828
 
+Xcursor.size: 16
+Xcursor.theme: capitaine-cursors-light
+
 rofi.lines: 5
 rofi.eh: 2
 rofi.padding: 200

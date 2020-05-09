@@ -4,21 +4,23 @@
 
 module Config (main) where
 
+import Control.Concurrent
+import           Control.Exception              ( catch
+                                                , SomeException
+                                                )
 import Data.Char (isDigit)
-import Data.List (isSuffixOf, isPrefixOf)
+import           Data.List                      ( isSuffixOf , isPrefixOf)
 import System.Exit (exitSuccess)
 
 import qualified Rofi
 
-import qualified Codec.Binary.UTF8.String as UTF8
-import qualified DBus as D
-import qualified DBus.Client as D
+
 import qualified Data.Map as M
 import qualified Data.Monoid
+import           Data.Foldable                  ( for_ )
 import qualified System.IO as SysIO
 
 import XMonad.Layout.HintedGrid
-import XMonad.Layout.TwoPanePersistent
 
 import XMonad hiding ((|||))
 import XMonad.Actions.Commands
@@ -26,7 +28,6 @@ import XMonad.Actions.CopyWindow
 import XMonad.Actions.Submap
 import XMonad.Config.Desktop
 import XMonad.Hooks.DynamicLog
-import XMonad.Hooks.FadeInactive
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.SetWMName (setWMName)
 import XMonad.Layout.BinarySpacePartition
@@ -39,10 +40,9 @@ import XMonad.Layout.NoBorders
 import XMonad.Layout.Renamed (renamed, Rename(Replace))
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.Spacing (spacingRaw, Border(..), toggleWindowSpacingEnabled)
-import XMonad.Layout.Spiral (spiral)
 import XMonad.Layout.ToggleLayouts
 import XMonad.Layout.ZoomRow
-import XMonad.Util.EZConfig (additionalKeysP, removeKeysP, checkKeymap)
+import XMonad.Util.EZConfig (additionalKeysP, removeKeysP)
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run
 import XMonad.Util.SpawnOnce (spawnOnce)
@@ -50,6 +50,7 @@ import qualified XMonad.Actions.Navigation2D as Nav2d
 import qualified XMonad.Hooks.EwmhDesktops as Ewmh
 import qualified XMonad.Hooks.ManageHelpers as ManageHelpers
 import qualified XMonad.Layout.BoringWindows as BoringWindows
+import           XMonad.Layout.IndependentScreens
 import qualified XMonad.StackSet as W
 import qualified XMonad.Util.XSelection as XSel
 
@@ -135,13 +136,6 @@ myLayout = avoidStruts . BoringWindows.boringWindows . smartBorders . toggleLayo
 
 -- }}}
 
--- Loghook -------------------------------------- {{{
-
-myLogHook :: X ()
-myLogHook = return () -- fadeInactiveLogHook 0.95 -- opacity of unfocused windows
-
--- }}}
-
 -- Startuphook ----------------------------- {{{
 
 myStartupHook :: X ()
@@ -153,8 +147,9 @@ myStartupHook = do
   spawnOnce "mailspring --background"
   spawnOnce "redshift -P -O 5000"
   spawn "xset r rate 300 50" -- make key repeat quicker
+  spawn "/home/leon/.screenlayout/dualscreen-landscape.sh"
+  _ <- liftIO $ Control.Concurrent.threadDelay (1000 * 10)
   spawn "/home/leon/.config/polybar/launch.sh"
-  spawn "/home/leon/.screenlayout/dualscreen.sh"
   spawn "feh --bg-fill /home/leon/Bilder/wallpapers/mountains_with_clounds.jpg"
   setWMName "LG3D" -- Java stuff hack
 
@@ -164,60 +159,65 @@ myStartupHook = do
 
 -- Default mappings that need to be removed
 removedKeys :: [String]
-removedKeys = ["M-S-c", "M-S-q", "M-h", "M-l"]
+removedKeys = ["M-S-c", "M-S-q", "M-h", "M-l"] ++ ["M-" ++ show n | n <- [1..9 :: Int]]
 
 multiMonitorOperation :: (WorkspaceId -> WindowSet -> WindowSet) -> ScreenId -> X ()
 multiMonitorOperation operation n = do
   monitor <- screenWorkspace n
-  case monitor of 
+  case monitor of
     Just mon -> windows $ operation  mon
     Nothing -> return ()
 
 
-myKeys :: [(String, X ())]
-myKeys = [ ("M-+",      sendMessage zoomIn)
-         , ("M--",      sendMessage zoomOut)
-         , ("M-#",      sendMessage zoomReset)
+myKeys :: XConfig a -> XConfig a
+myKeys c = additionalKeysP c $
+  [ ("M-+",      sendMessage zoomIn)
+  , ("M--",      sendMessage zoomOut)
+  , ("M-#",      sendMessage zoomReset)
 
-         , ("M-f",      toggleFullscreen)
+  , ("M-f",      toggleFullscreen)
 
-         , ("M-S-C-c",  kill1)
-         , ("M-S-C-q",  io exitSuccess)
+  , ("M-S-C-c",  kill1)
+  , ("M-S-C-q",  io exitSuccess)
 
-         -- Binary space partitioning
-         , ("M-<Backspace>",    sendMessage Swap)
-         , ("M-M1-<Backspace>", sendMessage Rotate)
+  -- Binary space partitioning
+  , ("M-<Backspace>",    sendMessage Swap)
+  , ("M-M1-<Backspace>", sendMessage Rotate)
 
-         -- Media
-         , ("<XF86AudioRaiseVolume>", spawn "amixer sset Master 5%+")
-         , ("<XF86AudioLowerVolume>", spawn "amixer sset Master 5%-")
+  -- Media
+  , ("<XF86AudioRaiseVolume>", spawn "amixer sset Master 5%+")
+  , ("<XF86AudioLowerVolume>", spawn "amixer sset Master 5%-")
 
-         -- Multi monitor
-         , ("M-s",   multiMonitorOperation W.view 0)
-         , ("M-d",   multiMonitorOperation W.view 1)
-         , ("M-S-s", (multiMonitorOperation W.shift 0) >> multiMonitorOperation W.view 0)
-         , ("M-S-d", (multiMonitorOperation W.shift 1) >> multiMonitorOperation W.view 1)
+  -- Multi monitor
+  , ("M-s",   multiMonitorOperation W.view 1)
+  , ("M-d",   multiMonitorOperation W.view 0)
+  , ("M-S-s", (multiMonitorOperation W.shift 1) >> multiMonitorOperation W.view 1)
+  , ("M-S-d", (multiMonitorOperation W.shift 0) >> multiMonitorOperation W.view 0)
 
-         -- programs
-         , ("M-p",      spawn myLauncher)
-         , ("M-b",      spawn myBrowser)
-         , ("M-C-p",    spawn (myTerminal ++ " --class termite_floating -e fff"))
-         , ("M-S-p",    Rofi.showCombi  (def { Rofi.theme = Rofi.bigTheme }) [ "drun", "window", "ssh" ])
-         , ("M-S-e",    Rofi.showNormal (def { Rofi.theme = Rofi.bigTheme }) "emoji" )
-         --, ("M-s",      spawn $ scriptFile "rofi-search.sh")
-         , ("M-S-o",    spawn $ scriptFile "rofi-open.sh")
-         , ("M-n",      scratchpadSubmap )
-         , ("M-m",      mediaSubmap )
-         , ("M-e",      Rofi.promptRunCommand def specialCommands)
-         , ("M-C-e",    Rofi.promptRunCommand def =<< defaultCommands )
-         , ("M-o",      Rofi.promptRunCommand def withSelectionCommands)
-         , ("M-S-C-g",  spawn "killall -INT -g giph" >> spawn "notify-send gif 'saved gif in ~/Bilder/gifs'") -- stop gif recording
-         ] ++ generatedMappings
+  -- programs
+  , ("M-p",      spawn myLauncher)
+  , ("M-b",      spawn myBrowser)
+  , ("M-C-p",    spawn (myTerminal ++ " --class termite_floating -e fff"))
+  , ("M-S-p",    Rofi.showCombi  (def { Rofi.theme = Rofi.bigTheme }) [ "drun", "window", "ssh" ])
+  , ("M-S-e",    Rofi.showNormal (def { Rofi.theme = Rofi.bigTheme }) "emoji" )
+  --, ("M-s",      spawn $ scriptFile "rofi-search.sh")
+  , ("M-S-o",    spawn $ scriptFile "rofi-open.sh")
+  , ("M-n",      scratchpadSubmap )
+  , ("M-m",      mediaSubmap )
+  , ("M-e",      Rofi.promptRunCommand def specialCommands)
+  , ("M-C-e",    Rofi.promptRunCommand def =<< defaultCommands )
+  , ("M-o",      Rofi.promptRunCommand def withSelectionCommands)
+  , ("M-S-C-g",  spawn "killall -INT -g giph" >> spawn "notify-send gif 'saved gif in ~/Bilder/gifs'") -- stop gif recording
+  ] ++ generatedMappings
   where
     generatedMappings :: [(String, X ())]
-    generatedMappings = copyToWorkspaceMappings ++ windowGoMappings ++ windowSwapMappings ++ resizeMappings
+    generatedMappings = windowGoMappings ++ windowSwapMappings ++ resizeMappings ++ workspaceMappings
         where
-          copyToWorkspaceMappings = [ ("M-C-" ++ wsp, windows $ copy wsp) | wsp <- map show [1..9 :: Int] ]
+          workspaceMappings =
+            [ (mappingPrefix ++ show wspNum, windows $ onCurrentScreen action wsp)
+               | (wsp, wspNum) <- zip (workspaces' c) [1..9 :: Int]
+              , (mappingPrefix, action) <- [("M-", W.greedyView), ("M-S-", W.shift), ("M-C-", copy)]
+            ]
 
           keyDirPairs = [("h", L), ("j", D), ("k", U), ("l", R)]
 
@@ -229,6 +229,9 @@ myKeys = [ ("M-+",      sendMessage zoomIn)
               , ("M-C-k", ifLayoutIs "BSP" (sendMessage $ ExpandTowards U) (ifLayoutIs "Horizon" (sendMessage Shrink)      (sendMessage MirrorExpand >> sendMessage ShrinkSlave)))
               , ("M-C-l", ifLayoutIs "BSP" (sendMessage $ ExpandTowards R) (ifLayoutIs "Horizon" (sendMessage ExpandSlave) (sendMessage Expand)))
               ]
+
+
+
 
     toggleFullscreen :: X ()
     toggleFullscreen = do
@@ -307,29 +310,35 @@ myManageHook = composeAll
 -- Main ------------------------------------ {{{
 main :: IO ()
 main = do
-  dbus <- D.connectSession
-  -- Request access to the DBus name
-  _ <- D.requestName dbus (D.busName_ "org.xmonad.Log")
-      [D.nameAllowReplacement, D.nameReplaceExisting, D.nameDoNotQueue]
+  currentScreenCount :: Int <- countScreens
+  let monitorIndices = [0..currentScreenCount - 1]
 
--- $ ewmh  (kills IntelliJ)
+  -- create a fifo named pipe for every monitor (called /tmp/xmonad-state-bar0, etc)
+  for_ monitorIndices (\idx -> safeSpawn "mkfifo" ["/tmp/xmonad-state-bar" ++ show idx])
+
+  -- create polybarLogHooks for every monitor and combine them using the <+> monoid instance
+  let polybarLogHooks = foldMap (polybarLogHook . fromIntegral) monitorIndices
+
+  let myConfig = myKeys (desktopConfig
+        { terminal           = myTerminal
+        , workspaces         = withScreens (fromIntegral currentScreenCount) (map show [1..9 :: Int])
+        , modMask            = myModMask
+        , borderWidth        = 2
+        , layoutHook         = myLayout
+        , logHook            = polybarLogHook 0 <+> polybarLogHook 1 <+> logHook def
+        , startupHook        = myStartupHook <+> startupHook def -- <+> return () >> checkKeymap myConfig (myKeys myConfig)
+        , manageHook         = myManageHook <+> manageHook def
+        , focusedBorderColor = aqua
+        , normalBorderColor  = "#282828"
+        --, handleEventHook  = minimizeEventHook <+> handleEventHook def <+> hintsEventHook -- <+> Ewmh.fullscreenEventHook
+        } `removeKeysP` removedKeys)
+
+
+
   xmonad
     $ Ewmh.ewmh
     $ Nav2d.withNavigation2DConfig def { Nav2d.defaultTiledNavigation = Nav2d.sideNavigation }
-    $ myConfig dbus
-
-myConfig dbus = desktopConfig
-      { terminal           = myTerminal
-      , modMask            = myModMask
-      , borderWidth        = 2
-      , layoutHook         = myLayout
-      , logHook            = myLogHook <+> dynamicLogWithPP (polybarPP dbus) <+> logHook def
-      , startupHook        = myStartupHook <+> startupHook def <+> return () >> checkKeymap (myConfig dbus ) myKeys
-      , manageHook         = myManageHook <+> manageHook def
-      , focusedBorderColor = aqua
-      , normalBorderColor  = "#282828"
-      --, handleEventHook = minimizeEventHook <+> handleEventHook def <+> hintsEventHook -- <+> Ewmh.fullscreenEventHook
-      } `removeKeysP` removedKeys `additionalKeysP` myKeys
+    $ myConfig
 
 
 
@@ -337,11 +346,19 @@ myConfig dbus = desktopConfig
 
 -- POLYBAR Kram -------------------------------------- {{{
 
+-- | Loghook for polybar on a given monitor.
+-- Will write the polybar formatted string to /tmp/xmonad-state-bar${monitor}
+polybarLogHook :: Int -> X ()
+polybarLogHook monitor = do
+  barOut <- dynamicLogString $ polybarPP monitor
+  io $ SysIO.appendFile ("/tmp/xmonad-state-bar" ++ show monitor) (barOut ++ "\n")
 
-polybarPP :: D.Client -> PP
-polybarPP dbus = namedScratchpadFilterOutWorkspacePP $ def
-  { ppOutput  = dbusOutput dbus
-  , ppCurrent = withBG bg2
+
+-- swapping namedScratchpadFilterOutWorkspacePP and marshallPP  will throw "Prelude.read no Parse" errors..... wtf
+-- | create a polybar Pretty printer, marshalled for given monitor.
+polybarPP :: Int -> PP
+polybarPP monitor = namedScratchpadFilterOutWorkspacePP $ marshallPP (fromIntegral monitor)  $ def
+  { ppCurrent = withBG bg2
   , ppVisible = withBG bg2
   , ppUrgent  = withFG red
   , ppLayout  = removeWord "Minimize" . removeWord "Hinted" . removeWord "Spacing" . withFG purple
@@ -349,7 +366,7 @@ polybarPP dbus = namedScratchpadFilterOutWorkspacePP $ def
   , ppWsSep   = ""
   , ppSep     = " | "
   , ppExtras  = []
-  , ppTitle   = const "" -- withFG aqua . (shorten 40)
+  , ppTitle   = withFG aqua . (shorten 40)
   }
     where
       removeWord substr = unwords . filter (/= substr) . words
@@ -360,21 +377,16 @@ polybarPP dbus = namedScratchpadFilterOutWorkspacePP $ def
         | otherwise = wsp
       wrapOnClickCmd command = wrap ("%{A1:" ++ command ++ ":}") "%{A}"
 
--- Emit a DBus signal on log updates
-dbusOutput :: D.Client -> String -> IO ()
-dbusOutput dbus str = do
-    let signal = (D.signal objectPath interfaceName memberName) {
-            D.signalBody = [D.toVariant $ UTF8.decodeString str]
-        }
-    D.emit dbus signal
-  where
-    objectPath = D.objectPath_ "/org/xmonad/Log"
-    interfaceName = D.interfaceName_ "org.xmonad.Log"
-    memberName = D.memberName_ "Update"
-
 -- }}}
 
 -- Utilities --------------------------------------------------- {{{
+
+
+
+catchAndNotifyAny :: IO () -> IO ()
+catchAndNotifyAny ioAction = catch ioAction (\(e :: SomeException) -> safeSpawn "notify-send" ["Xmonad exception", show e])
+
+
 promptDzenWhileRunning :: String -> [String] -> X () -> X ()
 promptDzenWhileRunning promptTitle options action = do
   handle <- spawnPipe $ "sleep 1 && dzen2 -e onstart=uncollapse -l " ++ lineCount ++ " -fn '" ++ font ++ "'"
