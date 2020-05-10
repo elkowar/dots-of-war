@@ -34,6 +34,8 @@ import XMonad.Layout.BinarySpacePartition
 import XMonad.Layout.BorderResize
 import XMonad.Layout.Gaps
 import XMonad.Layout.LayoutCombinators ((|||))
+
+import XMonad.Layout.Simplest
 import XMonad.Layout.LayoutHints
 import XMonad.Layout.MouseResizableTile
 import XMonad.Layout.NoBorders
@@ -42,15 +44,19 @@ import XMonad.Layout.ResizableTile
 import XMonad.Layout.Spacing (spacingRaw, Border(..), toggleWindowSpacingEnabled)
 import XMonad.Layout.ToggleLayouts
 import XMonad.Layout.ZoomRow
+import XMonad.Layout.MultiToggle
+import XMonad.Layout.MultiToggle.Instances
 import XMonad.Util.EZConfig (additionalKeysP, removeKeysP)
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run
 import XMonad.Util.SpawnOnce (spawnOnce)
+import XMonad.Layout.Tabbed
 import qualified XMonad.Actions.Navigation2D as Nav2d
 import qualified XMonad.Hooks.EwmhDesktops as Ewmh
 import qualified XMonad.Hooks.ManageHelpers as ManageHelpers
 import qualified XMonad.Layout.BoringWindows as BoringWindows
 import           XMonad.Layout.IndependentScreens
+import           XMonad.Layout.SubLayouts
 import qualified XMonad.StackSet as W
 import qualified XMonad.Util.XSelection as XSel
 
@@ -132,8 +138,6 @@ myLayout = avoidStruts . BoringWindows.boringWindows . smartBorders . toggleLayo
                          spacingBorder = Border (intGap) (intGap) (intGap) (intGap)
                          gapBorder     = Border intGap intGap intGap intGap
                      in spacingRaw True spacingBorder True gapBorder True
-
-
 -- }}}
 
 -- Startuphook ----------------------------- {{{
@@ -143,6 +147,7 @@ myStartupHook = do
   spawnOnce "picom --config ~/.config/picom.conf --experimental-backends"  --no-fading-openclose"
   spawnOnce "pasystray"
   spawnOnce "nm-applet"
+  spawnOnce "udiskie -s" -- Mount USB sticks automatically. -s is smart systray mode: systray icon if something is mounted
   spawnOnce "xfce4-clipman"
   spawnOnce "mailspring --background"
   spawnOnce "redshift -P -O 5000"
