@@ -11,7 +11,7 @@ for arg in "$@"; do
 done
 
 # Do not quote this, this is multiple flags
-select_flag="-s --highlight --color 1,1,1,0.2"
+select_flag="-s --highlight --color 1,1,1,0.1"
 
 [ $fullscreen -eq 1 ] && select_flag=""
 

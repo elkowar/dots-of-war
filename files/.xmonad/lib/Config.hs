@@ -91,7 +91,8 @@ scratchpads =
     where
       launchTerminal = myTerminal ++ " --class scratchpad_term"
       launchGHCI     = myTerminal ++ " --class scratchpad_ghci stack exec -- ghci"
-      launchWhatsapp = "gtk-launch chrome-hnpfjngllnobngcgfapefoaidbinmjnm-Default.desktop"
+      launchWhatsapp = "whatsapp-nativefier"
+      --launchWhatsapp = "gtk-launch chrome-hnpfjngllnobngcgfapefoaidbinmjnm-Default.desktop"
 
 
 -- Colors ------ {{{
@@ -145,7 +146,7 @@ myLayout = avoidStruts . BoringWindows.boringWindows . smartBorders . toggleLayo
 myStartupHook :: X ()
 myStartupHook = do
   spawnOnce "picom --config ~/.config/picom.conf --experimental-backends"  --no-fading-openclose"
-  spawnOnce "pasystray"
+  --spawnOnce "pasystray" -- just open the UI by right-clicking on polybar's pulseaudio module
   spawnOnce "nm-applet"
   spawnOnce "udiskie -s" -- Mount USB sticks automatically. -s is smart systray mode: systray icon if something is mounted
   spawnOnce "xfce4-clipman"
