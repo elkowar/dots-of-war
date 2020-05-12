@@ -214,7 +214,7 @@ myKeys =
   , ("M-S-C-<Backspace>",  withFocused (sendMessage . UnMerge))
   , ("M-<Tab>",            onGroup W.focusDown')
   , ("M-C-<Tab>",          onGroup W.focusUp')
-  , ("M-t",                toggleTabbedLayout)
+  , ("M-S-t",              toggleTabbedLayout)
 
 
   , ("M-f", toggleFullscreen)
