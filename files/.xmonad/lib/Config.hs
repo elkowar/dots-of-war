@@ -1,6 +1,4 @@
 {-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE TypeSynonymInstances #-}
 {-# Language ScopedTypeVariables, LambdaCase #-}
 {-# OPTIONS_GHC -fno-warn-missing-signatures -fno-warn-unused-binds #-}
 -- Imports -------------------------------------------------------- {{{
@@ -45,10 +43,8 @@ import XMonad.Layout.NoBorders
 import XMonad.Layout.Renamed (renamed, Rename(Replace))
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.Spacing (spacingRaw, Border(..), toggleWindowSpacingEnabled)
-import XMonad.Layout.ToggleLayouts
+import qualified XMonad.Layout.ToggleLayouts as ToggleLayouts
 import XMonad.Layout.ZoomRow
-import XMonad.Layout.MultiToggle
-import XMonad.Layout.MultiToggle.Instances
 import           XMonad.Util.EZConfig           ( additionalKeysP
                                                 , removeKeysP
                                                 , checkKeymap
@@ -129,29 +125,29 @@ aqua      = "#8ec07c"
 myTabTheme = def
     { activeColor           = "#504945"
     , inactiveColor         = "#282828"
-    , activeBorderColor     = "#504945"
-    , inactiveBorderColor   = "#fbf1c7"
+    , activeBorderColor     = "#fbf1c7"
+    , inactiveBorderColor   = "#282828"
     , activeTextColor       = "#fbf1c7"
     , inactiveTextColor     = "#fbf1c7"
     , fontName = "-*-jetbrains mono-medium-r-normal-12-0-0-0-0-m-0-ascii-1"
     }
 
--- Transform layout modifier into a toggle-able
-makeTabbed layout = windowNavigation $ addTabs shrinkText myTabTheme $ subLayout [] Simplest $ layout
 
 -- layoutHints .                                 
-myLayout = avoidStruts . BoringWindows.boringWindows . smartBorders . toggleLayouts Full . layoutHintsToCenter $ layouts
+
+myLayout = avoidStruts . smartBorders .  ToggleLayouts.toggleLayouts resizableTabbedLayout . ToggleLayouts.toggleLayouts Full . layoutHintsToCenter $ layouts
   where
-    layouts =((rename "Tall"     $ onlySpacing    $ mouseResizableTile         {draggerType = dragger}) -- ResizableTall 1 (3/100) (1/2) []
-          ||| (rename "Horizon"  $ onlySpacing    $ mouseResizableTileMirrored {draggerType = dragger}) -- Mirror                           $ ResizableTall 1 (3/100) (3/4) []
-          ||| (rename "BSP"      $ spacingAndGaps $ borderResize $ emptyBSP)
-          ||| (rename "ResTall"  $ makeTabbed $ spacingAndGaps $ ResizableTall 1 (3/100) (1/2) [])
-          ||| (rename "Row"      $ makeTabbed $ spacingAndGaps $ zoomRow)
-          ||| (rename "grid"     $ makeTabbed $ spacingAndGaps $ Grid False))
+    layouts =((rename "Tall"       $ onlySpacing    $ mouseResizableTile         {draggerType = dragger})
+          ||| (rename "Horizon"    $ onlySpacing    $ mouseResizableTileMirrored {draggerType = dragger})
+          ||| (rename "BSP"        $ spacingAndGaps $ borderResize $ emptyBSP)
+          ||| (rename "TabbedRow"  $ makeTabbed $ spacingAndGaps $ zoomRow)
+          ||| (rename "TabbedGrid" $ makeTabbed $ spacingAndGaps $ Grid False))
           -- ||| (rename "threeCol" $ spacingAndGaps $ ThreeColMid 1 (3/100) (1/2))
           -- ||| (rename "spiral"   $ spacingAndGaps $ spiral (9/21))
 
     rename n = renamed [Replace n]
+
+    resizableTabbedLayout = rename "Tabbed" . BoringWindows.boringWindows . makeTabbed . spacingAndGaps $ ResizableTall 1 (3/100) (1/2) []
 
     gap            = 7
     onlySpacing = gaps [ (dir, (gap*2)) | dir <- [L, R, D, U] ]  -- gaps are included in mouseResizableTile
@@ -160,6 +156,10 @@ myLayout = avoidStruts . BoringWindows.boringWindows . smartBorders . toggleLayo
     spacingAndGaps = let intGap        = fromIntegral gap
                          border = Border (intGap) (intGap) (intGap) (intGap)
                      in spacingRaw False border True border True
+
+    -- transform a layout into supporting tabs
+    makeTabbed layout = windowNavigation $ addTabs shrinkText myTabTheme $ subLayout [] Simplest $ layout
+
 -- }}}
 
 -- Startuphook ----------------------------- {{{
@@ -204,8 +204,8 @@ myKeys =
 
 
   -- Tabs
-  , ("M-j",                BoringWindows.focusDown)
-  , ("M-k",                BoringWindows.focusUp)
+  , ("M-j",                ifLayoutName ("Tabbed" `isPrefixOf`) (BoringWindows.focusDown) (windows W.focusDown))
+  , ("M-k",                ifLayoutName ("Tabbed" `isPrefixOf`) (BoringWindows.focusUp)   (windows W.focusUp))
   , ("M-C-S-h",            sendMessage $ pullGroup L)
   , ("M-C-S-j",            sendMessage $ pullGroup D)
   , ("M-C-S-k",            sendMessage $ pullGroup U)
@@ -214,17 +214,17 @@ myKeys =
   , ("M-S-C-<Backspace>",  withFocused (sendMessage . UnMerge))
   , ("M-<Tab>",            onGroup W.focusDown')
   , ("M-C-<Tab>",          onGroup W.focusUp')
+  , ("M-t",                toggleTabbedLayout)
 
 
+  , ("M-f", toggleFullscreen)
 
 
-  , ("M-f",      toggleFullscreen)
-
-  , ("M-S-C-c",  kill1)
-  , ("M-S-C-q",  io exitSuccess)
+  , ("M-S-C-c", kill1)
+  , ("M-S-C-q", io exitSuccess)
 
   -- Binary space partitioning
-  , ("M-<Backspace>", sendMessage Swap)
+  , ("M-<Backspace>",    sendMessage Swap)
   , ("M-M1-<Backspace>", sendMessage Rotate)
 
   -- Media
@@ -278,12 +278,23 @@ myKeys =
               , ("M-C-l", ifLayoutIs "BSP" (sendMessage $ ExpandTowards R) (ifLayoutIs "Horizon" (sendMessage ExpandSlave) (sendMessage Expand)))
               ]
 
-
+    
+    toggleTabbedLayout :: X ()
+    toggleTabbedLayout = do 
+      sendMessage $ ToggleLayouts.Toggle "Tabbed"
+      ifLayoutIs "Tabbed" (do BoringWindows.focusMaster
+                              withFocused (sendMessage . MergeAll)
+                              withFocused (sendMessage . UnMerge)
+                              -- refresh the tabs, so they draw correctly
+                              windows W.focusUp
+                              windows W.focusDown)
+                          (return ())
 
 
     toggleFullscreen :: X ()
     toggleFullscreen = do
-      sendMessage ToggleLayout                  -- toggle fullscreen layout
+      --sendMessage ToggleLayout                  -- toggle fullscreen layout
+      sendMessage $ ToggleLayouts.Toggle "Full"
       sendMessage ToggleStruts                  -- bar is hidden -> no need to make place for it
       --safeSpawn "polybar-msg" ["cmd", "toggle"] -- toggle polybar visibility
 
@@ -446,9 +457,12 @@ promptDzenWhileRunning promptTitle options action = do
     font      = "-*-iosevka-medium-r-s*--16-87-*-*-*-*-iso10???-1"
 
 ifLayoutIs :: String -> X a -> X a -> X a
-ifLayoutIs layoutAName onLayoutA onLayoutB = do
-  layout <- getActiveLayoutDescription
-  if (layout == layoutAName) then onLayoutA else onLayoutB
+ifLayoutIs layoutAName = ifLayoutName (== layoutAName)
+
+ifLayoutName :: (String -> Bool) -> X a -> X a -> X a
+ifLayoutName check onLayoutA onLayoutB = do
+  layout <- getActiveLayoutDescription 
+  if (check layout) then onLayoutA else onLayoutB
 
 -- Get the name of the active layout.
 getActiveLayoutDescription :: X String
