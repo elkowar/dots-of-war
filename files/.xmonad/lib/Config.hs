@@ -59,6 +59,8 @@ import           XMonad.Layout.IndependentScreens
 import           XMonad.Layout.SubLayouts
 import qualified XMonad.StackSet as W
 import qualified XMonad.Util.XSelection as XSel
+import qualified XMonad.Layout.Groups.Examples as GroupsEx
+import qualified XMonad.Layout.Groups as Groups
 
 {-# ANN module "HLint: ignore Redundant $" #-}
 {-# ANN module "HLint: ignore Redundant bracket" #-}
@@ -71,7 +73,7 @@ import qualified XMonad.Util.XSelection as XSel
 
 myModMask  = mod4Mask
 myLauncher = Rofi.asCommand (def { Rofi.theme = Rofi.bigTheme }) ["-show run"]
-myTerminal = "termite"
+myTerminal = "alacritty"
 myBrowser = "qutebrowser"
 --myBrowser = "google-chrome-stable"
 
@@ -117,17 +119,28 @@ aqua      = "#8ec07c"
 -- }}}
 
 -- Layout ---------------------------------------- {{{
---layoutHints .
+--
+
+myTabTheme = def
+    { activeColor           = "#504945"
+    , inactiveColor         = "#282828"
+    , activeBorderColor     = "#fbf1c7"
+    , inactiveBorderColor   = "#fbf1c7"
+    , activeTextColor       = "#fbf1c7"
+    , inactiveTextColor     = "#fbf1c7"
+    , fontName = "JetBrainsMono"
+    }
+-- layoutHints . 
 myLayout = avoidStruts . BoringWindows.boringWindows . smartBorders . toggleLayouts Full . layoutHintsToCenter $ layouts
   where
     layouts =((rename "Tall"     $ onlySpacing    $ mouseResizableTile         {draggerType = dragger}) -- ResizableTall 1 (3/100) (1/2) []
           ||| (rename "Horizon"  $ onlySpacing    $ mouseResizableTileMirrored {draggerType = dragger}) -- Mirror                           $ ResizableTall 1 (3/100) (3/4) []
           ||| (rename "BSP"      $ spacingAndGaps $ borderResize $ emptyBSP)
-          ||| (rename "Row"      $ spacingAndGaps $ zoomRow)
+          ||| (rename "Tabbed"   $ onlySpacing    $ GroupsEx.tallTabs $ def { GroupsEx.tabsTheme = myTabTheme  } )
+          ||| (rename "Row"      $ addTabsAlways shrinkText def $ subLayout [] Simplest $ spacingAndGaps $ zoomRow)
           ||| (rename "grid"     $ spacingAndGaps $ Grid False))
           -- ||| (rename "threeCol" $ spacingAndGaps $ ThreeColMid 1 (3/100) (1/2))
           -- ||| (rename "spiral"   $ spacingAndGaps $ spiral (9/21))
-          -- Grid
 
     rename n = renamed [Replace n]
 
@@ -136,9 +149,8 @@ myLayout = avoidStruts . BoringWindows.boringWindows . smartBorders . toggleLayo
     dragger        = let x = fromIntegral gap * 2
                      in FixedDragger x x
     spacingAndGaps = let intGap        = fromIntegral gap
-                         spacingBorder = Border (intGap) (intGap) (intGap) (intGap)
-                         gapBorder     = Border intGap intGap intGap intGap
-                     in spacingRaw True spacingBorder True gapBorder True
+                         border = Border (intGap) (intGap) (intGap) (intGap)
+                     in spacingRaw True border True border True
 -- }}}
 
 -- Startuphook ----------------------------- {{{
@@ -165,7 +177,7 @@ myStartupHook = do
 
 -- Default mappings that need to be removed
 removedKeys :: [String]
-removedKeys = ["M-S-c", "M-S-q", "M-h", "M-l"] ++ ["M-" ++ show n | n <- [1..9 :: Int]]
+removedKeys = ["M-<Tab>", "M-S-c", "M-S-q", "M-h", "M-l", "M-j", "M-k"] ++ ["M-" ++ show n | n <- [1..9 :: Int]]
 
 multiMonitorOperation :: (WorkspaceId -> WindowSet -> WindowSet) -> ScreenId -> X ()
 multiMonitorOperation operation n = do
@@ -179,6 +191,29 @@ myKeys :: XConfig a -> XConfig a
 myKeys c = additionalKeysP c $
   [ ("M-+",      sendMessage zoomIn)
   , ("M--",      sendMessage zoomOut)
+  , ("M-C-ü",    GroupsEx.nextOuterLayout)
+
+  , ("M-S-<Backspace>" , sendMessage $ Groups.Modify $ Groups.moveToGroupUp True)
+  , ("M-C-<Backspace>" , sendMessage $ Groups.Modify $ Groups.moveToNewGroupDown)
+  , ("M-<Tab>"         , sendMessage $ Groups.Modify Groups.focusDown)
+  , ("M-C-<Tab>"       , sendMessage $ Groups.Modify Groups.focusUp)
+  , ("M-j"             , ifLayoutIs "Tabbed" (sendMessage $ Groups.Modify Groups.focusGroupDown) (windows W.focusDown))
+  , ("M-k"             , ifLayoutIs "Tabbed" (sendMessage $ Groups.Modify Groups.focusGroupUp)   (windows W.focusUp))
+  , ("M-S-j"           , ifLayoutIs "Tabbed" (sendMessage $ Groups.Modify Groups.swapGroupDown)  (windows W.swapDown))
+  , ("M-S-k"           , ifLayoutIs "Tabbed" (sendMessage $ Groups.Modify Groups.swapGroupUp)    (windows W.swapUp))
+
+
+  , ("M-<Left>", sendMessage $ pullGroup L)
+  , ("M-<Down>", sendMessage $ pullGroup D)
+  , ("M-<Up>", sendMessage $ pullGroup U)
+  , ("M-<Right>", sendMessage $ pullGroup R)
+  , ("M-S-C-m", withFocused (sendMessage . MergeAll))
+  , ("M-S-C-u", withFocused (sendMessage . UnMerge))
+  , ("M-S-C-+", onGroup W.focusUp')
+  , ("M-S-C--", onGroup W.focusDown')
+
+
+
   , ("M-#",      sendMessage zoomReset)
 
   , ("M-f",      toggleFullscreen)
@@ -187,7 +222,7 @@ myKeys c = additionalKeysP c $
   , ("M-S-C-q",  io exitSuccess)
 
   -- Binary space partitioning
-  , ("M-<Backspace>",    sendMessage Swap)
+  , ("M-<Backspace>", sendMessage Swap)
   , ("M-M1-<Backspace>", sendMessage Rotate)
 
   -- Media
@@ -221,7 +256,7 @@ myKeys c = additionalKeysP c $
         where
           workspaceMappings =
             [ (mappingPrefix ++ show wspNum, windows $ onCurrentScreen action wsp)
-               | (wsp, wspNum) <- zip (workspaces' c) [1..9 :: Int]
+              | (wsp, wspNum) <- zip (workspaces' c) [1..9 :: Int]
               , (mappingPrefix, action) <- [("M-", W.greedyView), ("M-S-", W.shift), ("M-C-", copy)]
             ]
 
