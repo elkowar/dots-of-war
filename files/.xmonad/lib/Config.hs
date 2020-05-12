@@ -189,7 +189,8 @@ myStartupHook = do
   spawn "/home/leon/.screenlayout/dualscreen-landscape.sh"
   _ <- liftIO $ Control.Concurrent.threadDelay (1000 * 10)
   spawn "/home/leon/.config/polybar/launch.sh"
-  spawn "feh --bg-fill /home/leon/Bilder/wallpapers/mountains_with_clounds.jpg"
+  --spawn "feh --bg-fill /home/leon/Bilder/wallpapers/mountains_with_clounds.jpg"
+  spawn "nitrogen --restore"
   setWMName "LG3D" -- Java stuff hack
 
 -- }}}
