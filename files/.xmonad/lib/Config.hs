@@ -1,3 +1,6 @@
+{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE TypeSynonymInstances #-}
 {-# Language ScopedTypeVariables, LambdaCase #-}
 {-# OPTIONS_GHC -fno-warn-missing-signatures -fno-warn-unused-binds #-}
 -- Imports -------------------------------------------------------- {{{
@@ -46,7 +49,10 @@ import XMonad.Layout.ToggleLayouts
 import XMonad.Layout.ZoomRow
 import XMonad.Layout.MultiToggle
 import XMonad.Layout.MultiToggle.Instances
-import XMonad.Util.EZConfig (additionalKeysP, removeKeysP)
+import           XMonad.Util.EZConfig           ( additionalKeysP
+                                                , removeKeysP
+                                                , checkKeymap
+                                                )
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run
 import XMonad.Util.SpawnOnce (spawnOnce)
@@ -59,8 +65,7 @@ import           XMonad.Layout.IndependentScreens
 import           XMonad.Layout.SubLayouts
 import qualified XMonad.StackSet as W
 import qualified XMonad.Util.XSelection as XSel
-import qualified XMonad.Layout.Groups.Examples as GroupsEx
-import qualified XMonad.Layout.Groups as Groups
+import           XMonad.Layout.WindowNavigation ( windowNavigation )
 
 {-# ANN module "HLint: ignore Redundant $" #-}
 {-# ANN module "HLint: ignore Redundant bracket" #-}
@@ -124,21 +129,25 @@ aqua      = "#8ec07c"
 myTabTheme = def
     { activeColor           = "#504945"
     , inactiveColor         = "#282828"
-    , activeBorderColor     = "#fbf1c7"
+    , activeBorderColor     = "#504945"
     , inactiveBorderColor   = "#fbf1c7"
     , activeTextColor       = "#fbf1c7"
     , inactiveTextColor     = "#fbf1c7"
-    , fontName = "JetBrainsMono"
+    , fontName = "-*-jetbrains mono-medium-r-normal-12-0-0-0-0-m-0-ascii-1"
     }
--- layoutHints . 
+
+-- Transform layout modifier into a toggle-able
+makeTabbed layout = windowNavigation $ addTabs shrinkText myTabTheme $ subLayout [] Simplest $ layout
+
+-- layoutHints .                                 
 myLayout = avoidStruts . BoringWindows.boringWindows . smartBorders . toggleLayouts Full . layoutHintsToCenter $ layouts
   where
     layouts =((rename "Tall"     $ onlySpacing    $ mouseResizableTile         {draggerType = dragger}) -- ResizableTall 1 (3/100) (1/2) []
           ||| (rename "Horizon"  $ onlySpacing    $ mouseResizableTileMirrored {draggerType = dragger}) -- Mirror                           $ ResizableTall 1 (3/100) (3/4) []
           ||| (rename "BSP"      $ spacingAndGaps $ borderResize $ emptyBSP)
-          ||| (rename "Tabbed"   $ onlySpacing    $ GroupsEx.tallTabs $ def { GroupsEx.tabsTheme = myTabTheme  } )
-          ||| (rename "Row"      $ addTabsAlways shrinkText def $ subLayout [] Simplest $ spacingAndGaps $ zoomRow)
-          ||| (rename "grid"     $ spacingAndGaps $ Grid False))
+          ||| (rename "ResTall"  $ makeTabbed $ spacingAndGaps $ ResizableTall 1 (3/100) (1/2) [])
+          ||| (rename "Row"      $ makeTabbed $ spacingAndGaps $ zoomRow)
+          ||| (rename "grid"     $ makeTabbed $ spacingAndGaps $ Grid False))
           -- ||| (rename "threeCol" $ spacingAndGaps $ ThreeColMid 1 (3/100) (1/2))
           -- ||| (rename "spiral"   $ spacingAndGaps $ spiral (9/21))
 
@@ -150,7 +159,7 @@ myLayout = avoidStruts . BoringWindows.boringWindows . smartBorders . toggleLayo
                      in FixedDragger x x
     spacingAndGaps = let intGap        = fromIntegral gap
                          border = Border (intGap) (intGap) (intGap) (intGap)
-                     in spacingRaw True border True border True
+                     in spacingRaw False border True border True
 -- }}}
 
 -- Startuphook ----------------------------- {{{
@@ -187,34 +196,27 @@ multiMonitorOperation operation n = do
     Nothing -> return ()
 
 
-myKeys :: XConfig a -> XConfig a
-myKeys c = additionalKeysP c $
+myKeys :: [(String, X ())]
+myKeys = 
   [ ("M-+",      sendMessage zoomIn)
   , ("M--",      sendMessage zoomOut)
-  , ("M-C-ü",    GroupsEx.nextOuterLayout)
-
-  , ("M-S-<Backspace>" , sendMessage $ Groups.Modify $ Groups.moveToGroupUp True)
-  , ("M-C-<Backspace>" , sendMessage $ Groups.Modify $ Groups.moveToNewGroupDown)
-  , ("M-<Tab>"         , sendMessage $ Groups.Modify Groups.focusDown)
-  , ("M-C-<Tab>"       , sendMessage $ Groups.Modify Groups.focusUp)
-  , ("M-j"             , ifLayoutIs "Tabbed" (sendMessage $ Groups.Modify Groups.focusGroupDown) (windows W.focusDown))
-  , ("M-k"             , ifLayoutIs "Tabbed" (sendMessage $ Groups.Modify Groups.focusGroupUp)   (windows W.focusUp))
-  , ("M-S-j"           , ifLayoutIs "Tabbed" (sendMessage $ Groups.Modify Groups.swapGroupDown)  (windows W.swapDown))
-  , ("M-S-k"           , ifLayoutIs "Tabbed" (sendMessage $ Groups.Modify Groups.swapGroupUp)    (windows W.swapUp))
-
-
-  , ("M-<Left>", sendMessage $ pullGroup L)
-  , ("M-<Down>", sendMessage $ pullGroup D)
-  , ("M-<Up>", sendMessage $ pullGroup U)
-  , ("M-<Right>", sendMessage $ pullGroup R)
-  , ("M-S-C-m", withFocused (sendMessage . MergeAll))
-  , ("M-S-C-u", withFocused (sendMessage . UnMerge))
-  , ("M-S-C-+", onGroup W.focusUp')
-  , ("M-S-C--", onGroup W.focusDown')
-
-
-
   , ("M-#",      sendMessage zoomReset)
+
+
+  -- Tabs
+  , ("M-j",                BoringWindows.focusDown)
+  , ("M-k",                BoringWindows.focusUp)
+  , ("M-C-S-h",            sendMessage $ pullGroup L)
+  , ("M-C-S-j",            sendMessage $ pullGroup D)
+  , ("M-C-S-k",            sendMessage $ pullGroup U)
+  , ("M-C-S-l",            sendMessage $ pullGroup R)
+  , ("M-S-C-m",            withFocused (sendMessage . MergeAll))
+  , ("M-S-C-<Backspace>",  withFocused (sendMessage . UnMerge))
+  , ("M-<Tab>",            onGroup W.focusDown')
+  , ("M-C-<Tab>",          onGroup W.focusUp')
+
+
+
 
   , ("M-f",      toggleFullscreen)
 
@@ -255,8 +257,13 @@ myKeys c = additionalKeysP c $
     generatedMappings = windowGoMappings ++ windowSwapMappings ++ resizeMappings ++ workspaceMappings
         where
           workspaceMappings =
-            [ (mappingPrefix ++ show wspNum, windows $ onCurrentScreen action wsp)
-              | (wsp, wspNum) <- zip (workspaces' c) [1..9 :: Int]
+            [ (mappingPrefix ++ show wspNum, 
+                do
+                  -- get all workspaces from the config by running an X action to query the config
+                  wsps <- workspaces' <$> asks config 
+                  windows $ onCurrentScreen action (wsps !! (wspNum - 1))
+              )
+              | (wspNum) <- [1..9 :: Int]
               , (mappingPrefix, action) <- [("M-", W.greedyView), ("M-S-", W.shift), ("M-C-", copy)]
             ]
 
@@ -360,19 +367,19 @@ main = do
   -- create polybarLogHooks for every monitor and combine them using the <+> monoid instance
   let polybarLogHooks = foldMap (polybarLogHook . fromIntegral) monitorIndices
 
-  let myConfig = myKeys (desktopConfig
+  let myConfig = desktopConfig
         { terminal           = myTerminal
         , workspaces         = withScreens (fromIntegral currentScreenCount) (map show [1..9 :: Int])
         , modMask            = myModMask
         , borderWidth        = 2
         , layoutHook         = myLayout
         , logHook            = polybarLogHook 0 <+> polybarLogHook 1 <+> logHook def
-        , startupHook        = myStartupHook <+> startupHook def -- <+> return () >> checkKeymap myConfig (myKeys myConfig)
+        , startupHook        = myStartupHook <+> startupHook def <+> return () >> checkKeymap myConfig myKeys
         , manageHook         = myManageHook <+> manageHook def
         , focusedBorderColor = aqua
         , normalBorderColor  = "#282828"
         --, handleEventHook  = minimizeEventHook <+> handleEventHook def <+> hintsEventHook -- <+> Ewmh.fullscreenEventHook
-        } `removeKeysP` removedKeys)
+       } `removeKeysP` removedKeys `additionalKeysP` myKeys
 
 
 
