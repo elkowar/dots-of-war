@@ -1,13 +1,13 @@
 #!/bin/bash
 
 if [ "$MONITOR" = "HDMI-A-0" ]; then
-  while true; do
-    tail -F /tmp/xmonad-state-bar0
-  done
+  #while true; do
+    tail -f /tmp/xmonad-state-bar0
+  #done
 else
-  while true; do
-    tail -F /tmp/xmonad-state-bar1
-  done
+  #while true; do
+    tail -f /tmp/xmonad-state-bar1
+  #done
 fi
 
 #while true; do

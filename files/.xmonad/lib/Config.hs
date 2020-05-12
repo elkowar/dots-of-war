@@ -50,6 +50,9 @@ import           XMonad.Util.EZConfig           ( additionalKeysP
                                                 , checkKeymap
                                                 )
 import XMonad.Util.NamedScratchpad
+
+import qualified XMonad.Layout.MultiToggle as MTog
+import qualified XMonad.Layout.MultiToggle.Instances as MTog
 import XMonad.Util.Run
 import XMonad.Util.SpawnOnce (spawnOnce)
 import XMonad.Layout.Tabbed
@@ -62,6 +65,10 @@ import           XMonad.Layout.SubLayouts
 import qualified XMonad.StackSet as W
 import qualified XMonad.Util.XSelection as XSel
 import           XMonad.Layout.WindowNavigation ( windowNavigation )
+import           GHC.IO.Encoding                ( setLocaleEncoding
+                                                , utf8
+                                                , setFileSystemEncoding
+                                                )
 
 {-# ANN module "HLint: ignore Redundant $" #-}
 {-# ANN module "HLint: ignore Redundant bracket" #-}
@@ -101,7 +108,7 @@ scratchpads =
 -- Colors ------ {{{
 fg        = "#ebdbb2"
 bg        = "#282828"
-gray      = "#a89984"
+gray      = "#888974"
 bg1       = "#3c3836"
 bg2       = "#504945"
 bg3       = "#665c54"
@@ -135,7 +142,12 @@ myTabTheme = def
 
 -- layoutHints .                                 
 
-myLayout = avoidStruts . smartBorders .  ToggleLayouts.toggleLayouts resizableTabbedLayout . ToggleLayouts.toggleLayouts Full . layoutHintsToCenter $ layouts
+myLayout = avoidStruts 
+         $ smartBorders 
+         $ MTog.mkToggle1 MTog.FULL 
+         $ ToggleLayouts.toggleLayouts resizableTabbedLayout
+         $ layoutHintsToCenter 
+         $ layouts
   where
     layouts =((rename "Tall"       $ onlySpacing    $ mouseResizableTile         {draggerType = dragger})
           ||| (rename "Horizon"    $ onlySpacing    $ mouseResizableTileMirrored {draggerType = dragger})
@@ -149,7 +161,7 @@ myLayout = avoidStruts . smartBorders .  ToggleLayouts.toggleLayouts resizableTa
 
     resizableTabbedLayout = rename "Tabbed" . BoringWindows.boringWindows . makeTabbed . spacingAndGaps $ ResizableTall 1 (3/100) (1/2) []
 
-    gap            = 7
+    gap            = 10
     onlySpacing = gaps [ (dir, (gap*2)) | dir <- [L, R, D, U] ]  -- gaps are included in mouseResizableTile
     dragger        = let x = fromIntegral gap * 2
                      in FixedDragger x x
@@ -217,7 +229,8 @@ myKeys =
   , ("M-S-t",              toggleTabbedLayout)
 
 
-  , ("M-f", toggleFullscreen)
+  --, ("M-f", toggleFullscreen)
+  , ("M-f", sendMessage $ MTog.Toggle MTog.FULL)
 
 
   , ("M-S-C-c", kill1)
@@ -369,6 +382,8 @@ myManageHook = composeAll
 -- Main ------------------------------------ {{{
 main :: IO ()
 main = do
+  setLocaleEncoding utf8
+
   currentScreenCount :: Int <- countScreens
   let monitorIndices = [0..currentScreenCount - 1]
 
@@ -417,20 +432,22 @@ polybarLogHook monitor = do
 -- | create a polybar Pretty printer, marshalled for given monitor.
 polybarPP :: Int -> PP
 polybarPP monitor = namedScratchpadFilterOutWorkspacePP $ marshallPP (fromIntegral monitor)  $ def
-  { ppCurrent = withBG bg2
-  , ppVisible = withBG bg2
-  , ppUrgent  = withFG red
-  , ppLayout  = removeWord "Minimize" . removeWord "Hinted" . removeWord "Spacing" . withFG purple
-  , ppHidden  = wrap " " " " . unwords . map wrapOpenWorkspaceCmd . words
+  { ppCurrent = withFG aqua . withMargin
+   --ppCurrent = withBG bg2
+  , ppVisible = withFG aqua . withMargin
+  , ppUrgent  = withFG red . withMargin
+  , ppLayout  = removeWord "Minimize" . removeWord "Hinted" . removeWord "Spacing" . withFG purple . withMargin
+  , ppHidden  = withMargin . withFG gray . unwords . map wrapOpenWorkspaceCmd . words
   , ppWsSep   = ""
   , ppSep     = " | "
   , ppExtras  = []
-  , ppTitle   = withFG aqua . (shorten 40)
+  , ppTitle   = const "" -- withFG aqua . (shorten 40)
   }
     where
+      withMargin = wrap " " " "
       removeWord substr = unwords . filter (/= substr) . words
-      withBG col = wrap ("%{B" ++ col ++ "} ") " %{B-}"
-      withFG col = wrap ("%{F" ++ col ++ "} ") " %{F-}"
+      withBG col = wrap ("%{B" ++ col ++ "}") "%{B-}"
+      withFG col = wrap ("%{F" ++ col ++ "}") "%{F-}"
       wrapOpenWorkspaceCmd wsp
         | all isDigit wsp = wrapOnClickCmd ("xdotool key super+" ++ wsp) wsp
         | otherwise = wsp
