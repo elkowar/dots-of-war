@@ -3,6 +3,14 @@
 Xcursor.size: 16
 Xcursor.theme: capitaine-cursors-light
 
+Xft.autohint: 0
+Xft.antialias: 1
+Xft.hinting: true
+Xft.hintstyle: hintslight
+Xft.dpi: 96
+Xft.rgba: rgb
+Xft.lcdfilter: lcddefault
+
 rofi.lines: 5
 rofi.eh: 2
 rofi.padding: 200

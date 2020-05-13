@@ -1,0 +1,5 @@
+#!/bin/bash
+selected=$(cat /home/leon/scripts/bookmarks/config_files | awk '{print $1}' | fzf)
+test "$selected" = "" && exit 1
+file=$(grep "$selected" /home/leon/scripts/bookmarks/config_files | sed -r 's/^\w*\s+(.*)$/\1/g')
+nvim "$file"

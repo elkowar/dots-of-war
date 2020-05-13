@@ -3,6 +3,9 @@ fish_vi_key_bindings
 
 set -U FZF_TMUX 1
 set -U FZF_PREVIEW_FILE_CMD "head -n 10 | bat --color=always --decorations=never"
+set -U fish_greeting
+#function fish_greeting
+#end
 
 
 alias ls=lsd

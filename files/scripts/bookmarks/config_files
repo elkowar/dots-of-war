@@ -1,0 +1,4 @@
+xmonad    /home/leon/.xmonad/lib/Config.hs
+polybar   /home/leon/.config/polybar/config.ini
+picom     /home/leon/.config/picom.conf
+vimrc     /home/leon/.vimrc

@@ -142,11 +142,11 @@ myTabTheme = def
 
 -- layoutHints .                                 
 
-myLayout = avoidStruts 
-         $ smartBorders 
-         $ MTog.mkToggle1 MTog.FULL 
+myLayout = avoidStruts
+         $ smartBorders
+         $ MTog.mkToggle1 MTog.FULL
          $ ToggleLayouts.toggleLayouts resizableTabbedLayout
-         $ layoutHintsToCenter 
+         $ layoutHintsToCenter
          $ layouts
   where
     layouts =((rename "Tall"       $ onlySpacing    $ mouseResizableTile         {draggerType = dragger})
@@ -210,10 +210,10 @@ multiMonitorOperation operation n = do
 
 
 myKeys :: [(String, X ())]
-myKeys = 
-  [ ("M-+",      sendMessage zoomIn)
-  , ("M--",      sendMessage zoomOut)
-  , ("M-#",      sendMessage zoomReset)
+myKeys =
+  [ ("M-+", sendMessage zoomIn)
+  , ("M--", sendMessage zoomOut)
+  , ("M-#", sendMessage zoomReset)
 
 
   -- Tabs
@@ -228,6 +228,11 @@ myKeys =
   , ("M-<Tab>",            onGroup W.focusDown')
   , ("M-C-<Tab>",          onGroup W.focusUp')
   , ("M-S-t",              toggleTabbedLayout)
+
+  , ("M-S-<Tab>", do windows W.focusMaster
+                     BoringWindows.focusDown
+                     onGroup W.focusDown'
+                     windows W.focusMaster)
 
 
   --, ("M-f", toggleFullscreen)
@@ -271,10 +276,10 @@ myKeys =
     generatedMappings = windowGoMappings ++ windowSwapMappings ++ resizeMappings ++ workspaceMappings
         where
           workspaceMappings =
-            [ (mappingPrefix ++ show wspNum, 
+            [ (mappingPrefix ++ show wspNum,
                 do
                   -- get all workspaces from the config by running an X action to query the config
-                  wsps <- workspaces' <$> asks config 
+                  wsps <- workspaces' <$> asks config
                   windows $ onCurrentScreen action (wsps !! (wspNum - 1))
               )
               | (wspNum) <- [1..9 :: Int]
@@ -292,9 +297,9 @@ myKeys =
               , ("M-C-l", ifLayoutIs "BSP" (sendMessage $ ExpandTowards R) (ifLayoutIs "Horizon" (sendMessage ExpandSlave) (sendMessage Expand)))
               ]
 
-    
+
     toggleTabbedLayout :: X ()
-    toggleTabbedLayout = do 
+    toggleTabbedLayout = do
       sendMessage $ ToggleLayouts.Toggle "Tabbed"
       ifLayoutIs "Tabbed" (do BoringWindows.focusMaster
                               withFocused (sendMessage . MergeAll)
@@ -396,7 +401,7 @@ main = do
 
   let myConfig = desktopConfig
         { terminal           = myTerminal
-        , workspaces         = withScreens (fromIntegral currentScreenCount) (map show [1..9 :: Int])
+        , workspaces         = withScreens (fromIntegral currentScreenCount) (map show [1..5 :: Int])
         , modMask            = myModMask
         , borderWidth        = 2
         , layoutHook         = myLayout
@@ -415,8 +420,6 @@ main = do
     $ Nav2d.withNavigation2DConfig def { Nav2d.defaultTiledNavigation = Nav2d.sideNavigation }
     $ myConfig
 
-
-
 -- }}}
 
 -- POLYBAR Kram -------------------------------------- {{{
@@ -431,27 +434,25 @@ polybarLogHook monitor = do
 
 -- swapping namedScratchpadFilterOutWorkspacePP and marshallPP  will throw "Prelude.read no Parse" errors..... wtf
 -- | create a polybar Pretty printer, marshalled for given monitor.
+
 polybarPP :: Int -> PP
 polybarPP monitor = namedScratchpadFilterOutWorkspacePP $ marshallPP (fromIntegral monitor)  $ def
-  { ppCurrent = withFG aqua . withMargin
-   --ppCurrent = withBG bg2
-  , ppVisible = withFG aqua . withMargin
-  , ppUrgent  = withFG red . withMargin
-  , ppLayout  = removeWord "Minimize" . removeWord "Hinted" . removeWord "Spacing" . withFG purple . withMargin
-  , ppHidden  = withMargin . withFG gray . unwords . map wrapOpenWorkspaceCmd . words
-  , ppWsSep   = ""
-  , ppSep     = " | "
-  , ppExtras  = []
-  , ppTitle   = const "" -- withFG aqua . (shorten 40)
+  { ppCurrent         = withFG aqua . withMargin . const "__active__"
+  , ppVisible         = withFG aqua . withMargin . const "__active__"
+  , ppUrgent          = withFG red  . withMargin . const "__urgent__"
+  , ppHidden          = withFG gray . (\wsp -> wrapOnClickCmd ("xdotool key super+" ++ wsp) $ withMargin "__hidden__")
+  , ppHiddenNoWindows = withFG gray . (\wsp -> wrapOnClickCmd ("xdotool key super+" ++ wsp) $ withMargin "__empty__")
+  , ppWsSep           = ""
+  , ppSep             = " | "
+  , ppLayout          = removeWord "Minimize" . removeWord "Hinted" . removeWord "Spacing" . withFG purple . withMargin
+  , ppExtras          = []
+  , ppTitle           = const "" -- withFG aqua . (shorten 40)
   }
     where
       withMargin = wrap " " " "
       removeWord substr = unwords . filter (/= substr) . words
       withBG col = wrap ("%{B" ++ col ++ "}") "%{B-}"
       withFG col = wrap ("%{F" ++ col ++ "}") "%{F-}"
-      wrapOpenWorkspaceCmd wsp
-        | all isDigit wsp = wrapOnClickCmd ("xdotool key super+" ++ wsp) wsp
-        | otherwise = wsp
       wrapOnClickCmd command = wrap ("%{A1:" ++ command ++ ":}") "%{A}"
 
 -- }}}
@@ -479,7 +480,7 @@ ifLayoutIs layoutAName = ifLayoutName (== layoutAName)
 
 ifLayoutName :: (String -> Bool) -> X a -> X a -> X a
 ifLayoutName check onLayoutA onLayoutB = do
-  layout <- getActiveLayoutDescription 
+  layout <- getActiveLayoutDescription
   if (check layout) then onLayoutA else onLayoutB
 
 -- Get the name of the active layout.
