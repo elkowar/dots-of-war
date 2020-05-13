@@ -378,6 +378,7 @@ myManageHook = composeAll
   , className =? "mpv" --> ManageHelpers.doRectFloat (W.RationalRect 0.9 0.9 0.1 0.1)
   , title =? "Something" --> doFloat
   , className =? "termite_floating" --> ManageHelpers.doRectFloat(W.RationalRect 0.2 0.2 0.6 0.6)
+  , className =? "bar_system_status_indicator" --> ManageHelpers.doRectFloat (W.RationalRect 0.7 0.05 0.29 0.26)
   -- , isFullscreen --> doF W.focusDown <+> doFullFloat
   , manageDocks
   , namedScratchpadManageHook scratchpads
