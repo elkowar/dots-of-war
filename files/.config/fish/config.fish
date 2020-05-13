@@ -2,6 +2,7 @@ fish_vi_key_bindings
 # fish_default_key_bindings
 
 set -U FZF_TMUX 1
+set -U FZF_DEFAULT_COMMANDS "--filepath-word --cycle"
 set -U FZF_PREVIEW_FILE_CMD "head -n 10 | bat --color=always --decorations=never"
 set -U fish_greeting
 #function fish_greeting
@@ -9,6 +10,7 @@ set -U fish_greeting
 
 
 alias ls=lsd
+alias tcolors="env TERM=xterm-256color tcolors"
 abbr --add --global vim nvim
 abbr --add --global tsh trash
 #abbr --add --global clear "clear && ls"
@@ -35,6 +37,14 @@ function run_stuff
   commandline -r $result
   commandline -f repaint
 end
+
+function c
+  set -l result (/home/leon/scripts/conf)
+  commandline -r "$result"
+  commandline -f repaint
+  commandline -f execute
+end
+
 
 bind \ca run_stuff
 

@@ -1,5 +1,7 @@
 [options]
 font = Iosevka Nerd Font Medium 12
+;font = Cozette 10
+;font = scientifica Regular 12
 ;font = Victor mono 13
 ;font = jetbrains mono Nerd Font 12
 ;font = monospace 13

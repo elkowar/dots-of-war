@@ -401,7 +401,7 @@ main = do
 
   let myConfig = desktopConfig
         { terminal           = myTerminal
-        , workspaces         = withScreens (fromIntegral currentScreenCount) (map show [1..5 :: Int])
+        , workspaces         = withScreens (fromIntegral currentScreenCount) (map show [1..6 :: Int])
         , modMask            = myModMask
         , borderWidth        = 2
         , layoutHook         = myLayout
@@ -443,14 +443,18 @@ polybarPP monitor = namedScratchpadFilterOutWorkspacePP $ marshallPP (fromIntegr
   , ppHidden          = withFG gray . (\wsp -> wrapOnClickCmd ("xdotool key super+" ++ wsp) $ withMargin "__hidden__")
   , ppHiddenNoWindows = withFG gray . (\wsp -> wrapOnClickCmd ("xdotool key super+" ++ wsp) $ withMargin "__empty__")
   , ppWsSep           = ""
-  , ppSep             = " | "
-  , ppLayout          = removeWord "Minimize" . removeWord "Hinted" . removeWord "Spacing" . withFG purple . withMargin
+  , ppSep             = ""
+  , ppLayout          = \l -> if l == "Tall" || l == "Horizon"
+                                then ""
+                                else (withFG gray " | ") ++ 
+                                        (removeWords ["Minimize", "Hinted", "Spacing", "Tall"] . withFG purple . withMargin $ l)
   , ppExtras          = []
   , ppTitle           = const "" -- withFG aqua . (shorten 40)
   }
     where
       withMargin = wrap " " " "
       removeWord substr = unwords . filter (/= substr) . words
+      removeWords wrds str = foldr removeWord str wrds
       withBG col = wrap ("%{B" ++ col ++ "}") "%{B-}"
       withFG col = wrap ("%{F" ++ col ++ "}") "%{F-}"
       wrapOnClickCmd command = wrap ("%{A1:" ++ command ++ ":}") "%{A}"

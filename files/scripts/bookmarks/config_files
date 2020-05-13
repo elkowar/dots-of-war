@@ -2,3 +2,6 @@ xmonad    /home/leon/.xmonad/lib/Config.hs
 polybar   /home/leon/.config/polybar/config.ini
 picom     /home/leon/.config/picom.conf
 vimrc     /home/leon/.vimrc
+termite   /home/leon/.config/termite/config
+alacritty /home/leon/.config/alacritty/alacritty.yml
+fish      /home/leon/.config/fish/config.fish

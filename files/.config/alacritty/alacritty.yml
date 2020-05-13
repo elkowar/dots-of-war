@@ -254,6 +254,7 @@ schemes:
       white:   '#e6e6e6'
   gruvbox: &gruvbox
     primary:
+      #background: '#1d2021' # hard contrast: background = '#1d2021'
       background: '#282828' # hard contrast: background = '#1d2021'
       foreground: '#ebdbb2' # soft contrast: background = '#32302f'
     normal:
@@ -306,8 +307,14 @@ colors: *gruvbox
 background_opacity: 1
 
 font:
-  size: 13
+  size: 12
   normal: # >>=  >=
-    family: Iosevka
     #family: JetBrainsMono Nerd Font
+    #family: Iosevka
+    family: cozette
+    #family: Terminus (TTF)
+    #family: cherry
+    #family: lucy tewi2a
+    #family: Scientifica
     style: Normal
+
