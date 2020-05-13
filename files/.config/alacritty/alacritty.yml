@@ -311,8 +311,8 @@ font:
   normal: # >>=  >=
     #family: JetBrainsMono Nerd Font
     #family: Iosevka
-    family: cozette
-    #family: Terminus (TTF)
+    #family: cozette
+    family: Terminus (TTF)
     #family: cherry
     #family: lucy tewi2a
     #family: Scientifica

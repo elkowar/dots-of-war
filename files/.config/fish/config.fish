@@ -41,7 +41,6 @@ end
 function c
   set -l result (/home/leon/scripts/conf)
   commandline -r "$result"
-  commandline -f repaint
   commandline -f execute
 end
 

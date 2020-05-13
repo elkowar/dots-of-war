@@ -3,11 +3,16 @@
 format_workspaces() {
   while read -r line; do
     echo "$line" \
-      | sed 's/__active__/⬤/g' \
-      | sed 's/__urgent__/⬤/g' \
-      | sed 's/__hidden__/⬤/g' \
-      | sed 's/__empty__/⭕/g' \
-      | perl -pe 's/((?:%{F#888974*?}%{A1:.*} __empty__ %{A}%{F-} ?)*)(?!.*\1)//g'
+      | sed 's/__active__/◆/g' \
+      | sed 's/__urgent__/◆/g' \
+      | sed 's/__hidden__/◆/g' \
+      | sed 's/__empty__/◇/g' \
+      #| sed 's/__active__/⬤/g' \
+      #| sed 's/__urgent__/⬤/g' \
+      #| sed 's/__hidden__/⬤/g' \
+      #| sed 's/__empty__/⭕/g' \
+
+      #| perl -pe 's/((?:%{F#888974*?}%{A1:.*} __empty__ %{A}%{F-} ?)*)(?!.*\1)//g'
     done
 }
 
@@ -16,13 +21,9 @@ format_workspaces() {
 
 
 if [ "$MONITOR" = "HDMI-A-0" ]; then
-  #while true; do
   tail -F /tmp/xmonad-state-bar0 | stdbuf -o0 cat | format_workspaces 
-  #done
 else
-  #while true; do
-    tail -F /tmp/xmonad-state-bar1 | stdbuf -o0 cat | format_workspaces 
-  #done
+  tail -F /tmp/xmonad-state-bar1 | stdbuf -o0 cat | format_workspaces 
 fi
 
 #while true; do
