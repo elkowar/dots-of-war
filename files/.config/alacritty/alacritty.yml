@@ -307,8 +307,8 @@ colors: *gruvbox
 background_opacity: 1
 
 font:
-  size: 14
-  normal: # >>=  >=
+  size: 12
+  normal:
     #family: JetBrainsMono Nerd Font
     #family: Iosevka
     #family: cozette

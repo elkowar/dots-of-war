@@ -16,3 +16,4 @@ https://wiki.haskell.org/GHC_optimisations#Fusion GHC optimisations - HaskellWik
 https://github.com/ViktorNova/architect ViktorNova/architect: Automatically builds native packages for any Linux distribution using the source code repositories from Arch Linux and the Arch User Repository (AUR)
 https://stackoverflow.com/questions/38252123/piping-tail-f-to-cut-to-sed-produces-no-output linux - Piping tail -f to cut to sed produces no output - Stack Overflow
 https://start.duckduckgo.com/ DuckDuckGo — Privacy, simplified.
+http://hackage.haskell.org/package/xmonad-eval xmonad-eval: Module for evaluation Haskell expressions in the running xmonad instance

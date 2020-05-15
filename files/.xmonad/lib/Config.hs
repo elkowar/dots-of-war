@@ -10,7 +10,11 @@ import           Control.Exception              ( catch
                                                 , SomeException
                                                 )
 import Data.Char (isDigit)
-import           Data.List                      ( isSuffixOf , isPrefixOf)
+import           Data.List                      ( isSuffixOf
+                                                , isPrefixOf
+                                                , sort
+                                                , sortBy
+                                                )
 import System.Exit (exitSuccess)
 
 import qualified Rofi
@@ -19,6 +23,7 @@ import qualified Rofi
 import qualified Data.Map as M
 import qualified Data.Monoid
 import           Data.Foldable                  ( for_ )
+import           Data.Ord                       ( comparing )
 import qualified System.IO as SysIO
 
 import XMonad.Layout.HintedGrid
@@ -57,6 +62,7 @@ import XMonad.Util.Run
 import XMonad.Util.SpawnOnce (spawnOnce)
 import XMonad.Layout.Tabbed
 import qualified XMonad.Actions.Navigation2D as Nav2d
+import           XMonad.Actions.PhysicalScreens ( horizontalScreenOrderer )
 import qualified XMonad.Hooks.EwmhDesktops as Ewmh
 import qualified XMonad.Hooks.ManageHelpers as ManageHelpers
 import qualified XMonad.Layout.BoringWindows as BoringWindows
@@ -64,6 +70,10 @@ import           XMonad.Layout.IndependentScreens
 import           XMonad.Layout.SubLayouts
 import qualified XMonad.StackSet as W
 import qualified XMonad.Util.XSelection as XSel
+import           XMonad.Util.WorkspaceCompare   ( getSortByXineramaRule
+                                                , getSortByXineramaPhysicalRule
+                                                , getSortByIndex
+                                                )
 import           XMonad.Layout.WindowNavigation ( windowNavigation )
 import           GHC.IO.Encoding                ( setLocaleEncoding
                                                 , utf8
@@ -83,6 +93,7 @@ myModMask  = mod4Mask
 myLauncher = Rofi.asCommand (def { Rofi.theme = Rofi.bigTheme }) ["-show run"]
 myTerminal = "alacritty"
 myBrowser = "qutebrowser"
+useSharedWorkspaces = False
 --myBrowser = "google-chrome-stable"
 
 {-| adds the scripts-directory path to the filename of a script |-}
@@ -140,7 +151,7 @@ myTabTheme = def
     }
 
 
--- layoutHints .                                 
+-- layoutHints .
 
 myLayout = avoidStruts
          $ smartBorders
@@ -165,33 +176,30 @@ myLayout = avoidStruts
     onlySpacing = gaps [ (dir, (gap*2)) | dir <- [L, R, D, U] ]  -- gaps are included in mouseResizableTile
     dragger        = let x = fromIntegral gap * 2
                      in FixedDragger x x
-    spacingAndGaps = let intGap        = fromIntegral gap
+    spacingAndGaps = let intGap = fromIntegral gap
                          border = Border (intGap) (intGap) (intGap) (intGap)
                      in spacingRaw False border True border True
 
     -- transform a layout into supporting tabs
     makeTabbed layout = windowNavigation $ addTabs shrinkText myTabTheme $ subLayout [] Simplest $ layout
-
 -- }}}
 
 -- Startuphook ----------------------------- {{{
 
 myStartupHook :: X ()
 myStartupHook = do
-  spawnOnce "picom --config ~/.config/picom.conf --experimental-backends"  --no-fading-openclose"
-  --spawnOnce "pasystray" -- just open the UI by right-clicking on polybar's pulseaudio module
-  spawnOnce "nm-applet"
-  spawnOnce "udiskie -s" -- Mount USB sticks automatically. -s is smart systray mode: systray icon if something is mounted
-  spawnOnce "xfce4-clipman"
-  spawnOnce "mailspring --background"
-  spawnOnce "redshift -P -O 5000"
-  spawn "xset r rate 300 50" -- make key repeat quicker
-  spawn "/home/leon/.screenlayout/dualscreen-landscape.sh"
-  _ <- liftIO $ Control.Concurrent.threadDelay (1000 * 10)
-  spawn "/home/leon/.config/polybar/launch.sh"
-  --spawn "feh --bg-fill /home/leon/Bilder/wallpapers/mountains_with_clounds.jpg"
-  spawn "nitrogen --restore"
   setWMName "LG3D" -- Java stuff hack
+  spawnOnce "picom --config ~/.config/picom.conf &"  --no-fading-openclose"
+  --spawnOnce "pasystray" -- just open the UI by right-clicking on polybar's pulseaudio module
+  spawnOnce "nm-applet &"
+  spawnOnce "udiskie -s &" -- Mount USB sticks automatically. -s is smart systray mode: systray icon if something is mounted
+  spawnOnce "xfce4-clipman &"
+  spawnOnce "mailspring --background &"
+  spawnOnce "redshift -P -O 5000 &"
+  spawn "xset r rate 300 50 &" -- make key repeat quicker
+
+  -- polybar and nitrogen need the screen layout to be restored fully before starting
+  spawn "/home/leon/.screenlayout/dualscreen-landscape.sh && /home/leon/.config/polybar/launch.sh && nitrogen --restore"
 
 -- }}}
 
@@ -199,7 +207,8 @@ myStartupHook = do
 
 -- Default mappings that need to be removed
 removedKeys :: [String]
-removedKeys = ["M-<Tab>", "M-S-c", "M-S-q", "M-h", "M-l", "M-j", "M-k"] ++ ["M-" ++ show n | n <- [1..9 :: Int]]
+removedKeys = ["M-<Tab>", "M-S-c", "M-S-q", "M-h", "M-l", "M-j", "M-k"]
+  ++ if useSharedWorkspaces then [key ++ show n | key <- ["M-", "M-S-", "M-C-"], n <- [1..9 :: Int]] else []
 
 multiMonitorOperation :: (WorkspaceId -> WindowSet -> WindowSet) -> ScreenId -> X ()
 multiMonitorOperation operation n = do
@@ -211,6 +220,7 @@ multiMonitorOperation operation n = do
 
 myKeys :: [(String, X ())]
 myKeys =
+  -- ZoomRow
   [ ("M-+", sendMessage zoomIn)
   , ("M--", sendMessage zoomOut)
   , ("M-#", sendMessage zoomReset)
@@ -229,14 +239,14 @@ myKeys =
   , ("M-C-<Tab>",          onGroup W.focusUp')
   , ("M-S-t",              toggleTabbedLayout)
 
+  -- In tabbed mode, while focussing master pane, cycle tabs on the first slave
   , ("M-S-<Tab>", do windows W.focusMaster
                      BoringWindows.focusDown
                      onGroup W.focusDown'
                      windows W.focusMaster)
 
 
-  --, ("M-f", toggleFullscreen)
-  , ("M-f", sendMessage $ MTog.Toggle MTog.FULL)
+  , ("M-f", toggleFullscreen)
 
 
   , ("M-S-C-c", kill1)
@@ -259,13 +269,11 @@ myKeys =
   -- programs
   , ("M-p",      spawn myLauncher)
   , ("M-b",      spawn myBrowser)
-  , ("M-C-p",    spawn (myTerminal ++ " --class termite_floating -e fff"))
   , ("M-S-p",    Rofi.showCombi  (def { Rofi.theme = Rofi.bigTheme }) [ "drun", "window", "ssh" ])
   , ("M-S-e",    Rofi.showNormal (def { Rofi.theme = Rofi.bigTheme }) "emoji" )
   --, ("M-s",      spawn $ scriptFile "rofi-search.sh")
   , ("M-S-o",    spawn $ scriptFile "rofi-open.sh")
   , ("M-n",      scratchpadSubmap )
-  , ("M-m",      mediaSubmap )
   , ("M-e",      Rofi.promptRunCommand def specialCommands)
   , ("M-C-e",    Rofi.promptRunCommand def =<< defaultCommands )
   , ("M-o",      Rofi.promptRunCommand def withSelectionCommands)
@@ -276,15 +284,16 @@ myKeys =
     generatedMappings = windowGoMappings ++ windowSwapMappings ++ resizeMappings ++ workspaceMappings
         where
           workspaceMappings =
-            [ (mappingPrefix ++ show wspNum,
-                do
-                  -- get all workspaces from the config by running an X action to query the config
-                  wsps <- workspaces' <$> asks config
-                  windows $ onCurrentScreen action (wsps !! (wspNum - 1))
-              )
-              | (wspNum) <- [1..9 :: Int]
-              , (mappingPrefix, action) <- [("M-", W.greedyView), ("M-S-", W.shift), ("M-C-", copy)]
-            ]
+            if useSharedWorkspaces then [] else
+              [ (mappingPrefix ++ show wspNum,
+                  do
+                    -- get all workspaces from the config by running an X action to query the config
+                    wsps <- workspaces' <$> asks config
+                    windows $ onCurrentScreen action (wsps !! (wspNum - 1))
+                )
+                 | (wspNum) <- [1..9 :: Int]
+                , (mappingPrefix, action) <- [("M-", W.greedyView), ("M-S-", W.shift), ("M-C-", copy)]
+              ]
 
           keyDirPairs = [("h", L), ("j", D), ("k", U), ("l", R)]
 
@@ -312,10 +321,8 @@ myKeys =
 
     toggleFullscreen :: X ()
     toggleFullscreen = do
-      --sendMessage ToggleLayout                  -- toggle fullscreen layout
-      sendMessage $ ToggleLayouts.Toggle "Full"
-      sendMessage ToggleStruts                  -- bar is hidden -> no need to make place for it
-      --safeSpawn "polybar-msg" ["cmd", "toggle"] -- toggle polybar visibility
+      sendMessage $ MTog.Toggle MTog.FULL
+      sendMessage ToggleStruts
 
 
     scratchpadSubmap :: X ()
@@ -328,20 +335,11 @@ myKeys =
       , ((myModMask, xK_d), "<M-m> discord",  namedScratchpadAction scratchpads "discord")
       ]
 
-    mediaSubmap :: X ()
-    mediaSubmap = describedSubmap "Media"
-      [ ((myModMask, xK_m), "<M-m> play/pause",      spawn "playerctl play-pause")
-      , ((myModMask, xK_l), "<M-l> next",            spawn "playerctl next")
-      , ((myModMask, xK_l), "<M-h> previous",        spawn "playerctl previous")
-      , ((myModMask, xK_k), "<M-k> increase volume", spawn "amixer sset Master 5%+")
-      , ((myModMask, xK_j), "<M-j> decrease volume", spawn "amixer sset Master 5%-")
-      ]
-
     withSelectionCommands :: [(String, X ())]
     withSelectionCommands =
-      [ ("Google",        XSel.transformPromptSelection  ("https://google.com/search?q=" ++) "qutebrowser")
-      , ("Hoogle",        XSel.transformPromptSelection  ("https://hoogle.haskell.org/?hoogle=" ++) "qutebrowser")
-      , ("Translate",     XSel.transformPromptSelection  ("https://translate.google.com/#view=home&op=translate&sl=auto&tl=en&text=" ++) "qutebrowser")
+      [ ("Google",    XSel.transformPromptSelection  ("https://google.com/search?q=" ++) "qutebrowser")
+      , ("Hoogle",    XSel.transformPromptSelection  ("https://hoogle.haskell.org/?hoogle=" ++) "qutebrowser")
+      , ("Translate", XSel.transformPromptSelection  ("https://translate.google.com/#view=home&op=translate&sl=auto&tl=en&text=" ++) "qutebrowser")
       ]
 
 
@@ -373,13 +371,12 @@ myKeys =
 
 myManageHook :: Query (Data.Monoid.Endo WindowSet)
 myManageHook = composeAll
-  [ resource =? "Dialog" --> ManageHelpers.doCenterFloat
-  , appName =? "pavucontrol" --> ManageHelpers.doCenterFloat
-  , className =? "mpv" --> ManageHelpers.doRectFloat (W.RationalRect 0.9 0.9 0.1 0.1)
-  , title =? "Something" --> doFloat
-  , className =? "termite_floating" --> ManageHelpers.doRectFloat(W.RationalRect 0.2 0.2 0.6 0.6)
+  [ resource  =? "Dialog"                      --> ManageHelpers.doCenterFloat
+  , appName   =? "pavucontrol"                 --> ManageHelpers.doCenterFloat
+  , className =? "mpv"                         --> ManageHelpers.doRectFloat (W.RationalRect 0.9 0.9 0.1 0.1)
+  , title     =? "Something"                   --> doFloat
+  , className =? "termite_floating"            --> ManageHelpers.doRectFloat(W.RationalRect 0.2 0.2 0.6 0.6)
   , className =? "bar_system_status_indicator" --> ManageHelpers.doRectFloat (W.RationalRect 0.7 0.05 0.29 0.26)
-  -- , isFullscreen --> doF W.focusDown <+> doFullFloat
   , manageDocks
   , namedScratchpadManageHook scratchpads
   ]
@@ -402,7 +399,8 @@ main = do
 
   let myConfig = desktopConfig
         { terminal           = myTerminal
-        , workspaces         = withScreens (fromIntegral currentScreenCount) (map show [1..6 :: Int])
+        , workspaces         = if useSharedWorkspaces then map show [1..9 :: Int]
+                                                      else withScreens (fromIntegral currentScreenCount) (map show [1..6 :: Int])
         , modMask            = myModMask
         , borderWidth        = 2
         , layoutHook         = myLayout
@@ -417,6 +415,7 @@ main = do
 
 
   xmonad
+    $ docks
     $ Ewmh.ewmh
     $ Nav2d.withNavigation2DConfig def { Nav2d.defaultTiledNavigation = Nav2d.sideNavigation }
     $ myConfig
@@ -437,28 +436,41 @@ polybarLogHook monitor = do
 -- | create a polybar Pretty printer, marshalled for given monitor.
 
 polybarPP :: Int -> PP
-polybarPP monitor = namedScratchpadFilterOutWorkspacePP $ marshallPP (fromIntegral monitor)  $ def
-  { ppCurrent         = withFG aqua . withMargin . const "__active__"
-  , ppVisible         = withFG aqua . withMargin . const "__active__"
-  , ppUrgent          = withFG red  . withMargin . const "__urgent__"
-  , ppHidden          = withFG gray . (\wsp -> wrapOnClickCmd ("xdotool key super+" ++ wsp) $ withMargin "__hidden__")
-  , ppHiddenNoWindows = withFG gray . (\wsp -> wrapOnClickCmd ("xdotool key super+" ++ wsp) $ withMargin "__empty__")
-  , ppWsSep           = ""
-  , ppSep             = ""
-  , ppLayout          = \l -> if l == "Tall" || l == "Horizon"
-                                then ""
-                                else (withFG gray " | ") ++ 
-                                        (removeWords ["Minimize", "Hinted", "Spacing", "Tall"] . withFG purple . withMargin $ l)
-  , ppExtras          = []
-  , ppTitle           = const "" -- withFG aqua . (shorten 40)
+polybarPP monitor = namedScratchpadFilterOutWorkspacePP . (if useSharedWorkspaces then id else marshallPP $ fromIntegral monitor) $ def
+  { ppCurrent          = withFG aqua . withMargin . withFont 5 . const "__active__"
+  , ppVisible          = withFG aqua . withMargin . withFont 5 . const "__active__"
+  , ppUrgent           = withFG red  . withMargin . withFont 5 . const "__urgent__"
+  , ppHidden           = withFG gray . withMargin . withFont 5 . (`wrapClickableWorkspace` "__hidden__")
+  , ppHiddenNoWindows  = withFG gray . withMargin . withFont 5 . (`wrapClickableWorkspace` "__empty__")
+  , ppWsSep            = ""
+  , ppSep              = ""
+  , ppLayout           = \l -> if l == "Tall" || l == "Horizon"
+                                 then ""
+                                 else (withFG gray " | ") ++
+                                         (removeWords ["Minimize", "Hinted", "Spacing", "Tall"] . withFG purple . withMargin $ l)
+  , ppExtras           = []
+  , ppTitle            = const "" -- withFG aqua . (shorten 40)
+  , ppSort = if useSharedWorkspaces
+                then getSortByXineramaPhysicalRule horizontalScreenOrderer
+                else do
+                  ws <- gets windowset
+                  sorter <- getSortByIndex
+                  let visibleWorkspaceTags = map (unmarshallW . W.tag . W.workspace) $ W.current ws : W.visible ws
+                  let shouldDrop wsp = (null $ W.stack wsp) && (W.tag wsp) `notElem` visibleWorkspaceTags
+                  return $ reverse . dropWhile shouldDrop . reverse . sorter
   }
     where
-      withMargin = wrap " " " "
-      removeWord substr = unwords . filter (/= substr) . words
-      removeWords wrds str = foldr removeWord str wrds
-      withBG col = wrap ("%{B" ++ col ++ "}") "%{B-}"
-      withFG col = wrap ("%{F" ++ col ++ "}") "%{F-}"
-      wrapOnClickCmd command = wrap ("%{A1:" ++ command ++ ":}") "%{A}"
+      withMargin                 = wrap " " " "
+      removeWord substr          = unwords . filter (/= substr) . words
+      removeWords wrds str       = foldr removeWord str wrds
+      withFont fNum              = wrap ("%{T" ++ show (fNum :: Int) ++ "}") "%{T}"
+      withBG col                 = wrap ("%{B" ++ col ++ "}") "%{B-}"
+      withFG col                 = wrap ("%{F" ++ col ++ "}") "%{F-}"
+      wrapOnClickCmd command     = wrap ("%{A1:" ++ command ++ ":}") "%{A}"
+      wrapClickableWorkspace wsp = wrapOnClickCmd ("xdotool key super+" ++ wsp)
+      correctlyOrderedXineramaSort = do xineramaSort <- getSortByXineramaRule
+                                        return (\wsps -> let (x:xs) = xineramaSort wsps
+                                                          in [head xs, x] ++ tail xs)
 
 -- }}}
 
