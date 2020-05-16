@@ -250,7 +250,7 @@ myKeys =
   , ("M-f", toggleFullscreen)
 
   , ("M-b",          launchWithBackgroundInstance (className =? "qutebrowser") "bwrap --bind / / --dev-bind /dev /dev --tmpfs /tmp --tmpfs /run qutebrowser")
-  , ("M-S-<Return>", launchWithBackgroundInstance (className =? "Alacritty") "alacritty")
+  , ("M-S-<Return>", launchWithBackgroundInstance (className =? "Alacritty")   "alacritty")
 
   , ("M-S-C-c", kill1)
   , ("M-S-C-q", io exitSuccess)
@@ -331,7 +331,7 @@ myKeys =
     -- For this to work, the window needs to have the `_NET_WM_PID` set and unique!
     launchWithBackgroundInstance :: (Query Bool) -> String -> X ()
     launchWithBackgroundInstance windowQuery commandToRun = withWindowSet $ \winSet -> do
-        quteWins <- (W.allWindows winSet) |> filter (\win -> Just True == fmap ("NSP" ==) (W.findTag win winSet))
+        quteWins <- (W.allWindows winSet) |> filter (\win -> Just True == (("NSP" ==) <$> (W.findTag win winSet)))
                                           |> filterM (runQuery windowQuery)
         case quteWins of
           []        -> do spawnHere commandToRun
