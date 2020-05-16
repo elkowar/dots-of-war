@@ -9,6 +9,7 @@ import Control.Concurrent
 import           Control.Exception              ( catch
                                                 , SomeException
                                                 )
+import           Control.Monad                  ( filterM )
 import Data.Char (isDigit)
 import           Data.List                      ( isSuffixOf
                                                 , isPrefixOf
@@ -63,6 +64,7 @@ import XMonad.Util.SpawnOnce (spawnOnce)
 import XMonad.Layout.Tabbed
 import qualified XMonad.Actions.Navigation2D as Nav2d
 import           XMonad.Actions.PhysicalScreens ( horizontalScreenOrderer )
+import           XMonad.Actions.SpawnOn
 import qualified XMonad.Hooks.EwmhDesktops as Ewmh
 import qualified XMonad.Hooks.ManageHelpers as ManageHelpers
 import qualified XMonad.Layout.BoringWindows as BoringWindows
@@ -197,8 +199,8 @@ myStartupHook = do
   spawn "/home/leon/.screenlayout/dualscreen.sh "
   io $ threadDelay $ 1000 * 100
   spawnOnce "picom --config ~/.config/picom.conf"  --no-fading-openclose"
-  spawn"/home/leon/.config/polybar/launch.sh" 
-  spawn "nitrogen --restore"
+  spawn "/home/leon/.config/polybar/launch.sh" 
+  spawnOnce "nitrogen --restore"
 
 -- }}}
 
@@ -206,7 +208,7 @@ myStartupHook = do
 
 -- Default mappings that need to be removed
 removedKeys :: [String]
-removedKeys = ["M-<Tab>", "M-S-c", "M-S-q", "M-h", "M-l", "M-j", "M-k"]
+removedKeys = ["M-<Tab>", "M-S-c", "M-S-q", "M-h", "M-l", "M-j", "M-k", "M-S-<Return>"]
   ++ if useSharedWorkspaces then [key ++ show n | key <- ["M-", "M-S-", "M-C-"], n <- [1..9 :: Int]] else []
 
 multiMonitorOperation :: (WorkspaceId -> WindowSet -> WindowSet) -> ScreenId -> X ()
@@ -247,6 +249,8 @@ myKeys =
 
   , ("M-f", toggleFullscreen)
 
+  , ("M-b",          launchWithBackgroundInstance (className =? "qutebrowser") "bwrap --bind / / --dev-bind /dev /dev --tmpfs /tmp --tmpfs /run qutebrowser")
+  , ("M-S-<Return>", launchWithBackgroundInstance (className =? "Alacritty") "alacritty")
 
   , ("M-S-C-c", kill1)
   , ("M-S-C-q", io exitSuccess)
@@ -267,7 +271,6 @@ myKeys =
 
   -- programs
   , ("M-p",      spawn myLauncher)
-  , ("M-b",      spawn myBrowser)
   , ("M-S-p",    Rofi.showCombi  (def { Rofi.theme = Rofi.bigTheme }) [ "drun", "window", "ssh" ])
   , ("M-S-e",    Rofi.showNormal (def { Rofi.theme = Rofi.bigTheme }) "emoji" )
   --, ("M-s",      spawn $ scriptFile "rofi-search.sh")
@@ -322,6 +325,22 @@ myKeys =
     toggleFullscreen = do
       sendMessage $ MTog.Toggle MTog.FULL
       sendMessage ToggleStruts
+
+    -- | launch a program by starting an instance in a hidden workspace, 
+    -- and just raising an already running instance. This allows for super quick "startup" time.
+    -- For this to work, the window needs to have the `_NET_WM_PID` set and unique!
+    launchWithBackgroundInstance :: (Query Bool) -> String -> X ()
+    launchWithBackgroundInstance windowQuery commandToRun = withWindowSet $ \winSet -> do
+        quteWins <- (W.allWindows winSet) |> filter (\win -> Just True == fmap ("NSP" ==) (W.findTag win winSet))
+                                          |> filterM (runQuery windowQuery)
+        case quteWins of
+          []        -> do spawnHere commandToRun
+                          spawnOn "NSP" commandToRun
+          [winId]   -> do windows $ W.shiftWin (W.currentTag winSet) winId
+                          spawnOn "NSP" commandToRun
+          (winId:_) -> windows $ W.shiftWin (W.currentTag winSet) winId
+
+
 
 
     scratchpadSubmap :: X ()
@@ -403,7 +422,7 @@ main = do
         , layoutHook         = myLayout
         , logHook            = polybarLogHooks <+> logHook def
         , startupHook        = myStartupHook <+> startupHook def <+> return () >> checkKeymap myConfig myKeys
-        , manageHook         = myManageHook <+> manageHook def
+        , manageHook         = manageSpawn <+> myManageHook <+> manageHook def
         , focusedBorderColor = aqua
         , normalBorderColor  = "#282828"
         --, handleEventHook  = minimizeEventHook <+> handleEventHook def <+> hintsEventHook -- <+> Ewmh.fullscreenEventHook
