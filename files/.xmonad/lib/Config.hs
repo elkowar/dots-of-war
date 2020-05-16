@@ -19,7 +19,7 @@ import System.Exit (exitSuccess)
 
 import qualified Rofi
 
-
+import Data.Function ((&))
 import qualified Data.Map as M
 import qualified Data.Monoid
 import           Data.Foldable                  ( for_ )
@@ -75,10 +75,6 @@ import           XMonad.Util.WorkspaceCompare   ( getSortByXineramaRule
                                                 , getSortByIndex
                                                 )
 import           XMonad.Layout.WindowNavigation ( windowNavigation )
-import           GHC.IO.Encoding                ( setLocaleEncoding
-                                                , utf8
-                                                , setFileSystemEncoding
-                                                )
 
 {-# ANN module "HLint: ignore Redundant $" #-}
 {-# ANN module "HLint: ignore Redundant bracket" #-}
@@ -189,7 +185,6 @@ myLayout = avoidStruts
 myStartupHook :: X ()
 myStartupHook = do
   setWMName "LG3D" -- Java stuff hack
-  spawnOnce "picom --config ~/.config/picom.conf &"  --no-fading-openclose"
   --spawnOnce "pasystray" -- just open the UI by right-clicking on polybar's pulseaudio module
   spawnOnce "nm-applet &"
   spawnOnce "udiskie -s &" -- Mount USB sticks automatically. -s is smart systray mode: systray icon if something is mounted
@@ -199,7 +194,11 @@ myStartupHook = do
   spawn "xset r rate 300 50 &" -- make key repeat quicker
 
   -- polybar and nitrogen need the screen layout to be restored fully before starting
-  spawn "/home/leon/.screenlayout/dualscreen-landscape.sh && /home/leon/.config/polybar/launch.sh && nitrogen --restore"
+  spawn "/home/leon/.screenlayout/dualscreen.sh "
+  io $ threadDelay $ 1000 * 100
+  spawnOnce "picom --config ~/.config/picom.conf"  --no-fading-openclose"
+  spawn"/home/leon/.config/polybar/launch.sh" 
+  spawn "nitrogen --restore"
 
 -- }}}
 
@@ -386,8 +385,6 @@ myManageHook = composeAll
 -- Main ------------------------------------ {{{
 main :: IO ()
 main = do
-  setLocaleEncoding utf8
-
   currentScreenCount :: Int <- countScreens
   let monitorIndices = [0..currentScreenCount - 1]
 
@@ -395,7 +392,7 @@ main = do
   for_ monitorIndices (\idx -> safeSpawn "mkfifo" ["/tmp/xmonad-state-bar" ++ show idx])
 
   -- create polybarLogHooks for every monitor and combine them using the <+> monoid instance
-  let polybarLogHooks = foldMap (polybarLogHook . fromIntegral) monitorIndices
+  let polybarLogHooks = composeAll $ map polybarLogHook monitorIndices
 
   let myConfig = desktopConfig
         { terminal           = myTerminal
@@ -404,7 +401,7 @@ main = do
         , modMask            = myModMask
         , borderWidth        = 2
         , layoutHook         = myLayout
-        , logHook            = polybarLogHook 0 <+> polybarLogHook 1 <+> logHook def
+        , logHook            = polybarLogHooks <+> logHook def
         , startupHook        = myStartupHook <+> startupHook def <+> return () >> checkKeymap myConfig myKeys
         , manageHook         = myManageHook <+> manageHook def
         , focusedBorderColor = aqua
@@ -455,7 +452,11 @@ polybarPP monitor = namedScratchpadFilterOutWorkspacePP . (if useSharedWorkspace
                 else do
                   ws <- gets windowset
                   sorter <- getSortByIndex
-                  let visibleWorkspaceTags = map (unmarshallW . W.tag . W.workspace) $ W.current ws : W.visible ws
+                  let visibleWorkspaceTags = W.current ws : W.visible ws
+                                           |> map (W.tag . W.workspace)
+                                           |> filter (\tag -> monitor == fromIntegral (unmarshallS tag))
+                                           |> map unmarshallW
+
                   let shouldDrop wsp = (null $ W.stack wsp) && (W.tag wsp) `notElem` visibleWorkspaceTags
                   return $ reverse . dropWhile shouldDrop . reverse . sorter
   }
@@ -476,6 +477,9 @@ polybarPP monitor = namedScratchpadFilterOutWorkspacePP . (if useSharedWorkspace
 
 -- Utilities --------------------------------------------------- {{{
 
+(|>) :: a -> (a -> b) -> b
+(|>) = (&)
+infixl 1 |>
 
 
 catchAndNotifyAny :: IO () -> IO ()

@@ -304,7 +304,7 @@ schemes:
 # https://github.com/alacritty/alacritty/wiki/Color-schemes
 colors: *gruvbox
 #background_opacity: 0.95
-background_opacity: 1
+background_opacity: 1.0
 
 font:
   size: 12
