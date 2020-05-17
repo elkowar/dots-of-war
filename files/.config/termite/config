@@ -10,7 +10,7 @@ font = Terminus (TTF) 12
 [colors]
 # hard contrast: background = #1d2021
 background = rgba(40, 40, 40, 1)
-;background = rgba(40, 40, 40, 0.95)
+;background = rgba(40, 40, 40, 0.90)
 # soft contrast: background = #32302f
 foreground = #ebdbb2
 foreground_bold = #ebdbb2

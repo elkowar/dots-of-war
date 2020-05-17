@@ -415,8 +415,8 @@ main = do
 
   let myConfig = desktopConfig
         { terminal           = myTerminal
-        , workspaces         = if useSharedWorkspaces then map show [1..9 :: Int]
-                                                      else withScreens (fromIntegral currentScreenCount) (map show [1..6 :: Int])
+        , workspaces         = if useSharedWorkspaces then (map show [1..9 :: Int]) ++ ["NSP"]
+                                                      else (withScreens (fromIntegral currentScreenCount) (map show [1..6 :: Int])) ++ ["NSP"]
         , modMask            = myModMask
         , borderWidth        = 2
         , layoutHook         = myLayout
