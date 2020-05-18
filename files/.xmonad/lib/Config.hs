@@ -10,15 +10,15 @@ import           Control.Exception              ( catch
                                                 , SomeException
                                                 )
 import           Control.Monad                  ( filterM )
-import           Data.List                      ( isSuffixOf
-                                                , isPrefixOf
+import           Data.List                      ( isPrefixOf
+                                                , isSuffixOf
                                                 )
 import System.Exit (exitSuccess)
 
 import qualified Rofi
+import qualified DescribedSubmap
 
 import Data.Function ((&))
-import qualified Data.Map as M
 import qualified Data.Monoid
 import           Data.Foldable                  ( for_ )
 import qualified System.IO as SysIO
@@ -27,7 +27,6 @@ import XMonad.Layout.HintedGrid
 
 import XMonad hiding ((|||))
 import XMonad.Actions.CopyWindow
-import XMonad.Actions.Submap
 import XMonad.Config.Desktop
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
@@ -72,6 +71,7 @@ import           XMonad.Util.WorkspaceCompare   ( getSortByXineramaPhysicalRule
                                                 )
 import           XMonad.Layout.WindowNavigation ( windowNavigation )
 
+
 {-# ANN module "HLint: ignore Redundant $" #-}
 {-# ANN module "HLint: ignore Redundant bracket" #-}
 {-# ANN module "HLint: ignore Move brackets to avoid $" #-}
@@ -92,18 +92,16 @@ useSharedWorkspaces = False
 scriptFile :: String -> String
 scriptFile script = "/home/leon/scripts/" ++ script
 
+
 scratchpads :: [NamedScratchpad]
 scratchpads =
-  [ NS "terminal" launchTerminal (className =? "scratchpad_term")      (customFloating $ W.RationalRect 0.66 0.7 0.34 0.3)
-  , NS "spotify"  "spotify"      (appName   =? "spotify")              defaultFloating
-  , NS "discord"  "discord"      (appName   =? "discord")              defaultFloating
-  , NS "whatsapp" launchWhatsapp (("WhatsApp" `isSuffixOf`) <$> title) defaultFloating
-  , NS "slack"    "slack"        (("Slack | " `isPrefixOf`) <$> title) defaultFloating
+  [ NS "terminal" "alacritty --class scratchpad_term" (className =? "scratchpad_term")      defaultFloating
+  , NS "spotify"  "spotify"                           (appName   =? "spotify")              defaultFloating
+  , NS "discord"  "discord"                           (appName   =? "discord")              defaultFloating
+  , NS "whatsapp" "whatsapp-nativefier"               (("WhatsApp" `isSuffixOf`) <$> title) defaultFloating
+  , NS "slack"    "slack"                             (("Slack | " `isPrefixOf`) <$> title) defaultFloating
   ]
-    where
-      launchTerminal = myTerminal ++ " --class scratchpad_term"
-      launchWhatsapp = "whatsapp-nativefier"
-      --launchWhatsapp = "gtk-launch chrome-hnpfjngllnobngcgfapefoaidbinmjnm-Default.desktop"
+--launchWhatsapp = "gtk-launch chrome-hnpfjngllnobngcgfapefoaidbinmjnm-Default.desktop"
 
 
 -- Colors ------ {{{
@@ -128,7 +126,6 @@ aqua      = "#8ec07c"
 -- }}}
 
 -- Layout ---------------------------------------- {{{
---
 
 myTabTheme = def
     { activeColor           = "#504945"
@@ -239,7 +236,8 @@ myKeys =
                      windows W.focusMaster)
 
 
-  , ("M-f", toggleFullscreen)
+  , ("M-f", do sendMessage $ MTog.Toggle MTog.FULL
+               sendMessage ToggleStruts)
 
   , ("M-b",          launchWithBackgroundInstance (className =? "qutebrowser") "bwrap --bind / / --dev-bind /dev /dev --tmpfs /tmp --tmpfs /run qutebrowser")
   , ("M-S-<Return>", launchWithBackgroundInstance (className =? "Alacritty")   "alacritty")
@@ -270,7 +268,7 @@ myKeys =
   , ("M-n",      scratchpadSubmap)
   , ("M-e",      Rofi.promptRunCommand def specialCommands)
   , ("M-o",      Rofi.promptRunCommand def withSelectionCommands)
-  , ("M-S-C-g",  spawn "killall -INT -g giph" >> spawn "notify-send gif 'saved gif in ~/Bilder/gifs'") -- stop gif recording
+  , ("M-S-C-g",  spawn "killall -INT -g giph" >> notify "gif" "saved gif in ~/Bilder/gifs") -- stop gif recording
   ] ++ generatedMappings
   where
     generatedMappings :: [(String, X ())]
@@ -300,7 +298,20 @@ myKeys =
               ]
 
 
-    -- | toggle tabbed Tall layout, merging all non-master windows into a single tab group when initializing the tabbed layout.
+
+    scratchpadSubmap :: X ()
+    scratchpadSubmap = DescribedSubmap.describedSubmap "Scratchpads"
+      [ ("M-n", "terminal", namedScratchpadAction scratchpads "terminal")
+      , ("M-w", "whatsapp", namedScratchpadAction scratchpads "whatsapp")
+      , ("M-s", "slack",    namedScratchpadAction scratchpads "slack")
+      , ("M-m", "spotify",  namedScratchpadAction scratchpads "spotify")
+      , ("M-d", "discord",  namedScratchpadAction scratchpads "discord")
+      ]
+
+
+
+    -- | toggle tabbed Tall layout, merging all non-master windows
+    -- into a single tab group when initializing the tabbed layout.
     toggleTabbedLayout :: X ()
     toggleTabbedLayout = do
       sendMessage $ ToggleLayouts.Toggle "Tabbed"
@@ -312,18 +323,12 @@ myKeys =
                               windows W.focusDown)
                           (return ())
 
-
-    toggleFullscreen :: X ()
-    toggleFullscreen = do
-      sendMessage $ MTog.Toggle MTog.FULL
-      sendMessage ToggleStruts
-
     -- | launch a program by starting an instance in a hidden workspace,
     -- and just raising an already running instance. This allows for super quick "startup" time.
     -- For this to work, the window needs to have the `_NET_WM_PID` set and unique!
     launchWithBackgroundInstance :: (Query Bool) -> String -> X ()
     launchWithBackgroundInstance windowQuery commandToRun = withWindowSet $ \winSet -> do
-        quteWins <- (W.allWindows winSet) |> filter (\win -> Just True == (("NSP" ==) <$> (W.findTag win winSet)))
+        quteWins <- (W.allWindows winSet) |> filter (\win -> Just "NSP" == W.findTag win winSet)
                                           |> filterM (runQuery windowQuery)
         case quteWins of
           []        -> do spawnHere commandToRun
@@ -331,18 +336,6 @@ myKeys =
           [winId]   -> do windows $ W.shiftWin (W.currentTag winSet) winId
                           spawnOn "NSP" commandToRun
           (winId:_) -> windows $ W.shiftWin (W.currentTag winSet) winId
-
-
-
-
-    scratchpadSubmap :: X ()
-    scratchpadSubmap = describedSubmap "Scratchpads"
-      [ ((myModMask, xK_n), "<M-n> terminal", namedScratchpadAction scratchpads "terminal")
-      , ((myModMask, xK_w), "<M-w> whatsapp", namedScratchpadAction scratchpads "whatsapp")
-      , ((myModMask, xK_s), "<M-s> slack",    namedScratchpadAction scratchpads "slack")
-      , ((myModMask, xK_m), "<M-m> spotify",  namedScratchpadAction scratchpads "spotify")
-      , ((myModMask, xK_d), "<M-m> discord",  namedScratchpadAction scratchpads "discord")
-      ]
 
     withSelectionCommands :: [(String, X ())]
     withSelectionCommands =
@@ -357,21 +350,15 @@ myKeys =
       [ ("screenshot",              spawn $ scriptFile "screenshot.sh")
       , ("screenshot to file",      spawn $ scriptFile "screenshot.sh --tofile")
       , ("screenshot full to file", spawn $ scriptFile "screenshot.sh --tofile --fullscreen")
-      , ("screengif to file",       spawn (scriptFile "screengif.sh") >> spawn "notify-send gif 'stop gif-recording with M-S-C-g'")
+      , ("screengif to file",       spawn (scriptFile "screengif.sh") >> notify "gif" "stop gif-recording with M-S-C-g")
       , ("toggleOptimal",           sendMessage ToggleGaps >> toggleWindowSpacingEnabled)
       , ("toggleSpacing",           toggleWindowSpacingEnabled)
       , ("toggleGaps",              sendMessage ToggleGaps)
       , ("Copy to all workspaces",  windows copyToAll)
       , ("Kill all other copies",   killAllOtherCopies)
-      , ("toggle polybar",          safeSpawn "polybar-msg" ["cmd", "toggle"])
+      , ("toggle polybar",          sendMessage ToggleStruts >> safeSpawn "polybar-msg" ["cmd", "toggle"])
       ]
 
-
-    describedSubmap :: String -> [((KeyMask, KeySym), String, X ())] -> X ()
-    describedSubmap submapTitle mappings = promptDzenWhileRunning submapTitle descriptions mySubmap
-      where
-        mySubmap     = submap $ M.fromList $ map (\(k, _, f) -> (k, f)) mappings
-        descriptions = map (\(_,x,_) -> x) mappings
 
 -- }}}
 
@@ -484,11 +471,10 @@ infixl 1 |>
 
 dropEndWhile :: (a -> Bool) -> [a] -> [a]
 dropEndWhile _    []  = []
-dropEndWhile test [x] = if test x then [] else [x]
 dropEndWhile test xs  = if test $ last xs then dropEndWhile test (init xs) else xs
 
 catchAndNotifyAny :: IO () -> IO ()
-catchAndNotifyAny ioAction = catch ioAction (\(e :: SomeException) -> safeSpawn "notify-send" ["Xmonad exception", show e])
+catchAndNotifyAny ioAction = catch ioAction (\(e :: SomeException) -> notify "Xmonad exception" (show e))
 
 
 getVisibleWorkspacesTagsOnMonitor :: ScreenId -> X [VirtualWorkspace]
@@ -499,6 +485,9 @@ getVisibleWorkspacesTagsOnMonitor monitor = do
     |> filter (\tag -> monitor == fromIntegral (unmarshallS tag))
     |> map unmarshallW
 
+
+notify :: MonadIO m => String -> String -> m ()
+notify notificationTitle notificationMsg = safeSpawn "notify-send" [notificationTitle, notificationMsg]
 
 
 ifLayoutIs :: String -> X a -> X a -> X a
@@ -512,21 +501,4 @@ ifLayoutName check onLayoutA onLayoutB = do
 -- Get the name of the active layout.
 getActiveLayoutDescription :: X String
 getActiveLayoutDescription = (description . W.layout . W.workspace . W.current) <$> gets windowset
-
-
-
-
-
-promptDzenWhileRunning :: String -> [String] -> X () -> X ()
-promptDzenWhileRunning promptTitle options action = do
-  handle <- spawnPipe $ "sleep 1 && dzen2 -e onstart=uncollapse -l " ++ lineCount ++ " -fn '" ++ font ++ "'"
-  io $ SysIO.hPutStrLn handle (promptTitle ++ unlines options)
-  _ <- action
-  io $ SysIO.hClose handle
-  where
-    lineCount = show $ length options
-    font      = "-*-iosevka-medium-r-s*--16-87-*-*-*-*-iso10???-1"
-
-
-
 -- }}}

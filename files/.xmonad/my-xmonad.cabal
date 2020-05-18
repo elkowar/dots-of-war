@@ -9,6 +9,7 @@ executable my-xmonad
     other-modules:
         Config
         Rofi
+        DescribedSubmap
 
     default-language: Haskell2010
     ghc-options:      -Wall -threaded -fno-warn-missing-signatures
