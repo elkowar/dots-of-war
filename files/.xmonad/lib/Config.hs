@@ -1,3 +1,5 @@
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE FlexibleContexts #-}
 {-# Language ScopedTypeVariables, LambdaCase #-}
 {-# OPTIONS_GHC -fno-warn-missing-signatures -fno-warn-unused-binds #-}
@@ -8,6 +10,9 @@ module Config (main) where
 import Control.Concurrent
 import           Control.Exception              ( catch , SomeException)
 import           Control.Monad                  ( filterM )
+import           Control.Arrow                  ( second
+                                                , (***)
+                                                )
 import           Data.List                      ( isPrefixOf , isSuffixOf)
 import System.Exit (exitSuccess)
 
@@ -35,6 +40,7 @@ import XMonad.Layout.LayoutHints
 import XMonad.Layout.MouseResizableTile
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Renamed (renamed, Rename(Replace))
+import qualified XMonad.Layout.MultiColumns as MultiCol
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.Simplest
 import XMonad.Layout.Spacing (spacingRaw, Border(..), toggleWindowSpacingEnabled)
@@ -42,24 +48,29 @@ import XMonad.Layout.SubLayouts
 import XMonad.Layout.Tabbed
 import XMonad.Layout.WindowNavigation ( windowNavigation )
 import XMonad.Layout.ZoomRow
-import XMonad.Util.EZConfig           ( additionalKeysP , removeKeysP , checkKeymap)
+import XMonad.Layout.ThreeColumns
+import           XMonad.Util.EZConfig           ( additionalKeysP
+                                                , removeKeysP
+                                                , checkKeymap
+                                                , additionalMouseBindings
+                                                )
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run
 import XMonad.Util.SpawnOnce (spawnOnce)
 import XMonad.Util.WorkspaceCompare   ( getSortByXineramaPhysicalRule , getSortByIndex)
 
 import qualified Data.Monoid
-import qualified System.IO as SysIO
-import qualified XMonad.Actions.Navigation2D as Nav2d
-import qualified XMonad.Config.Desktop as Desktop
-import qualified XMonad.Hooks.EwmhDesktops as Ewmh
-import qualified XMonad.Hooks.ManageHelpers as ManageHelpers
-import qualified XMonad.Layout.BoringWindows as BoringWindows
-import qualified XMonad.Layout.MultiToggle as MTog
+import qualified System.IO                           as SysIO
+import qualified XMonad.Actions.Navigation2D         as Nav2d
+import qualified XMonad.Config.Desktop               as Desktop
+import qualified XMonad.Hooks.EwmhDesktops           as Ewmh
+import qualified XMonad.Hooks.ManageHelpers          as ManageHelpers
+import qualified XMonad.Layout.BoringWindows         as BoringWindows
+import qualified XMonad.Layout.MultiToggle           as MTog
 import qualified XMonad.Layout.MultiToggle.Instances as MTog
-import qualified XMonad.Layout.ToggleLayouts as ToggleLayouts
-import qualified XMonad.StackSet as W
-import qualified XMonad.Util.XSelection as XSel
+import qualified XMonad.Layout.ToggleLayouts         as ToggleLayouts
+import qualified XMonad.StackSet                     as W
+import qualified XMonad.Util.XSelection              as XSel
 
 {-# ANN module "HLint: ignore Redundant $" #-}
 {-# ANN module "HLint: ignore Redundant bracket" #-}
@@ -117,31 +128,33 @@ aqua      = "#8ec07c"
 -- Layout ---------------------------------------- {{{
 
 myTabTheme = def
-    { activeColor           = "#504945"
-    , inactiveColor         = "#282828"
-    , activeBorderColor     = "#fbf1c7"
-    , inactiveBorderColor   = "#282828"
-    , activeTextColor       = "#fbf1c7"
-    , inactiveTextColor     = "#fbf1c7"
-    , fontName = "-*-jetbrains mono-medium-r-normal-12-0-0-0-0-m-0-ascii-1"
+    { activeColor         = "#504945"
+    , inactiveColor       = "#282828"
+    , activeBorderColor   = "#fbf1c7"
+    , inactiveBorderColor = "#282828"
+    , activeTextColor     = "#fbf1c7"
+    , inactiveTextColor   = "#fbf1c7"
+    , fontName            = "-*-jetbrains mono-medium-r-normal-12-0-0-0-0-m-0-ascii-1"
     }
 
 
 -- layoutHints .
 
-myLayout = -- avoidStruts
-          smartBorders
+myLayout = avoidStruts
+         $  smartBorders
          $ MTog.mkToggle1 MTog.FULL
          $ ToggleLayouts.toggleLayouts resizableTabbedLayout
          $ layoutHintsToCenter
          $ layouts
   where
-    layouts =((rename "Tall"       $ onlySpacing    $ mouseResizableTile         {draggerType = dragger})
-          ||| (rename "Horizon"    $ onlySpacing    $ mouseResizableTileMirrored {draggerType = dragger})
-          ||| (rename "BSP"        $ spacingAndGaps $ borderResize $ emptyBSP)
-          ||| (rename "TabbedRow"  $ makeTabbed $ spacingAndGaps $ zoomRow)
-          ||| (rename "TabbedGrid" $ makeTabbed $ spacingAndGaps $ Grid False))
-          -- ||| (rename "threeCol" $ spacingAndGaps $ ThreeColMid 1 (3/100) (1/2))
+    layouts =((rename "Tall"        $ onlySpacing    $ mouseResizableTile         {draggerType = dragger})
+          ||| (rename "Horizon"     $ onlySpacing    $ mouseResizableTileMirrored {draggerType = dragger})
+          ||| (rename "BSP"         $ spacingAndGaps $ borderResize $ emptyBSP)
+          ||| (rename "FL ThreeCol" $ makeTabbed $ spacingAndGaps $ Mirror $ Flip $ ThreeColMid 1 (3/100) (1/2))
+          ||| (rename "ThreeCol"    $ makeTabbed $ spacingAndGaps $ ThreeCol 1 (3/100) (1/2))
+          ||| (rename "TabbedRow"   $ makeTabbed $ spacingAndGaps $ zoomRow))
+          -- ||| (rename "MultiCol"   $ spacingAndGaps $ Mirror $  MultiCol.multiCol [1] 3 0.01 0.5)
+          -- ||| (rename "TabbedGrid" $ makeTabbed $ spacingAndGaps $ Grid False))
           -- ||| (rename "spiral"   $ spacingAndGaps $ spiral (9/21))
 
     rename n = renamed [Replace n]
@@ -158,6 +171,17 @@ myLayout = -- avoidStruts
 
     -- transform a layout into supporting tabs
     makeTabbed layout = BoringWindows.boringWindows . windowNavigation . addTabs shrinkText myTabTheme $ subLayout [] Simplest $ layout
+
+
+-- | Flip a layout, compute its 180 degree rotated form.
+newtype Flip l a = Flip (l a) deriving (Show, Read)
+
+instance LayoutClass l a => LayoutClass (Flip l) a where
+    handleMessage (Flip l) = fmap (fmap Flip) . handleMessage l
+    description   (Flip l) = "Flip " ++ description l
+    runLayout (W.Workspace i (Flip l) ms) r = (map (second flipRect) *** fmap Flip) <$> runLayout (W.Workspace i l ms) (flipRect r)
+      where screenWidth = fromIntegral $ rect_width r
+            flipRect (Rectangle rx ry rw rh) = Rectangle (screenWidth - rx - (fromIntegral rw)) ry rw rh
 -- }}}
 
 -- Startuphook ----------------------------- {{{
@@ -203,6 +227,8 @@ myKeys =
   [ ("M-+", sendMessage zoomIn)
   , ("M--", sendMessage zoomOut)
   , ("M-#", sendMessage zoomReset)
+
+  , ("M-S-<Space>", for_ [1..6 :: Int] $ \_ -> sendMessage $ NextLayout)
 
 
   -- Tabs
@@ -379,7 +405,9 @@ main = do
   -- create polybarLogHooks for every monitor and combine them using the <+> monoid instance
   let polybarLogHooks = composeAll $ map polybarLogHook monitorIndices
 
-  let myConfig = Desktop.desktopConfig
+  let myConfig = flip additionalKeysP myKeys
+               . flip removeKeysP removedKeys
+               $ Desktop.desktopConfig
         { terminal           = myTerminal
         , workspaces         = if useSharedWorkspaces
                                   then (map show [1..9 :: Int]) ++ ["NSP"]
@@ -394,7 +422,7 @@ main = do
         , normalBorderColor  = "#282828"
         , handleEventHook    = handleEventHook Desktop.desktopConfig
         --, handleEventHook  = minimizeEventHook <+> handleEventHook def <+> hintsEventHook -- <+> Ewmh.fullscreenEventHook
-       } `removeKeysP` removedKeys `additionalKeysP` myKeys
+       }
 
 
 
