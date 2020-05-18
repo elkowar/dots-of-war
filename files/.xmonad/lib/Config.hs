@@ -6,71 +6,60 @@
 module Config (main) where
 
 import Control.Concurrent
-import           Control.Exception              ( catch
-                                                , SomeException
-                                                )
+import           Control.Exception              ( catch , SomeException)
 import           Control.Monad                  ( filterM )
-import           Data.List                      ( isPrefixOf
-                                                , isSuffixOf
-                                                )
+import           Data.List                      ( isPrefixOf , isSuffixOf)
 import System.Exit (exitSuccess)
 
 import qualified Rofi
 import qualified DescribedSubmap
 
-import Data.Function ((&))
-import qualified Data.Monoid
-import           Data.Foldable                  ( for_ )
-import qualified System.IO as SysIO
 
-import XMonad.Layout.HintedGrid
+import Data.Foldable                  ( for_ )
+import Data.Function ((&))
 
 import XMonad hiding ((|||))
 import XMonad.Actions.CopyWindow
-import XMonad.Config.Desktop
+import XMonad.Actions.PhysicalScreens ( horizontalScreenOrderer )
+import XMonad.Actions.SpawnOn
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.SetWMName (setWMName)
 import XMonad.Layout.BinarySpacePartition
 import XMonad.Layout.BorderResize
 import XMonad.Layout.Gaps
+import XMonad.Layout.HintedGrid
+import XMonad.Layout.IndependentScreens
 import XMonad.Layout.LayoutCombinators ((|||))
-
-import XMonad.Layout.Simplest
 import XMonad.Layout.LayoutHints
 import XMonad.Layout.MouseResizableTile
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Renamed (renamed, Rename(Replace))
 import XMonad.Layout.ResizableTile
+import XMonad.Layout.Simplest
 import XMonad.Layout.Spacing (spacingRaw, Border(..), toggleWindowSpacingEnabled)
-import qualified XMonad.Layout.ToggleLayouts as ToggleLayouts
+import XMonad.Layout.SubLayouts
+import XMonad.Layout.Tabbed
+import XMonad.Layout.WindowNavigation ( windowNavigation )
 import XMonad.Layout.ZoomRow
-import           XMonad.Util.EZConfig           ( additionalKeysP
-                                                , removeKeysP
-                                                , checkKeymap
-                                                )
+import XMonad.Util.EZConfig           ( additionalKeysP , removeKeysP , checkKeymap)
 import XMonad.Util.NamedScratchpad
-
-import qualified XMonad.Layout.MultiToggle as MTog
-import qualified XMonad.Layout.MultiToggle.Instances as MTog
 import XMonad.Util.Run
 import XMonad.Util.SpawnOnce (spawnOnce)
-import XMonad.Layout.Tabbed
+import XMonad.Util.WorkspaceCompare   ( getSortByXineramaPhysicalRule , getSortByIndex)
+
+import qualified Data.Monoid
+import qualified System.IO as SysIO
 import qualified XMonad.Actions.Navigation2D as Nav2d
-import           XMonad.Actions.PhysicalScreens ( horizontalScreenOrderer )
-import           XMonad.Actions.SpawnOn
+import qualified XMonad.Config.Desktop as Desktop
 import qualified XMonad.Hooks.EwmhDesktops as Ewmh
 import qualified XMonad.Hooks.ManageHelpers as ManageHelpers
 import qualified XMonad.Layout.BoringWindows as BoringWindows
-import           XMonad.Layout.IndependentScreens
-import           XMonad.Layout.SubLayouts
+import qualified XMonad.Layout.MultiToggle as MTog
+import qualified XMonad.Layout.MultiToggle.Instances as MTog
+import qualified XMonad.Layout.ToggleLayouts as ToggleLayouts
 import qualified XMonad.StackSet as W
 import qualified XMonad.Util.XSelection as XSel
-import           XMonad.Util.WorkspaceCompare   ( getSortByXineramaPhysicalRule
-                                                , getSortByIndex
-                                                )
-import           XMonad.Layout.WindowNavigation ( windowNavigation )
-
 
 {-# ANN module "HLint: ignore Redundant $" #-}
 {-# ANN module "HLint: ignore Redundant bracket" #-}
@@ -140,8 +129,8 @@ myTabTheme = def
 
 -- layoutHints .
 
-myLayout = avoidStruts
-         $ smartBorders
+myLayout = -- avoidStruts
+          smartBorders
          $ MTog.mkToggle1 MTog.FULL
          $ ToggleLayouts.toggleLayouts resizableTabbedLayout
          $ layoutHintsToCenter
@@ -390,7 +379,7 @@ main = do
   -- create polybarLogHooks for every monitor and combine them using the <+> monoid instance
   let polybarLogHooks = composeAll $ map polybarLogHook monitorIndices
 
-  let myConfig = desktopConfig
+  let myConfig = Desktop.desktopConfig
         { terminal           = myTerminal
         , workspaces         = if useSharedWorkspaces
                                   then (map show [1..9 :: Int]) ++ ["NSP"]
@@ -398,20 +387,21 @@ main = do
         , modMask            = myModMask
         , borderWidth        = 2
         , layoutHook         = myLayout
-        , logHook            = polybarLogHooks <+> logHook def
-        , startupHook        = myStartupHook <+> startupHook def <+> return () >> checkKeymap myConfig myKeys
+        , logHook            = polybarLogHooks <+> logHook Desktop.desktopConfig <+> logHook def
+        , startupHook        = myStartupHook <+> return () >> checkKeymap myConfig myKeys
         , manageHook         = manageSpawn <+> myManageHook <+> manageHook def
         , focusedBorderColor = aqua
         , normalBorderColor  = "#282828"
+        , handleEventHook    = handleEventHook Desktop.desktopConfig
         --, handleEventHook  = minimizeEventHook <+> handleEventHook def <+> hintsEventHook -- <+> Ewmh.fullscreenEventHook
        } `removeKeysP` removedKeys `additionalKeysP` myKeys
 
 
 
   xmonad
-    $ docks
     $ Ewmh.ewmh
     $ Nav2d.withNavigation2DConfig def { Nav2d.defaultTiledNavigation = Nav2d.sideNavigation }
+    $ docks
     $ myConfig
 
 -- }}}
