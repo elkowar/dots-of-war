@@ -10,11 +10,8 @@ import           Control.Exception              ( catch
                                                 , SomeException
                                                 )
 import           Control.Monad                  ( filterM )
-import Data.Char (isDigit)
 import           Data.List                      ( isSuffixOf
                                                 , isPrefixOf
-                                                , sort
-                                                , sortBy
                                                 )
 import System.Exit (exitSuccess)
 
@@ -24,13 +21,11 @@ import Data.Function ((&))
 import qualified Data.Map as M
 import qualified Data.Monoid
 import           Data.Foldable                  ( for_ )
-import           Data.Ord                       ( comparing )
 import qualified System.IO as SysIO
 
 import XMonad.Layout.HintedGrid
 
 import XMonad hiding ((|||))
-import XMonad.Actions.Commands
 import XMonad.Actions.CopyWindow
 import XMonad.Actions.Submap
 import XMonad.Config.Desktop
@@ -72,8 +67,7 @@ import           XMonad.Layout.IndependentScreens
 import           XMonad.Layout.SubLayouts
 import qualified XMonad.StackSet as W
 import qualified XMonad.Util.XSelection as XSel
-import           XMonad.Util.WorkspaceCompare   ( getSortByXineramaRule
-                                                , getSortByXineramaPhysicalRule
+import           XMonad.Util.WorkspaceCompare   ( getSortByXineramaPhysicalRule
                                                 , getSortByIndex
                                                 )
 import           XMonad.Layout.WindowNavigation ( windowNavigation )
@@ -101,7 +95,6 @@ scriptFile script = "/home/leon/scripts/" ++ script
 scratchpads :: [NamedScratchpad]
 scratchpads =
   [ NS "terminal" launchTerminal (className =? "scratchpad_term")      (customFloating $ W.RationalRect 0.66 0.7 0.34 0.3)
-  , NS "ghci"     launchGHCI     (className =? "scratchpad_ghci")      (customFloating $ W.RationalRect 0.66 0.7 0.34 0.3)
   , NS "spotify"  "spotify"      (appName   =? "spotify")              defaultFloating
   , NS "discord"  "discord"      (appName   =? "discord")              defaultFloating
   , NS "whatsapp" launchWhatsapp (("WhatsApp" `isSuffixOf`) <$> title) defaultFloating
@@ -109,7 +102,6 @@ scratchpads =
   ]
     where
       launchTerminal = myTerminal ++ " --class scratchpad_term"
-      launchGHCI     = myTerminal ++ " --class scratchpad_ghci stack exec -- ghci"
       launchWhatsapp = "whatsapp-nativefier"
       --launchWhatsapp = "gtk-launch chrome-hnpfjngllnobngcgfapefoaidbinmjnm-Default.desktop"
 
@@ -168,7 +160,7 @@ myLayout = avoidStruts
 
     rename n = renamed [Replace n]
 
-    resizableTabbedLayout = rename "Tabbed" . BoringWindows.boringWindows . makeTabbed . spacingAndGaps $ ResizableTall 1 (3/100) (1/2) []
+    resizableTabbedLayout = rename "Tabbed" .  makeTabbed . spacingAndGaps $ ResizableTall 1 (3/100) (1/2) []
 
     gap            = 10
     onlySpacing = gaps [ (dir, (gap*2)) | dir <- [L, R, D, U] ]  -- gaps are included in mouseResizableTile
@@ -179,7 +171,7 @@ myLayout = avoidStruts
                      in spacingRaw False border True border True
 
     -- transform a layout into supporting tabs
-    makeTabbed layout = windowNavigation $ addTabs shrinkText myTabTheme $ subLayout [] Simplest $ layout
+    makeTabbed layout = BoringWindows.boringWindows . windowNavigation . addTabs shrinkText myTabTheme $ subLayout [] Simplest $ layout
 -- }}}
 
 -- Startuphook ----------------------------- {{{
@@ -199,7 +191,7 @@ myStartupHook = do
   spawn "/home/leon/.screenlayout/dualscreen.sh "
   io $ threadDelay $ 1000 * 100
   spawnOnce "picom --config ~/.config/picom.conf"  --no-fading-openclose"
-  spawn "/home/leon/.config/polybar/launch.sh" 
+  spawn "/home/leon/.config/polybar/launch.sh"
   spawnOnce "nitrogen --restore"
 
 -- }}}
@@ -215,7 +207,7 @@ multiMonitorOperation :: (WorkspaceId -> WindowSet -> WindowSet) -> ScreenId -> 
 multiMonitorOperation operation n = do
   monitor <- screenWorkspace n
   case monitor of
-    Just mon -> windows $ operation  mon
+    Just mon -> windows $ operation mon
     Nothing -> return ()
 
 
@@ -275,9 +267,8 @@ myKeys =
   , ("M-S-e",    Rofi.showNormal (def { Rofi.theme = Rofi.bigTheme }) "emoji" )
   --, ("M-s",      spawn $ scriptFile "rofi-search.sh")
   , ("M-S-o",    spawn $ scriptFile "rofi-open.sh")
-  , ("M-n",      scratchpadSubmap )
+  , ("M-n",      scratchpadSubmap)
   , ("M-e",      Rofi.promptRunCommand def specialCommands)
-  , ("M-C-e",    Rofi.promptRunCommand def =<< defaultCommands )
   , ("M-o",      Rofi.promptRunCommand def withSelectionCommands)
   , ("M-S-C-g",  spawn "killall -INT -g giph" >> spawn "notify-send gif 'saved gif in ~/Bilder/gifs'") -- stop gif recording
   ] ++ generatedMappings
@@ -309,6 +300,7 @@ myKeys =
               ]
 
 
+    -- | toggle tabbed Tall layout, merging all non-master windows into a single tab group when initializing the tabbed layout.
     toggleTabbedLayout :: X ()
     toggleTabbedLayout = do
       sendMessage $ ToggleLayouts.Toggle "Tabbed"
@@ -326,7 +318,7 @@ myKeys =
       sendMessage $ MTog.Toggle MTog.FULL
       sendMessage ToggleStruts
 
-    -- | launch a program by starting an instance in a hidden workspace, 
+    -- | launch a program by starting an instance in a hidden workspace,
     -- and just raising an already running instance. This allows for super quick "startup" time.
     -- For this to work, the window needs to have the `_NET_WM_PID` set and unique!
     launchWithBackgroundInstance :: (Query Bool) -> String -> X ()
@@ -346,7 +338,6 @@ myKeys =
     scratchpadSubmap :: X ()
     scratchpadSubmap = describedSubmap "Scratchpads"
       [ ((myModMask, xK_n), "<M-n> terminal", namedScratchpadAction scratchpads "terminal")
-      , ((myModMask, xK_h), "<M-h> ghci",     namedScratchpadAction scratchpads "ghci")
       , ((myModMask, xK_w), "<M-w> whatsapp", namedScratchpadAction scratchpads "whatsapp")
       , ((myModMask, xK_s), "<M-s> slack",    namedScratchpadAction scratchpads "slack")
       , ((myModMask, xK_m), "<M-m> spotify",  namedScratchpadAction scratchpads "spotify")
@@ -367,11 +358,10 @@ myKeys =
       , ("screenshot to file",      spawn $ scriptFile "screenshot.sh --tofile")
       , ("screenshot full to file", spawn $ scriptFile "screenshot.sh --tofile --fullscreen")
       , ("screengif to file",       spawn (scriptFile "screengif.sh") >> spawn "notify-send gif 'stop gif-recording with M-S-C-g'")
-      , ("clipboard history",       spawn $ "clipmenu")
       , ("toggleOptimal",           sendMessage ToggleGaps >> toggleWindowSpacingEnabled)
       , ("toggleSpacing",           toggleWindowSpacingEnabled)
       , ("toggleGaps",              sendMessage ToggleGaps)
-      , ("Copy to all workspaces",  windows copyToAll)           -- windows: Modify the current window list with a pure function, and refresh
+      , ("Copy to all workspaces",  windows copyToAll)
       , ("Kill all other copies",   killAllOtherCopies)
       , ("toggle polybar",          safeSpawn "polybar-msg" ["cmd", "toggle"])
       ]
@@ -415,8 +405,9 @@ main = do
 
   let myConfig = desktopConfig
         { terminal           = myTerminal
-        , workspaces         = if useSharedWorkspaces then (map show [1..9 :: Int]) ++ ["NSP"]
-                                                      else (withScreens (fromIntegral currentScreenCount) (map show [1..6 :: Int])) ++ ["NSP"]
+        , workspaces         = if useSharedWorkspaces
+                                  then (map show [1..9 :: Int]) ++ ["NSP"]
+                                  else (withScreens (fromIntegral currentScreenCount) (map show [1..6 :: Int])) ++ ["NSP"]
         , modMask            = myModMask
         , borderWidth        = 2
         , layoutHook         = myLayout
@@ -444,14 +435,13 @@ main = do
 -- Will write the polybar formatted string to /tmp/xmonad-state-bar${monitor}
 polybarLogHook :: Int -> X ()
 polybarLogHook monitor = do
-  barOut <- dynamicLogString $ polybarPP monitor
+  barOut <- dynamicLogString $ polybarPP $ fromIntegral monitor
   io $ SysIO.appendFile ("/tmp/xmonad-state-bar" ++ show monitor) (barOut ++ "\n")
 
 
 -- swapping namedScratchpadFilterOutWorkspacePP and marshallPP  will throw "Prelude.read no Parse" errors..... wtf
 -- | create a polybar Pretty printer, marshalled for given monitor.
-
-polybarPP :: Int -> PP
+polybarPP :: ScreenId -> PP
 polybarPP monitor = namedScratchpadFilterOutWorkspacePP . (if useSharedWorkspaces then id else marshallPP $ fromIntegral monitor) $ def
   { ppCurrent          = withFG aqua . withMargin . withFont 5 . const "__active__"
   , ppVisible          = withFG aqua . withMargin . withFont 5 . const "__active__"
@@ -460,37 +450,28 @@ polybarPP monitor = namedScratchpadFilterOutWorkspacePP . (if useSharedWorkspace
   , ppHiddenNoWindows  = withFG gray . withMargin . withFont 5 . (`wrapClickableWorkspace` "__empty__")
   , ppWsSep            = ""
   , ppSep              = ""
-  , ppLayout           = \l -> if l == "Tall" || l == "Horizon"
-                                 then ""
-                                 else (withFG gray " | ") ++
-                                         (removeWords ["Minimize", "Hinted", "Spacing", "Tall"] . withFG purple . withMargin $ l)
+  , ppLayout           = \l -> if l == "Tall" || l == "Horizon" then ""
+                                 else (withFG gray " | ") ++ (removeWords ["Minimize", "Hinted", "Spacing", "Tall"] . withFG purple . withMargin $ l)
   , ppExtras           = []
   , ppTitle            = const "" -- withFG aqua . (shorten 40)
-  , ppSort = if useSharedWorkspaces
-                then getSortByXineramaPhysicalRule horizontalScreenOrderer
-                else do
-                  ws <- gets windowset
-                  sorter <- getSortByIndex
-                  let visibleWorkspaceTags = W.current ws : W.visible ws
-                                           |> map (W.tag . W.workspace)
-                                           |> filter (\tag -> monitor == fromIntegral (unmarshallS tag))
-                                           |> map unmarshallW
-
-                  let shouldDrop wsp = (null $ W.stack wsp) && (W.tag wsp) `notElem` visibleWorkspaceTags
-                  return $ reverse . dropWhile shouldDrop . reverse . sorter
+  , ppSort = if useSharedWorkspaces then getSortByXineramaPhysicalRule horizontalScreenOrderer
+                                    else onlyRelevantWspsSorter
   }
     where
       withMargin                 = wrap " " " "
       removeWord substr          = unwords . filter (/= substr) . words
-      removeWords wrds str       = foldr removeWord str wrds
+      removeWords wrds           = unwords . filter (`notElem` wrds). words
       withFont fNum              = wrap ("%{T" ++ show (fNum :: Int) ++ "}") "%{T}"
       withBG col                 = wrap ("%{B" ++ col ++ "}") "%{B-}"
       withFG col                 = wrap ("%{F" ++ col ++ "}") "%{F-}"
       wrapOnClickCmd command     = wrap ("%{A1:" ++ command ++ ":}") "%{A}"
       wrapClickableWorkspace wsp = wrapOnClickCmd ("xdotool key super+" ++ wsp)
-      correctlyOrderedXineramaSort = do xineramaSort <- getSortByXineramaRule
-                                        return (\wsps -> let (x:xs) = xineramaSort wsps
-                                                          in [head xs, x] ++ tail xs)
+
+      onlyRelevantWspsSorter = do
+        sortByIndex <- getSortByIndex
+        visibleWorkspaceTags <- getVisibleWorkspacesTagsOnMonitor monitor
+        let isEmptyAndNotOpened wsp = (null $ W.stack wsp) && (W.tag wsp) `notElem` visibleWorkspaceTags
+        return $ dropEndWhile isEmptyAndNotOpened . sortByIndex
 
 -- }}}
 
@@ -501,19 +482,24 @@ polybarPP monitor = namedScratchpadFilterOutWorkspacePP . (if useSharedWorkspace
 infixl 1 |>
 
 
+dropEndWhile :: (a -> Bool) -> [a] -> [a]
+dropEndWhile _    []  = []
+dropEndWhile test [x] = if test x then [] else [x]
+dropEndWhile test xs  = if test $ last xs then dropEndWhile test (init xs) else xs
+
 catchAndNotifyAny :: IO () -> IO ()
 catchAndNotifyAny ioAction = catch ioAction (\(e :: SomeException) -> safeSpawn "notify-send" ["Xmonad exception", show e])
 
 
-promptDzenWhileRunning :: String -> [String] -> X () -> X ()
-promptDzenWhileRunning promptTitle options action = do
-  handle <- spawnPipe $ "sleep 1 && dzen2 -e onstart=uncollapse -l " ++ lineCount ++ " -fn '" ++ font ++ "'"
-  io $ SysIO.hPutStrLn handle (promptTitle ++ unlines options)
-  _ <- action
-  io $ SysIO.hClose handle
-  where
-    lineCount = show $ length options
-    font      = "-*-iosevka-medium-r-s*--16-87-*-*-*-*-iso10???-1"
+getVisibleWorkspacesTagsOnMonitor :: ScreenId -> X [VirtualWorkspace]
+getVisibleWorkspacesTagsOnMonitor monitor = do
+  ws <- gets windowset
+  return $ W.current ws : W.visible ws
+    |> map (W.tag . W.workspace)
+    |> filter (\tag -> monitor == fromIntegral (unmarshallS tag))
+    |> map unmarshallW
+
+
 
 ifLayoutIs :: String -> X a -> X a -> X a
 ifLayoutIs layoutAName = ifLayoutName (== layoutAName)
@@ -526,5 +512,21 @@ ifLayoutName check onLayoutA onLayoutB = do
 -- Get the name of the active layout.
 getActiveLayoutDescription :: X String
 getActiveLayoutDescription = (description . W.layout . W.workspace . W.current) <$> gets windowset
+
+
+
+
+
+promptDzenWhileRunning :: String -> [String] -> X () -> X ()
+promptDzenWhileRunning promptTitle options action = do
+  handle <- spawnPipe $ "sleep 1 && dzen2 -e onstart=uncollapse -l " ++ lineCount ++ " -fn '" ++ font ++ "'"
+  io $ SysIO.hPutStrLn handle (promptTitle ++ unlines options)
+  _ <- action
+  io $ SysIO.hClose handle
+  where
+    lineCount = show $ length options
+    font      = "-*-iosevka-medium-r-s*--16-87-*-*-*-*-iso10???-1"
+
+
 
 -- }}}
