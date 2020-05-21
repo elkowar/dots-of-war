@@ -42,6 +42,7 @@ import XMonad.Layout.Renamed (renamed, Rename(Replace))
 --import qualified XMonad.Layout.MultiColumns as MultiCol
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.Simplest
+import XMonad.Layout.Reflect
 import XMonad.Layout.Spacing (spacingRaw, Border(..), toggleWindowSpacingEnabled)
 import XMonad.Layout.SubLayouts
 import XMonad.Layout.Tabbed
@@ -58,6 +59,7 @@ import XMonad.Util.SpawnOnce (spawnOnce)
 import XMonad.Util.WorkspaceCompare   ( getSortByXineramaPhysicalRule , getSortByIndex)
 
 import qualified Data.Monoid
+import qualified XMonad.Layout.LayoutModifier
 import qualified System.IO                           as SysIO
 import qualified XMonad.Actions.Navigation2D         as Nav2d
 import qualified XMonad.Config.Desktop               as Desktop
@@ -69,7 +71,7 @@ import qualified XMonad.Layout.MultiToggle.Instances as MTog
 import qualified XMonad.Layout.ToggleLayouts         as ToggleLayouts
 import qualified XMonad.StackSet                     as W
 import qualified XMonad.Util.XSelection              as XSel
-
+import qualified XMonad.Layout.PerScreen             as PerScreen
 {-# ANN module "HLint: ignore Redundant $" #-}
 {-# ANN module "HLint: ignore Redundant bracket" #-}
 {-# ANN module "HLint: ignore Move brackets to avoid $" #-}
@@ -93,11 +95,11 @@ scriptFile script = "/home/leon/scripts/" ++ script
 
 scratchpads :: [NamedScratchpad]
 scratchpads =
-  [ NS "terminal" "alacritty --class scratchpad_term" (className =? "scratchpad_term")      defaultFloating
-  , NS "spotify"  "spotify"                           (appName   =? "spotify")              defaultFloating
-  , NS "discord"  "discord"                           (appName   =? "discord")              defaultFloating
-  , NS "whatsapp" "whatsapp-nativefier"               (("WhatsApp" `isSuffixOf`) <$> title) defaultFloating
-  , NS "slack"    "slack"                             (("Slack | " `isPrefixOf`) <$> title) defaultFloating
+  [ NS "terminal" "alacritty --class sp_term" (className =? "sp_term")              defaultFloating
+  , NS "spotify"  "spotify"                   (appName   =? "spotify")              defaultFloating
+  , NS "discord"  "discord"                   (appName   =? "discord")              defaultFloating
+  , NS "whatsapp" "whatsapp-nativefier"       (("WhatsApp" `isSuffixOf`) <$> title) defaultFloating
+  , NS "slack"    "slack"                     (("Slack | " `isPrefixOf`) <$> title) defaultFloating
   ]
 --launchWhatsapp = "gtk-launch chrome-hnpfjngllnobngcgfapefoaidbinmjnm-Default.desktop"
 
@@ -135,51 +137,40 @@ myTabTheme = def
     , fontName            = "-*-jetbrains mono-medium-r-normal-12-0-0-0-0-m-0-ascii-1"
     }
 
-
--- layoutHints .
-
 myLayout = avoidStruts
-         $  smartBorders
+         $ smartBorders
          $ MTog.mkToggle1 MTog.FULL
-         $ ToggleLayouts.toggleLayouts resizableTabbedLayout
+         $ ToggleLayouts.toggleLayouts (rename "Tabbed" . makeTabbed . spacingAndGaps $ ResizableTall 1 (3/100) (1/2) [])
          $ layoutHintsToCenter
          $ layouts
   where
-    layouts =((rename "Tall"        $ onlySpacing    $ mouseResizableTile         {draggerType = dragger})
-          ||| (rename "Horizon"     $ onlySpacing    $ mouseResizableTileMirrored {draggerType = dragger})
-          ||| (rename "BSP"         $ spacingAndGaps $ borderResize $ emptyBSP)
-          ||| (rename "FL ThreeCol" $ makeTabbed $ spacingAndGaps $ Mirror $ Flip $ ThreeColMid 1 (3/100) (1/2))
-          ||| (rename "ThreeCol"    $ makeTabbed $ spacingAndGaps $ ThreeCol 1 (3/100) (1/2))
-          ||| (rename "TabbedRow"   $ makeTabbed $ spacingAndGaps $ zoomRow))
-          -- ||| (rename "MultiCol"   $ spacingAndGaps $ Mirror $  MultiCol.multiCol [1] 3 0.01 0.5)
-          -- ||| (rename "TabbedGrid" $ makeTabbed $ spacingAndGaps $ Grid False))
-          -- ||| (rename "spiral"   $ spacingAndGaps $ spiral (9/21))
+    -- | if the screen is wider than 1900px it's horizontal, so use horizontal layouts. 
+    -- if it's not, it's vertical, so use layouts for vertical screens.
+    layouts = PerScreen.ifWider 1900 horizScreenLayouts vertScreenLayouts
+
+    horizScreenLayouts = 
+        ((rename "Tall"      $ onlySpacing    $ mouseResizableTile         {draggerType = dragger})
+     ||| (rename "Horizon"   $ onlySpacing    $ mouseResizableTileMirrored {draggerType = dragger})
+     ||| (rename "BSP"       $ spacingAndGaps $ borderResize $ emptyBSP)
+     ||| (rename "ThreeCol"  $ makeTabbed $ spacingAndGaps $ ThreeCol 1 (3/100) (1/2))
+     ||| (rename "TabbedRow" $ makeTabbed $ spacingAndGaps $ zoomRow))
+
+    vertScreenLayouts = 
+        ((rename "ThreeCol" $ makeTabbed  $ spacingAndGaps $ Mirror $ reflectHoriz $ ThreeColMid 1 (3/100) (1/2))
+     ||| (rename "Horizon"  $ onlySpacing $ mouseResizableTileMirrored {draggerType = dragger}))
 
     rename n = renamed [Replace n]
-
-    resizableTabbedLayout = rename "Tabbed" .  makeTabbed . spacingAndGaps $ ResizableTall 1 (3/100) (1/2) []
-
     gap            = 10
-    onlySpacing = gaps [ (dir, (gap*2)) | dir <- [L, R, D, U] ]  -- gaps are included in mouseResizableTile
+    onlySpacing    = gaps [ (dir, (gap*2)) | dir <- [L, R, D, U] ]
     dragger        = let x = fromIntegral gap * 2
                      in FixedDragger x x
     spacingAndGaps = let intGap = fromIntegral gap
                          border = Border (intGap) (intGap) (intGap) (intGap)
                      in spacingRaw False border True border True
 
-    -- transform a layout into supporting tabs
+    -- | transform a layout into supporting tabs
     makeTabbed layout = BoringWindows.boringWindows . windowNavigation . addTabs shrinkText myTabTheme $ subLayout [] Simplest $ layout
 
-
--- | Flip a layout, compute its 180 degree rotated form.
-newtype Flip l a = Flip (l a) deriving (Show, Read)
-
-instance LayoutClass l a => LayoutClass (Flip l) a where
-    handleMessage (Flip l) = fmap (fmap Flip) . handleMessage l
-    description   (Flip l) = "Flip " ++ description l
-    runLayout (W.Workspace i (Flip l) ms) r = (map (second flipRect) *** fmap Flip) <$> runLayout (W.Workspace i l ms) (flipRect r)
-      where screenWidth = fromIntegral $ rect_width r
-            flipRect (Rectangle rx ry rw rh) = Rectangle (screenWidth - rx - (fromIntegral rw)) ry rw rh
 -- }}}
 
 -- Startuphook ----------------------------- {{{
@@ -195,21 +186,16 @@ myStartupHook = do
   spawnOnce "redshift -P -O 5000 &"
   spawn "xset r rate 300 50 &" -- make key repeat quicker
 
-  -- polybar and nitrogen need the screen layout to be restored fully before starting
   spawn "/home/leon/.screenlayout/dualscreen.sh "
   io $ threadDelay $ 1000 * 100
   spawnOnce "picom --config ~/.config/picom.conf"  --no-fading-openclose"
   spawn "/home/leon/.config/polybar/launch.sh"
   spawnOnce "nitrogen --restore"
 
+
 -- }}}
 
 -- Keymap --------------------------------------- {{{
-
--- Default mappings that need to be removed
-removedKeys :: [String]
-removedKeys = ["M-<Tab>", "M-S-c", "M-S-q", "M-h", "M-l", "M-j", "M-k", "M-S-<Return>"]
-  ++ if useSharedWorkspaces then [key ++ show n | key <- ["M-", "M-S-", "M-C-"], n <- [1..9 :: Int]] else []
 
 multiMonitorOperation :: (WorkspaceId -> WindowSet -> WindowSet) -> ScreenId -> X ()
 multiMonitorOperation operation n = do
@@ -217,6 +203,11 @@ multiMonitorOperation operation n = do
   case monitor of
     Just mon -> windows $ operation mon
     Nothing -> return ()
+
+-- Default mappings that need to be removed
+removedKeys :: [String]
+removedKeys = ["M-<Tab>", "M-S-c", "M-S-q", "M-h", "M-l", "M-j", "M-k", "M-S-<Return>"]
+  ++ if useSharedWorkspaces then [key ++ show n | key <- ["M-", "M-S-", "M-C-"], n <- [1..9 :: Int]] else []
 
 
 myKeys :: [(String, X ())]
@@ -227,7 +218,6 @@ myKeys =
   , ("M-#", sendMessage zoomReset)
 
   , ("M-S-<Space>", for_ [1..6 :: Int] $ \_ -> sendMessage $ NextLayout)
-
 
   -- Tabs
   , ("M-j",                ifLayoutName ("Tabbed" `isPrefixOf`) (BoringWindows.focusDown) (windows W.focusDown))
@@ -341,9 +331,9 @@ myKeys =
     -- For this to work, the window needs to have the `_NET_WM_PID` set and unique!
     launchWithBackgroundInstance :: (Query Bool) -> String -> X ()
     launchWithBackgroundInstance windowQuery commandToRun = withWindowSet $ \winSet -> do
-        quteWins <- (W.allWindows winSet) |> filter (\win -> Just "NSP" == W.findTag win winSet)
-                                          |> filterM (runQuery windowQuery)
-        case quteWins of
+        fittingHiddenWindows <- (W.allWindows winSet) |> filter (\win -> Just "NSP" == W.findTag win winSet)
+                                                      |> filterM (runQuery windowQuery)
+        case fittingHiddenWindows of
           []        -> do spawnHere commandToRun
                           spawnOn "NSP" commandToRun
           [winId]   -> do windows $ W.shiftWin (W.currentTag winSet) winId
