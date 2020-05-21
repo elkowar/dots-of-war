@@ -95,11 +95,11 @@ scriptFile script = "/home/leon/scripts/" ++ script
 
 scratchpads :: [NamedScratchpad]
 scratchpads =
-  [ NS "terminal" "alacritty --class sp_term" (className =? "sp_term")              defaultFloating
-  , NS "spotify"  "spotify"                   (appName   =? "spotify")              defaultFloating
-  , NS "discord"  "discord"                   (appName   =? "discord")              defaultFloating
-  , NS "whatsapp" "whatsapp-nativefier"       (("WhatsApp" `isSuffixOf`) <$> title) defaultFloating
-  , NS "slack"    "slack"                     (("Slack | " `isPrefixOf`) <$> title) defaultFloating
+  [ NS "terminal" "termite --class sp_term" (className =? "sp_term")              (customFloating $ W.RationalRect 0.66 0.7 0.34 0.3)
+  , NS "spotify"  "spotify"                 (appName   =? "spotify")              defaultFloating
+  , NS "discord"  "discord"                 (appName   =? "discord")              defaultFloating
+  , NS "whatsapp" "whatsapp-nativefier"     (("WhatsApp" `isSuffixOf`) <$> title) defaultFloating
+  , NS "slack"    "slack"                   (("Slack | " `isPrefixOf`) <$> title) defaultFloating
   ]
 --launchWhatsapp = "gtk-launch chrome-hnpfjngllnobngcgfapefoaidbinmjnm-Default.desktop"
 
