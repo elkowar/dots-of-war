@@ -33,14 +33,13 @@ import XMonad.Hooks.SetWMName (setWMName)
 import XMonad.Layout.BinarySpacePartition
 import XMonad.Layout.BorderResize
 import XMonad.Layout.Gaps
-import XMonad.Layout.HintedGrid
 import XMonad.Layout.IndependentScreens
 import XMonad.Layout.LayoutCombinators ((|||))
 import XMonad.Layout.LayoutHints
 import XMonad.Layout.MouseResizableTile
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Renamed (renamed, Rename(Replace))
-import qualified XMonad.Layout.MultiColumns as MultiCol
+--import qualified XMonad.Layout.MultiColumns as MultiCol
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.Simplest
 import XMonad.Layout.Spacing (spacingRaw, Border(..), toggleWindowSpacingEnabled)
@@ -52,7 +51,6 @@ import XMonad.Layout.ThreeColumns
 import           XMonad.Util.EZConfig           ( additionalKeysP
                                                 , removeKeysP
                                                 , checkKeymap
-                                                , additionalMouseBindings
                                                 )
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run
@@ -277,7 +275,7 @@ myKeys =
   -- programs
   , ("M-p",      spawn myLauncher)
   , ("M-S-p",    Rofi.showCombi  (def { Rofi.theme = Rofi.bigTheme }) [ "drun", "window", "ssh" ])
-  , ("M-S-e",    Rofi.showNormal (def { Rofi.theme = Rofi.bigTheme }) "emoji" )
+  , ("M-S-e",    Rofi.showNormal (def { Rofi.theme = Rofi.bigTheme, Rofi.fuzzy = False }) "emoji")
   --, ("M-s",      spawn $ scriptFile "rofi-search.sh")
   , ("M-S-o",    spawn $ scriptFile "rofi-open.sh")
   , ("M-n",      scratchpadSubmap)

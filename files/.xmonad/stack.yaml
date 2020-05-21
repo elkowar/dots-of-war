@@ -17,6 +17,9 @@
 #
 # resolver: ./custom-snapshot.yaml
 # resolver: https://example.com/snapshots/2018-01-01.yaml
+
+#ghc-build: nopie
+
 resolver: lts-15.3
 
 # User packages to be built.
