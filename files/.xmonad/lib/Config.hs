@@ -98,10 +98,10 @@ scratchpads =
   [ NS "terminal" "termite --class sp_term" (className =? "sp_term")              (customFloating $ W.RationalRect 0.66 0.7 0.34 0.3)
   , NS "spotify"  "spotify"                 (appName   =? "spotify")              defaultFloating
   , NS "discord"  "discord"                 (appName   =? "discord")              defaultFloating
-  , NS "whatsapp" "whatsapp-nativefier"     (("WhatsApp" `isSuffixOf`) <$> title) defaultFloating
+  , NS "whatsapp" launchWhatsapp            (("WhatsApp" `isSuffixOf`) <$> title) defaultFloating
   , NS "slack"    "slack"                   (("Slack | " `isPrefixOf`) <$> title) defaultFloating
   ]
---launchWhatsapp = "gtk-launch chrome-hnpfjngllnobngcgfapefoaidbinmjnm-Default.desktop"
+launchWhatsapp = "gtk-launch chrome-hnpfjngllnobngcgfapefoaidbinmjnm-Default.desktop"
 
 
 -- Colors ------ {{{
@@ -191,8 +191,8 @@ myStartupHook = do
   spawnOnce "picom --config ~/.config/picom.conf"  --no-fading-openclose"
   spawn "/home/leon/.config/polybar/launch.sh"
   spawnOnce "nitrogen --restore"
-
-
+  spawnOnce "mailnag"
+  for_ ["led1", "led2"] $ \led -> safeSpawn "sudo" ["liquidctl", "set", led, "color", "fixed", "00ffff"]
 -- }}}
 
 -- Keymap --------------------------------------- {{{
@@ -242,8 +242,9 @@ myKeys =
   , ("M-f", do sendMessage $ MTog.Toggle MTog.FULL
                sendMessage ToggleStruts)
 
-  , ("M-b",          launchWithBackgroundInstance (className =? "qutebrowser") "bwrap --bind / / --dev-bind /dev /dev --tmpfs /tmp --tmpfs /run qutebrowser")
-  , ("M-S-<Return>", launchWithBackgroundInstance (className =? "Alacritty")   "alacritty")
+  --, ("M-b",          launchWithBackgroundInstance (className =? "qutebrowser") "bwrap --bind / / --dev-bind /dev /dev --tmpfs /tmp --tmpfs /run qutebrowser")
+  , ("M-b",          safeSpawnProg "qutebrowser")
+  , ("M-S-<Return>", launchWithBackgroundInstance (className =? "Alacritty") "alacritty")
 
   , ("M-S-C-c", kill1)
   , ("M-S-C-q", io exitSuccess)
