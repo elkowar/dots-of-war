@@ -1,7 +1,4 @@
-{-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE FlexibleContexts #-}
-{-# Language ScopedTypeVariables, LambdaCase #-}
+{-# LANGUAGE MultiParamTypeClasses, DeriveDataTypeable, TypeSynonymInstances, FlexibleInstances, FlexibleContexts, ScopedTypeVariables, LambdaCase #-}
 {-# OPTIONS_GHC -fno-warn-missing-signatures -fno-warn-unused-binds #-}
 -- Imports -------------------------------------------------------- {{{
 
@@ -10,9 +7,6 @@ module Config (main) where
 import Control.Concurrent
 import           Control.Exception              ( catch , SomeException)
 import           Control.Monad                  ( filterM )
-import           Control.Arrow                  ( second
-                                                , (***)
-                                                )
 import           Data.List                      ( isPrefixOf , isSuffixOf)
 import System.Exit (exitSuccess)
 
@@ -49,6 +43,11 @@ import XMonad.Layout.Tabbed
 import XMonad.Layout.WindowNavigation ( windowNavigation )
 import XMonad.Layout.ZoomRow
 import XMonad.Layout.ThreeColumns
+
+import XMonad.Layout.WindowSwitcherDecoration
+import XMonad.Layout.DraggingVisualizer
+import XMonad.Layout.DecorationAddons
+
 import           XMonad.Util.EZConfig           ( additionalKeysP
                                                 , removeKeysP
                                                 , checkKeymap
@@ -59,7 +58,6 @@ import XMonad.Util.SpawnOnce (spawnOnce)
 import XMonad.Util.WorkspaceCompare   ( getSortByXineramaPhysicalRule , getSortByIndex)
 
 import qualified Data.Monoid
-import qualified XMonad.Layout.LayoutModifier
 import qualified System.IO                           as SysIO
 import qualified XMonad.Actions.Navigation2D         as Nav2d
 import qualified XMonad.Config.Desktop               as Desktop
@@ -127,20 +125,23 @@ aqua      = "#8ec07c"
 
 -- Layout ---------------------------------------- {{{
 
-myTabTheme = def
-    { activeColor         = "#504945"
-    , inactiveColor       = "#282828"
-    , activeBorderColor   = "#fbf1c7"
+myTabTheme = defaultThemeWithButtons
+    { activeColor         = "#282828"
+    -- activeColor         = "#504945"
+    --, inactiveColor       = "#282828"
+    , inactiveColor       = "#1d2021"
+    , activeBorderColor   = "#282828"
     , inactiveBorderColor = "#282828"
     , activeTextColor     = "#fbf1c7"
     , inactiveTextColor   = "#fbf1c7"
-    , fontName            = "-*-jetbrains mono-medium-r-normal-12-0-0-0-0-m-0-ascii-1"
+    , fontName            = "-misc-cozettevector-*-*-*-*-10-*-*-*-*-*-*-*"
     }
 
 myLayout = avoidStruts
          $ smartBorders
          $ MTog.mkToggle1 MTog.FULL
          $ ToggleLayouts.toggleLayouts (rename "Tabbed" . makeTabbed . spacingAndGaps $ ResizableTall 1 (3/100) (1/2) [])
+         $ MTog.mkToggle1 WINDOWDECORATION
          $ layoutHintsToCenter
          $ layouts
   where
@@ -148,14 +149,14 @@ myLayout = avoidStruts
     -- if it's not, it's vertical, so use layouts for vertical screens.
     layouts = PerScreen.ifWider 1900 horizScreenLayouts vertScreenLayouts
 
-    horizScreenLayouts = 
+    horizScreenLayouts =
         ((rename "Tall"      $ onlySpacing    $ mouseResizableTile         {draggerType = dragger})
      ||| (rename "Horizon"   $ onlySpacing    $ mouseResizableTileMirrored {draggerType = dragger})
      ||| (rename "BSP"       $ spacingAndGaps $ borderResize $ emptyBSP)
      ||| (rename "ThreeCol"  $ makeTabbed $ spacingAndGaps $ ThreeCol 1 (3/100) (1/2))
      ||| (rename "TabbedRow" $ makeTabbed $ spacingAndGaps $ zoomRow))
 
-    vertScreenLayouts = 
+    vertScreenLayouts =
         ((rename "ThreeCol" $ makeTabbed  $ spacingAndGaps $ Mirror $ reflectHoriz $ ThreeColMid 1 (3/100) (1/2))
      ||| (rename "Horizon"  $ onlySpacing $ mouseResizableTileMirrored {draggerType = dragger}))
 
@@ -170,6 +171,13 @@ myLayout = avoidStruts
 
     -- | transform a layout into supporting tabs
     makeTabbed layout = BoringWindows.boringWindows . windowNavigation . addTabs shrinkText myTabTheme $ subLayout [] Simplest $ layout
+
+data WINDOWDECORATION = WINDOWDECORATION deriving (Read, Show, Eq, Typeable)
+instance MTog.Transformer WINDOWDECORATION Window where
+  transform WINDOWDECORATION x k = k
+    (windowSwitcherDecorationWithButtons shrinkText myTabTheme $ draggingVisualizer $ x)
+    (const x)
+    --(\(ModifiedLayout _ x') -> x')
 
 -- }}}
 
@@ -241,6 +249,8 @@ myKeys =
 
   , ("M-f", do sendMessage $ MTog.Toggle MTog.FULL
                sendMessage ToggleStruts)
+
+  , ("M-C-S-w", sendMessage $ MTog.Toggle WINDOWDECORATION)
 
   --, ("M-b",          launchWithBackgroundInstance (className =? "qutebrowser") "bwrap --bind / / --dev-bind /dev /dev --tmpfs /tmp --tmpfs /run qutebrowser")
   , ("M-b",          safeSpawnProg "qutebrowser")
@@ -363,7 +373,6 @@ myKeys =
       , ("toggle polybar",          sendMessage ToggleStruts >> safeSpawn "polybar-msg" ["cmd", "toggle"])
       ]
 
-
 -- }}}
 
 -- ManageHook -------------------------------{{{
@@ -402,7 +411,7 @@ main = do
                                   then (map show [1..9 :: Int]) ++ ["NSP"]
                                   else (withScreens (fromIntegral currentScreenCount) (map show [1..6 :: Int])) ++ ["NSP"]
         , modMask            = myModMask
-        , borderWidth        = 2
+        , borderWidth        = 1
         , layoutHook         = myLayout
         , logHook            = polybarLogHooks <+> logHook Desktop.desktopConfig <+> logHook def
         , startupHook        = myStartupHook <+> return () >> checkKeymap myConfig myKeys

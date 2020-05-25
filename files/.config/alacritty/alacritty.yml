@@ -230,6 +230,37 @@ mouse:
 # schemes --------------------------------------------------------- {{{
 
 schemes:
+  blueish: &blueish
+    colors:
+    # Default colors
+    primary:
+      background: '0x3f5163'
+      foreground: '0xe2efe6'
+
+    # Normal colors
+    normal:
+      black:   '0x111111'
+      red:     '0xa54242'
+      green:   '0xa9b254'
+      yellow:  '0xde935f'
+      blue:    '0x1bcdee'
+      magenta: '0xbd88ce'
+      cyan:    '0x5bc5b7'
+      white:   '0xbceff7'
+
+    # Bright colors
+    bright:
+      black:   '0xc5d2e6'
+      red:     '0xff8484'
+      green:   '0xebf39c'
+      yellow:  '0xf4c76e'
+      blue:    '0x97cfff'
+      magenta: '0xc3a2cd'
+      cyan:    '0xa5f9ee'
+      white:   '0xe7fcff'
+
+
+
   dracula: &dracula
     primary:
       background: '#282a36'
