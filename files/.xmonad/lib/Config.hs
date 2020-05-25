@@ -7,6 +7,7 @@ module Config (main) where
 import Control.Concurrent
 import           Control.Exception              ( catch , SomeException)
 import           Control.Monad                  ( filterM )
+import           Control.Arrow                  ( (>>>) )
 import           Data.List                      ( isPrefixOf , isSuffixOf)
 import System.Exit (exitSuccess)
 
@@ -125,17 +126,25 @@ aqua      = "#8ec07c"
 
 -- Layout ---------------------------------------- {{{
 
-myTabTheme = defaultThemeWithButtons
-    { activeColor         = "#282828"
-    -- activeColor         = "#504945"
+myTabTheme = def -- defaultThemeWithButtons
+    { -- activeColor         = "#8ec07c"
+      activeColor         = "#1d2021"
+      --activeColor         = "#1d2021"
+     --activeColor         = "#504945"
     --, inactiveColor       = "#282828"
     , inactiveColor       = "#1d2021"
-    , activeBorderColor   = "#282828"
+    , activeBorderColor   = "#1d2021"
     , inactiveBorderColor = "#282828"
     , activeTextColor     = "#fbf1c7"
     , inactiveTextColor   = "#fbf1c7"
+    , decoHeight = 15
     , fontName            = "-misc-cozettevector-*-*-*-*-10-*-*-*-*-*-*-*"
+    --, fontName            = "-misc-scientifica-*-*-*-*-10-*-*-*-*-*-*-*"
     }
+
+data EmptyShrinker = EmptyShrinker deriving (Show, Read)
+instance Shrinker EmptyShrinker where 
+  shrinkIt _ _ = [] :: [String]
 
 myLayout = avoidStruts
          $ smartBorders
@@ -172,12 +181,12 @@ myLayout = avoidStruts
     -- | transform a layout into supporting tabs
     makeTabbed layout = BoringWindows.boringWindows . windowNavigation . addTabs shrinkText myTabTheme $ subLayout [] Simplest $ layout
 
+
 data WINDOWDECORATION = WINDOWDECORATION deriving (Read, Show, Eq, Typeable)
 instance MTog.Transformer WINDOWDECORATION Window where
   transform WINDOWDECORATION x k = k
-    (windowSwitcherDecorationWithButtons shrinkText myTabTheme $ draggingVisualizer $ x)
+    (windowSwitcherDecoration shrinkText myTabTheme $ draggingVisualizer $ x)
     (const x)
-    --(\(ModifiedLayout _ x') -> x')
 
 -- }}}
 
@@ -453,8 +462,9 @@ polybarPP monitor = namedScratchpadFilterOutWorkspacePP . (if useSharedWorkspace
   , ppHiddenNoWindows  = withFG gray . withMargin . withFont 5 . (`wrapClickableWorkspace` "__empty__")
   , ppWsSep            = ""
   , ppSep              = ""
-  , ppLayout           = \l -> if l == "Tall" || l == "Horizon" then ""
-                                 else (withFG gray " | ") ++ (removeWords ["Minimize", "Hinted", "Spacing", "Tall"] . withFG purple . withMargin $ l)
+  , ppLayout           = removeWords ["DraggingVisualizer", "WindowSwitcherDeco", "Minimize", "Hinted", "Spacing", "Tall"]
+                          >>> \l -> if l == "Tall" || l == "Horizon" || l == "" then ""
+                                    else (withFG gray " | ") ++ (withFG purple $ withMargin l)
   , ppExtras           = []
   , ppTitle            = const "" -- withFG aqua . (shorten 40)
   , ppSort = if useSharedWorkspaces then getSortByXineramaPhysicalRule horizontalScreenOrderer
