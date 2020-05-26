@@ -6,13 +6,14 @@ module Config (main) where
 import qualified Data.Map.Strict as M
 import Control.Concurrent
 import           Control.Exception              ( catch , SomeException)
-import           Control.Monad                  ( filterM, when )
+import           Control.Monad                  ( filterM )
 import           Control.Arrow                  ( (>>>) )
 import           Data.List                      ( isPrefixOf , isSuffixOf)
 import System.Exit (exitSuccess)
 
 import qualified Rofi
 import qualified DescribedSubmap
+import qualified TiledDragging
 
 
 import Data.Foldable                  ( for_ )
@@ -47,12 +48,10 @@ import XMonad.Layout.ThreeColumns
 
 import XMonad.Layout.WindowSwitcherDecoration
 import XMonad.Layout.DraggingVisualizer
-import XMonad.Layout.DecorationAddons
 
 import           XMonad.Util.EZConfig           ( additionalKeysP
                                                 , removeKeysP
                                                 , checkKeymap
-                                                , additionalMouseBindings
                                                 )
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run
@@ -60,10 +59,6 @@ import XMonad.Util.SpawnOnce (spawnOnce)
 import XMonad.Util.WorkspaceCompare   ( getSortByXineramaPhysicalRule , getSortByIndex)
 
 import qualified Data.Monoid
-import           Data.Monoid                    ( All
-                                                , All(..)
-                                                )
-import           Data.Int                       ( Int32 )
 import qualified System.IO                           as SysIO
 import qualified XMonad.Actions.Navigation2D         as Nav2d
 import qualified XMonad.Config.Desktop               as Desktop
@@ -75,9 +70,7 @@ import qualified XMonad.Layout.MultiToggle.Instances as MTog
 import qualified XMonad.Layout.ToggleLayouts         as ToggleLayouts
 import qualified XMonad.StackSet                     as W
 import qualified XMonad.Util.XSelection              as XSel
-import           XMonad.Util.XUtils             ( fi )
 import qualified XMonad.Layout.PerScreen             as PerScreen
-import           Foreign.C.Types                ( CInt )
 {-# ANN module "HLint: ignore Redundant $" #-}
 {-# ANN module "HLint: ignore Redundant bracket" #-}
 {-# ANN module "HLint: ignore Move brackets to avoid $" #-}
@@ -158,11 +151,11 @@ myLayout = avoidStruts
          $ MTog.mkToggle1 MTog.FULL
          $ ToggleLayouts.toggleLayouts (rename "Tabbed" . makeTabbed . spacingAndGaps $ ResizableTall 1 (3/100) (1/2) [])
          $ MTog.mkToggle1 WINDOWDECORATION
-         $ draggingVisualizer 
+         $ draggingVisualizer
          $ layoutHintsToCenter
          $ layouts
   where
-    -- | if the screen is wider than 1900px it's horizontal, so use horizontal layouts. 
+    -- | if the screen is wider than 1900px it's horizontal, so use horizontal layouts.
     -- if it's not, it's vertical, so use layouts for vertical screens.
     layouts = PerScreen.ifWider 1900 horizScreenLayouts vertScreenLayouts
 
@@ -222,6 +215,11 @@ myStartupHook = do
 -- }}}
 
 -- Keymap --------------------------------------- {{{
+
+myMouseBindings :: XConfig Layout -> M.Map (KeyMask, Button) (Window -> X ())
+myMouseBindings (XConfig {XMonad.modMask = modMask'}) = M.fromList
+  [((modMask' .|. shiftMask, button1), TiledDragging.tiledDrag)]
+
 
 multiMonitorOperation :: (WorkspaceId -> WindowSet -> WindowSet) -> ScreenId -> X ()
 multiMonitorOperation operation n = do
@@ -495,75 +493,6 @@ polybarPP monitor = namedScratchpadFilterOutWorkspacePP . (if useSharedWorkspace
         return $ dropEndWhile isEmptyAndNotOpened . sortByIndex
 
 -- }}}
-
-
--- Window dragging {{{
-
-myMouseBindings :: XConfig Layout -> M.Map (KeyMask, Button) (Window -> X ())
-myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList
-  [((modMask .|. shiftMask, button1), tiledDragging)]
-
-
-
-tiledDragging :: Window -> X ()
-tiledDragging window = whenX (isClient window) $ withDisplay $ \disp -> do
-  focus window
-  windows $ W.sink window
-  (offsetX, offsetY) <- getPointerOffset window disp
-  (winX, winY, winWidth, winHeight) <- io $ getWindowPlacement disp window
-
-  mouseDrag
-    (\posX posY -> let rect = Rectangle (fromIntegral (fromIntegral winX + (posX - fromIntegral offsetX)))
-                                        (fromIntegral (fromIntegral winY + (posY - fromIntegral offsetY)))
-                                        (fromIntegral winWidth)
-                                        (fromIntegral winHeight)
-                   in sendMessage $ DraggingWindow window rect)
-    (sendMessage DraggingStopped >> performWindowSwitching window)
-      
-
--- | get the pointer offset relative to the given windows root coordinates
-getPointerOffset :: Window -> Display -> X (Int, Int)
-getPointerOffset win disp = do
-  (_, _, _, offsetX, offsetY, _, _, _) <- io $ queryPointer disp win
-  return (fromIntegral offsetX, fromIntegral offsetY)
-  
--- | return a tuple of windowX, windowY, windowWidth, windowHeight
-getWindowPlacement :: Display -> Window -> IO (CInt, CInt, CInt, CInt)
-getWindowPlacement disp window = do
-  windowAttributes <- getWindowAttributes disp window
-  return (wa_x windowAttributes, wa_y windowAttributes, wa_width windowAttributes, wa_height windowAttributes)
-  
-
-handleTiledDraggingInProgress :: CInt -> CInt -> (Window, Rectangle) -> Position -> Position -> X ()
-handleTiledDraggingInProgress ex ey (mainw, r) x y = do
-  let rect = Rectangle (x - (fi ex - rect_x r))
-                       (y - (fi ey - rect_y r))
-                       (rect_width  r)
-                       (rect_height r)
-  sendMessage $ DraggingWindow mainw rect
-
-performWindowSwitching :: Window -> X ()
-performWindowSwitching win =
-  withDisplay $ \d -> do
-   root <- asks theRoot
-   (_, _, selWin, _, _, _, _, _) <- io $ queryPointer d root
-   ws <- gets windowset
-   let allWindows = W.index ws
-   when ((win `elem` allWindows) && (selWin `elem` allWindows)) $ do
-     let allWindowsSwitched = map (switchEntries win selWin) allWindows
-     let (ls, t:rs) = break (== win) allWindowsSwitched
-     let newStack = W.Stack t (reverse ls) rs
-     windows $ W.modify' $ const newStack
-  where
-    switchEntries a b x
-        | x == a    = b
-        | x == b    = a
-        | otherwise = x
-
-
---}}}
-
-
 
 -- Utilities --------------------------------------------------- {{{
 

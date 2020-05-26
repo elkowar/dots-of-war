@@ -10,6 +10,7 @@ executable my-xmonad
         Config
         Rofi
         DescribedSubmap
+        TiledDragging
 
     default-language: Haskell2010
     ghc-options:      -Wall -threaded -fno-warn-missing-signatures
