@@ -127,19 +127,19 @@ aqua      = "#8ec07c"
 -- Layout ---------------------------------------- {{{
 
 myTabTheme = def -- defaultThemeWithButtons
-    { -- activeColor         = "#8ec07c"
+    { -- activeColor      = "#8ec07c"
       activeColor         = "#1d2021"
-      --activeColor         = "#1d2021"
-     --activeColor         = "#504945"
-    --, inactiveColor       = "#282828"
+      --activeColor       = "#1d2021"
+     --activeColor        = "#504945"
+    --, inactiveColor     = "#282828"
     , inactiveColor       = "#1d2021"
     , activeBorderColor   = "#1d2021"
     , inactiveBorderColor = "#282828"
     , activeTextColor     = "#fbf1c7"
     , inactiveTextColor   = "#fbf1c7"
-    , decoHeight = 15
+    , decoHeight          = 15
     , fontName            = "-misc-cozettevector-*-*-*-*-10-*-*-*-*-*-*-*"
-    --, fontName            = "-misc-scientifica-*-*-*-*-10-*-*-*-*-*-*-*"
+    --, fontName          = "-misc-scientifica-*-*-*-*-10-*-*-*-*-*-*-*"
     }
 
 data EmptyShrinker = EmptyShrinker deriving (Show, Read)
@@ -205,7 +205,7 @@ myStartupHook = do
   spawnOnce "redshift -P -O 5000 &"
   spawn "xset r rate 300 50 &" -- make key repeat quicker
 
-  spawn "/home/leon/.screenlayout/dualscreen.sh "
+  spawn "/home/leon/.screenlayout/dualscreen-stacked.sh"
   io $ threadDelay $ 1000 * 100
   spawnOnce "picom --config ~/.config/picom.conf"  --no-fading-openclose"
   spawn "/home/leon/.config/polybar/launch.sh"
@@ -313,7 +313,7 @@ myKeys =
                     windows $ onCurrentScreen action (wsps !! (wspNum - 1))
                 )
                  | (wspNum) <- [1..9 :: Int]
-                , (mappingPrefix, action) <- [("M-", W.greedyView), ("M-S-", W.shift), ("M-C-", copy)]
+                , (mappingPrefix, action) <- [("M-", W.view), ("M-S-", W.shift), ("M-C-", copy)]
               ]
 
           keyDirPairs = [("h", L), ("j", D), ("k", U), ("l", R)]
@@ -427,7 +427,7 @@ main = do
                                   then (map show [1..9 :: Int]) ++ ["NSP"]
                                   else (withScreens (fromIntegral currentScreenCount) (map show [1..6 :: Int])) ++ ["NSP"]
         , modMask            = myModMask
-        , borderWidth        = 1
+        , borderWidth        = 2
         , layoutHook         = myLayout
         , logHook            = polybarLogHooks <+> logHook Desktop.desktopConfig <+> logHook def
         , startupHook        = myStartupHook <+> return () >> checkKeymap myConfig myKeys
