@@ -53,6 +53,7 @@ import           XMonad.Util.EZConfig           ( additionalKeysP
                                                 , removeKeysP
                                                 , checkKeymap
                                                 )
+
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run
 import XMonad.Util.SpawnOnce (spawnOnce)
@@ -212,6 +213,7 @@ myStartupHook = do
   spawn "/home/leon/.config/polybar/launch.sh"
   spawnOnce "nitrogen --restore"
   spawnOnce "mailnag"
+  spawnOnce "flashfocus"
   for_ ["led1", "led2"] $ \led -> safeSpawn "sudo" ["liquidctl", "set", led, "color", "fixed", "00ffff"]
 -- }}}
 
@@ -273,6 +275,7 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
     , ("M-d",   multiMonitorOperation W.view 0)
     , ("M-S-s", (multiMonitorOperation W.shift 1) >> multiMonitorOperation W.view 1)
     , ("M-S-d", (multiMonitorOperation W.shift 0) >> multiMonitorOperation W.view 0)
+    , ("M-C-s", windows swapScreenContents)
     ]
 
   programLaunchBindings :: [(String, X ())]
@@ -309,6 +312,7 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
     , ("<XF86AudioRaiseVolume>", spawn "amixer sset Master 5%+")
     , ("<XF86AudioLowerVolume>", spawn "amixer sset Master 5%-")
     , ("M-S-C-,", (notify "hi" (show $ map (\(a, _) -> show a) workspaceBindings)) >> (notify "ho" (show removedKeys)))
+    , ("M-<Delete>", spawn "flash_window")
     ]
 
   workspaceBindings :: [(String, X ())]
@@ -367,6 +371,20 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
         [winId]   -> do windows $ W.shiftWin (W.currentTag winSet) winId
                         spawnOn "NSP" commandToRun
         (winId:_) -> windows $ W.shiftWin (W.currentTag winSet) winId
+
+
+  swapScreenContents :: W.StackSet i l a sid sd -> W.StackSet i l a sid sd
+  swapScreenContents ws = if null (W.visible ws) then ws else 
+    let 
+      otherScreen   = head $ W.visible ws
+      otherWsp      = W.workspace otherScreen
+      currentScreen = W.current ws
+      currentWsp    = W.workspace currentScreen
+    in 
+      ws 
+        { W.current = currentScreen { W.workspace = otherWsp   { W.tag = W.tag currentWsp } }
+        , W.visible = (otherScreen  { W.workspace = currentWsp { W.tag = W.tag otherWsp } } : (tail $ W.visible ws))
+        }
 
 
 
