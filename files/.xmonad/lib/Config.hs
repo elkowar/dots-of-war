@@ -59,6 +59,7 @@ import XMonad.Util.SpawnOnce (spawnOnce)
 import XMonad.Util.WorkspaceCompare   ( getSortByXineramaPhysicalRule , getSortByIndex)
 
 import qualified Data.Monoid
+import           Data.Traversable               ( for )
 import qualified System.IO                           as SysIO
 import qualified XMonad.Actions.Navigation2D         as Nav2d
 import qualified XMonad.Config.Desktop               as Desktop
@@ -231,163 +232,178 @@ multiMonitorOperation operation n = do
 -- Default mappings that need to be removed
 removedKeys :: [String]
 removedKeys = ["M-<Tab>", "M-S-c", "M-S-q", "M-h", "M-l", "M-j", "M-k", "M-S-<Return>"]
-  ++ if useSharedWorkspaces then [key ++ show n | key <- ["M-", "M-S-", "M-C-"], n <- [1..9 :: Int]] else []
-
+  ++ if useSharedWorkspaces then [] else [key ++ show n | key <- ["M-", "M-S-", "M-C-"], n <- [1..9 :: Int]]
 
 myKeys :: [(String, X ())]
-myKeys =
-  -- ZoomRow
-  [ ("M-+", sendMessage zoomIn)
-  , ("M--", sendMessage zoomOut)
-  , ("M-#", sendMessage zoomReset)
+myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, programLaunchBindings, miscBindings, windowControlBindings, workspaceBindings ]
+  where 
+  keyDirPairs = [("h", L), ("j", D), ("k", U), ("l", R)]
 
-  , ("M-S-<Space>", for_ [1..6 :: Int] $ \_ -> sendMessage $ NextLayout)
+  zoomRowBindings :: [(String, X ())]
+  zoomRowBindings = 
+    [ ("M-+", sendMessage zoomIn)
+    , ("M--", sendMessage zoomOut)
+    , ("M-#", sendMessage zoomReset)
+    ]
 
-  -- Tabs
-  , ("M-j",                ifLayoutName ("Tabbed" `isPrefixOf`) (BoringWindows.focusDown) (windows W.focusDown))
-  , ("M-k",                ifLayoutName ("Tabbed" `isPrefixOf`) (BoringWindows.focusUp)   (windows W.focusUp))
-  , ("M-C-S-h",            sendMessage $ pullGroup L)
-  , ("M-C-S-j",            sendMessage $ pullGroup D)
-  , ("M-C-S-k",            sendMessage $ pullGroup U)
-  , ("M-C-S-l",            sendMessage $ pullGroup R)
-  , ("M-S-C-m",            withFocused (sendMessage . MergeAll))
-  , ("M-S-C-<Backspace>",  withFocused (sendMessage . UnMerge))
-  , ("M-<Tab>",            onGroup W.focusDown')
-  , ("M-C-<Tab>",          onGroup W.focusUp')
-  , ("M-S-t",              toggleTabbedLayout)
+  tabbedBindings :: [(String, X ())]
+  tabbedBindings =
+    [ ("M-j",                ifLayoutName ("Tabbed" `isPrefixOf`) (BoringWindows.focusDown) (windows W.focusDown))
+    , ("M-k",                ifLayoutName ("Tabbed" `isPrefixOf`) (BoringWindows.focusUp)   (windows W.focusUp))
+    , ("M-C-S-h",            sendMessage $ pullGroup L)
+    , ("M-C-S-j",            sendMessage $ pullGroup D)
+    , ("M-C-S-k",            sendMessage $ pullGroup U)
+    , ("M-C-S-l",            sendMessage $ pullGroup R)
+    , ("M-S-C-m",            withFocused (sendMessage . MergeAll))
+    , ("M-S-C-<Backspace>",  withFocused (sendMessage . UnMerge))
+    , ("M-<Tab>",            onGroup W.focusDown')
+    , ("M-C-<Tab>",          onGroup W.focusUp')
+    , ("M-S-t",              toggleTabbedLayout)
 
-  -- In tabbed mode, while focussing master pane, cycle tabs on the first slave
-  , ("M-S-<Tab>", do windows W.focusMaster
-                     BoringWindows.focusDown
-                     onGroup W.focusDown'
-                     windows W.focusMaster)
+    -- In tabbed mode, while focussing master pane, cycle tabs on the first slave
+    , ("M-S-<Tab>", do windows W.focusMaster
+                       BoringWindows.focusDown
+                       onGroup W.focusDown'
+                       windows W.focusMaster)
+    ]
 
+  multiMonitorBindings :: [(String, X ())]
+  multiMonitorBindings = 
+    [ ("M-s",   multiMonitorOperation W.view 1)
+    , ("M-d",   multiMonitorOperation W.view 0)
+    , ("M-S-s", (multiMonitorOperation W.shift 1) >> multiMonitorOperation W.view 1)
+    , ("M-S-d", (multiMonitorOperation W.shift 0) >> multiMonitorOperation W.view 0)
+    ]
 
-  , ("M-f", do sendMessage $ MTog.Toggle MTog.FULL
-               sendMessage ToggleStruts)
+  programLaunchBindings :: [(String, X ())]
+  programLaunchBindings =
+    [ ("M-p",      spawn myLauncher)
+    , ("M-S-p",    Rofi.showCombi  (def { Rofi.theme = Rofi.bigTheme }) [ "drun", "window", "ssh" ])
+    , ("M-S-e",    Rofi.showNormal (def { Rofi.theme = Rofi.bigTheme, Rofi.fuzzy = False }) "emoji")
+    --, ("M-s",      spawn $ scriptFile "rofi-search.sh")
+    , ("M-S-o",    spawn $ scriptFile "rofi-open.sh")
+    , ("M-n",      scratchpadSubmap)
+    , ("M-e",      Rofi.promptRunCommand def specialCommands)
+    , ("M-o",      Rofi.promptRunCommand def withSelectionCommands)
+    , ("M-S-C-g",  spawn "killall -INT -g giph" >> notify "gif" "saved gif in ~/Bilder/gifs") -- stop gif recording
 
-  , ("M-C-S-w", sendMessage $ MTog.Toggle WINDOWDECORATION)
+    --, ("M-b",          launchWithBackgroundInstance (className =? "qutebrowser") "bwrap --bind / / --dev-bind /dev /dev --tmpfs /tmp --tmpfs /run qutebrowser")
+    , ("M-b",          safeSpawnProg "qutebrowser")
+    , ("M-S-<Return>", launchWithBackgroundInstance (className =? "Alacritty") "alacritty")
+    ]
 
-  --, ("M-b",          launchWithBackgroundInstance (className =? "qutebrowser") "bwrap --bind / / --dev-bind /dev /dev --tmpfs /tmp --tmpfs /run qutebrowser")
-  , ("M-b",          safeSpawnProg "qutebrowser")
-  , ("M-S-<Return>", launchWithBackgroundInstance (className =? "Alacritty") "alacritty")
+  miscBindings :: [(String, X ())]
+  miscBindings =
+    [ ("M-f",     do sendMessage (MTog.Toggle MTog.FULL)
+                     sendMessage ToggleStruts)
+    , ("M-C-S-w", sendMessage $ MTog.Toggle WINDOWDECORATION)
 
-  , ("M-S-C-c", kill1)
-  , ("M-S-C-q", io exitSuccess)
+    , ("M-S-C-c", kill1)
+    , ("M-S-C-q", io exitSuccess)
 
-  -- Binary space partitioning
-  , ("M-<Backspace>",    sendMessage Swap)
-  , ("M-M1-<Backspace>", sendMessage Rotate)
+    -- Binary space partitioning
+    , ("M-<Backspace>",    sendMessage Swap)
+    , ("M-M1-<Backspace>", sendMessage Rotate)
 
-  -- Media
-  , ("<XF86AudioRaiseVolume>", spawn "amixer sset Master 5%+")
-  , ("<XF86AudioLowerVolume>", spawn "amixer sset Master 5%-")
+    -- Media
+    , ("<XF86AudioRaiseVolume>", spawn "amixer sset Master 5%+")
+    , ("<XF86AudioLowerVolume>", spawn "amixer sset Master 5%-")
+    , ("M-S-C-,", (notify "hi" (show $ map (\(a, _) -> show a) workspaceBindings)) >> (notify "ho" (show removedKeys)))
+    ]
 
-  -- Multi monitor
-  , ("M-s",   multiMonitorOperation W.view 1)
-  , ("M-d",   multiMonitorOperation W.view 0)
-  , ("M-S-s", (multiMonitorOperation W.shift 1) >> multiMonitorOperation W.view 1)
-  , ("M-S-d", (multiMonitorOperation W.shift 0) >> multiMonitorOperation W.view 0)
-
-  -- programs
-  , ("M-p",      spawn myLauncher)
-  , ("M-S-p",    Rofi.showCombi  (def { Rofi.theme = Rofi.bigTheme }) [ "drun", "window", "ssh" ])
-  , ("M-S-e",    Rofi.showNormal (def { Rofi.theme = Rofi.bigTheme, Rofi.fuzzy = False }) "emoji")
-  --, ("M-s",      spawn $ scriptFile "rofi-search.sh")
-  , ("M-S-o",    spawn $ scriptFile "rofi-open.sh")
-  , ("M-n",      scratchpadSubmap)
-  , ("M-e",      Rofi.promptRunCommand def specialCommands)
-  , ("M-o",      Rofi.promptRunCommand def withSelectionCommands)
-  , ("M-S-C-g",  spawn "killall -INT -g giph" >> notify "gif" "saved gif in ~/Bilder/gifs") -- stop gif recording
-  ] ++ generatedMappings
-  where
-    generatedMappings :: [(String, X ())]
-    generatedMappings = windowGoMappings ++ windowSwapMappings ++ resizeMappings ++ workspaceMappings
-        where
-          workspaceMappings =
-            if useSharedWorkspaces then [] else
-              [ (mappingPrefix ++ show wspNum,
-                  do
-                    -- get all workspaces from the config by running an X action to query the config
-                    wsps <- workspaces' <$> asks config
-                    windows $ onCurrentScreen action (wsps !! (wspNum - 1))
-                )
-                 | (wspNum) <- [1..9 :: Int]
-                , (mappingPrefix, action) <- [("M-", W.view), ("M-S-", W.shift), ("M-C-", copy)]
-              ]
-
-          keyDirPairs = [("h", L), ("j", D), ("k", U), ("l", R)]
-
-          windowGoMappings   = [ ("M-M1-"   ++ key, Nav2d.windowGo   dir False) | (key, dir) <- keyDirPairs ]
-          windowSwapMappings = [ ("M-S-M1-" ++ key, Nav2d.windowSwap dir False) | (key, dir) <- keyDirPairs ]
-          resizeMappings =
-              [ ("M-C-h", ifLayoutIs "BSP" (sendMessage $ ExpandTowards L) (ifLayoutIs "Horizon" (sendMessage ShrinkSlave) (sendMessage Shrink)))
-              , ("M-C-j", ifLayoutIs "BSP" (sendMessage $ ExpandTowards D) (ifLayoutIs "Horizon" (sendMessage Expand)      (sendMessage MirrorShrink >> sendMessage ExpandSlave)))
-              , ("M-C-k", ifLayoutIs "BSP" (sendMessage $ ExpandTowards U) (ifLayoutIs "Horizon" (sendMessage Shrink)      (sendMessage MirrorExpand >> sendMessage ShrinkSlave)))
-              , ("M-C-l", ifLayoutIs "BSP" (sendMessage $ ExpandTowards R) (ifLayoutIs "Horizon" (sendMessage ExpandSlave) (sendMessage Expand)))
-              ]
+  workspaceBindings :: [(String, X ())]
+  workspaceBindings = 
+    if useSharedWorkspaces 
+      then [] 
+      else concat $ 
+        [ [ ("M-"   ++ show wspNum, runActionOnWorkspace W.view  wspNum)
+          , ("M-S-" ++ show wspNum, runActionOnWorkspace W.shift wspNum)
+          , ("M-C-" ++ show wspNum, runActionOnWorkspace copy    wspNum) 
+          ]
+        | wspNum <- [1..9 :: Int]
+        ]
+    where
+    runActionOnWorkspace action wspNum = do
+      wsps <- workspaces' <$> asks config
+      windows $ onCurrentScreen action (wsps !! (wspNum - 1))
 
 
-
-    scratchpadSubmap :: X ()
-    scratchpadSubmap = DescribedSubmap.describedSubmap "Scratchpads"
-      [ ("M-n", "terminal", namedScratchpadAction scratchpads "terminal")
-      , ("M-w", "whatsapp", namedScratchpadAction scratchpads "whatsapp")
-      , ("M-s", "slack",    namedScratchpadAction scratchpads "slack")
-      , ("M-m", "spotify",  namedScratchpadAction scratchpads "spotify")
-      , ("M-d", "discord",  namedScratchpadAction scratchpads "discord")
+  windowControlBindings :: [(String, X ())]
+  windowControlBindings = windowGoMappings ++ windowSwapMappings ++ resizeMappings
+    where
+    windowGoMappings   = [ ("M-M1-"   ++ key, Nav2d.windowGo   dir False) | (key, dir) <- keyDirPairs ]
+    windowSwapMappings = [ ("M-S-M1-" ++ key, Nav2d.windowSwap dir False) | (key, dir) <- keyDirPairs ]
+    resizeMappings =
+      [ ("M-C-h", ifLayoutIs "BSP" (sendMessage $ ExpandTowards L) (ifLayoutIs "Horizon" (sendMessage ShrinkSlave) (sendMessage Shrink)))
+      , ("M-C-j", ifLayoutIs "BSP" (sendMessage $ ExpandTowards D) (ifLayoutIs "Horizon" (sendMessage Expand)      (sendMessage MirrorShrink >> sendMessage ExpandSlave)))
+      , ("M-C-k", ifLayoutIs "BSP" (sendMessage $ ExpandTowards U) (ifLayoutIs "Horizon" (sendMessage Shrink)      (sendMessage MirrorExpand >> sendMessage ShrinkSlave)))
+      , ("M-C-l", ifLayoutIs "BSP" (sendMessage $ ExpandTowards R) (ifLayoutIs "Horizon" (sendMessage ExpandSlave) (sendMessage Expand)))
       ]
 
 
+  -- | toggle tabbed Tall layout, merging all non-master windows
+  -- into a single tab group when initializing the tabbed layout.
+  toggleTabbedLayout :: X ()
+  toggleTabbedLayout = do
+    sendMessage $ ToggleLayouts.Toggle "Tabbed"
+    ifLayoutIs "Tabbed" (do BoringWindows.focusMaster
+                            withFocused (sendMessage . MergeAll)
+                            withFocused (sendMessage . UnMerge)
+                            -- refresh the tabs, so they draw correctly
+                            windows W.focusUp
+                            windows W.focusDown)
+                        (return ())
 
-    -- | toggle tabbed Tall layout, merging all non-master windows
-    -- into a single tab group when initializing the tabbed layout.
-    toggleTabbedLayout :: X ()
-    toggleTabbedLayout = do
-      sendMessage $ ToggleLayouts.Toggle "Tabbed"
-      ifLayoutIs "Tabbed" (do BoringWindows.focusMaster
-                              withFocused (sendMessage . MergeAll)
-                              withFocused (sendMessage . UnMerge)
-                              -- refresh the tabs, so they draw correctly
-                              windows W.focusUp
-                              windows W.focusDown)
-                          (return ())
-
-    -- | launch a program by starting an instance in a hidden workspace,
-    -- and just raising an already running instance. This allows for super quick "startup" time.
-    -- For this to work, the window needs to have the `_NET_WM_PID` set and unique!
-    launchWithBackgroundInstance :: (Query Bool) -> String -> X ()
-    launchWithBackgroundInstance windowQuery commandToRun = withWindowSet $ \winSet -> do
-        fittingHiddenWindows <- (W.allWindows winSet) |> filter (\win -> Just "NSP" == W.findTag win winSet)
-                                                      |> filterM (runQuery windowQuery)
-        case fittingHiddenWindows of
-          []        -> do spawnHere commandToRun
-                          spawnOn "NSP" commandToRun
-          [winId]   -> do windows $ W.shiftWin (W.currentTag winSet) winId
-                          spawnOn "NSP" commandToRun
-          (winId:_) -> windows $ W.shiftWin (W.currentTag winSet) winId
-
-    withSelectionCommands :: [(String, X ())]
-    withSelectionCommands =
-      [ ("Google",    XSel.transformPromptSelection  ("https://google.com/search?q=" ++) "qutebrowser")
-      , ("Hoogle",    XSel.transformPromptSelection  ("https://hoogle.haskell.org/?hoogle=" ++) "qutebrowser")
-      , ("Translate", XSel.transformPromptSelection  ("https://translate.google.com/#view=home&op=translate&sl=auto&tl=en&text=" ++) "qutebrowser")
-      ]
+  -- | launch a program by starting an instance in a hidden workspace,
+  -- and just raising an already running instance. This allows for super quick "startup" time.
+  -- For this to work, the window needs to have the `_NET_WM_PID` set and unique!
+  launchWithBackgroundInstance :: (Query Bool) -> String -> X ()
+  launchWithBackgroundInstance windowQuery commandToRun = withWindowSet $ \winSet -> do
+      fittingHiddenWindows <- (W.allWindows winSet) |> filter (\win -> Just "NSP" == W.findTag win winSet)
+                                                    |> filterM (runQuery windowQuery)
+      case fittingHiddenWindows of
+        []        -> do spawnHere commandToRun
+                        spawnOn "NSP" commandToRun
+        [winId]   -> do windows $ W.shiftWin (W.currentTag winSet) winId
+                        spawnOn "NSP" commandToRun
+        (winId:_) -> windows $ W.shiftWin (W.currentTag winSet) winId
 
 
-    specialCommands :: [(String,  X ())]
-    specialCommands =
-      [ ("screenshot",              spawn $ scriptFile "screenshot.sh")
-      , ("screenshot to file",      spawn $ scriptFile "screenshot.sh --tofile")
-      , ("screenshot full to file", spawn $ scriptFile "screenshot.sh --tofile --fullscreen")
-      , ("screengif to file",       spawn (scriptFile "screengif.sh") >> notify "gif" "stop gif-recording with M-S-C-g")
-      , ("toggleOptimal",           sendMessage ToggleGaps >> toggleWindowSpacingEnabled)
-      , ("toggleSpacing",           toggleWindowSpacingEnabled)
-      , ("toggleGaps",              sendMessage ToggleGaps)
-      , ("Copy to all workspaces",  windows copyToAll)
-      , ("Kill all other copies",   killAllOtherCopies)
-      , ("toggle polybar",          sendMessage ToggleStruts >> safeSpawn "polybar-msg" ["cmd", "toggle"])
-      ]
+
+  withSelectionCommands :: [(String, X ())]
+  withSelectionCommands =
+    [ ("Google",    XSel.transformPromptSelection  ("https://google.com/search?q=" ++) "qutebrowser")
+    , ("Hoogle",    XSel.transformPromptSelection  ("https://hoogle.haskell.org/?hoogle=" ++) "qutebrowser")
+    , ("Translate", XSel.transformPromptSelection  ("https://translate.google.com/#view=home&op=translate&sl=auto&tl=en&text=" ++) "qutebrowser")
+    ]
+
+
+  specialCommands :: [(String,  X ())]
+  specialCommands =
+    [ ("screenshot",              spawn $ scriptFile "screenshot.sh")
+    , ("screenshot to file",      spawn $ scriptFile "screenshot.sh --tofile")
+    , ("screenshot full to file", spawn $ scriptFile "screenshot.sh --tofile --fullscreen")
+    , ("screengif to file",       spawn (scriptFile "screengif.sh") >> notify "gif" "stop gif-recording with M-S-C-g")
+    , ("toggleOptimal",           sendMessage ToggleGaps >> toggleWindowSpacingEnabled)
+    , ("toggleSpacing",           toggleWindowSpacingEnabled)
+    , ("toggleGaps",              sendMessage ToggleGaps)
+    , ("Copy to all workspaces",  windows copyToAll)
+    , ("Kill all other copies",   killAllOtherCopies)
+    , ("toggle polybar",          sendMessage ToggleStruts >> safeSpawn "polybar-msg" ["cmd", "toggle"])
+    ]
+
+
+  scratchpadSubmap :: X ()
+  scratchpadSubmap = DescribedSubmap.describedSubmap "Scratchpads"
+    [ ("M-n", "terminal", namedScratchpadAction scratchpads "terminal")
+    , ("M-w", "whatsapp", namedScratchpadAction scratchpads "whatsapp")
+    , ("M-s", "slack",    namedScratchpadAction scratchpads "slack")
+    , ("M-m", "spotify",  namedScratchpadAction scratchpads "spotify")
+    , ("M-d", "discord",  namedScratchpadAction scratchpads "discord")
+    ]
+
+
+
 
 -- }}}
 
@@ -420,7 +436,7 @@ main = do
   let polybarLogHooks = composeAll $ map polybarLogHook monitorIndices
 
   let myConfig = flip additionalKeysP myKeys
-               . flip removeKeysP removedKeys
+               $ flip removeKeysP removedKeys
                $ Desktop.desktopConfig
         { terminal           = myTerminal
         , workspaces         = if useSharedWorkspaces

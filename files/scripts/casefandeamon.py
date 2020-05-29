@@ -18,15 +18,11 @@ def run_fan_check():
         temp = float(re.findall(r"^Tdie:\s*\+(.*?)°C.+", temp)[0])
         if temp < 50:
             fan_speed = 0
-        elif temp < 60:
-            fan_speed = 10
-        elif temp < 70:
-            fan_speed = 20
-        elif temp < 75:
+        if temp < 60:
             fan_speed = 30
-        elif temp < 80:
+        elif temp < 70:
             fan_speed = 50
-        elif temp < 85:
+        elif temp < 80:
             fan_speed = 100
 
     print("applying fan curve to " + str(fan_speed) + "%, temp is " + str(temp))

@@ -21,6 +21,8 @@ SINK_ICON=""
 # the names of your active sinks, use `pactl list sinks short`.
 SINK_BLACKLIST=(
     "alsa_output.pci-0000_00_1f.3.iec958-stereo"
+    "alsa_output.pci-0000_28_00.4.iec958-stereo"
+    "alsa_output.pci-0000_26_00.1.hdmi-stereo-extra2"
 )
 
 # Maps PulseAudio sink names to human-readable names
