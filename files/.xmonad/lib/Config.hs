@@ -17,6 +17,8 @@ import qualified TiledDragging
 
 
 import Data.Foldable                  ( for_ )
+
+
 import Data.Function ((&))
 
 import XMonad hiding ((|||))
@@ -66,6 +68,9 @@ import qualified XMonad.Actions.Navigation2D         as Nav2d
 import qualified XMonad.Config.Desktop               as Desktop
 import qualified XMonad.Hooks.EwmhDesktops           as Ewmh
 import qualified XMonad.Hooks.ManageHelpers          as ManageHelpers
+import           XMonad.Hooks.DebugStack        ( debugStackString
+                                                , debugStackFullString
+                                                )
 import qualified XMonad.Layout.BoringWindows         as BoringWindows
 import qualified XMonad.Layout.MultiToggle           as MTog
 import qualified XMonad.Layout.MultiToggle.Instances as MTog
@@ -165,7 +170,7 @@ myLayout = avoidStruts
         ((rename "Tall"      $ onlySpacing    $ mouseResizableTile         {draggerType = dragger})
      ||| (rename "Horizon"   $ onlySpacing    $ mouseResizableTileMirrored {draggerType = dragger})
      ||| (rename "BSP"       $ spacingAndGaps $ borderResize $ emptyBSP)
-     ||| (rename "ThreeCol"  $ makeTabbed $ spacingAndGaps $ ThreeCol 1 (3/100) (1/2))
+     ||| (rename "ThreeCol"  $ makeTabbed $ spacingAndGaps $ reflectHoriz $ ThreeColMid 1 (3/100) (1/2))
      ||| (rename "TabbedRow" $ makeTabbed $ spacingAndGaps $ zoomRow))
 
     vertScreenLayouts =
@@ -238,11 +243,11 @@ removedKeys = ["M-<Tab>", "M-S-c", "M-S-q", "M-h", "M-l", "M-j", "M-k", "M-S-<Re
 
 myKeys :: [(String, X ())]
 myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, programLaunchBindings, miscBindings, windowControlBindings, workspaceBindings ]
-  where 
+  where
   keyDirPairs = [("h", L), ("j", D), ("k", U), ("l", R)]
 
   zoomRowBindings :: [(String, X ())]
-  zoomRowBindings = 
+  zoomRowBindings =
     [ ("M-+", sendMessage zoomIn)
     , ("M--", sendMessage zoomOut)
     , ("M-#", sendMessage zoomReset)
@@ -270,7 +275,7 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
     ]
 
   multiMonitorBindings :: [(String, X ())]
-  multiMonitorBindings = 
+  multiMonitorBindings =
     [ ("M-s",   multiMonitorOperation W.view 1)
     , ("M-d",   multiMonitorOperation W.view 0)
     , ("M-S-s", (multiMonitorOperation W.shift 1) >> multiMonitorOperation W.view 1)
@@ -288,7 +293,7 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
     , ("M-n",      scratchpadSubmap)
     , ("M-e",      Rofi.promptRunCommand def specialCommands)
     , ("M-o",      Rofi.promptRunCommand def withSelectionCommands)
-    , ("M-S-C-g",  spawn "killall -INT -g giph" >> notify "gif" "saved gif in ~/Bilder/gifs") -- stop gif recording
+    , ("M-S-C-g",  spawn "killall -INT -g giph") -- stop gif recording
 
     --, ("M-b",          launchWithBackgroundInstance (className =? "qutebrowser") "bwrap --bind / / --dev-bind /dev /dev --tmpfs /tmp --tmpfs /run qutebrowser")
     , ("M-b",          safeSpawnProg "qutebrowser")
@@ -297,7 +302,8 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
 
   miscBindings :: [(String, X ())]
   miscBindings =
-    [ ("M-f",     do sendMessage (MTog.Toggle MTog.FULL)
+    [ ("M-f",     do withFocused (windows . W.sink)
+                     sendMessage (MTog.Toggle MTog.FULL)
                      sendMessage ToggleStruts)
     , ("M-C-S-w", sendMessage $ MTog.Toggle WINDOWDECORATION)
 
@@ -316,13 +322,13 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
     ]
 
   workspaceBindings :: [(String, X ())]
-  workspaceBindings = 
-    if useSharedWorkspaces 
-      then [] 
-      else concat $ 
+  workspaceBindings =
+    if useSharedWorkspaces
+      then []
+      else concat $
         [ [ ("M-"   ++ show wspNum, runActionOnWorkspace W.view  wspNum)
           , ("M-S-" ++ show wspNum, runActionOnWorkspace W.shift wspNum)
-          , ("M-C-" ++ show wspNum, runActionOnWorkspace copy    wspNum) 
+          , ("M-C-" ++ show wspNum, runActionOnWorkspace copy    wspNum)
           ]
         | wspNum <- [1..9 :: Int]
         ]
@@ -374,14 +380,14 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
 
 
   swapScreenContents :: W.StackSet i l a sid sd -> W.StackSet i l a sid sd
-  swapScreenContents ws = if null (W.visible ws) then ws else 
-    let 
+  swapScreenContents ws = if null (W.visible ws) then ws else
+    let
       otherScreen   = head $ W.visible ws
       otherWsp      = W.workspace otherScreen
       currentScreen = W.current ws
       currentWsp    = W.workspace currentScreen
-    in 
-      ws 
+    in
+      ws
         { W.current = currentScreen { W.workspace = otherWsp   { W.tag = W.tag currentWsp } }
         , W.visible = (otherScreen  { W.workspace = currentWsp { W.tag = W.tag otherWsp } } : (tail $ W.visible ws))
         }
@@ -408,6 +414,7 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
     , ("Copy to all workspaces",  windows copyToAll)
     , ("Kill all other copies",   killAllOtherCopies)
     , ("toggle polybar",          sendMessage ToggleStruts >> safeSpawn "polybar-msg" ["cmd", "toggle"])
+    , ("get debug data",          debugStackFullString >>= (\str -> safeSpawn "xmessage" [str]))
     ]
 
 
