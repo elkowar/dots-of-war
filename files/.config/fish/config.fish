@@ -48,6 +48,20 @@ end
 bind \ca run_stuff
 
 
+function replace_with_yay
+  set -l cmd (commandline -b)
+  switch $cmd
+  case "*pacman*"
+    set edited (echo $cmd | sed 's/sudo //g' | sed 's/pacman/yay/g')
+  case "yay*"
+    set edited (echo $cmd | sed 's/yay/sudo pacman/g')
+  end
+  commandline -r "$edited"
+  commandline -f repaint
+end
+
+bind \cy replace_with_yay
+
 # fff file manager cd on exit
 function f
     fff $argv

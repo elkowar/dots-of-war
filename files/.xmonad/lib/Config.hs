@@ -296,7 +296,8 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
     , ("M-S-C-g",  spawn "killall -INT -g giph") -- stop gif recording
 
     --, ("M-b",          launchWithBackgroundInstance (className =? "qutebrowser") "bwrap --bind / / --dev-bind /dev /dev --tmpfs /tmp --tmpfs /run qutebrowser")
-    , ("M-b",          safeSpawnProg "qutebrowser")
+    --, ("M-b",          safeSpawnProg "qutebrowser")
+    , ("M-b",          safeSpawnProg "firefox")
     , ("M-S-<Return>", launchWithBackgroundInstance (className =? "Alacritty") "alacritty")
     ]
 
