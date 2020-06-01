@@ -171,7 +171,7 @@ myLayout = avoidStruts
      ||| (rename "Horizon"   $ onlySpacing    $ mouseResizableTileMirrored {draggerType = dragger})
      ||| (rename "BSP"       $ spacingAndGaps $ borderResize $ emptyBSP)
      ||| (rename "ThreeCol"  $ makeTabbed $ spacingAndGaps $ reflectHoriz $ ThreeColMid 1 (3/100) (1/2))
-     ||| (rename "TabbedRow" $ makeTabbed $ spacingAndGaps $ zoomRow))
+     ||| (rename "TabbedRow" $ makeTabbed $ spacingAndGaps $ zoomRow)) 
 
     vertScreenLayouts =
         ((rename "ThreeCol" $ makeTabbed  $ spacingAndGaps $ Mirror $ reflectHoriz $ ThreeColMid 1 (3/100) (1/2))
@@ -399,8 +399,14 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
   withSelectionCommands =
     [ ("Google",    XSel.transformPromptSelection  ("https://google.com/search?q=" ++) "qutebrowser")
     , ("Hoogle",    XSel.transformPromptSelection  ("https://hoogle.haskell.org/?hoogle=" ++) "qutebrowser")
-    , ("Translate", XSel.transformPromptSelection  ("https://translate.google.com/#view=home&op=translate&sl=auto&tl=en&text=" ++) "qutebrowser")
+    , ("Translate", XSel.getSelection >>= translateMenu)
     ]
+
+  translateMenu :: String -> X ()
+  translateMenu input = do
+    selectedLanguage <- Rofi.promptSimple def ["de", "en", "fr"]
+    translated <- runProcessWithInput "trans" [":" ++ selectedLanguage, input, "--no-ansi"] ""
+    notify "Translation" translated
 
 
   specialCommands :: [(String,  X ())]

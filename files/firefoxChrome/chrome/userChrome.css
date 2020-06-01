@@ -63,7 +63,7 @@
 .tab-background:not[visuallyselected] {
   background: var(--mff-tab-selected-bg) !important;
   /*opacity: 0.5 !important;*/
-  opacity: 1.0 !important;
+  opacity: 1 !important;
 }
 
 /* This positions the tabs under the navaigator container */
@@ -119,7 +119,6 @@ hbox.tab-content[pinned="true"] .tab-text {
   --tab-loading-fill: #033433 !important;
 }
 
-
 .tab-label-container:not([textoverflow]) {
   display: flex;
   overflow: hidden;
@@ -166,6 +165,11 @@ hbox.tab-content[pinned="true"] .tab-text {
 
 /* Toolbar {{{ */
 
+::selection {
+  background-color: #8ec07c !important;
+  color: #282828 !important;
+}
+
 .urlbar-icon > image {
   fill: var(--mff-icon-color) !important;
   color: var(--mff-icon-color) !important;
@@ -181,7 +185,8 @@ hbox.tab-content[pinned="true"] .tab-text {
 .toolbarbutton-1 {
   filter: brightness(80%) sepia(50%);
 }
-#back-button, #forward-button {
+#back-button,
+#forward-button {
   filter: brightness(80%) sepia(100%);
   transform: scale(0.9);
 }
@@ -225,7 +230,6 @@ hbox.tab-content[pinned="true"] .tab-text {
 .urlbarView-type-icon {
   display: none !important;
 }
-
 
 #urlbar-input {
   font-size: var(--mff-urlbar-font-size) !important;
@@ -373,9 +377,8 @@ toolbarseparator {
   display: none;
 }
 
-
 /* something */
-.toolbarbutton-icon ,
+.toolbarbutton-icon,
 .toolbarbutton-icon::after {
   fill: #ebdbb2 !important;
 }
@@ -383,6 +386,5 @@ toolbarseparator {
 .urlbarView-row[selected="true"] {
   color: red;
 }
-
 
 /* }}} */
