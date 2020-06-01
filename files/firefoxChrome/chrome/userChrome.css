@@ -1,3 +1,4 @@
+/* variables {{{ */
 :root {
   /* Minimal Functional Fox variables*/
   --mff-bg: #282828;
@@ -9,8 +10,9 @@
   --mff-sidebar-color: #ebdbb2;
   --mff-tab-border-radius: 0px;
   --mff-tab-color: #ebdbb2;
-  --mff-tab-font-family: "terminus (ttf)";
-  --mff-tab-font-size: 9pt;
+  /*--mff-tab-font-family: "terminus (ttf)";*/
+  --mff-tab-font-family: "cozette";
+  --mff-tab-font-size: 10pt;
   --mff-tab-font-weight: 400;
   --mff-tab-height: 20px;
   --mff-tab-pinned-bg: #70c1b3;
@@ -46,12 +48,9 @@
   --panel-disabled-color: rgba(var(--foreground-lighter), 0.4) !important;
 }
 
-/*
-  _____ _   ___ ___
- |_   _/_\ | _ ) __|
-   | |/ _ \| _ \__ \
-   |_/_/ \_\___/___/
-*/
+/* }}} */
+
+/* Tabs {{{ */
 
 .tab-background[selected="true"] {
   background: var(--mff-tab-selected-bg) !important;
@@ -163,12 +162,9 @@ hbox.tab-content[pinned="true"] .tab-text {
   display: none !important;
 }
 
-/*
-  _____ ___   ___  _    ___   _   ___
-|_   _/ _ \ / _ \| |  | _ ) /_\ | _ \
-  | || (_) | (_) | |__| _ \/ _ \|   /
-  |_| \___/ \___/|____|___/_/  \_\_|_\
-*/
+/* }}} */
+
+/* Toolbar {{{ */
 
 .urlbar-icon > image {
   fill: var(--mff-icon-color) !important;
@@ -229,6 +225,7 @@ hbox.tab-content[pinned="true"] .tab-text {
 .urlbarView-type-icon {
   display: none !important;
 }
+
 
 #urlbar-input {
   font-size: var(--mff-urlbar-font-size) !important;
@@ -313,8 +310,8 @@ toolbar#nav-bar {
 
 #urlbar {
   max-width: 90% !important;
-  margin: 0 15% !important;
-  margin-top: -5px;
+  margin: 0 5% !important;
+  margin-top: -5px !important;
   /* 	position: unset!important; */
 }
 
@@ -330,13 +327,9 @@ toolbar#nav-bar {
 toolbarbutton {
   box-shadow: none !important;
 }
+/* }}} */
 
-/*
-  ___ ___ ___  ___ ___   _   ___
- / __|_ _|   \| __| _ ) /_\ | _ \
- \__ \| || |) | _|| _ \/ _ \|   /
- |___/___|___/|___|___/_/ \_\_|_\
-*/
+/* Sidebar {{{ */
 
 .close-icon,
 .urlbar-icon {
@@ -367,13 +360,9 @@ splitter#sidebar-splitter {
 image#sidebar-icon {
   display: none;
 }
+/* }}} */
 
-/*
-    _   ___ ___  _____      _____  _   _  _ ___ _
-   /_\ | _ \ _ \/ _ \ \    / / _ \/_\ | \| | __| |
-  / _ \|   /   / (_) \ \/\/ /|  _/ _ \| .` | _|| |__
- /_/ \_\_|_\_|_\\___/ \_/\_/ |_|/_/ \_\_|\_|___|____|
- */
+/* arrow panel {{{*/
 
 .panel-arrowcontent {
   padding: 0px !important;
@@ -395,3 +384,5 @@ toolbarseparator {
   color: red;
 }
 
+
+/* }}} */
