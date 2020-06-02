@@ -107,8 +107,11 @@ scratchpads =
   , NS "slack"    "slack"                   (("Slack | " `isPrefixOf`) <$> title) defaultFloating
   , NS "discord"  launchDiscord             (appName   =? "discord")              defaultFloating
   ]
-launchWhatsapp = "gtk-launch chrome-hnpfjngllnobngcgfapefoaidbinmjnm-Default.desktop"
-launchDiscord = "beautifuldiscord --css /home/leon/.config/beautifuldiscord/custom_discord.css"
+  where
+--launchWhatsapp = "gtk-launch chrome-hnpfjngllnobngcgfapefoaidbinmjnm-Default.desktop"
+  launchWhatsapp = "google-chrome-stable --start-fullscreen -kiosk --app='https://web.whatsapp.com'"
+  launchDiscord = "beautifuldiscord --css /home/leon/.config/beautifuldiscord/custom_discord.css"
+
 
 
 -- Colors ------ {{{

@@ -45,7 +45,7 @@
   --background-modifier-hover: rgba(79, 84, 92, 0.16);
   --background-modifier-active: rgba(79, 84, 92, 0.24);
   /*--background-modifier-accent: hsla(0, 0%, 100%, 0.06);*/
-  --background-modifier-accent: rgba(0,0,0,0);
+  --background-modifier-accent: rgba(0, 0, 0, 0);
   --elevation-high: 0 8px 16px rgba(0, 0, 0, 0.24);
   --guild-header-text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
   --channeltextarea-background: var(--bg1);
@@ -56,30 +56,37 @@
   --background-message-hover: var(--bg2) !important;
 }
 
+* {
+  font-family: "Terminus (TTF)" !important;
+  font-weight: normal !important;
+  font-size: 1rem !important;
+}
+
 ::-webkit-scrollbar,
 ::-webkit-scrollbar-track,
 ::-webkit-scrollbar-track-handle,
 ::-webkit-scrollbar-track-piece {
-  border-color: rgba(0,0,0,0) !important;
-  background-color: rgba(0,0,0,0) !important;
+  border-color: rgba(0, 0, 0, 0) !important;
+  background-color: rgba(0, 0, 0, 0) !important;
 }
 
-[class*="peopleColumn"]{
+/* sections */
+
+[class*="peopleColumn"] {
   background-color: var(--bg2);
 }
 
-[class*="section"]{ 
+[class*="section"] {
   background-color: var(--bg3);
 }
-
 [class*="sidebar"] [class*="container"] [class*="header"] {
   background-color: var(--bg1) !important;
-  box-shadow: 0 0 15px 0 rgba(0,0,0,0.2);
+  box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.2);
 }
 
 [class*="sidebar"] > [class*="container"],
 [class*="members"][class*="scroller"] {
-  box-shadow: inset 0 0 15px 0 rgba(0,0,0,0.2);
+  box-shadow: inset 0 0 15px 0 rgba(0, 0, 0, 0.2);
 }
 
 [class*="scrollerWrap"] {
@@ -91,10 +98,12 @@
   overflow: hidden;
 }
 
-[class*="chatContent"] [class*="form"]{
+/* message input area */
+
+[class*="chatContent"] [class*="form"] {
   padding-top: 0.5rem;
   background-color: var(--bg1);
-  box-shadow: 0 0 20px 0 rgba(0,0,0,0.3);
+  box-shadow: 0 -30px 20px -30px rgba(0, 0, 0, 0.3);
 }
 
 [class*="textAreaSlate"] {
@@ -108,6 +117,8 @@
   padding-left: 1rem;
   padding-right: 1rem;
 }
+
+/* components */
 
 button[class*="lookFilled"] {
   background-color: var(--button) !important;
@@ -132,6 +143,14 @@ button[class*="lookLink"] {
   filter: sepia(20%) !important;
 }
 
+[class*="newMessagesBar-"] {
+  background-color: var(--accent);
+  opacity: 1;
+}
+[class*="newMessagesBar-"] button {
+  color: var(--bg1) !important;
+}
+
 img[class*="avatar"] {
   filter: sepia(30%) !important;
   transition: filter 0.1s, transform 0.1s ease-in-out;
@@ -146,8 +165,10 @@ img[class*="avatar"]:hover {
 }
 
 [class*="divider"] {
-  /*border-color: var(--red) !important;*/
   border-color: var(--bg3);
+}
+[class*="divider"][class*="isUnread"]{
+  border-color: var(--red) !important;
 }
 
 [class*="unreadPill-"] {
@@ -166,13 +187,6 @@ button[class*="lookFilled"] {
   color: var(--fg1);
 }
 
-/*[class*="modal"] [class*="inner"] {*/
-  /*background-color: var(--bg1) !important;*/
-/*}*/
-/*[class*="uploadModal"] {*/
-  /*background-color: red !important;*/
-/*}*/
-
 [class*="modal"] [class*="queryContainer-"],
 [class*="modal"] [class*="resultsGroup-"],
 [class*="modal"] [class*="bodyInner-"],
@@ -180,20 +194,24 @@ button[class*="lookFilled"] {
 [class*="modal"] [class*="inner-"],
 [class*="modal"] [class*="header-"]:not(header):not(h2),
 [class*="modal"] [class*="uploadModal-"] {
-    background-color: var(--bg1) !important;
+  background-color: var(--bg1) !important;
 }
+
+[class*="modal"] [class*="sourceScroller"],
+[class*="modal"] [class*="segmentContainer-"] [class*="segmentControl"] /*go live source selector header bar*/{
+  background-color: var(--bg3) !important;
+}
+[class*="modal"] [class*="header"] {
+  padding-top: unset;
+  padding: 0.4rem;
+}
+
 [class*="modal"] [class*="footer-"] {
-    background-color: var(--bg3) !important;
-    filter: brightness(110%);
+  background-color: var(--bg3) !important;
+  filter: brightness(110%);
 }
 
-/*[class*="mention"][class*="interactive"] {*/
-  /*background-color: var(--green);*/
-  /*color: var(--bg1);*/
-/*}*/
-
-
-[class*="panels"]>*:nth-child(2) {
+[class*="panels"] > *:nth-child(2) {
   height: 4.6rem;
   padding-bottom: 0.5rem;
 }
