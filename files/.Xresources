@@ -1,4 +1,5 @@
 *.background:   #282828
+color5: #ff0000
 
 Xcursor.size: 16
 Xcursor.theme: capitaine-cursors-light
