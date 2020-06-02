@@ -146,7 +146,8 @@ img[class*="avatar"]:hover {
 }
 
 [class*="divider"] {
-  border-color: var(--red) !important;
+  /*border-color: var(--red) !important;*/
+  border-color: var(--bg3);
 }
 
 [class*="unreadPill-"] {
