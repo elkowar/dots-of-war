@@ -41,12 +41,13 @@ import XMonad.Layout.Renamed (renamed, Rename(Replace))
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.Simplest
 import XMonad.Layout.Reflect
-import XMonad.Layout.Spacing (spacingRaw, Border(..), toggleWindowSpacingEnabled)
+import XMonad.Layout.Spacing (spacingRaw, Border(..), toggleWindowSpacingEnabled, incScreenWindowSpacing, decScreenWindowSpacing)
 import XMonad.Layout.SubLayouts
 import XMonad.Layout.Tabbed
 import XMonad.Layout.WindowNavigation ( windowNavigation )
 import XMonad.Layout.ZoomRow
 import XMonad.Layout.ThreeColumns
+import XMonad.Layout.ResizableThreeColumns
 
 import XMonad.Layout.WindowSwitcherDecoration
 import XMonad.Layout.DraggingVisualizer
@@ -56,6 +57,7 @@ import           XMonad.Util.EZConfig           ( additionalKeysP
                                                 , checkKeymap
                                                 )
 
+import XMonad.Layout.LayoutModifier
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run
 import XMonad.Util.SpawnOnce (spawnOnce)
@@ -89,7 +91,7 @@ import qualified XMonad.Layout.PerScreen             as PerScreen
 
 myModMask  = mod4Mask
 myLauncher = Rofi.asCommand (def { Rofi.theme = Rofi.bigTheme }) ["-show run"]
-myTerminal = "alacritty"
+myTerminal = "termite --name törminell"
 myBrowser = "qutebrowser"
 useSharedWorkspaces = False
 --myBrowser = "google-chrome-stable"
@@ -110,7 +112,8 @@ scratchpads =
   where
 --launchWhatsapp = "gtk-launch chrome-hnpfjngllnobngcgfapefoaidbinmjnm-Default.desktop"
   launchWhatsapp = "google-chrome-stable --start-fullscreen -kiosk --app='https://web.whatsapp.com'"
-  launchDiscord = "beautifuldiscord --css /home/leon/.config/beautifuldiscord/custom_discord.css"
+  launchDiscord = "discord"
+  --launchDiscord = "beautifuldiscord --css /home/leon/.config/beautifuldiscord/custom_discord.css"
 
 
 
@@ -174,7 +177,7 @@ myLayout = avoidStruts
         ((rename "Tall"      $ onlySpacing    $ mouseResizableTile         {draggerType = dragger})
      ||| (rename "Horizon"   $ onlySpacing    $ mouseResizableTileMirrored {draggerType = dragger})
      ||| (rename "BSP"       $ spacingAndGaps $ borderResize $ emptyBSP)
-     ||| (rename "ThreeCol"  $ makeTabbed $ spacingAndGaps $ reflectHoriz $ ThreeColMid 1 (3/100) (1/2))
+     ||| (rename "ThreeCol"  $ makeTabbed $ spacingAndGaps $ reflectHoriz $ ResizableThreeColMid 1 (3/100) (1/2) [])
      ||| (rename "TabbedRow" $ makeTabbed $ spacingAndGaps $ zoomRow)) 
 
     vertScreenLayouts =
@@ -193,7 +196,6 @@ myLayout = avoidStruts
     -- | transform a layout into supporting tabs
     makeTabbed layout = BoringWindows.boringWindows . windowNavigation . addTabs shrinkText myTabTheme $ subLayout [] Simplest $ layout
 
-
 -- | window decoration layout modifier. this needs you to add `dragginVisualizer` yourself
 data WINDOWDECORATION = WINDOWDECORATION deriving (Read, Show, Eq, Typeable)
 instance MTog.Transformer WINDOWDECORATION Window where
@@ -208,7 +210,6 @@ instance MTog.Transformer WINDOWDECORATION Window where
 myStartupHook :: X ()
 myStartupHook = do
   setWMName "LG3D" -- Java stuff hack
-  --spawnOnce "pasystray" -- just open the UI by right-clicking on polybar's pulseaudio module
   spawnOnce "nm-applet &"
   spawnOnce "udiskie -s &" -- Mount USB sticks automatically. -s is smart systray mode: systray icon if something is mounted
   spawnOnce "xfce4-clipman &"
@@ -244,6 +245,7 @@ multiMonitorOperation operation n = do
 removedKeys :: [String]
 removedKeys = ["M-<Tab>", "M-S-c", "M-S-q", "M-h", "M-l", "M-j", "M-k", "M-S-<Return>"]
   ++ if useSharedWorkspaces then [] else [key ++ show n | key <- ["M-", "M-S-", "M-C-"], n <- [1..9 :: Int]]
+
 
 myKeys :: [(String, X ())]
 myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, programLaunchBindings, miscBindings, windowControlBindings, workspaceBindings ]
@@ -324,6 +326,8 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
     , ("<XF86AudioLowerVolume>", spawn "amixer sset Master 5%-")
     , ("M-S-C-,", (notify "hi" (show $ map (\(a, _) -> show a) workspaceBindings)) >> (notify "ho" (show removedKeys)))
     , ("M-<Delete>", spawn "flash_window")
+    , ("M-g", incScreenWindowSpacing 5)
+    , ("M-S-g", decScreenWindowSpacing 5)
     ]
 
   workspaceBindings :: [(String, X ())]

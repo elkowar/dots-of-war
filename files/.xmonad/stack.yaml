@@ -3,7 +3,7 @@ resolver: lts-15.3
 
 packages:
 - .
-#- xmonad-contrib
+- xmonad-contrib
 
 extra-deps:
   - iwlib-0.1.0
