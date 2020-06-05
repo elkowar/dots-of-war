@@ -215,3 +215,12 @@ button[class*="lookFilled"] {
   height: 4.6rem;
   padding-bottom: 0.5rem;
 }
+
+
+div[class*="chat"] div[class*="root"] {
+  background-color: #282828;
+}
+
+div[class*="chat"] div[class*="root"] canvas {
+  border-radius: 20px;
+}
