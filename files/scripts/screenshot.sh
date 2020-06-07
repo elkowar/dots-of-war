@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 to_file=0
 fullscreen=0
 for arg in "$@"; do

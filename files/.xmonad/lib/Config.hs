@@ -69,6 +69,7 @@ import qualified System.IO                           as SysIO
 import qualified XMonad.Actions.Navigation2D         as Nav2d
 import qualified XMonad.Config.Desktop               as Desktop
 import qualified XMonad.Hooks.EwmhDesktops           as Ewmh
+import XMonad.Hooks.FadeInactive
 import qualified XMonad.Hooks.ManageHelpers          as ManageHelpers
 import           XMonad.Hooks.DebugStack        ( debugStackString
                                                 , debugStackFullString
@@ -91,7 +92,8 @@ import qualified XMonad.Layout.PerScreen             as PerScreen
 
 myModMask  = mod4Mask
 myLauncher = Rofi.asCommand (def { Rofi.theme = Rofi.bigTheme }) ["-show run"]
-myTerminal = "termite --name törminell"
+--myTerminal = "termite --name törminell"
+myTerminal = "alacritty"
 myBrowser = "qutebrowser"
 useSharedWorkspaces = False
 --myBrowser = "google-chrome-stable"
@@ -318,14 +320,14 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
     , ("M-S-C-q", io exitSuccess)
 
     -- Binary space partitioning
-    , ("M-<Backspace>",    sendMessage Swap)
-    , ("M-M1-<Backspace>", sendMessage Rotate)
+    , ("M-<Delete>",    sendMessage Swap)
+    , ("M-M1-<Delete>", sendMessage Rotate)
 
     -- Media
     , ("<XF86AudioRaiseVolume>", spawn "amixer sset Master 5%+")
     , ("<XF86AudioLowerVolume>", spawn "amixer sset Master 5%-")
     , ("M-S-C-,", (notify "hi" (show $ map (\(a, _) -> show a) workspaceBindings)) >> (notify "ho" (show removedKeys)))
-    , ("M-<Delete>", spawn "flash_window")
+    , ("M-<Backspace>", spawn "flash_window")
     , ("M-g", incScreenWindowSpacing 5)
     , ("M-S-g", decScreenWindowSpacing 5)
     ]
@@ -483,9 +485,9 @@ main = do
                                   then (map show [1..9 :: Int]) ++ ["NSP"]
                                   else (withScreens (fromIntegral currentScreenCount) (map show [1..6 :: Int])) ++ ["NSP"]
         , modMask            = myModMask
-        , borderWidth        = 2
+        , borderWidth        = 1
         , layoutHook         = myLayout
-        , logHook            = polybarLogHooks <+> logHook Desktop.desktopConfig <+> logHook def
+        , logHook            = polybarLogHooks <+> logHook Desktop.desktopConfig <+> fadeInactiveLogHook 1 <+> logHook def
         , startupHook        = myStartupHook <+> return () >> checkKeymap myConfig myKeys
         , manageHook         = manageSpawn <+> myManageHook <+> manageHook def
         , focusedBorderColor = aqua

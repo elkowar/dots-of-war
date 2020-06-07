@@ -222,5 +222,5 @@ div[class*="chat"] div[class*="root"] {
 }
 
 div[class*="chat"] div[class*="root"] canvas {
-  border-radius: 20px;
+  /*border-radius: 20px;*/
 }

@@ -1,4 +1,8 @@
 .termite {
   padding: 15px;
 }
+vte-terminal {
+  padding: 10px;
+}
+
 @import 'colors.css';

@@ -1,7 +1,7 @@
 fish_vi_key_bindings
 # fish_default_key_bindings
 
-set -U FZF_TMUX 1
+#set -U FZF_TMUX 1
 set -U FZF_DEFAULT_COMMANDS "--filepath-word --cycle"
 set -U FZF_PREVIEW_FILE_CMD "head -n 10 | bat --color=always --decorations=never"
 set -U fish_greeting
@@ -17,10 +17,10 @@ abbr --add --global tsh trash
 abbr --add --global cxmonad "nvim /home/leon/.xmonad/lib/Config.hs"
 
 
-if status is-interactive
-and not set -q TMUX
-    exec tmux
-end
+#if status is-interactive
+#and not set -q TMUX
+    #exec tmux
+#end
 
 abbr --add --global gaa "git add --all"
 abbr --add --global gc "git commit -m "
