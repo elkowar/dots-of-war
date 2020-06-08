@@ -176,23 +176,19 @@ myLayout = avoidStruts
     layouts = PerScreen.ifWider 1900 horizScreenLayouts vertScreenLayouts
 
     horizScreenLayouts =
-        ((rename "Tall"      $ onlySpacing    $ mouseResizableTile         {draggerType = dragger})
-     ||| (rename "Horizon"   $ onlySpacing    $ mouseResizableTileMirrored {draggerType = dragger})
-     ||| (rename "BSP"       $ spacingAndGaps $ borderResize $ emptyBSP)
+        ((rename "Tall"      $              spacingAndGaps $ mouseResizableTile         {draggerType = BordersDragger})
+     ||| (rename "Horizon"   $              spacingAndGaps $ mouseResizableTileMirrored {draggerType = BordersDragger})
+     ||| (rename "BSP"       $              spacingAndGaps $ borderResize $ emptyBSP)
      ||| (rename "ThreeCol"  $ makeTabbed $ spacingAndGaps $ reflectHoriz $ ResizableThreeColMid 1 (3/100) (1/2) [])
      ||| (rename "TabbedRow" $ makeTabbed $ spacingAndGaps $ zoomRow)) 
 
     vertScreenLayouts =
         ((rename "ThreeCol" $ makeTabbed  $ spacingAndGaps $ Mirror $ reflectHoriz $ ThreeColMid 1 (3/100) (1/2))
-     ||| (rename "Horizon"  $ onlySpacing $ mouseResizableTileMirrored {draggerType = dragger}))
+     ||| (rename "Horizon"  $               spacingAndGaps $ mouseResizableTileMirrored {draggerType = BordersDragger}))
 
     rename n = renamed [Replace n]
-    gap            = 10
-    onlySpacing    = gaps [ (dir, (gap*2)) | dir <- [L, R, D, U] ]
-    dragger        = let x = fromIntegral gap * 2
-                     in FixedDragger x x
-    spacingAndGaps = let intGap = fromIntegral gap
-                         border = Border (intGap) (intGap) (intGap) (intGap)
+    spacingAndGaps = let intGap = 10 :: Integer
+                         border = Border intGap intGap intGap intGap
                      in spacingRaw False border True border True
 
     -- | transform a layout into supporting tabs
