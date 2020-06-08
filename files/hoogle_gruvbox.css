@@ -74,7 +74,11 @@
         background-color: var(--bg0);
         border: unset;
         border-color: var(--bg3);
-        padding: 0.2rem;
+        padding: 0.2rem 1rem;;
+        transition: box-shadow 0.2s ease-in-out;
+        &[type="submit"]:hover {
+            box-shadow: 2px 2px 5px 0 rgba(0,0,0, 0.2);
+        }
     }
     #scope_chosen {
         background-color: var(--bg0);
@@ -117,7 +121,10 @@
     }
 
     .result {
-        box-shadow: 1px 1px 5px 0 rgba(0,0,0, 0.3);
+        a:hover {
+            background-color: inherit;
+        }
+        box-shadow: 1px 1px 5px 0 rgba(0, 0, 0, 0.3);
         .from {
             padding: 0.5rem 0.9rem;
         }
