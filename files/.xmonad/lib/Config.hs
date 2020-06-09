@@ -6,14 +6,22 @@ module Config (main) where
 import qualified Data.Map.Strict as M
 import Control.Concurrent
 import           Control.Exception              ( catch , SomeException)
-import           Control.Monad                  ( filterM )
+import           Control.Monad                  ( filterM
+                                                , when
+                                                , guard
+                                                )
 import           Control.Arrow                  ( (>>>) )
-import           Data.List                      ( isPrefixOf , isSuffixOf)
+import           Data.List                      ( isPrefixOf
+                                                , isSuffixOf
+                                                , isInfixOf
+                                                )
+import qualified Foreign.C.Types
 import System.Exit (exitSuccess)
-
+import qualified XMonad.Util.ExtensibleState as XS
 import qualified Rofi
 import qualified DescribedSubmap
 import qualified TiledDragging
+import qualified GHC.Word
 
 
 import Data.Foldable                  ( for_ )
@@ -64,7 +72,9 @@ import XMonad.Util.SpawnOnce (spawnOnce)
 import XMonad.Util.WorkspaceCompare   ( getSortByXineramaPhysicalRule , getSortByIndex)
 
 import qualified Data.Monoid
+import           Data.Monoid                    ( Endo )
 import           Data.Traversable               ( for )
+import           Data.Semigroup                 ( All(..) )
 import qualified System.IO                           as SysIO
 import qualified XMonad.Actions.Navigation2D         as Nav2d
 import qualified XMonad.Config.Desktop               as Desktop
@@ -80,6 +90,7 @@ import qualified XMonad.Layout.MultiToggle.Instances as MTog
 import qualified XMonad.Layout.ToggleLayouts         as ToggleLayouts
 import qualified XMonad.StackSet                     as W
 import qualified XMonad.Util.XSelection              as XSel
+import           XMonad.Util.WindowProperties
 import qualified XMonad.Layout.PerScreen             as PerScreen
 {-# ANN module "HLint: ignore Redundant $" #-}
 {-# ANN module "HLint: ignore Redundant bracket" #-}
@@ -180,7 +191,7 @@ myLayout = avoidStruts
      ||| (rename "Horizon"   $              spacingAndGaps $ mouseResizableTileMirrored {draggerType = BordersDragger})
      ||| (rename "BSP"       $              spacingAndGaps $ borderResize $ emptyBSP)
      ||| (rename "ThreeCol"  $ makeTabbed $ spacingAndGaps $ reflectHoriz $ ResizableThreeColMid 1 (3/100) (1/2) [])
-     ||| (rename "TabbedRow" $ makeTabbed $ spacingAndGaps $ zoomRow)) 
+     ||| (rename "TabbedRow" $ makeTabbed $ spacingAndGaps $ zoomRow))
 
     vertScreenLayouts =
         ((rename "ThreeCol" $ makeTabbed  $ spacingAndGaps $ Mirror $ reflectHoriz $ ThreeColMid 1 (3/100) (1/2))
@@ -488,7 +499,7 @@ main = do
         , manageHook         = manageSpawn <+> myManageHook <+> manageHook def
         , focusedBorderColor = aqua
         , normalBorderColor  = "#282828"
-        , handleEventHook    = handleEventHook Desktop.desktopConfig
+        , handleEventHook    = mySwallowEventHook <+> handleEventHook Desktop.desktopConfig
         --, handleEventHook  = minimizeEventHook <+> handleEventHook def <+> hintsEventHook -- <+> Ewmh.fullscreenEventHook
         , mouseBindings = myMouseBindings <+> mouseBindings def
        }
@@ -500,6 +511,48 @@ main = do
     $ myConfig
 
 -- }}}
+
+
+mySwallowEventHook = swallowEventHook ([className =? "Alacritty", className =? "Termite"]) ([return True])
+
+swallowEventHook :: [Query Bool] -> [Query Bool] -> Event -> X All
+swallowEventHook parentQueries childQueries event = do
+  case event of
+    (DestroyWindowEvent _ _ _ _ eventId window) ->
+      when (eventId == window) $ do
+        (SwallowedStorage swallowed) <- XS.get
+        case M.lookup window swallowed of
+          Just win -> windows (\ws -> W.shiftWin (W.tag . W.workspace . W.current $ ws) (fromIntegral win) ws)
+          Nothing -> return ()
+        return ()
+
+    (MapRequestEvent _ _ _ _ _ newWindow) -> withFocused $ \focused -> do
+      parentMatches <- mapM (`runQuery` focused) parentQueries
+      childMatches  <- mapM (`runQuery` newWindow) childQueries
+      when (or parentMatches && or childMatches) $ do
+        newWindowPid <- getProp32s "_NET_WM_PID" newWindow
+        oldWindowPid <- getProp32s "_NET_WM_PID" focused
+        case (oldWindowPid, newWindowPid) of
+          (Just (oldPid:_), Just (newPid:_)) -> do
+            isChild <- liftIO $ (fromIntegral newPid) `isChildOf` (fromIntegral oldPid)
+            when isChild $ do
+              windows (W.shiftWin "NSP" focused) -- TODO use https://hackage.haskell.org/package/xmonad-contrib-0.16/docs/XMonad-Layout-Hidden.html
+              XS.modify (\(SwallowedStorage m) -> SwallowedStorage $ M.insert newWindow focused m)
+          _ -> return ()
+        return ()
+    _ -> return ()
+  return $ All True
+
+isChildOf :: Int -> Int -> IO Bool
+isChildOf child parent = do
+  output <- runProcessWithInput "pstree" ["-T", "-p", show parent] ""
+  return $ any ((show child) `isInfixOf`) $ lines output
+
+newtype SwallowedStorage = SwallowedStorage (M.Map GHC.Word.Word64 GHC.Word.Word64) deriving Typeable
+instance ExtensionClass SwallowedStorage where
+  initialValue = SwallowedStorage mempty
+
+
 
 -- POLYBAR Kram -------------------------------------- {{{
 

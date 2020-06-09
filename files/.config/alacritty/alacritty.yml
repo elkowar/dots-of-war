@@ -12,8 +12,8 @@ window:
   #  y: 0
 
   padding:
-    x: 10
-    y: 10
+    x: 20
+    y: 20
 
    #Spread additional padding evenly around the terminal content.
   dynamic_padding: true
@@ -338,6 +338,7 @@ colors: *gruvbox
 background_opacity: 1.0
 
 font:
+  #size: 10
   size: 12
   normal:
     #family: JetBrainsMono Nerd Font
@@ -347,3 +348,6 @@ font:
     #family: cherry
     #family: lucy tewi2a
     #family: Scientifica
+  offset:
+    x: 0
+    y: 0
