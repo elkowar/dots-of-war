@@ -1,3 +1,4 @@
+{-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE MultiParamTypeClasses, DeriveDataTypeable, TypeSynonymInstances, FlexibleInstances, FlexibleContexts, ScopedTypeVariables, LambdaCase #-}
 {-# OPTIONS_GHC -fno-warn-missing-signatures -fno-warn-unused-binds #-}
 -- Imports -------------------------------------------------------- {{{
@@ -520,19 +521,15 @@ mySwallowEventHook = swallowEventHook ([className =? "Alacritty", className =? "
 swallowEventHook :: [Query Bool] -> [Query Bool] -> Event -> X All
 swallowEventHook parentQueries childQueries event = do
   case event of
-    ConfigureEvent {} -> withWindowSet (XS.put . BeforeClosingStackStorage . W.stack . W.workspace . W.current)
-    (DestroyWindowEvent _ _ _ _ eventId window) -> when (eventId == window) $ do
-      (SwallowedStorage swallowed) <- XS.get
-      liftIO $ logOut [ show swallowed ]
-      case M.lookup window swallowed of
-        Just win -> do
-          BeforeClosingStackStorage maybeOldStack <- XS.get
-          case maybeOldStack of
-            Just oldStack -> do
-              windows (\ws -> onWorkspace "NSP" (W.delete' win) ws |> updateStack (const $ Just $ oldStack { W.focus = win }))
-              XS.modify (\(SwallowedStorage m) -> SwallowedStorage $ M.delete window m)
-            Nothing -> return ()
-        Nothing -> return ()
+    ConfigureEvent {} -> withWindowSet (XS.modify . setStackBeforeWindowClosing . W.stack . W.workspace . W.current)
+    (DestroyWindowEvent _ _ _ _ eventId childWindow) -> when (eventId == childWindow) $ do
+      swallowedParent <- XS.gets (getSwallowedParent childWindow)
+      maybeOldStack <- XS.gets stackBeforeWindowClosing
+      case (swallowedParent, maybeOldStack) of
+        (Just parent, Just oldStack) -> do
+          windows (updateStack (const $ Just $ oldStack { W.focus = parent }) . onWorkspace "NSP" (W.delete' parent))
+          XS.modify (removeSwallowed childWindow . setStackBeforeWindowClosing Nothing)
+        _ -> return ()
       return ()
 
     (MapRequestEvent _ _ _ _ _ newWindow) -> withFocused $ \focused -> do
@@ -546,14 +543,8 @@ swallowEventHook parentQueries childQueries event = do
             isChild <- liftIO $ (fromIntegral newPid) `isChildOf` (fromIntegral oldPid)
             when isChild $ do
               -- TODO use https://hackage.haskell.org/package/xmonad-contrib-0.16/docs/XMonad-Layout-Hidden.html
-              windows (\ws -> (onWorkspace "NSP" (W.insertUp focused) ws)
-                  { W.current = (W.current ws) 
-                    { W.workspace = (W.workspace $ W.current ws) 
-                      { W.stack = (fmap (\x -> x { W.focus = newWindow}) $ W.stack . W.workspace . W.current $ ws) 
-                      }
-                    }
-                  })
-              XS.modify (\(SwallowedStorage m) -> SwallowedStorage $ M.insert newWindow focused m)
+              windows (updateStack (fmap (\x -> x { W.focus = newWindow })) . onWorkspace "NSP" (W.insertUp focused))
+              XS.modify (addSwallowedParent focused newWindow)
           _ -> return ()
         return ()
     _ -> return ()
@@ -562,25 +553,39 @@ swallowEventHook parentQueries childQueries event = do
     updateStack f ws =
       ws { W.current = (W.current ws) { W.workspace = (W.workspace $ W.current $ ws) { W.stack = (f $ W.stack . W.workspace . W.current $ ws) } } }
 
+    onWorkspace :: (Eq i, Eq s) => i -> (W.StackSet i l a s sd -> W.StackSet i l a s sd) -> (W.StackSet i l a s sd -> W.StackSet i l a s sd)
+    onWorkspace n f s = W.view (W.currentTag s) . f . W.view n $ s
 
-isChildOf :: Int -> Int -> IO Bool
-isChildOf child parent = do
-  output <- runProcessWithInput "pstree" ["-T", "-p", show parent] ""
-  return $ any ((show child) `isInfixOf`) $ lines output
+    isChildOf :: Int -> Int -> IO Bool
+    isChildOf child parent = do
+      output <- runProcessWithInput "pstree" ["-T", "-p", show parent] ""
+      return $ any ((show child) `isInfixOf`) $ lines output
 
 logOut :: [String] -> IO ()
 logOut x = catchAndNotifyAny (appendFile "/tmp/xmonad-event-out" ((intercalate " - " x) ++ "\n"))
 
-onWorkspace :: (Eq i, Eq s) => i -> (W.StackSet i l a s sd -> W.StackSet i l a s sd) -> (W.StackSet i l a s sd -> W.StackSet i l a s sd)
-onWorkspace n f s = W.view (W.currentTag s) . f . W.view n $ s
 
-newtype SwallowedStorage = SwallowedStorage (M.Map GHC.Word.Word64 GHC.Word.Word64) deriving Typeable
-instance ExtensionClass SwallowedStorage where
-  initialValue = SwallowedStorage mempty
+data SwallowingState = 
+  SwallowingState 
+    { currentlySwallowed :: (M.Map Window Window), -- ^ mapping from child window window to the currently swallowed parent window
+      stackBeforeWindowClosing :: Maybe (W.Stack Window) -- ^ current stack state right before DestroyWindowEvent is sent
+    } deriving (Typeable, Show)
 
-newtype BeforeClosingStackStorage = BeforeClosingStackStorage (Maybe (W.Stack Window)) deriving (Typeable, Show)
-instance ExtensionClass BeforeClosingStackStorage where
-  initialValue = BeforeClosingStackStorage Nothing
+getSwallowedParent :: Window -> SwallowingState -> Maybe Window
+getSwallowedParent win (SwallowingState { currentlySwallowed }) = M.lookup win currentlySwallowed
+
+addSwallowedParent :: Window -> Window -> SwallowingState -> SwallowingState
+addSwallowedParent parent child s@(SwallowingState { currentlySwallowed }) = s { currentlySwallowed = M.insert child parent currentlySwallowed }
+
+removeSwallowed :: Window -> SwallowingState -> SwallowingState
+removeSwallowed child s@(SwallowingState { currentlySwallowed }) = s { currentlySwallowed = M.delete child currentlySwallowed }
+
+setStackBeforeWindowClosing :: Maybe (W.Stack Window) -> SwallowingState -> SwallowingState
+setStackBeforeWindowClosing stack s = s { stackBeforeWindowClosing = stack }
+
+
+instance ExtensionClass SwallowingState where
+  initialValue = SwallowingState {currentlySwallowed = mempty, stackBeforeWindowClosing = Nothing }
 
 -- POLYBAR Kram -------------------------------------- {{{
 
