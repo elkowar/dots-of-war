@@ -14,6 +14,7 @@ import           Control.Arrow                  ( (>>>) )
 import           Data.List                      ( isPrefixOf
                                                 , isSuffixOf
                                                 , isInfixOf
+                                                , intercalate
                                                 )
 import qualified Foreign.C.Types
 import System.Exit (exitSuccess)
@@ -313,7 +314,8 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
     --, ("M-b",          launchWithBackgroundInstance (className =? "qutebrowser") "bwrap --bind / / --dev-bind /dev /dev --tmpfs /tmp --tmpfs /run qutebrowser")
     --, ("M-b",          safeSpawnProg "qutebrowser")
     , ("M-b",          safeSpawnProg "firefox")
-    , ("M-S-<Return>", launchWithBackgroundInstance (className =? "Alacritty") "alacritty")
+    , ("M-S-<Return>", spawn "alacritty")
+    --, ("M-S-<Return>", launchWithBackgroundInstance (className =? "Alacritty") "alacritty")
     ]
 
   miscBindings :: [(String, X ())]
@@ -518,13 +520,20 @@ mySwallowEventHook = swallowEventHook ([className =? "Alacritty", className =? "
 swallowEventHook :: [Query Bool] -> [Query Bool] -> Event -> X All
 swallowEventHook parentQueries childQueries event = do
   case event of
-    (DestroyWindowEvent _ _ _ _ eventId window) ->
-      when (eventId == window) $ do
-        (SwallowedStorage swallowed) <- XS.get
-        case M.lookup window swallowed of
-          Just win -> windows (\ws -> W.shiftWin (W.tag . W.workspace . W.current $ ws) (fromIntegral win) ws)
-          Nothing -> return ()
-        return ()
+    ConfigureEvent {} -> withWindowSet (XS.put . BeforeClosingStackStorage . W.stack . W.workspace . W.current)
+    (DestroyWindowEvent _ _ _ _ eventId window) -> when (eventId == window) $ do
+      (SwallowedStorage swallowed) <- XS.get
+      liftIO $ logOut [ show swallowed ]
+      case M.lookup window swallowed of
+        Just win -> do
+          BeforeClosingStackStorage maybeOldStack <- XS.get
+          case maybeOldStack of
+            Just oldStack -> do
+              windows (\ws -> onWorkspace "NSP" (W.delete' win) ws |> updateStack (const $ Just $ oldStack { W.focus = win }))
+              XS.modify (\(SwallowedStorage m) -> SwallowedStorage $ M.delete window m)
+            Nothing -> return ()
+        Nothing -> return ()
+      return ()
 
     (MapRequestEvent _ _ _ _ _ newWindow) -> withFocused $ \focused -> do
       parentMatches <- mapM (`runQuery` focused) parentQueries
@@ -536,23 +545,42 @@ swallowEventHook parentQueries childQueries event = do
           (Just (oldPid:_), Just (newPid:_)) -> do
             isChild <- liftIO $ (fromIntegral newPid) `isChildOf` (fromIntegral oldPid)
             when isChild $ do
-              windows (W.shiftWin "NSP" focused) -- TODO use https://hackage.haskell.org/package/xmonad-contrib-0.16/docs/XMonad-Layout-Hidden.html
+              -- TODO use https://hackage.haskell.org/package/xmonad-contrib-0.16/docs/XMonad-Layout-Hidden.html
+              windows (\ws -> (onWorkspace "NSP" (W.insertUp focused) ws)
+                  { W.current = (W.current ws) 
+                    { W.workspace = (W.workspace $ W.current ws) 
+                      { W.stack = (fmap (\x -> x { W.focus = newWindow}) $ W.stack . W.workspace . W.current $ ws) 
+                      }
+                    }
+                  })
               XS.modify (\(SwallowedStorage m) -> SwallowedStorage $ M.insert newWindow focused m)
           _ -> return ()
         return ()
     _ -> return ()
   return $ All True
+  where
+    updateStack f ws =
+      ws { W.current = (W.current ws) { W.workspace = (W.workspace $ W.current $ ws) { W.stack = (f $ W.stack . W.workspace . W.current $ ws) } } }
+
 
 isChildOf :: Int -> Int -> IO Bool
 isChildOf child parent = do
   output <- runProcessWithInput "pstree" ["-T", "-p", show parent] ""
   return $ any ((show child) `isInfixOf`) $ lines output
 
+logOut :: [String] -> IO ()
+logOut x = catchAndNotifyAny (appendFile "/tmp/xmonad-event-out" ((intercalate " - " x) ++ "\n"))
+
+onWorkspace :: (Eq i, Eq s) => i -> (W.StackSet i l a s sd -> W.StackSet i l a s sd) -> (W.StackSet i l a s sd -> W.StackSet i l a s sd)
+onWorkspace n f s = W.view (W.currentTag s) . f . W.view n $ s
+
 newtype SwallowedStorage = SwallowedStorage (M.Map GHC.Word.Word64 GHC.Word.Word64) deriving Typeable
 instance ExtensionClass SwallowedStorage where
   initialValue = SwallowedStorage mempty
 
-
+newtype BeforeClosingStackStorage = BeforeClosingStackStorage (Maybe (W.Stack Window)) deriving (Typeable, Show)
+instance ExtensionClass BeforeClosingStackStorage where
+  initialValue = BeforeClosingStackStorage Nothing
 
 -- POLYBAR Kram -------------------------------------- {{{
 
@@ -614,7 +642,6 @@ dropEndWhile test xs  = if test $ last xs then dropEndWhile test (init xs) else 
 
 catchAndNotifyAny :: IO () -> IO ()
 catchAndNotifyAny ioAction = catch ioAction (\(e :: SomeException) -> notify "Xmonad exception" (show e))
-
 
 getVisibleWorkspacesTagsOnMonitor :: ScreenId -> X [VirtualWorkspace]
 getVisibleWorkspacesTagsOnMonitor monitor = do
