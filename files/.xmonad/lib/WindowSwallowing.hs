@@ -34,7 +34,7 @@ swallowEventHook parentQueries childQueries event = do
         oldFloating          <- XS.gets floatingBeforeClosing
         case (maybeSwallowedParent, maybeOldStack) of
           (Just parent, Just oldStack) -> do
-            liftIO $ threadDelay 100000
+            --liftIO $ threadDelay 100000
             windows
               (\ws ->
                 updateStack (const $ Just $ oldStack { W.focus = parent })

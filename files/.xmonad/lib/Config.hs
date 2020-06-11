@@ -71,6 +71,7 @@ import XMonad.Layout.LayoutModifier
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run
 import XMonad.Util.SpawnOnce (spawnOnce)
+import qualified XMonad.Hooks.UrgencyHook as Urgency
 import XMonad.Util.WorkspaceCompare   ( getSortByXineramaPhysicalRule , getSortByIndex)
 
 import qualified Data.Monoid
@@ -227,14 +228,13 @@ myStartupHook = do
   spawnOnce "mailspring --background &"
   spawnOnce "redshift -P -O 5000 &"
   spawn "xset r rate 300 50 &" -- make key repeat quicker
-
   spawn "/home/leon/.screenlayout/dualscreen-stacked.sh"
   io $ threadDelay $ 1000 * 100
-  spawnOnce "picom --config ~/.config/picom.conf"  --no-fading-openclose"
+  spawnOnce "/home/leon/Downloads/picom --config /home/leon/.config/picom.conf --experimental-backends --backend xrender"  --no-fading-openclose"
   spawn "/home/leon/.config/polybar/launch.sh"
   spawnOnce "nitrogen --restore"
   spawnOnce "mailnag"
-  spawnOnce "flashfocus"
+  --spawnOnce "flashfocus"
   for_ ["led1", "led2"] $ \led -> safeSpawn "sudo" ["liquidctl", "set", led, "color", "fixed", "00ffff"]
 -- }}}
 
@@ -497,18 +497,21 @@ main = do
         , modMask            = myModMask
         , borderWidth        = 1
         , layoutHook         = myLayout
-        , logHook            = polybarLogHooks <+> logHook Desktop.desktopConfig <+> fadeInactiveLogHook 1 <+> logHook def
-        , startupHook        = myStartupHook <+> return () >> checkKeymap myConfig myKeys
-        , manageHook         = manageSpawn <+> myManageHook <+> manageHook def
+        , logHook            = mconcat [ polybarLogHooks, Ewmh.ewmhDesktopsLogHook, logHook Desktop.desktopConfig, logHook def]
+        , startupHook        = mconcat [ myStartupHook, Ewmh.ewmhDesktopsStartup, return () >> checkKeymap myConfig myKeys]
+        , manageHook         = mconcat [ manageSpawn, myManageHook, manageHook def]
         , focusedBorderColor = aqua
         , normalBorderColor  = "#282828"
-        , handleEventHook    = mySwallowEventHook <+> handleEventHook Desktop.desktopConfig
+        , handleEventHook    = mconcat [ mySwallowEventHook
+                                       , activateWindowEventHook
+                                       , handleEventHook Desktop.desktopConfig
+                                       , Ewmh.ewmhDesktopsEventHook
+                                       ]
         --, handleEventHook  = minimizeEventHook <+> handleEventHook def <+> hintsEventHook -- <+> Ewmh.fullscreenEventHook
         , mouseBindings = myMouseBindings <+> mouseBindings def
        }
 
   xmonad
-    $ Ewmh.ewmh
     $ Nav2d.withNavigation2DConfig def { Nav2d.defaultTiledNavigation = Nav2d.sideNavigation }
     $ docks
     $ myConfig
@@ -517,6 +520,18 @@ main = do
 
 
 mySwallowEventHook = WindowSwallowing.swallowEventHook ([className =? "Alacritty", className =? "Termite"]) ([return True])
+
+
+activateWindowEventHook :: Event -> X All
+activateWindowEventHook (ClientMessageEvent { ev_message_type = messageType, ev_window = window }) = withWindowSet $ \ws -> do
+  activateWindowAtom <- getAtom "_NET_ACTIVE_WINDOW"
+  when (messageType == activateWindowAtom) $
+    if window `elem` (concatMap (W.integrate' . W.stack . W.workspace) (W.current ws : W.visible ws))
+       then windows (W.focusWindow window)
+       else windows (W.shiftWin (W.tag $ W.workspace $ W.current ws) window)
+  return $ All True
+activateWindowEventHook _ = return $ All True
+
 
 
 -- POLYBAR Kram -------------------------------------- {{{
