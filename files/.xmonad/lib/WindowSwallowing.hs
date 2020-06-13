@@ -12,32 +12,26 @@ import           Data.Semigroup                 ( All(..) )
 import qualified Data.Map.Strict               as M
 import           Data.List                      ( isInfixOf )
 import           Control.Monad                  ( when )
-import           Control.Concurrent             ( threadDelay )
 
 
 swallowEventHook :: [Query Bool] -> [Query Bool] -> Event -> X All
 swallowEventHook parentQueries childQueries event = do
   case event of
-    ConfigureEvent{} -> do
-      withWindowSet
-        ( XS.modify
-        . setStackBeforeWindowClosing
-        . W.stack
-        . W.workspace
-        . W.current
-        )
-      withWindowSet (XS.modify . setFloatingBeforeWindowClosing . W.floating)
-    (DestroyWindowEvent _ _ _ _ eventId childWindow) ->
+    ConfigureEvent{} -> withWindowSet $ \ws -> do
+      XS.modify . setStackBeforeWindowClosing . currentStack $ ws
+      XS.modify . setFloatingBeforeWindowClosing . W.floating $ ws
+
+    DestroyWindowEvent { ev_event = eventId, ev_window = childWindow } ->
       when (eventId == childWindow) $ do
         maybeSwallowedParent <- XS.gets (getSwallowedParent childWindow)
         maybeOldStack        <- XS.gets stackBeforeWindowClosing
         oldFloating          <- XS.gets floatingBeforeClosing
         case (maybeSwallowedParent, maybeOldStack) of
           (Just parent, Just oldStack) -> do
-            --liftIO $ threadDelay 100000
             windows
               (\ws ->
-                updateStack (const $ Just $ oldStack { W.focus = parent })
+                updateCurrentStack
+                    (const $ Just $ oldStack { W.focus = parent })
                   $ onWorkspace "NSP" (W.delete' parent)
                   $ copyFloatingState childWindow parent
                   $ ws { W.floating = oldFloating }
@@ -48,8 +42,8 @@ swallowEventHook parentQueries childQueries event = do
           _ -> return ()
         return ()
 
-    (MapRequestEvent _ _ _ _ _ childWindow) -> withFocused $ \parentWindow ->
-      do
+    MapRequestEvent { ev_window = childWindow } ->
+      withFocused $ \parentWindow -> do
         parentMatches <- mapM (`runQuery` parentWindow) parentQueries
         childMatches  <- mapM (`runQuery` childWindow) childQueries
         when (or parentMatches && or childMatches) $ do
@@ -61,7 +55,7 @@ swallowEventHook parentQueries childQueries event = do
               when isChild $ do
                 -- TODO use https://hackage.haskell.org/package/xmonad-contrib-0.16/docs/XMonad-Layout-Hidden.html
                 windows
-                  ( updateStack (fmap (\x -> x { W.focus = childWindow }))
+                  (updateCurrentStack (fmap (\x -> x { W.focus = childWindow }))
                   . onWorkspace "NSP" (W.insertUp parentWindow)
                   . copyFloatingState parentWindow childWindow
                   )
@@ -70,19 +64,21 @@ swallowEventHook parentQueries childQueries event = do
           return ()
     _ -> return ()
   return $ All True
- where
-  updateStack f ws = ws
-    { W.current = (W.current ws)
-                    { W.workspace = (W.workspace $ W.current ws)
-                                      { W.stack = f
-                                                  . W.stack
-                                                  . W.workspace
-                                                  . W.current
-                                                  $ ws
-                                      }
-                    }
-    }
 
+
+updateCurrentStack
+  :: (Maybe (W.Stack a) -> Maybe (W.Stack a))
+  -> W.StackSet i l a sid sd
+  -> W.StackSet i l a sid sd
+updateCurrentStack f ws = ws
+  { W.current = (W.current ws)
+    { W.workspace = currentWsp { W.stack = f $ currentStack ws }
+    }
+  }
+  where currentWsp = W.workspace $ W.current ws
+
+currentStack :: W.StackSet i l a sid sd -> Maybe (W.Stack a)
+currentStack = W.stack . W.workspace . W.current
 
 copyFloatingState
   :: Ord a => a -> a -> W.StackSet i l a s sd -> W.StackSet i l a s sd
@@ -100,7 +96,7 @@ onWorkspace
 onWorkspace n f s = W.view (W.currentTag s) . f . W.view n $ s
 
 
--- | check if a given process is a child of another process.
+-- | check if a given process is a child of another process. This depends on "pstree" being in the PATH
 -- NOTE: this does not work if the child process does any kind of process-sharing.
 isChildOf
   :: Int -- ^ child PID
@@ -145,5 +141,5 @@ instance ExtensionClass SwallowingState where
                                  }
 
 
-
+fi :: (Integral a, Num b) => a -> b
 fi = fromIntegral
