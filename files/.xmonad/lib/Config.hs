@@ -500,7 +500,8 @@ main = do
         , logHook            = mconcat [ polybarLogHooks, Ewmh.ewmhDesktopsLogHook, logHook Desktop.desktopConfig, logHook def]
         , startupHook        = mconcat [ myStartupHook, Ewmh.ewmhDesktopsStartup, return () >> checkKeymap myConfig myKeys]
         , manageHook         = mconcat [ manageSpawn, myManageHook, manageHook def]
-        , focusedBorderColor = aqua
+        --, focusedBorderColor = aqua
+        , focusedBorderColor = "#427b58"
         , normalBorderColor  = "#282828"
         , handleEventHook    = mconcat [ mySwallowEventHook
                                        , activateWindowEventHook
