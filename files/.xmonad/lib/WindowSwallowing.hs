@@ -12,6 +12,7 @@ import           Data.Semigroup                 ( All(..) )
 import qualified Data.Map.Strict               as M
 import           Data.List                      ( isInfixOf )
 import           Control.Monad                  ( when )
+import qualified XMonad.Layout.Hidden          as Hidden
 
 
 swallowEventHook :: [Query Bool] -> [Query Bool] -> Event -> X All
@@ -28,17 +29,16 @@ swallowEventHook parentQueries childQueries event = do
         oldFloating          <- XS.gets floatingBeforeClosing
         case (maybeSwallowedParent, maybeOldStack) of
           (Just parent, Just oldStack) -> do
+            Hidden.popHiddenWindow parent
             windows
               (\ws ->
                 updateCurrentStack
                     (const $ Just $ oldStack { W.focus = parent })
-                  $ onWorkspace "NSP" (W.delete' parent)
                   $ copyFloatingState childWindow parent
                   $ ws { W.floating = oldFloating }
               )
-            XS.modify
-              (removeSwallowed childWindow . setStackBeforeWindowClosing Nothing
-              )
+            XS.modify $ removeSwallowed childWindow
+            XS.modify $ setStackBeforeWindowClosing Nothing
           _ -> return ()
         return ()
 
@@ -53,13 +53,12 @@ swallowEventHook parentQueries childQueries event = do
             (Just (parentPid : _), Just (childPid : _)) -> do
               isChild <- liftIO $ fi childPid `isChildOf` fi parentPid
               when isChild $ do
-                -- TODO use https://hackage.haskell.org/package/xmonad-contrib-0.16/docs/XMonad-Layout-Hidden.html
                 windows
                   (updateCurrentStack (fmap (\x -> x { W.focus = childWindow }))
-                  . onWorkspace "NSP" (W.insertUp parentWindow)
                   . copyFloatingState parentWindow childWindow
                   )
                 XS.modify (addSwallowedParent parentWindow childWindow)
+                Hidden.hideWindow parentWindow
             _ -> return ()
           return ()
     _ -> return ()
@@ -87,13 +86,6 @@ copyFloatingState from to ws = ws
                        (\r -> M.insert to r (W.floating ws))
                        (M.lookup from (W.floating ws))
   }
-
-onWorkspace
-  :: (Eq i, Eq s)
-  => i
-  -> (W.StackSet i l a s sd -> W.StackSet i l a s sd)
-  -> (W.StackSet i l a s sd -> W.StackSet i l a s sd)
-onWorkspace n f s = W.view (W.currentTag s) . f . W.view n $ s
 
 
 -- | check if a given process is a child of another process. This depends on "pstree" being in the PATH
