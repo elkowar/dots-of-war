@@ -520,7 +520,7 @@ main = do
 -- }}}
 
 
-mySwallowEventHook = WindowSwallowing.swallowEventHook ([className =? "Alacritty", className =? "Termite"]) ([return True])
+mySwallowEventHook = WindowSwallowing.swallowEventHook ([className =? "Alacritty", className =? "Termite", className =? "Thunar"]) ([return True])
 
 
 activateWindowEventHook :: Event -> X All
