@@ -1,6 +1,10 @@
 fish_vi_key_bindings
 # fish_default_key_bindings
 
+# disable truecolor for dvtm
+# set -e fish_term24bit
+#source /home/leon/.config/fish/gruvbox-colors.fish
+
 #set -U FZF_TMUX 1
 set -U FZF_DEFAULT_COMMANDS "--filepath-word --cycle"
 set -U FZF_PREVIEW_FILE_CMD "head -n 10 | bat --color=always --decorations=never"

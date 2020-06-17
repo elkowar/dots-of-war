@@ -26,14 +26,14 @@ def run_fan_check():
             # fan_speed = 60
         # else:
             # fan_speed = 100
-        if temp < 50:
-            fan_speed = 50
         if temp < 60:
-            fan_speed = 50
-        elif temp < 70:
-            fan_speed = 50
-        elif temp < 80:
             fan_speed = 60
+        if temp < 60:
+            fan_speed = 60
+        elif temp < 70:
+            fan_speed = 60
+        elif temp < 80:
+            fan_speed = 70
         else:
             fan_speed = 100
 

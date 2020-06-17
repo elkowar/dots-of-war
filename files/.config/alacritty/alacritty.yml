@@ -1,6 +1,6 @@
 env:
   # if not set, it supposedly check's if a alacritty entry exists and uses xterm-256color otherwise
-  #TERM: alacritty
+  # TERM: alacritty
   TERM: xterm-256color
 
 window:

@@ -58,7 +58,6 @@ import XMonad.Layout.WindowNavigation ( windowNavigation )
 import XMonad.Layout.ZoomRow
 import XMonad.Layout.ThreeColumns
 import XMonad.Layout.ResizableThreeColumns
-
 import XMonad.Layout.WindowSwitcherDecoration
 import XMonad.Layout.DraggingVisualizer
 
@@ -193,7 +192,7 @@ myLayout = avoidStruts
         ((rename "Tall"      $              spacingAndGaps $ mouseResizableTile         {draggerType = BordersDragger})
      ||| (rename "Horizon"   $              spacingAndGaps $ mouseResizableTileMirrored {draggerType = BordersDragger})
      ||| (rename "BSP"       $              spacingAndGaps $ borderResize $ emptyBSP)
-     ||| (rename "ThreeCol"  $ makeTabbed $ spacingAndGaps $ reflectHoriz $ ResizableThreeColMid 1 (3/100) (1/2) [])
+     ||| (rename "ThreeCol"  $ makeTabbed $ spacingAndGaps $ ResizableThreeColMid 1 (3/100) (1/2) [])
      ||| (rename "TabbedRow" $ makeTabbed $ spacingAndGaps $ zoomRow))
 
     vertScreenLayouts =
@@ -222,10 +221,9 @@ instance MTog.Transformer WINDOWDECORATION Window where
 myStartupHook :: X ()
 myStartupHook = do
   setWMName "LG3D" -- Java stuff hack
-  spawnOnce "nm-applet &"
-  spawnOnce "udiskie -s &" -- Mount USB sticks automatically. -s is smart systray mode: systray icon if something is mounted
+  --spawnOnce "nm-applet &"
+  --spawnOnce "udiskie -s &" -- Mount USB sticks automatically. -s is smart systray mode: systray icon if something is mounted
   spawnOnce "xfce4-clipman &"
-  spawnOnce "mailspring --background &"
   spawnOnce "redshift -P -O 5000 &"
   spawn "xset r rate 300 50 &" -- make key repeat quicker
   spawn "/home/leon/.screenlayout/dualscreen-stacked.sh"
