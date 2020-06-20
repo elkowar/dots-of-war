@@ -23,7 +23,9 @@ import qualified XMonad.Util.ExtensibleState as XS
 import qualified Rofi
 import qualified DescribedSubmap
 import qualified TiledDragging
-import qualified WindowSwallowing
+--import qualified WindowSwallowing
+
+import XMonad.Hooks.WindowSwallowing as WindowSwallowing
 
 
 import Data.Foldable                  ( for_ )
@@ -60,6 +62,7 @@ import XMonad.Layout.ThreeColumns
 import XMonad.Layout.ResizableThreeColumns
 import XMonad.Layout.WindowSwitcherDecoration
 import XMonad.Layout.DraggingVisualizer
+--import XMonad.Layout.Hidden as Hidden
 
 import           XMonad.Util.EZConfig           ( additionalKeysP
                                                 , removeKeysP
@@ -181,6 +184,7 @@ myLayout = avoidStruts
          $ ToggleLayouts.toggleLayouts (rename "Tabbed" . makeTabbed . spacingAndGaps $ ResizableTall 1 (3/100) (1/2) [])
          $ MTog.mkToggle1 WINDOWDECORATION
          $ draggingVisualizer
+         -- $ Hidden.hiddenWindows
          $ layoutHintsToCenter
          $ layouts
   where
@@ -518,7 +522,7 @@ main = do
 -- }}}
 
 
-mySwallowEventHook = WindowSwallowing.swallowEventHook ([className =? "Alacritty", className =? "Termite", className =? "Thunar"]) ([return True])
+mySwallowEventHook = WindowSwallowing.swallowEventHook [className =? "Alacritty", className =? "Termite", className =? "Thunar"] [return True]
 
 
 activateWindowEventHook :: Event -> X All

@@ -29,7 +29,7 @@ swallowEventHook parentQueries childQueries event = do
         oldFloating          <- XS.gets floatingBeforeClosing
         case (maybeSwallowedParent, maybeOldStack) of
           (Just parent, Just oldStack) -> do
-            Hidden.popHiddenWindow parent
+            --Hidden.popHiddenWindow parent
             windows
               (\ws ->
                 updateCurrentStack
@@ -58,7 +58,7 @@ swallowEventHook parentQueries childQueries event = do
                   . copyFloatingState parentWindow childWindow
                   )
                 XS.modify (addSwallowedParent parentWindow childWindow)
-                Hidden.hideWindow parentWindow
+                --Hidden.hideWindow parentWindow
             _ -> return ()
           return ()
     _ -> return ()
