@@ -1,0 +1,1 @@
+/home/leon/.local/share/omf/themes/lambda_better/fish_prompt.fish

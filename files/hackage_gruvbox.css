@@ -1,0 +1,267 @@
+/* ==UserStyle==
+@name           Haskellstuff
+@namespace      github.com/openstyles/stylus
+@version        1.0.0
+@description    A new userstyle
+@author         ElKowar
+@preprocessor   stylus
+==/UserStyle== */
+@-moz-document domain("hackage.haskell.org") {
+
+    :root {
+        --bg0: #1d2021;
+        --bg1: #222222;
+        --bg2: #282828;
+        --bg3: #504945;
+        --bg4: #202020;
+        --fg1: #ebdbb2;
+        --fg1: #d5c4a1;
+        --fg3: #a89984;
+        --col_blue: #83a598;
+        --col_aqua: #83c07c;
+        --col_yellow: #fabd2f;
+        --col_red: #fb4934;
+
+        --monospaced: "Jetbrains Mono";
+        --monospaced-size: 14px;
+        --monospaced-small: cozette;
+    }
+
+    * {
+        color: var(--fg1);
+        border-color: var(--fg1) !important;
+    }
+
+    #package-header {
+        border: none;
+        background-color: var(--bg1);
+        #page-menu li a {
+            color: var(--fg1);
+        }
+    }
+
+    body {
+        background-color: var(--bg2);
+        color: var(--fg1);
+    }
+
+
+    #package-header {
+        padding: 0.5rem;
+    }
+
+    a {
+        &[href]:link {
+            color: var(--col_blue);
+        }
+        &[href]:visited {
+            color: var(--col_aqua);
+        }
+    }
+    #footer {
+        display: none;
+    }
+
+
+    table.info,
+    #table-of-contents {
+        background-color: var(--bg1);
+        border: none;
+        box-shadow: 1px 1px 5px 0 rgba(0, 0, 0, 0.4);
+        padding: 1rem;
+    }
+
+
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    th,
+    .caption {
+        border: none !important;
+        color: var(--col_blue) !important;
+        a {
+            color: inherit !important;
+        }
+    }
+
+    #description,
+    #module-header,
+    #synopsis,
+    #interface {
+        /* surrounding element of a piece of documentation */
+        .top {
+            background-color: var(--bg2);
+            box-shadow: 0px 4px 5px -1px rgba(0, 0, 0, 0.3);
+            & > :last-child {
+                padding-bottom: 0.2rem;
+            }
+        }
+
+
+        .src,
+        pre,
+        code {
+            /*font-family: "Terminus (TTF)";*/
+            font-family: var(--monospaced);
+            font-size: var(--monospaced-size);
+            font-weight: normal !important;
+            .def {
+                font-weight: normal !important;
+            }
+        }
+
+        .src,
+        pre {
+            background-color: var(--bg1) !important;
+            padding: 0.5rem;
+            border: none !important;
+
+            .selflink {
+                display: none;
+            }
+            .link {
+                background: var(--col_aqua) !important;
+                color: var(--bg1) !important;
+                border: none;
+                margin: -0.4rem !important;
+                padding: 0.4rem !important;
+                margin-left: 1rem !important;
+            }
+        }
+
+
+        summary {
+            color: var(--col_aqua);
+            list-style-image: unset !important;
+        }
+
+
+
+        .key {
+            background: none;
+            border: none;
+            font-family: var(--monospaced-small);
+        }
+
+        #synopsis details .details-toggle {
+            background-color: var(--bg1);
+            box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+            .subs {
+                background: none;
+            }
+        }
+
+        .details-toggle-control {
+            background: none;
+            margin-left: -0.8rem !important;
+            &::after {
+                content: "+"
+            }
+        }
+    }
+
+    #search {
+        overflow: visible;
+        #search-form,
+        #search-results {
+            box-shadow: 3px 3px 10px -4px rgba(0, 0, 0, 0.3);
+            background-color: var(--bg2);
+            border: none;
+            overflow: hidden;
+            border-radius: 4px
+        }
+        #search-form input {
+            background-color: var(--bg1);
+            border: none;
+            padding: 1rem;
+            &::placeholder {
+                font-size: 1rem;
+                color: var(--fg3);
+            }
+        }
+        #search-results {
+            margin-top: 1rem;
+            background-color: var(--bg1);
+            padding: 1rem;
+        }
+    }
+
+    /* source view */
+    .hs-identifier {
+        color: var(--col_aqua);
+        &.hs-var {
+            color: var(--fg1);
+        }
+        &.hs-type {
+            color: var(--col_blue);
+        }
+    }
+    .hs-operator {
+        color: var(--col_blue);
+    }
+    .hs-keyword {
+        color: var(--col_red);
+    }
+    .hs-number,
+    .hs-glyph {
+        color: var(--col_blue);
+    }
+    .hs-string {
+        color: var(--fg1);
+    }
+    .hs-comment {}
+
+
+    /* module startpage */
+    #page-header {
+        border: none;
+        padding: 0.3rem 1rem
+    }
+    #properties {
+        background: var(--bg1) !important;
+        box-shadow: 3px 3px 10px -3px rgba(0, 0, 0, 0.4);
+        padding: 0.8rem;
+        a {
+            color: var(--col_aqua);
+        }
+    }
+    #readme-container {
+        pre {
+            background-color: var(--bg1);
+        }
+        .embedded-author-content {
+            border: none;
+        }
+    }
+
+
+    /* package search */
+    form input,
+    #table_wrapper.dataTables_wrapper #table_length select,
+    #table_wrapper.dataTables_wrapper #table_filter input {
+        background-color: var(--bg3);
+        border: none;
+        padding: 0.2rem 0.5rem;
+    }
+    #table_wrapper {
+        box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+        padding: 1rem;
+        table {
+            border: none;
+            & * {
+                background-color: var(--bg2) !important;
+                border: none;
+            }
+        }
+    }
+    #table_paginate {
+        a {
+            border: none;
+            background: var(--bg1) !important;
+            color: var(--fg1) !important;
+        }
+    }
+}

@@ -1,0 +1,2 @@
+/*@import "./colorschemes/gruvbox.rasi"*/
+@import "./colorschemes/teal.rasi"

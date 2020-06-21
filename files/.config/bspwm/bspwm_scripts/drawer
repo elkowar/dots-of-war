@@ -1,0 +1,107 @@
+#!/bin/bash
+
+# Config
+# ======
+
+# Where to look for wid files:
+TMPDIR="$XDG_RUNTIME_DIR/drawers.wids/"
+
+# Find and show/hide the window if it exists
+# ==========================================
+
+NAME=$1
+
+if [[ -e $TMPDIR$NAME ]]; then
+     read -r WINDOW < "$TMPDIR$NAME"
+
+    # Window exists? Show/hide it and we're done.
+    if xdotool getwindowname "$WINDOW" &> /dev/null; then
+        if xdotool search --onlyvisible . | grep -q "$WINDOW"; then
+            xdotool windowminimize "$WINDOW"
+        else
+            ~/.config/bspwm/bspwm_scripts/bringwindow -R "$WINDOW"
+        fi
+        exit
+    fi
+fi
+
+if [[ $# -lt 5 ]]; then
+    echo "Not enough args to launch a new $NAME."
+    exit 1
+fi
+
+# No window to show/hide, better create it. Do setup for that.
+# ============================================================
+
+# no xinerama for now
+CFG=($(xdotool getdisplaygeometry))
+SCR_WIDTH=${CFG[0]}
+SCR_HEIGHT=${CFG[1]}
+SCR_LEFT=0 #${CFG[2]}
+SCR_TOP=0 #${CFG[3]}
+
+SIDE=$2
+WIDTH=$3
+HEIGHT=$4
+
+shift 4
+
+# Handle fractions of screen size for width and height
+# ====================================================
+
+if [[ $WIDTH == *% ]]; then
+    WIDTH=${WIDTH:0:-1} # chomp '%'
+    WIDTH=$(( (WIDTH*10*SCR_WIDTH)/1000 ))
+fi
+
+if [[ $HEIGHT == *% ]]; then
+    HEIGHT=${HEIGHT:0:-1} # chomp '%'
+    HEIGHT=$(( (HEIGHT*10*SCR_HEIGHT)/1000 ))
+fi
+
+# Figure out where to put the window
+# ==================================
+
+TOP_ADJ=$(( (SCR_HEIGHT-HEIGHT)/2 ))
+LEFT_ADJ=$(( (SCR_WIDTH-WIDTH)/2 ))
+
+case $SIDE in
+    "left")
+        LEFT=$SCR_LEFT
+        TOP=$(( SCR_TOP + TOP_ADJ ))
+    ;;
+    "right")
+        LEFT=$(( SCR_WIDTH - WIDTH ))
+        TOP=$(( SCR_TOP + TOP_ADJ ))
+    ;;
+    "bottom")
+        LEFT=$(( SCR_LEFT + LEFT_ADJ ))
+        TOP=$(( SCR_HEIGHT - HEIGHT ))
+    ;;
+    "top")
+        LEFT=$(( SCR_LEFT + LEFT_ADJ ))
+        TOP=$SCR_TOP
+esac
+
+# Create the window
+# =================
+
+$@ &
+# await new window:
+countWins() { 
+    xdotool search --onlyvisible . 2> /dev/null | wc -l 
+}
+
+WIN_CNT="$(countWins)"
+while [[ $(countWins) = "$WIN_CNT" ]]; do sleep 0.1; done
+sleep 0.25
+
+# new window should now be active, make it our window:
+WINDOW="$(xdotool getactivewindow)"
+xdotool set_window --role "drawer" $WINDOW
+mkdir -p "$TMPDIR"
+echo "$WINDOW" > "$TMPDIR$NAME"
+
+border_width="$(xgetres awesome border_width)"
+which awesome-client &> /dev/null && echo "client.focus.floating = true; client.focus.border_width=$border_width" | awesome-client
+xdotool windowmove $WINDOW $LEFT $TOP windowsize $WINDOW $WIDTH $HEIGHT windowfocus $WINDOW windowraise $WINDOW

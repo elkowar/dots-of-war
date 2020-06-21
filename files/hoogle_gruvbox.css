@@ -1,0 +1,183 @@
+/* ==UserStyle==
+@name           hoogle-gruvbox
+@namespace      github.com/openstyles/stylus
+@version        1.0.0
+@description    A new userstyle
+@author         ElKowar
+@preprocessor   stylus
+==/UserStyle== */
+@-moz-document domain("hoogle.haskell.org") {
+
+    :root {
+        --bg0: #1d2021;
+        --bg1: #222222;
+        --bg2: #282828;
+        --bg3: #504945;
+        --bg4: #202020;
+        --fg1: #ebdbb2;
+        --fg1: #d5c4a1;
+        --fg3: #a89984;
+        --col_blue: #83a598;
+        --col_aqua: #83c07c;
+        --col_yellow: #fabd2f;
+        --col_red: #fb4934;
+
+        --monospaced: "Jetbrains Mono";
+        --monospaced-size: 14px;
+        --monospaced-small: cozette;
+    }
+
+    * {
+        color: var(--fg1);
+        border-color: var(--fg1) !important;
+    }
+
+    body {
+        background-color: var(--bg2);
+        color: var(--fg1);
+    }
+
+
+    #links {
+        border: none;
+        background-color: var(--bg0);
+        padding: 0.3rem;
+        * {
+            color: var(--fg1) !important;
+        }
+    }
+    #logo img {
+        display: inline-block;
+        opacity: 0;
+    }
+
+    a {
+        &[href]:link {
+            color: var(--col_blue);
+        }
+        &[href]:visited {
+            color: var(--col_aqua);
+        }
+    }
+    #footer {
+        display: none;
+    }
+
+    #example {
+        background-color: var(--bg1);
+        border: none !important;
+        color: var(--fg1);
+        padding: 1rem;
+    }
+
+    input {
+        background-color: var(--bg0);
+        border: unset;
+        border-color: var(--bg3);
+        padding: 0.2rem 1rem;;
+        transition: box-shadow 0.2s ease-in-out;
+        &[type="submit"]:hover {
+            box-shadow: 2px 2px 5px 0 rgba(0,0,0, 0.2);
+        }
+    }
+    #scope_chosen {
+        background-color: var(--bg0);
+        padding: 0.2rem;
+        > * {
+            background: none;
+            border: none;
+            box-shadow: none;
+        }
+        .chosen-drop {
+            background-color: var(--bg0);
+            box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.4);
+            padding: 0.5rem;
+            input {
+                border: none;
+            }
+            .no-results {
+                background: none;
+            }
+        }
+    }
+
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    th,
+    .caption {
+        border: none !important;
+        color: var(--col_blue) !important;
+        a {
+            color: inherit !important;
+        }
+    }
+
+    a {
+        color: var(--col_blue) !important;
+    }
+
+    .result {
+        a:hover {
+            background-color: inherit;
+        }
+        box-shadow: 1px 1px 5px 0 rgba(0, 0, 0, 0.3);
+        .from {
+            padding: 0.5rem 0.9rem;
+        }
+        .ans {
+            background-color: var(--bg0);
+            border: none;
+            padding: 0.3rem 1rem;
+            .name {
+                color: var(--col_aqua);
+                b {
+                    color: var(--col_aqua);
+                    font-weight: normal;
+                }
+            }
+        }
+    }
+    .doc.newline:not(:empty) {
+        background: none;
+        &::before {
+            margin-left: -0.8rem;
+            width: 1rem;
+            display: inline-block;
+            color: var(--col_aqua);
+            cursor: pointer;
+        }
+        &.shut::before {
+            content: "+";
+        }
+        &.open::before {
+            content: "-";
+        }
+    }
+
+    .minus {
+        margin-left: -1rem;
+    }
+    .minus,
+    .plus {
+        background: none !important;
+        &::after {
+            text-align: center;
+            width: 0.6rem;
+            height: 1rem;
+            margin: 0 0.2rem;
+            display: inline-block;
+            color: var(--col_aqua);
+            cursor: pointer;
+        }
+    }
+    .minus::after {
+        content: "-"
+    }
+    .plus::after {
+        content: "+"
+    }
+}
