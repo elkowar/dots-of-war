@@ -1,9 +1,0 @@
-#!/bin/sh
-#
-# As of 0.13, xmonad --recompile will look for a custom build script.
-
-set -e
-
-stack build :my-xmonad --verbosity error
-stack install :my-xmonad --local-bin-path bin/ --verbosity error
-mv bin/my-xmonad "$1"

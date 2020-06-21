@@ -1,6 +1,0 @@
-ilias      qutebrowser ilias.hs-heilbronn.de
-splan      qutebrowser "https://splan.hs-heilbronn.de/splan/?acc=false&og=725&pg=AIB4"
-youtube    qutebrowser youtube.de
-jira       qutebrowser jira-student.it.hs-heilbronn.de/secure/RapidBoard.jspa?projectKey=RUNDUM
-confluence qutebrowser https://confluence-student.it.hs-heilbronn.de/display/AIB/AIB_LabSWP_2020_SS_Rundum_Studium+Home
-bitbucket  qutebrowser https://bitbucket-student.it.hs-heilbronn.de/projects/LABAIB
