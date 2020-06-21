@@ -27,7 +27,7 @@
 
 /* unread indicators */
 .theme-dark .unread-2OHH1w:not(.selected-nT-gM3):before {
-    background: transparent;
+    background: #282828;
     opacity: 0.5;
     height: 50px;
     width: 50px;

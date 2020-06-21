@@ -16,3 +16,5 @@ xfce4
 yay
 .stack-work
 **/.surf/cache
+xmonad-x86_64-linux
+__pycache__

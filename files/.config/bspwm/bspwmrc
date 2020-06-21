@@ -1,0 +1,34 @@
+#! /bin/sh
+
+sxhkd &
+
+killall -q picom && picom --config ~/.config/picom.conf --experimental-backends  --no-fading-openclose &
+killall -q pasystray && pasystray &
+killall -q nm-applet && nm-applet &
+killall -q clipmenud && clipmenud &
+
+xset r rate 300 50 &
+/home/leon/.config/polybar/launch.sh &
+feh --bg-fill /home/leon/Bilder/wallpapers/mountains_with_clounds.jpg &
+
+bspc monitor -d 1 2 3 4 5 6 7 8 9 10
+
+bspc config border_width         2
+bspc config window_gap          14
+
+bspc config focus_follows_pointer true
+
+bspc config split_ratio          0.50
+bspc config borderless_monocle   false
+bspc config gapless_monocle      false
+bspc config automatic_scheme     alternate
+
+bspc rule -a mplayer2 state=floating
+bspc rule -a Kupfer.py focus=on
+bspc rule -a Screenkey manage=off
+bspc rule -a feh state=floating
+bspc rule -a Sxiv state=floating
+
+#bspc rule -a kitty_scratchpad sticky=on state=floating hidden=on
+#kitty --class kitty_scratchpad &
+

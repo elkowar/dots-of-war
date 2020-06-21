@@ -1,6 +1,6 @@
-import dracula.draw
+import gruvboxy.draw
 
-dracula.draw.blood(c, {
+gruvboxy.draw.blood(c, {
     'spacing': {
         'vertical': 4,
         'horizontal': 8
@@ -9,6 +9,9 @@ dracula.draw.blood(c, {
 
 # config.load_autoconfig()
 c.backend = 'webengine'
+
+c.scrolling.bar = "always" # "when-searching"
+c.content.user_stylesheets = "user.css"
 
 config.unbind("<Ctrl-tab>")
 config.unbind("d")
@@ -42,10 +45,10 @@ c.editor.command  = ["alacritty", "-e", "vim", "{file}"]
 
 # c.auto_save.session = True
 
-c.url.searchengines = { 
-    "DEFAULT": "https://duckduckgo.com/?q={}", 
-    "wa": "https://wiki.archlinux.org/?search={}", 
-    "y": "https://youtube.com/results?search_query={}", 
+c.url.searchengines = {
+    "DEFAULT": "https://duckduckgo.com/?q={}",
+    "wa": "https://wiki.archlinux.org/?search={}",
+    "y": "https://youtube.com/results?search_query={}",
     "g": "https://google.com/search?q={}",
     "h": "https://hoogle.haskell.org/?hoogle={}",
     "w": "https://wikipedia.org/wiki/Special:Search/{}"
