@@ -23,9 +23,9 @@ import qualified XMonad.Util.ExtensibleState as XS
 import qualified Rofi
 import qualified DescribedSubmap
 import qualified TiledDragging
---import qualified WindowSwallowing
+import qualified WindowSwallowing
 
-import XMonad.Hooks.WindowSwallowing as WindowSwallowing
+--import XMonad.Hooks.WindowSwallowing as WindowSwallowing
 
 
 import Data.Foldable                  ( for_ )
@@ -444,6 +444,8 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
     , ("Kill all other copies",   killAllOtherCopies)
     , ("toggle polybar",          sendMessage ToggleStruts >> safeSpawn "polybar-msg" ["cmd", "toggle"])
     , ("get debug data",          debugStackFullString >>= (\str -> safeSpawn "xmessage" [str]))
+    , ("get full stackset",       withWindowSet (\ws -> spawn $ "echo '" ++ show (W.floating ws) ++ "\n" ++ show (W.current ws) ++ "' | xclip -in -selection clipboard"))
+    , ("asdf", windows (\ws -> ws {W.floating = M.empty }))
     ]
 
 
@@ -522,7 +524,7 @@ main = do
 -- }}}
 
 
-mySwallowEventHook = WindowSwallowing.swallowEventHook [className =? "Alacritty", className =? "Termite", className =? "Thunar"] [return True]
+mySwallowEventHook = WindowSwallowing.swallowEventHook (className =? "Alacritty" <||> className =? "Termite" <||> className =? "Thunar") (return True)
 
 
 activateWindowEventHook :: Event -> X All
@@ -530,8 +532,12 @@ activateWindowEventHook (ClientMessageEvent { ev_message_type = messageType, ev_
   activateWindowAtom <- getAtom "_NET_ACTIVE_WINDOW"
   when (messageType == activateWindowAtom) $
     if window `elem` (concatMap (W.integrate' . W.stack . W.workspace) (W.current ws : W.visible ws))
-       then windows (W.focusWindow window)
-       else windows (W.shiftWin (W.tag $ W.workspace $ W.current ws) window)
+      then windows (W.focusWindow window)
+      else do
+        shouldRaise <- runQuery (className =? "discord" <||> className =? "web.whatsapp.com") window
+        if shouldRaise
+           then windows (W.shiftWin (W.tag $ W.workspace $ W.current ws) window)
+           else windows (W.focusWindow window)
   return $ All True
 activateWindowEventHook _ = return $ All True
 
