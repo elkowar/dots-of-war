@@ -102,11 +102,7 @@ swallowEventHook parentQueries childQueries event = do
 
                 windows
                   ( W.modify' (\x -> x { W.focus = childWindow })
-                  . copyFloatingState parentWindow childWindow
-                  )
-                windows
-                  (\ws ->
-                    ws { W.floating = M.delete parentWindow (W.floating ws) }
+                  . moveFloatingState parentWindow childWindow
                   )
                 XS.modify (addSwallowedParent parentWindow childWindow)
             _ -> return ()
@@ -142,12 +138,9 @@ swallowEventHook parentQueries childQueries event = do
               (\ws ->
                 updateCurrentStack
                     (const $ Just $ oldStack { W.focus = parent })
-                  $ copyFloatingState childWindow parent
+                  $ moveFloatingState childWindow parent
                   $ ws { W.floating = oldFloating }
               )
-            windows
-              (\ws -> ws { W.floating = M.delete childWindow (W.floating ws) })
-
             -- after restoring, we remove the information about the swallowing from the state.
             XS.modify $ removeSwallowed childWindow
             XS.modify $ setStackBeforeWindowClosing Nothing
@@ -168,17 +161,17 @@ currentStack :: W.StackSet i l a sid sd -> Maybe (W.Stack a)
 currentStack = W.stack . W.workspace . W.current
 
 
--- | copy the floating related state of one window to another window in a StackSet.
-copyFloatingState
+-- | move the floating state from one window to another, sinking the original window
+moveFloatingState
   :: Ord a
-  => a -- ^ window to copy from
-  -> a -- ^ window to copy to
+  => a -- ^ window to move from
+  -> a -- ^ window to move to
   -> W.StackSet i l a s sd
   -> W.StackSet i l a s sd
-copyFloatingState from to ws = ws
-  { W.floating = maybe (M.delete to (W.floating ws))
-                       (\r -> M.insert to r (W.floating ws))
-                       (M.lookup from (W.floating ws))
+moveFloatingState from to ws = ws
+  { W.floating = M.delete from $ maybe (M.delete to (W.floating ws))
+                                       (\r -> M.insert to r (W.floating ws))
+                                       (M.lookup from (W.floating ws))
   }
 
 
