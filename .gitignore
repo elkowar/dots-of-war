@@ -19,3 +19,6 @@ yay
 xmonad-x86_64-linux
 __pycache__
 **/kitty/kitty-themes
+files/.xmonad/xmonad
+files/.xmonad/xmonad-contrib
+files/.xmonad/xmonad-x86_64-linux
