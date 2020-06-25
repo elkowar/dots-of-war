@@ -97,6 +97,7 @@ import qualified XMonad.StackSet                     as W
 import qualified XMonad.Util.XSelection              as XSel
 import           XMonad.Util.WindowProperties
 import qualified XMonad.Layout.PerScreen             as PerScreen
+import           XMonad.Layout.WindowArranger
 {-# ANN module "HLint: ignore Redundant $" #-}
 {-# ANN module "HLint: ignore Redundant bracket" #-}
 {-# ANN module "HLint: ignore Move brackets to avoid $" #-}
@@ -524,12 +525,15 @@ main = do
 -- }}}
 
 
-mySwallowEventHook = WindowSwallowing.swallowEventHook (className =? "Alacritty" <||> className =? "Termite" <||> className =? "Thunar") (return True)
+mySwallowEventHook = WindowSwallowing.swallowEventHook 
+  (className =? "Alacritty" <||> className =? "Termite" <||> className =? "Thunar") 
+  (return True)
 
 
 activateWindowEventHook :: Event -> X All
 activateWindowEventHook (ClientMessageEvent { ev_message_type = messageType, ev_window = window }) = withWindowSet $ \ws -> do
   activateWindowAtom <- getAtom "_NET_ACTIVE_WINDOW"
+
   when (messageType == activateWindowAtom) $
     if window `elem` (concatMap (W.integrate' . W.stack . W.workspace) (W.current ws : W.visible ws))
       then windows (W.focusWindow window)
@@ -537,6 +541,7 @@ activateWindowEventHook (ClientMessageEvent { ev_message_type = messageType, ev_
         shouldRaise <- runQuery (className =? "discord" <||> className =? "web.whatsapp.com") window
         if shouldRaise
            then windows (W.shiftWin (W.tag $ W.workspace $ W.current ws) window)
+           -- TODO make this respect the independentScreen stuff, such that it doesn't raise a workspace on the wrong monitro
            else windows (W.focusWindow window)
   return $ All True
 activateWindowEventHook _ = return $ All True

@@ -10,4 +10,4 @@ I might organize them better at some point, but not now.
 In here, you'll find an absolutely unnecessarily complex XMonad setup, and a bunch of other stuff.
 
 If you're still reading this, then you are either very stubborn, or very interested in looking at
-a piece of my setup. In that case,... good look.
+a piece of my setup. In that case... good luck.
