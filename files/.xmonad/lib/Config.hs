@@ -511,6 +511,7 @@ main = do
         , handleEventHook    = mconcat [ mySwallowEventHook
                                        , activateWindowEventHook
                                        , handleEventHook Desktop.desktopConfig
+                                       , fullscreenFixEventHook
                                        , Ewmh.ewmhDesktopsEventHook
                                        ]
         --, handleEventHook  = minimizeEventHook <+> handleEventHook def <+> hintsEventHook -- <+> Ewmh.fullscreenEventHook
@@ -545,6 +546,27 @@ activateWindowEventHook (ClientMessageEvent { ev_message_type = messageType, ev_
            else windows (W.focusWindow window)
   return $ All True
 activateWindowEventHook _ = return $ All True
+
+
+
+
+-- | Fixes fullscreen behaviour of chromium based apps by quickly applying and undoing a resize.
+-- This causes chromium to recalculate the fullscreen window 
+-- dimensions to match the actual "windowed fullscreen" dimensions.
+fullscreenFixEventHook :: Event -> X All
+fullscreenFixEventHook (ClientMessageEvent _ _ _ dpy win typ (_:dats)) = do
+  wmstate <- getAtom "_NET_WM_STATE"
+  fullscreen <- getAtom "_NET_WM_STATE_FULLSCREEN"
+  when (typ == wmstate && fromIntegral fullscreen `elem` dats) $ do
+    withWindowAttributes dpy win $ \attrs ->
+      liftIO $ resizeWindow dpy win (fromIntegral $ wa_width attrs - 1) (fromIntegral $ wa_height attrs)
+    withWindowAttributes dpy win $ \attrs ->
+      liftIO $ resizeWindow dpy win (fromIntegral $ wa_width attrs + 1) (fromIntegral $ wa_height attrs)
+  return $ All True
+fullscreenFixEventHook _ = return $ All True
+  
+
+
 
 
 

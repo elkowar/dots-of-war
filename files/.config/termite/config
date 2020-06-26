@@ -7,6 +7,8 @@ font = Terminus (TTF) 12
 ;font = jetbrains mono Nerd Font 12
 ;font = monospace 13
 
+dynamic_title = false
+
 [colors]
 # hard contrast: background = #1d2021
 background = rgba(40, 40, 40, 1)
