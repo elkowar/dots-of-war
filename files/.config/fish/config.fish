@@ -79,3 +79,5 @@ fenv source '$HOME/.nix-profile/etc/profile.d/nix.sh'
 #bass source '$HOME/.nix-profile/etc/profile.d/nix.sh' &
 set -g NIX_PATH "$HOME/.nix-defexpr/channels:$NIX_PATH"
 fenv source "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
+#eval (direnv hook fish)
+
