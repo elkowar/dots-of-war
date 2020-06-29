@@ -75,3 +75,7 @@ end
 set -x EDITOR "nvim"
 set -x FFF_TRASH_CMD "trash" # make fff's trash function use trash-cli
 
+fenv source '$HOME/.nix-profile/etc/profile.d/nix.sh'
+#bass source '$HOME/.nix-profile/etc/profile.d/nix.sh' &
+set -g NIX_PATH "$HOME/.nix-defexpr/channels:$NIX_PATH"
+fenv source "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"

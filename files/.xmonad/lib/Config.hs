@@ -205,8 +205,8 @@ myLayout = avoidStruts
      ||| (rename "Horizon"  $               spacingAndGaps $ mouseResizableTileMirrored {draggerType = BordersDragger}))
 
     rename n = renamed [Replace n]
-    spacingAndGaps = let intGap = 10 :: Integer
-                         border = Border intGap intGap intGap intGap
+    spacingAndGaps = let gap = 10
+                         border = Border gap gap gap gap
                      in spacingRaw False border True border True
 
     -- | transform a layout into supporting tabs
