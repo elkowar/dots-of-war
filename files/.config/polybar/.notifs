@@ -1,0 +1,503 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@LegendOfMiracles#1719 I&#39;m top
+
+
+
+
+
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+
+Ich brauch 15 min länger xD‎‏ - ‪14:46‬
+
+Also 15 15‎‏ - ‪14:46‬
+
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Er packt auch die Parameter aus und ruft dann die Methode auf.
+
+
+
+
+
+Celine Zippert‎: Hier noch in light‎
+
+
+Niklas Rennhofer‎: danke‎
+
+
+
+
+
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+
+
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+
+Read them by running the command 'home-manager news'.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+
+Read them by running the command 'home-manager news'.
+
+
+Read them by running the command 'home-manager news'.
+
+
+Read them by running the command 'home-manager news'.
+
+
+let alac = pkgs.alacritty in
+nixpkgs.overlays = [
+(
+self: super: {
+alacritty =
+(
+pkgs.writeScriptBin &quot;alacritty&quot; &#39;&#39;
+#!/bin/sh
+exec nixGLIntel ${alac}/bin/alacritty &quot;$@&quot;
+&#39;&#39;
+);
+}
+)
+];```
+
+Read them by running the command 'home-manager news'.
+
+
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+
+
+Read them by running the command 'home-manager news'.
+
+
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+
+
+
+
+
+
+
+
+Read them by running the command 'home-manager news'.
+
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+
+Read them by running the command 'home-manager news'.
+
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+
+
+Read them by running the command 'home-manager news'.
+
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+
+
+
+
+
+@ElKowar#4689 oohhh where did u find this beauty
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+
+Read them by running the command 'home-manager news'.
+
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+
+
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+
+
+
+Read them by running the command 'home-manager news'.
+
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+
+Read them by running the command 'home-manager news'.
+
+```zsh
+PROMPT=&#39;0,000000{11}┌─
+└─%(#.0,000000{red}
+```
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+
+
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+
+Read them by running the command 'home-manager news'.
+
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+
+Read them by running the command 'home-manager news'.
+

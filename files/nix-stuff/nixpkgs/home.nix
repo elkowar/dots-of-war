@@ -1,8 +1,24 @@
+# https://nixos.wiki/wiki/Wrappers_vs._Dotfiles
+# https://nixos.org/nixos/manual/index.html#sec-writing-modules
+
+# do this to change to fork
+# nix-channel --add https://github.com/ElKowar/home-manager/archive/alacritty-package-option.tar.gz home-manager
+# nix-channel --update
+# nix-env -u home-manager
+
 { config, pkgs, ... }:
 let
   elkowar_local = import ./local/default.nix {};
+  myConf = import ./myConfig.nix;
 in
 {
+  nixpkgs.config.packageOverrides = pkgs: {
+    nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
+      inherit pkgs;
+    };
+  };
+
+
   home.packages = [
     elkowar_local.bashtop
     pkgs.htop
@@ -19,9 +35,10 @@ in
 
   programs = {
     home-manager.enable = true;
-    #alacritty = import ./config/alacritty.nix; # <- https://github.com/guibou/nixGL
+    alacritty = import ./config/alacritty.nix { inherit pkgs; inherit myConf; }; # <- https://github.com/guibou/nixGL
     #firefox = import ./config/firefox.nix;
     feh = import ./config/feh.nix;
+    zsh = import ./config/zsh.nix { inherit pkgs; inherit myConf; };
     lsd = {
       enable = true;
       enableAliases = true;
@@ -53,12 +70,6 @@ in
       #enableNixDirenvIntegration = true;
     };
   };
-
-  services = {
-    kdeconnect.enable = true;
-  };
-
-
 
   home.username = "leon";
   home.homeDirectory = "/home/leon";
