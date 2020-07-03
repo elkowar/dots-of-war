@@ -20,7 +20,8 @@ git_status() {
 
   if [ ! -z $BRANCH ]; then
     echo -n "(%F{$__bright_cyan}$BRANCH"
-    [ ! -z "$(git status --short)" ] && echo -n "%F{$__bright_white}*%f)"
+    [ ! -z "$(git status --short)" ] && echo -n "%F{$__bright_white}*%f"
+    echo -n ")"
   fi
 }
 
