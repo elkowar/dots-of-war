@@ -26,7 +26,7 @@ git_status() {
 
 function _my_prompt() {
 
-  echo -n "╭───"
+  echo -n "%F{$__bright_white}╭───"
   echo -n "%F{$__bright_cyan}$USER"
   echo -n "%F{$__bright_white} in"
   echo -n "%F{$__bright_green} $(dir)"
