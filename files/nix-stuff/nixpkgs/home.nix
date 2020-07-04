@@ -19,16 +19,17 @@ in
   };
 
 
-  home.packages = [
+  home.packages = with pkgs; [
     elkowar_local.bashtop
-    pkgs.htop
-    pkgs.direnv
-    pkgs.rnix-lsp
-    pkgs.nix-prefetch-git
-    pkgs.gtop
-    pkgs.simplescreenrecorder
-    pkgs.bat
-    pkgs.websocat
+    htop
+    direnv
+    rnix-lsp
+    nix-prefetch-git
+    gtop
+    simplescreenrecorder
+    bat
+    fontforge
+    websocat
     #pkgs.timg
   ];
 
