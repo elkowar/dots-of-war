@@ -19,6 +19,7 @@
       unfocused_hollow = true;
     };
     shell = "/home/leon/.nix-profile/bin/zsh";
+    #shell = "/usr/bin/fish";
     mouse = {
       double_click.threshold = 300;
       triple_click.threshold = 300;

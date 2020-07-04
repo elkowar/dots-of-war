@@ -30,7 +30,7 @@ in
     bat
     fontforge
     websocat
-    zsh-completions
+    #zsh-completions
     niv
     #pkgs.timg
   ];
@@ -42,6 +42,8 @@ in
     #firefox = import ./config/firefox.nix;
     feh = import ./config/feh.nix;
     zsh = import ./config/zsh.nix { inherit pkgs; inherit myConf; };
+
+
     lsd = {
       enable = true;
       enableAliases = true;

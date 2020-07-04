@@ -87,11 +87,14 @@ let
     zstyle ':fzf-tab:complete:cd:*' extra-opts --preview=$extract'lsd -1 --color=always $realpath'
     zstyle ':fzf-tab:complete:ls:*' extra-opts --preview=$extract'lsd -1 --color=always $realpath'
 
+
   '';
 
 in
 {
   enable = true;
+
+
   enableAutosuggestions = true;
   enableCompletion = true;
   #defaultKeymap = "viins";
@@ -104,8 +107,18 @@ in
 
   localVariables = {
     #ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE = "bg=${myConf.colors.accentDark}"; # why does this not work D:
-    #ZSH_AUTOSUGGEST_USE_ASYNC = 1;
+    ZSH_AUTOSUGGEST_USE_ASYNC = 1;
   };
+
+  initExtraBeforeCompInit = ''
+    zstyle ':completion:*' menu select
+    zstyle ':completion::complete:*' gain-privileges 1
+    zstyle ':completion:*' list-prompt ""
+    zstyle ':completion:*' select-prompt ""
+    zmodload zsh/complist
+
+    fpath+=( /usr/share/zsh/site-functions/ )
+  '';
 
   initExtra = ''
     setopt nobeep
@@ -114,15 +127,8 @@ in
     autoload -Uz colors && colors
     autoload -Uz promptinit && promptinit
 
-    autoload -U compinit 
-    zstyle ':completion:*' menu select
-    zstyle ':completion::complete:*' gain-privileges 1
-    zstyle ':completion:*' list-prompt ""
-    zstyle ':completion:*' select-prompt ""
-    zmodload zsh/complist
 
-    compinit
-    _comp_options+=(globdots)
+    #_comp_options+=(globdots)
 
     # enable cdr command
     autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
@@ -147,75 +153,14 @@ in
   '';
 
 
-  plugins =
-    let
-      sources = import ./zsh/nix/sources.nix;
-    in
-      [
-        { name = "fzf-tab"; src = sources.fzf-tab; }
-        { name = "zsh-autosuggestions"; src = sources.zsh-autosuggestions; }
-        { name = "history-substring-search"; src = sources.zsh-history-substring-search; }
-        { name = "zsh-abbr"; src = sources.zsh-abbr; }
-        { name = "fast-syntax-highlighting"; src = sources.fast-syntax-highlighting; }
-      ]
-      ++ [
-        #{
-        #name = "zsh-completions";
-        #src = pkgs.fetchFromGitHub {
-        #owner = "zsh-users";
-        #repo = "zsh-completions";
-        #rev = "0.32.0";
-        #sha256 = "12l9wrx0aysyj62kgp5limglz0nq73w8c415wcshxnxmhyk6sw6d";
-        #};
-        #}
-
-
-        #{
-        #name = "fzf-tab";
-        #src = pkgs.fetchFromGitHub {
-        #owner = "Aloxaf";
-        #repo = "fzf-tab";
-        #rev = "d92299baafdf197c93a88e54f9bbc1c8bb31d427";
-        #sha256 = "046fbhp5777iwl6n901db84bbmxbjgnh5gv9yqy9x15s8ikagzdl";
-        #};
-        #}
-        #{
-        #name = "zsh-autosuggestions";
-        #src = pkgs.fetchFromGitHub {
-        #owner = "zsh-users";
-        #repo = "zsh-autosuggestions";
-        #rev = "v0.6.4";
-        #sha256 = "0h52p2waggzfshvy1wvhj4hf06fmzd44bv6j18k3l9rcx6aixzn6";
-        #};
-        #}
-
-        #{
-        #name = "history-substring-search";
-        #src = pkgs.fetchFromGitHub {
-        #owner = "zsh-users";
-        #repo = "zsh-history-substring-search";
-        #rev = "v1.0.2";
-        #sha256 = "0y8va5kc2ram38hbk2cibkk64ffrabfv1sh4xm7pjspsba9n5p1y";
-        #};
-        #}
-        #{
-          #name = "zsh-abbr";
-          #src = pkgs.fetchFromGitHub {
-            #owner = "olets";
-            #repo = "zsh-abbr";
-            #rev = "v3.3.3";
-            #sha256 = "0aln7ashadbgharfn4slhimbw624ai82p4yizsxwvz70y4dv0wpg";
-          #};
-        #}
-
-        #{
-          #name = "fast-syntax-highlighting";
-          #src = pkgs.fetchFromGitHub {
-            #owner = "zdharma";
-            #repo = "fast-syntax-highlighting";
-            #rev = "v1.55";
-            #sha256 = "0h7f27gz586xxw7cc0wyiv3bx0x3qih2wwh05ad85bh2h834ar8d";
-          #};
-        #}
-      ];
+  plugins = let
+    sources = import ./zsh/nix/sources.nix;
+  in
+    [
+      { name = "fzf-tab"; src = sources.fzf-tab; }
+      { name = "zsh-autosuggestions"; src = sources.zsh-autosuggestions; }
+      { name = "history-substring-search"; src = sources.zsh-history-substring-search; }
+      { name = "zsh-abbr"; src = sources.zsh-abbr; }
+      { name = "fast-syntax-highlighting"; src = sources.fast-syntax-highlighting; }
+    ];
 }
