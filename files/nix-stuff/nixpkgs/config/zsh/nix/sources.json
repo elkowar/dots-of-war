@@ -1,0 +1,86 @@
+{
+    "fast-syntax-highlighting": {
+        "branch": "master",
+        "description": "(Short name F-Sy-H). Syntax-highlighting for Zshell – fine granularity, number of features, 40 work hours themes",
+        "homepage": "http://zdharma.org",
+        "owner": "zdharma",
+        "repo": "fast-syntax-highlighting",
+        "rev": "865566ce48cfd9bb5cdbaf5b1a74b0a675f4ccd4",
+        "sha256": "00d6nssh73k26w69fdp8iff1xghyr8ziy5w5a2li0z9lvm6j0nik",
+        "type": "tarball",
+        "url": "https://github.com/zdharma/fast-syntax-highlighting/archive/865566ce48cfd9bb5cdbaf5b1a74b0a675f4ccd4.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "fzf-tab": {
+        "branch": "master",
+        "description": "Replace zsh's default completion selection menu with fzf!",
+        "homepage": null,
+        "owner": "Aloxaf",
+        "repo": "fzf-tab",
+        "rev": "d92299baafdf197c93a88e54f9bbc1c8bb31d427",
+        "sha256": "046fbhp5777iwl6n901db84bbmxbjgnh5gv9yqy9x15s8ikagzdl",
+        "type": "tarball",
+        "url": "https://github.com/Aloxaf/fzf-tab/archive/d92299baafdf197c93a88e54f9bbc1c8bb31d427.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "niv": {
+        "branch": "master",
+        "description": "Easy dependency management for Nix projects",
+        "homepage": "https://github.com/nmattia/niv",
+        "owner": "nmattia",
+        "repo": "niv",
+        "rev": "f73bf8d584148677b01859677a63191c31911eae",
+        "sha256": "0jlmrx633jvqrqlyhlzpvdrnim128gc81q5psz2lpp2af8p8q9qs",
+        "type": "tarball",
+        "url": "https://github.com/nmattia/niv/archive/f73bf8d584148677b01859677a63191c31911eae.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "nixpkgs": {
+        "branch": "nixos-19.09",
+        "description": "A read-only mirror of NixOS/nixpkgs tracking the released channels. Send issues and PRs to",
+        "homepage": "https://github.com/NixOS/nixpkgs",
+        "owner": "NixOS",
+        "repo": "nixpkgs-channels",
+        "rev": "289466dd6a11c65a7de4a954d6ebf66c1ad07652",
+        "sha256": "0r5ja052s86fr54fm1zlhld3fwawz2w1d1gd6vbvpjrpjfyajibn",
+        "type": "tarball",
+        "url": "https://github.com/NixOS/nixpkgs-channels/archive/289466dd6a11c65a7de4a954d6ebf66c1ad07652.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "zsh-abbr": {
+        "branch": "master",
+        "description": "fish-like abbreviation management for zsh, enhanced",
+        "homepage": "",
+        "owner": "olets",
+        "repo": "zsh-abbr",
+        "rev": "703ba651e4f9c0ae18402e2462177e6253585386",
+        "sha256": "0aln7ashadbgharfn4slhimbw624ai82p4yizsxwvz70y4dv0wpg",
+        "type": "tarball",
+        "url": "https://github.com/olets/zsh-abbr/archive/703ba651e4f9c0ae18402e2462177e6253585386.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "zsh-autosuggestions": {
+        "branch": "master",
+        "description": "Fish-like autosuggestions for zsh",
+        "homepage": null,
+        "owner": "zsh-users",
+        "repo": "zsh-autosuggestions",
+        "rev": "ae315ded4dba10685dbbafbfa2ff3c1aefeb490d",
+        "sha256": "0h52p2waggzfshvy1wvhj4hf06fmzd44bv6j18k3l9rcx6aixzn6",
+        "type": "tarball",
+        "url": "https://github.com/zsh-users/zsh-autosuggestions/archive/ae315ded4dba10685dbbafbfa2ff3c1aefeb490d.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "zsh-history-substring-search": {
+        "branch": "master",
+        "description": "🐠 ZSH port of Fish history search (up arrow)",
+        "homepage": "",
+        "owner": "zsh-users",
+        "repo": "zsh-history-substring-search",
+        "rev": "0f80b8eb3368b46e5e573c1d91ae69eb095db3fb",
+        "sha256": "0y8va5kc2ram38hbk2cibkk64ffrabfv1sh4xm7pjspsba9n5p1y",
+        "type": "tarball",
+        "url": "https://github.com/zsh-users/zsh-history-substring-search/archive/0f80b8eb3368b46e5e573c1d91ae69eb095db3fb.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    }
+}

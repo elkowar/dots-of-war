@@ -30,6 +30,8 @@ in
     bat
     fontforge
     websocat
+    zsh-completions
+    niv
     #pkgs.timg
   ];
 

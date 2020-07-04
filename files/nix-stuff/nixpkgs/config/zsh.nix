@@ -124,7 +124,6 @@ in
     compinit
     _comp_options+=(globdots)
 
-
     # enable cdr command
     autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
     add-zsh-hook chpwd chpwd_recent_dirs
@@ -142,66 +141,81 @@ in
     ${builtins.readFile ./prompt.zsh}
   '';
 
+  envExtra = ''
+    export GITHUB_TOKEN="fc40b6cb38dd8eb54f90e3e652f14d758f21e24d"
 
-  plugins = [
-    #{
-    #name = "zsh-completions";
-    #src = pkgs.fetchFromGitHub {
-    #owner = "zsh-users";
-    #repo = "zsh-completions";
-    #rev = "0.32.0";
-    #sha256 = "12l9wrx0aysyj62kgp5limglz0nq73w8c415wcshxnxmhyk6sw6d";
-    #};
-    #}
+  '';
 
 
-    {
-      name = "fzf-tab";
-      src = pkgs.fetchFromGitHub {
-        owner = "Aloxaf";
-        repo = "fzf-tab";
-        rev = "d92299baafdf197c93a88e54f9bbc1c8bb31d427";
-        sha256 = "046fbhp5777iwl6n901db84bbmxbjgnh5gv9yqy9x15s8ikagzdl";
-      };
-    }
-    {
-      name = "zsh-autosuggestions";
-      src = pkgs.fetchFromGitHub {
-        owner = "zsh-users";
-        repo = "zsh-autosuggestions";
-        rev = "v0.6.4";
-        sha256 = "0h52p2waggzfshvy1wvhj4hf06fmzd44bv6j18k3l9rcx6aixzn6";
-      };
-    }
+  plugins =
+    let
+      sources = import ./zsh/nix/sources.nix;
+    in
+      [
+        { name = "fzf-tab"; src = sources.fzf-tab; }
+        { name = "zsh-autosuggestions"; src = sources.zsh-autosuggestions; }
+        { name = "history-substring-search"; src = sources.zsh-history-substring-search; }
+        { name = "zsh-abbr"; src = sources.zsh-abbr; }
+        { name = "fast-syntax-highlighting"; src = sources.fast-syntax-highlighting; }
+      ]
+      ++ [
+        #{
+        #name = "zsh-completions";
+        #src = pkgs.fetchFromGitHub {
+        #owner = "zsh-users";
+        #repo = "zsh-completions";
+        #rev = "0.32.0";
+        #sha256 = "12l9wrx0aysyj62kgp5limglz0nq73w8c415wcshxnxmhyk6sw6d";
+        #};
+        #}
 
-    {
-      name = "history-substring-search";
-      src = pkgs.fetchFromGitHub {
-        owner = "zsh-users";
-        repo = "zsh-history-substring-search";
-        rev = "v1.0.2";
-        sha256 = "0y8va5kc2ram38hbk2cibkk64ffrabfv1sh4xm7pjspsba9n5p1y";
-      };
-    }
 
-    {
-      name = "zsh-abbr";
-      src = pkgs.fetchFromGitHub {
-        owner = "olets";
-        repo = "zsh-abbr";
-        rev = "v3.3.3";
-        sha256 = "0aln7ashadbgharfn4slhimbw624ai82p4yizsxwvz70y4dv0wpg";
-      };
-    }
+        #{
+        #name = "fzf-tab";
+        #src = pkgs.fetchFromGitHub {
+        #owner = "Aloxaf";
+        #repo = "fzf-tab";
+        #rev = "d92299baafdf197c93a88e54f9bbc1c8bb31d427";
+        #sha256 = "046fbhp5777iwl6n901db84bbmxbjgnh5gv9yqy9x15s8ikagzdl";
+        #};
+        #}
+        #{
+        #name = "zsh-autosuggestions";
+        #src = pkgs.fetchFromGitHub {
+        #owner = "zsh-users";
+        #repo = "zsh-autosuggestions";
+        #rev = "v0.6.4";
+        #sha256 = "0h52p2waggzfshvy1wvhj4hf06fmzd44bv6j18k3l9rcx6aixzn6";
+        #};
+        #}
 
-    {
-      name = "fast-syntax-highlighting";
-      src = pkgs.fetchFromGitHub {
-        owner = "zdharma";
-        repo = "fast-syntax-highlighting";
-        rev = "v1.55";
-        sha256 = "0h7f27gz586xxw7cc0wyiv3bx0x3qih2wwh05ad85bh2h834ar8d";
-      };
-    }
-  ];
+        #{
+        #name = "history-substring-search";
+        #src = pkgs.fetchFromGitHub {
+        #owner = "zsh-users";
+        #repo = "zsh-history-substring-search";
+        #rev = "v1.0.2";
+        #sha256 = "0y8va5kc2ram38hbk2cibkk64ffrabfv1sh4xm7pjspsba9n5p1y";
+        #};
+        #}
+        #{
+          #name = "zsh-abbr";
+          #src = pkgs.fetchFromGitHub {
+            #owner = "olets";
+            #repo = "zsh-abbr";
+            #rev = "v3.3.3";
+            #sha256 = "0aln7ashadbgharfn4slhimbw624ai82p4yizsxwvz70y4dv0wpg";
+          #};
+        #}
+
+        #{
+          #name = "fast-syntax-highlighting";
+          #src = pkgs.fetchFromGitHub {
+            #owner = "zdharma";
+            #repo = "fast-syntax-highlighting";
+            #rev = "v1.55";
+            #sha256 = "0h7f27gz586xxw7cc0wyiv3bx0x3qih2wwh05ad85bh2h834ar8d";
+          #};
+        #}
+      ];
 }

@@ -1,4 +1,3 @@
-setopt HIST_IGNORE_ALL_DUPS
 local __bright_cyan="#8ec07c"
 local __bright_white="#ebdbb2"
 local __bright_green="#b8bb26"
