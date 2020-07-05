@@ -84,8 +84,10 @@ let
     realpath=\''${(Qe)~realpath}
     "
 
-    zstyle ':fzf-tab:complete:cd:*' extra-opts --preview=$extract'lsd -1 --color=always $realpath'
-    zstyle ':fzf-tab:complete:ls:*' extra-opts --preview=$extract'lsd -1 --color=always $realpath'
+    #zstyle ':fzf-tab:complete:cd:*' extra-opts --preview=$extract'lsd -1 --color=always $realpath'
+    #zstyle ':fzf-tab:complete:ls:*' extra-opts --preview=$extract'lsd -1 --color=always $realpath'
+    #zstyle ':fzf-tab:complete:nvim:*' extra-opts --preview=$extract'bat --color=always $realpath'
+    zstyle ':fzf-tab:complete:*:*' extra-opts --preview=$extract'if [ -f $realpath ]; then bat -p --color=always $realpath; else lsd -1 --color=always $realpath; fi'
 
 
   '';
@@ -97,6 +99,7 @@ in
 
   enableAutosuggestions = true;
   enableCompletion = true;
+  dotDir = ".config/zsh";
   #defaultKeymap = "viins";
   history = {
     save = 10000;
@@ -111,6 +114,7 @@ in
   };
 
   initExtraBeforeCompInit = ''
+
     zstyle ':completion:*' menu select
     zstyle ':completion::complete:*' gain-privileges 1
     zstyle ':completion:*' list-prompt ""

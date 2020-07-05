@@ -33,7 +33,7 @@ function _my_prompt() {
   echo -n "%F{$__bright_white} $(git_status)"
   echo
   # %3{stuff%} tell's zsh that the characters are printed as 3 chars wide
-  echo -n "%3{╰─λ%} "
+  echo -n "%F{$__bright_white}%3{╰─λ%} "
 }
 
 
