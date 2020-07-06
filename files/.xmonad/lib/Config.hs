@@ -23,9 +23,9 @@ import qualified XMonad.Util.ExtensibleState as XS
 import qualified Rofi
 import qualified DescribedSubmap
 import qualified TiledDragging
---import qualified WindowSwallowing
+import qualified WindowSwallowing
 
-import XMonad.Hooks.WindowSwallowing as WindowSwallowing
+--import XMonad.Hooks.WindowSwallowing as WindowSwallowing
 
 
 import Data.Foldable                  ( for_ )
