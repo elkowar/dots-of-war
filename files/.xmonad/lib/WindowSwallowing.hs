@@ -44,14 +44,11 @@ where
 import           XMonad
 import qualified XMonad.StackSet               as W
 import qualified XMonad.Util.ExtensibleState   as XS
-import           XMonad.Util.Run                ( runProcessWithInput
-                                                , safeSpawn
-                                                )
 import           XMonad.Util.WindowProperties
+import           XMonad.Util.Run                ( runProcessWithInput )
 import           Data.Semigroup                 ( All(..) )
 import qualified Data.Map.Strict               as M
 import           Data.List                      ( isInfixOf )
-import           Data.Maybe                     ( fromMaybe )
 import           Control.Monad                  ( when )
 
 -- $usage
@@ -154,13 +151,7 @@ swallowEventHook parentQueries childQueries event = do
                     $ moveFloatingState childWindow parent
                     $ ws { W.floating = oldFloating }
                 )
-              else windows
-                (W.modify
-                  (Just $ W.Stack parent [] [])
-                  (\s -> Just
-                    $ s { W.focus = parent, W.down = W.focus s : W.down s }
-                  )
-                )
+              else windows (insertIntoStack parent)
             -- after restoring, we remove the information about the swallowing from the state.
             XS.modify $ removeSwallowed childWindow
             XS.modify $ setStackBeforeWindowClosing Nothing
@@ -168,6 +159,14 @@ swallowEventHook parentQueries childQueries event = do
         return ()
     _ -> return ()
   return $ All True
+
+
+-- | insert a window as focused into the current stack, moving the previously focused window down the stack
+insertIntoStack :: a -> W.StackSet i l a sid sd -> W.StackSet i l a sid sd
+insertIntoStack win = W.modify
+  (Just $ W.Stack win [] [])
+  (\s -> Just $ s { W.focus = win, W.down = W.focus s : W.down s })
+
 
 -- | run a pure transformation on the Stack of the currently focused workspace.
 updateCurrentStack
