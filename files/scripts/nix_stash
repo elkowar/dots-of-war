@@ -1,6 +1,7 @@
 #!/bin/sh
 
-FILE_STACK_PATH="/tmp/nix_stash_stack"
+NIX_STASH_DIR="$XDG_CONFIG_HOME/nix_stash"
+FILE_STACK_PATH="$NIX_STASH_DIR/nix_stash_stack"
 
 # pop the last line from the file-stack and return it
 pop_from_file_stack() {
@@ -17,7 +18,8 @@ do_pop() {
   last_file="$(pop_from_file_stack)" || exit 1
   echo "restoring $last_file"
   trash "$last_file"
-  home-manager switch
+
+  [ ! -s "$FILE_STACK_PATH" ] && home-manager switch
 }
 
 
@@ -36,6 +38,7 @@ do_stash() {
   fi
 
   # remove the symlink and write the path to the stack
+  mkdir -p "$NIX_STASH_DIR"
   rm -rf "$config_file"
   echo "$config_file" >> "$FILE_STACK_PATH"
 
