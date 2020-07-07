@@ -30,6 +30,7 @@ in
     websocat
     niv
     exa
+    gromit-mpx
     zsh-completions
   ];
 
@@ -43,6 +44,16 @@ in
 
     htop = {
       enable = true;
+    };
+
+    broot = {
+      enable = true;
+      enableZshIntegration = true;
+    };
+
+    lf = {
+      enable = true;
+
     };
 
     #lsd = {
