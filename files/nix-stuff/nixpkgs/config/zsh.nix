@@ -84,10 +84,11 @@ let
     realpath=\''${(Qe)~realpath}
     "
 
-    #zstyle ':fzf-tab:complete:cd:*' extra-opts --preview=$extract'lsd -1 --color=always $realpath'
-    #zstyle ':fzf-tab:complete:ls:*' extra-opts --preview=$extract'lsd -1 --color=always $realpath'
-    #zstyle ':fzf-tab:complete:nvim:*' extra-opts --preview=$extract'bat --color=always $realpath'
-    zstyle ':fzf-tab:complete:*:*' extra-opts --preview=$extract'if [ -f $realpath ]; then bat -p --color=always $realpath; else lsd -1 --color=always $realpath; fi'
+    zstyle ':fzf-tab:complete:cd:*' extra-opts --preview=$extract'exa --icons -1 --color=always $realpath'
+    zstyle ':fzf-tab:complete:nvim:*' extra-opts --preview=$extract'bat -p --color=always $realpath'
+
+    #zstyle ':fzf-tab:complete:ls:*' extra-opts --preview=$extract'exa --icons -1 --color=always $realpath'
+    #zstyle ':fzf-tab:complete:*:*' extra-opts --preview=$extract'if [ -f $realpath ]; then bat -p --color=always $realpath; else exa --icons -1 --color=always $realpath; fi'
 
 
   '';
@@ -104,6 +105,7 @@ in
   history = {
     save = 10000;
     share = false;
+    extended = true;
     ignoreDups = true;
     ignoreSpace = true;
   };
@@ -111,6 +113,10 @@ in
   localVariables = {
     #ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE = "bg=${myConf.colors.accentDark}"; # why does this not work D:
     ZSH_AUTOSUGGEST_USE_ASYNC = 1;
+  };
+
+  shellAliases = {
+    ls = "exa --icons";
   };
 
   initExtraBeforeCompInit = ''

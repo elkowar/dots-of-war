@@ -33,7 +33,7 @@
       #normal.family = "Iosevka";
       normal.family = "Terminus (TTF)";
       offset.x = 0;
-      offset.y = 0;
+      offset.y = -2;
     };
     colors = myConf.colors;
   };
