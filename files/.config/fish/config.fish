@@ -13,7 +13,7 @@ set -U fish_greeting
 #end
 
 
-alias ls=lsd
+alias ls="exa --icons"
 alias tcolors="env TERM=xterm-256color tcolors"
 abbr --add --global vim nvim
 abbr --add --global tsh trash
@@ -34,13 +34,15 @@ abbr --add --global gs "git status"
 
 [ (hostname) = "garnix" ] && alias rm='echo "rm is disabled. Please use trash instead."; false'
 
-function run_stuff
+function run_pipr
   set -l commandline (commandline -b)
   pipr --out-file /tmp/pipr_out --default "$commandline"
   set -l result (cat /tmp/pipr_out)
   commandline -r $result
   commandline -f repaint
 end
+
+bind \ca run_pipr
 
 function c
   set -l result (/home/leon/scripts/conf)
@@ -49,7 +51,6 @@ function c
 end
 
 
-bind \ca run_stuff
 
 
 function replace_with_yay
