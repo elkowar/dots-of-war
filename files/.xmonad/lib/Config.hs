@@ -526,8 +526,8 @@ main = do
 -- }}}
 
 
-mySwallowEventHook = WindowSwallowing.swallowEventHook 
-  (className =? "Alacritty" <||> className =? "Termite" <||> className =? "Thunar") 
+mySwallowEventHook = WindowSwallowing.swallowEventHook
+  (className =? "Alacritty" <||> className =? "Termite" <||> className =? "Thunar")
   (return True)
 
 
@@ -551,7 +551,7 @@ activateWindowEventHook _ = return $ All True
 
 
 -- | Fixes fullscreen behaviour of chromium based apps by quickly applying and undoing a resize.
--- This causes chromium to recalculate the fullscreen window 
+-- This causes chromium to recalculate the fullscreen window
 -- dimensions to match the actual "windowed fullscreen" dimensions.
 fullscreenFixEventHook :: Event -> X All
 fullscreenFixEventHook (ClientMessageEvent _ _ _ dpy win typ (_:dats)) = do
@@ -564,7 +564,7 @@ fullscreenFixEventHook (ClientMessageEvent _ _ _ dpy win typ (_:dats)) = do
       liftIO $ resizeWindow dpy win (fromIntegral $ wa_width attrs + 1) (fromIntegral $ wa_height attrs)
   return $ All True
 fullscreenFixEventHook _ = return $ All True
-  
+
 
 
 

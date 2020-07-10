@@ -16,6 +16,12 @@ in
     nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
       inherit pkgs;
     };
+    cool-retro-term = (
+      pkgs.writeScriptBin "cool-retro-term" ''
+        #!/bin/sh
+        exec nixGLIntel ${pkgs.cool-retro-term}/bin/cool-retro-term "$@"
+      ''
+    );
   };
 
 
@@ -32,6 +38,7 @@ in
     exa
     gromit-mpx
     zsh-completions
+    cool-retro-term
   ];
 
 
