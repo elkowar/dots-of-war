@@ -23,9 +23,9 @@ import qualified XMonad.Util.ExtensibleState as XS
 import qualified Rofi
 import qualified DescribedSubmap
 import qualified TiledDragging
-import qualified WindowSwallowing
+--import qualified WindowSwallowing
 
---import XMonad.Hooks.WindowSwallowing as WindowSwallowing
+import XMonad.Hooks.WindowSwallowing as WindowSwallowing
 
 
 import Data.Foldable                  ( for_ )
@@ -205,7 +205,7 @@ myLayout = avoidStruts
      ||| (rename "Horizon"  $               spacingAndGaps $ mouseResizableTileMirrored {draggerType = BordersDragger}))
 
     rename n = renamed [Replace n]
-    spacingAndGaps = let gap = 20
+    spacingAndGaps = let gap = 15 -- gap = 20
                          border = Border gap gap gap gap
                      in spacingRaw False border True border True
 
@@ -527,7 +527,7 @@ main = do
 
 
 mySwallowEventHook = WindowSwallowing.swallowEventHook
-  (className =? "Alacritty" <||> className =? "Termite" <||> className =? "Thunar")
+  (className =? "Alacritty" <||> className =? "Termite" <||> className =? "NOPE Thunar")
   (return True)
 
 

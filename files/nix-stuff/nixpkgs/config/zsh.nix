@@ -12,6 +12,7 @@ let
     gaa = "git add --all";
     gs = "git status";
     cxmonad = "cd ~/.xmonad && nvim ~/.xmonad/lib/Config.hs && cd -";
+    cnix = "cd ~/nixpkgs/ && nvim && cd -";
   };
 
   manFunction = ''
@@ -156,12 +157,6 @@ in
 
     ${builtins.readFile ./prompt.zsh}
   '';
-
-  envExtra = ''
-    export GITHUB_TOKEN="fc40b6cb38dd8eb54f90e3e652f14d758f21e24d"
-
-  '';
-
 
   plugins = let
     sources = import ./zsh/nix/sources.nix;

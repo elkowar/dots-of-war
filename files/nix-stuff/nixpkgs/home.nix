@@ -12,6 +12,8 @@ let
   myConf = import ./myConfig.nix;
 in
 {
+  nixpkgs.config.allowUnfree = true;
+
   nixpkgs.config.packageOverrides = pkgs: {
     nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
       inherit pkgs;
@@ -23,6 +25,7 @@ in
       ''
     );
   };
+
 
 
   home.packages = with pkgs; [
@@ -39,8 +42,15 @@ in
     gromit-mpx
     zsh-completions
     cool-retro-term
+    ghc
+
+    mdcat
+    github-cli
+    tdesktop
+    #hyper-haskell
   ];
 
+  gtk = import ./config/gtk.nix { inherit pkgs; inherit myConf; };
 
   programs = {
     home-manager.enable = true;
@@ -49,24 +59,7 @@ in
     tmux = import ./config/tmux.nix { inherit pkgs; inherit myConf; };
     feh = import ./config/feh.nix;
 
-    htop = {
-      enable = true;
-    };
-
-    broot = {
-      enable = true;
-      enableZshIntegration = true;
-    };
-
-    lf = {
-      enable = true;
-
-    };
-
-    #lsd = {
-    #enable = true;
-    #enableAliases = true;
-    #};
+    htop.enable = true;
 
     mpv = {
       enable = true;
@@ -95,6 +88,14 @@ in
       enableZshIntegration = true;
       enableNixDirenvIntegration = true;
     };
+  };
+
+  services = {
+    mpd = {
+      enable = true;
+      musicDirectory = "/home/leon/Downloads/music";
+    };
+    udiskie.enable = true;
   };
 
   home.username = "leon";

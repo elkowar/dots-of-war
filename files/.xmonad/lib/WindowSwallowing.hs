@@ -117,7 +117,6 @@ swallowEventHook parentQueries childQueries event = do
       XS.modify . setStackBeforeWindowClosing . currentStack $ ws
       XS.modify . setFloatingBeforeWindowClosing . W.floating $ ws
 
-
     -- This is called right after any window closes.
     DestroyWindowEvent { ev_event = eventId, ev_window = childWindow } ->
       -- Because DestroyWindowEvent is emitted a lot more often then you think,
