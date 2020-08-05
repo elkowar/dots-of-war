@@ -12,7 +12,7 @@ let
     gaa = "git add --all";
     gs = "git status";
     cxmonad = "cd ~/.xmonad && nvim ~/.xmonad/lib/Config.hs && cd -";
-    cnix = "cd ~/nixpkgs/ && nvim && cd -";
+    cnix = "cd ~/nixpkgs/ && nvim home.nix && cd -";
   };
 
   manFunction = ''

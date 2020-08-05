@@ -28,10 +28,10 @@ instance Default RofiConfig where
   def = RofiConfig { theme = smallTheme, caseInsensitive = True, fuzzy = True }
 
 smallTheme :: String
-smallTheme = "/home/leon/scripts/rofi-scripts/launcher_grid_style.rasi"
+smallTheme = "/home/leon/scripts/rofi/launcher_grid_style.rasi"
 
 bigTheme :: String
-bigTheme = "/home/leon/scripts/rofi-scripts/launcher_grid_full_style.rasi"
+bigTheme = "/home/leon/scripts/rofi/launcher_grid_full_style.rasi"
 
 toArgList :: RofiConfig -> [String]
 toArgList RofiConfig {..} = concat

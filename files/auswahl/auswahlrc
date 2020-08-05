@@ -1,4 +1,4 @@
-use: rofi -dmenu -i -theme /home/leon/scripts/rofi-scripts/default_theme.rasi
+use: rofi -dmenu -i -theme /home/leon/scripts/rofi/default_theme.rasi
 
 menu: set-redshift :: -no-custom
   off     => redshift -x
