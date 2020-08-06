@@ -4,7 +4,11 @@
 "  \ V /| | | | | | | | | (__
 "   \_/ |_|_| |_| |_|_|  \___|
 
-source ~/.config/nvim/plugins.vim
+let g:vim_config_root = expand('<sfile>:p:h')
+let $VIM_ROOT = g:vim_config_root
+
+
+source $VIM_ROOT/plugins.vim
 
 
 if &shell =~# 'fish$'
@@ -191,6 +195,6 @@ let g:airline_theme='elkowars_gruvbox'
 
 " }}}
 
-source ~/.config/nvim/whichkeyConfig.vim
-source ~/.config/nvim/lsp.vim
+source $VIM_ROOT/whichkeyConfig.vim
+source $VIM_ROOT/lsp.vim
 " }}}
