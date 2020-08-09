@@ -132,6 +132,11 @@ in
   '';
 
   initExtra = ''
+    #export MANPAGER='nvim +Man! +"set nocul" +"set noshowcmd" +"set noruler" +"set noshowmode" +"set laststatus=2" +"set statusline=\ %t"'
+    export MANPAGER='nvim +Man! +"set nocul" +"set noshowcmd" +"set noruler" +"set noshowmode" +"set laststatus=0"'
+
+
+
     setopt nobeep
 
     setopt HIST_IGNORE_ALL_DUPS

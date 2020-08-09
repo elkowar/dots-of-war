@@ -2,8 +2,12 @@
 {
   enable = true;
   theme.name = "phocus";
-  iconTheme.package = pkgs.papirus-icon-theme;
-  iconTheme.name = "papirus";
+  #iconTheme.package = pkgs.papirus-icon-theme;
+  #iconTheme.name = "papirus";
+  #iconTheme.package = pkgs.numix-icon-theme;
+  #iconTheme.name = "Numix";
+  #iconTheme.package = pkgs.arc-icon-theme;
+  iconTheme.name = "Numix";
   font.name = "Terminus (TTF) 12";
 
   gtk2.extraConfig = ''gtk-theme-name = "Adwaita-dark"'';

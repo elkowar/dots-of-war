@@ -46,7 +46,6 @@ in
 
     mdcat
     github-cli
-    tdesktop
     #hyper-haskell
   ];
 
@@ -58,6 +57,7 @@ in
     zsh = import ./config/zsh.nix { inherit pkgs; inherit myConf; };
     tmux = import ./config/tmux.nix { inherit pkgs; inherit myConf; };
     feh = import ./config/feh.nix;
+    rofi = import ./config/rofi { inherit pkgs; inherit myConf; };
 
     htop.enable = true;
 

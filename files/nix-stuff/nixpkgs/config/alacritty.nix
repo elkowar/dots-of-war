@@ -12,8 +12,8 @@
       padding.x = 20;
       padding.y = 20;
       dynamic_padding = true;
+      dynamic_title = true;
     };
-    dynamic_title = true;
     cursor = {
       style = "Block";
       unfocused_hollow = true;
@@ -26,6 +26,14 @@
       hide_when_typing = true;
       url.launcher.program = "xdg-open";
     };
+
+    key_bindings = [
+      {
+        key = "N";
+        mods = "Control|Shift";
+        action = "SpawnNewInstance";
+      }
+    ];
 
     background_opacity = 1;
     font = {
