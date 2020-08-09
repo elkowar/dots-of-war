@@ -30,6 +30,7 @@ in
 
   home.packages = with pkgs; [
     elkowar_local.bashtop
+    elkowar_local.liquidctl
     direnv
     rnix-lsp
     nix-prefetch-git
