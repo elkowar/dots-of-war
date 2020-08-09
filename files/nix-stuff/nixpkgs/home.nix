@@ -26,87 +26,12 @@ in
     );
   };
 
-
-
-  home.packages = with pkgs; [
-    elkowar_local.bashtop
-    elkowar_local.liquidctl
-    direnv
-    rnix-lsp
-    nix-prefetch-git
-    gtop
-    simplescreenrecorder
-    bat
-    websocat
-    niv
-    exa
-    gromit-mpx
-    zsh-completions
-    cool-retro-term
-    ghc
-
-    mdcat
-    github-cli
-    #hyper-haskell
-  ];
-
-  gtk = import ./config/gtk.nix { inherit pkgs; inherit myConf; };
-
-  programs = {
-    home-manager.enable = true;
-    alacritty = import ./config/alacritty.nix { inherit pkgs; inherit myConf; }; # <- https://github.com/guibou/nixGL
-    zsh = import ./config/zsh.nix { inherit pkgs; inherit myConf; };
-    tmux = import ./config/tmux.nix { inherit pkgs; inherit myConf; };
-    feh = import ./config/feh.nix;
-    rofi = import ./config/rofi { inherit pkgs; inherit myConf; };
-
-    htop.enable = true;
-
-    mpv = {
-      enable = true;
-      bindings = {
-        WHEEL_UP = "add volume 5";
-        WHEEL_DOWN = "add volume -5";
-        WHEEL_LEFT = "seek -3";
-        WHEEL_RIGHT = "seek 3";
-        h = "seek -3";
-        l = "seek 3";
-      };
-    };
-
-    fzf = {
-      enable = true;
-      enableFishIntegration = true;
-      enableZshIntegration = true;
-      defaultCommand = "rg --files";
-      fileWidgetCommand = "fd --type f";
-      changeDirWidgetCommand = "rg --files --null | xargs -0 dirname | sort -u";
-    };
-
-    direnv = {
-      enable = true;
-      enableFishIntegration = true;
-      enableZshIntegration = true;
-      enableNixDirenvIntegration = true;
-    };
-  };
-
-  services = {
-    mpd = {
-      enable = true;
-      musicDirectory = "/home/leon/Downloads/music";
-    };
-    udiskie.enable = true;
+  profiles = {
+    base.enable = true;
+    desktop.enable = true;
   };
 
 
-  home.sessionVariables = {
-    LOCALE_ARCHIVE_2_11 = "${pkgs.glibcLocales}/lib/locale/locale-archive";
-    LOCALE_ARCHIVE_2_27 = "${pkgs.glibcLocales}/lib/locale/locale-archive";
-    LOCALE_ARCHIVE = "/usr/bin/locale";
-  };
-  home.username = "leon";
-  home.homeDirectory = "/home/leon";
 
-  home.stateVersion = "20.09";
+  imports = [ ./profiles/base.nix ./profiles/desktop.nix ];
 }
