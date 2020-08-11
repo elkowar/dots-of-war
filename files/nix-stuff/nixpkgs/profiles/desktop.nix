@@ -11,13 +11,9 @@ in
 
   config = lib.mkIf cfg.enable {
 
-
-    gtk = import ../config/gtk.nix { inherit pkgs; inherit myConf; };
-
     home.packages = with pkgs; [
       elkowar_local.bashtop
       elkowar_local.liquidctl
-
 
       cool-retro-term
       simplescreenrecorder

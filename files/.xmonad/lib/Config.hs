@@ -33,6 +33,7 @@ import Data.Foldable                  ( for_ )
 
 import Data.Function ((&))
 
+import qualified XMonad.Layout.Decoration
 import XMonad hiding ((|||))
 import XMonad.Actions.CopyWindow
 import XMonad.Actions.PhysicalScreens ( horizontalScreenOrderer )
@@ -158,21 +159,16 @@ aqua      = "#8ec07c"
 -- }}}
 
 -- Layout ---------------------------------------- {{{
-
+myTabTheme :: Theme
 myTabTheme = def -- defaultThemeWithButtons
-    { -- activeColor      = "#8ec07c"
-      activeColor         = "#1d2021"
-      --activeColor       = "#1d2021"
-     --activeColor        = "#504945"
-    --, inactiveColor     = "#282828"
+    { activeColor         = "#1d2021"
     , inactiveColor       = "#282828"
     , activeBorderColor   = "#1d2021"
     , inactiveBorderColor = "#282828"
     , activeTextColor     = "#fbf1c7"
     , inactiveTextColor   = "#fbf1c7"
-    , decoHeight          = 15
+    , decoHeight          = 20
     , fontName            = "-misc-cozettevector-*-*-*-*-10-*-*-*-*-*-*-*"
-    --, fontName          = "-misc-scientifica-*-*-*-*-10-*-*-*-*-*-*-*"
     }
 
 data EmptyShrinker = EmptyShrinker deriving (Show, Read)

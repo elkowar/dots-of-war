@@ -31,6 +31,9 @@ in
     desktop.enable = true;
   };
 
+  gtk = import ./config/gtk.nix { inherit pkgs; inherit myConf; };
+
+
 
 
   imports = [ ./profiles/base.nix ./profiles/desktop.nix ];
