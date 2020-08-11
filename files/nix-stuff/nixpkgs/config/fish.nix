@@ -20,18 +20,6 @@ in
         ls = "exa --icons";
       };
 
-      shellAbbrs = {
-        vim = "nvim";
-        tsh = "trash";
-        cxmonad = "nvim /home/leon/.xmonad/lib/Config.hs";
-        cnix = "cd ~/nixpkgs/ && nvim home.nix && cd -";
-
-        gaa = "git add --all";
-        gc = "git commit -m ";
-        gp = "git push";
-        gs = "git status";
-      };
-
       plugins =
         [
           {

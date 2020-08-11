@@ -12,15 +12,6 @@ let
         (mapAttrs (k: v: ''abbr --session ${k}="${v}" >/dev/null 2>&1'') abbrs)
     );
 
-  abbrs = makeAbbrs {
-    gc = "git commit -m";
-    gp = "git push";
-    gaa = "git add --all";
-    gs = "git status";
-    cxmonad = "cd ~/.xmonad && nvim ~/.xmonad/lib/Config.hs && cd -";
-    cnix = "cd ~/nixpkgs/ && nvim home.nix && cd -";
-  };
-
   manFunction = ''
     function man() {
       env \
@@ -104,8 +95,14 @@ in
 {
   options.elkowar.programs.zsh = {
     enable = lib.mkEnableOption "ZSH configuration";
+    abbrs = lib.mkOption {
+      type = lib.types.attrsOf lib.types.str;
+      description = "Shell abbreviations";
+      default = {};
+    };
   };
   config = {
+    home.packages = [ pkgs.zsh-completions ];
     programs.zsh = {
       enable = true;
 
@@ -113,7 +110,6 @@ in
       enableAutosuggestions = true;
       enableCompletion = true;
       dotDir = ".config/zsh";
-      #defaultKeymap = "viins";
       history = {
         save = 10000;
         share = false;
@@ -166,7 +162,7 @@ in
 
         ${fzf-tab-stuff}
         ${fixedKeybinds}
-        ${abbrs}
+        ${makeAbbrs cfg.abbrs}
         ${manFunction}
 
         ${builtins.readFile ./prompt.zsh}

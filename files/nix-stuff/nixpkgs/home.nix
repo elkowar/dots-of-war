@@ -27,7 +27,11 @@ in
   };
 
   profiles = {
-    base.enable = true;
+    base = {
+      enable = true;
+      enableFish = true;
+      enableZsh = true;
+    };
     desktop.enable = true;
   };
 

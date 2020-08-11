@@ -7,17 +7,26 @@ in
 {
   options.profiles.base = {
     enable = lib.mkEnableOption "Basic profile enabled";
-    #useZsh = lib.mkEnableOption
+    enableFish = lib.mkEnableOption "Fish shell";
+    enableZsh = lib.mkEnableOption "Zsh shell";
   };
 
   imports = [ ../config/tmux.nix ../config/generalConfig.nix ../config/zsh.nix ../config/fish.nix ];
 
   config = lib.mkIf cfg.enable {
     elkowar.programs.tmux.enable = true;
-    elkowar.programs.zsh.enable = true;
-    elkowar.programs.fish.enable = true;
-    elkowar.generalConfig.shellAliases = {
-      gc = "git commit";
+    elkowar.programs.zsh.enable = cfg.enableZsh;
+    elkowar.programs.fish.enable = cfg.enableFish;
+    elkowar.generalConfig.shellAbbrs = {
+        vim = "nvim";
+        tsh = "trash";
+        cxmonad = "nvim /home/leon/.xmonad/lib/Config.hs";
+        cnix = "cd ~/nixpkgs/ && nvim home.nix && cd -";
+
+        gaa = "git add --all";
+        gc = "git commit -m ";
+        gp = "git push";
+        gs = "git status";
     };
 
     home.packages = with pkgs; [
@@ -29,7 +38,6 @@ in
       websocat
       niv
       exa
-      zsh-completions
       trash-cli
       mdcat
       github-cli
@@ -47,8 +55,8 @@ in
 
       fzf = {
         enable = true;
-        enableFishIntegration = true;
-        enableZshIntegration = true;
+        enableFishIntegration = cfg.enableFish;
+        enableZshIntegration = cfg.enableZsh;
         defaultCommand = "rg --files";
         fileWidgetCommand = "fd --type f";
         changeDirWidgetCommand = "rg --files --null | xargs -0 dirname | sort -u";
@@ -56,8 +64,8 @@ in
 
       direnv = {
         enable = true;
-        enableFishIntegration = true;
-        enableZshIntegration = true;
+        enableFishIntegration = cfg.enableFish;
+        enableZshIntegration = cfg.enableZsh;
         enableNixDirenvIntegration = true;
       };
     };

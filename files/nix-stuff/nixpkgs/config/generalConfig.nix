@@ -5,15 +5,16 @@ let
 in
 {
   options.elkowar.generalConfig = with lib; {
-    shellAliases = lib.mkOption {
+    shellAbbrs = lib.mkOption {
       type = types.attrsOf types.str;
       default = {};
       description = ''
-        A map of aliases that will get applied to zsh and fish configuration.
+        A map of abbreviations that will get applied to zsh and fish configuration.
       '';
     };
   };
   config = {
-    programs.zsh.shellAliases = cfg.shellAliases;
+    elkowar.programs.zsh.abbrs = cfg.shellAbbrs;
+    programs.fish.shellAbbrs = cfg.shellAbbrs;
   };
 }
