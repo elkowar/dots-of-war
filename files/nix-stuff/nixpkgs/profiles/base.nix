@@ -10,11 +10,12 @@ in
     #useZsh = lib.mkEnableOption
   };
 
-  imports = [ ../config/tmux.nix ../config/generalConfig.nix ../config/zsh.nix ];
+  imports = [ ../config/tmux.nix ../config/generalConfig.nix ../config/zsh.nix ../config/fish.nix ];
 
   config = lib.mkIf cfg.enable {
     elkowar.programs.tmux.enable = true;
     elkowar.programs.zsh.enable = true;
+    elkowar.programs.fish.enable = true;
     elkowar.generalConfig.shellAliases = {
       gc = "git commit";
     };
