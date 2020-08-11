@@ -10,7 +10,15 @@ in
     #useZsh = lib.mkEnableOption
   };
 
+  imports = [ ../config/tmux.nix ../config/generalConfig.nix ../config/zsh.nix ];
+
   config = lib.mkIf cfg.enable {
+    elkowar.programs.tmux.enable = true;
+    elkowar.programs.zsh.enable = true;
+    elkowar.generalConfig.shellAliases = {
+      gc = "git commit";
+    };
+
     home.packages = with pkgs; [
       direnv
       rnix-lsp
@@ -29,15 +37,13 @@ in
       fd
       jq
 
-      (import (fetchTarball https://github.com/lf-/nix-doc/archive/main.tar.gz) {})
+      #(import (fetchTarball https://github.com/lf-/nix-doc/archive/main.tar.gz) {})
     ];
 
     programs = {
       home-manager.enable = true;
       htop.enable = true;
 
-      zsh = import ../config/zsh.nix { inherit pkgs; inherit myConf; };
-      tmux = import ../config/tmux.nix { inherit pkgs; inherit myConf; };
       fzf = {
         enable = true;
         enableFishIntegration = true;

@@ -1,5 +1,11 @@
-{ myConf, pkgs ? import <nixpkgs> }:
+{ config, lib, pkgs, ... }:
 let
+  cfg = config.elkowar.programs.zsh;
+  myConf = import ../myConfig.nix;
+
+
+
+
   makeAbbrs = with builtins; abbrs: concatStringsSep "\n"
     (
       attrValues
@@ -96,31 +102,36 @@ let
 
 in
 {
-  enable = true;
-
-
-  enableAutosuggestions = true;
-  enableCompletion = true;
-  dotDir = ".config/zsh";
-  #defaultKeymap = "viins";
-  history = {
-    save = 10000;
-    share = false;
-    extended = true;
-    ignoreDups = true;
-    ignoreSpace = true;
+  options.elkowar.programs.zsh = {
+    enable = lib.mkEnableOption "ZSH configuration";
   };
+  config = {
+    programs.zsh = {
+      enable = true;
 
-  localVariables = {
-    #ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE = "bg=${myConf.colors.accentDark}"; # why does this not work D:
-    ZSH_AUTOSUGGEST_USE_ASYNC = 1;
-  };
 
-  shellAliases = {
-    ls = "exa --icons";
-  };
+      enableAutosuggestions = true;
+      enableCompletion = true;
+      dotDir = ".config/zsh";
+      #defaultKeymap = "viins";
+      history = {
+        save = 10000;
+        share = false;
+        extended = true;
+        ignoreDups = true;
+        ignoreSpace = true;
+      };
 
-  initExtraBeforeCompInit = ''
+      localVariables = {
+        #ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE = "bg=${myConf.colors.accentDark}"; # why does this not work D:
+        ZSH_AUTOSUGGEST_USE_ASYNC = 1;
+      };
+
+      shellAliases = {
+        ls = "exa --icons";
+      };
+
+      initExtraBeforeCompInit = ''
 
     zstyle ':completion:*' menu select
     zstyle ':completion::complete:*' gain-privileges 1
@@ -131,44 +142,46 @@ in
     fpath+=( /usr/share/zsh/site-functions/ )
   '';
 
-  initExtra = ''
-    export MANPAGER='nvim +Man! +"set nocul" +"set noshowcmd" +"set noruler" +"set noshowmode" +"set laststatus=2" +"set statusline=\ %t"'
-    export MANPAGER='nvim +Man! +"set nocul" +"set noshowcmd" +"set noruler" +"set noshowmode" +"set laststatus=0"'
+      initExtra = ''
+        export MANPAGER='nvim +Man! +"set nocul" +"set noshowcmd" +"set noruler" +"set noshowmode" +"set laststatus=2" +"set statusline=\ %t"'
+        export MANPAGER='nvim +Man! +"set nocul" +"set noshowcmd" +"set noruler" +"set noshowmode" +"set laststatus=0"'
 
-    setopt nobeep
+        setopt nobeep
 
-    setopt HIST_IGNORE_ALL_DUPS
-    autoload -Uz colors && colors
-    autoload -Uz promptinit && promptinit
+        setopt HIST_IGNORE_ALL_DUPS
+        autoload -Uz colors && colors
+        autoload -Uz promptinit && promptinit
 
 
-    #_comp_options+=(globdots)
+        #_comp_options+=(globdots)
 
-    # enable cdr command
-    autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
-    add-zsh-hook chpwd chpwd_recent_dirs
+        # enable cdr command
+        autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
+        add-zsh-hook chpwd chpwd_recent_dirs
 
-    # deer is a ranger-style file manager directly in the shell that doesn't fully context-switch
-    #source ~/nixpkgs/config/deer.zsh
-    #zle -N deer
-    #bindkey '\ek' deer
+        # deer is a ranger-style file manager directly in the shell that doesn't fully context-switch
+        #source ~/nixpkgs/config/deer.zsh
+        #zle -N deer
+        #bindkey '\ek' deer
 
-    ${fzf-tab-stuff}
-    ${fixedKeybinds}
-    ${abbrs}
-    ${manFunction}
+        ${fzf-tab-stuff}
+        ${fixedKeybinds}
+        ${abbrs}
+        ${manFunction}
 
-    ${builtins.readFile ./prompt.zsh}
-  '';
+        ${builtins.readFile ./prompt.zsh}
+      '';
 
-  plugins = let
-    sources = import ./zsh/nix/sources.nix;
-  in
-    [
-      { name = "fzf-tab"; src = sources.fzf-tab; }
-      { name = "zsh-autosuggestions"; src = sources.zsh-autosuggestions; }
-      { name = "history-substring-search"; src = sources.zsh-history-substring-search; }
-      { name = "zsh-abbr"; src = sources.zsh-abbr; }
-      { name = "fast-syntax-highlighting"; src = sources.fast-syntax-highlighting; }
-    ];
+      plugins = let
+        sources = import ./zsh/nix/sources.nix;
+      in
+        [
+          { name = "fzf-tab"; src = sources.fzf-tab; }
+          { name = "zsh-autosuggestions"; src = sources.zsh-autosuggestions; }
+          { name = "history-substring-search"; src = sources.zsh-history-substring-search; }
+          { name = "zsh-abbr"; src = sources.zsh-abbr; }
+          { name = "fast-syntax-highlighting"; src = sources.fast-syntax-highlighting; }
+        ];
+    };
+  };
 }
