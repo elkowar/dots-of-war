@@ -31,6 +31,7 @@ in
     };
 
     home.packages = with pkgs; [
+      (pkgs.callPackage ../packages/fet.sh.nix { })
       sources.manix
       direnv
       rnix-lsp

@@ -1,12 +1,12 @@
 { pkgs ? import <nixpkgs> { } }:
 pkgs.stdenv.mkDerivation rec {
   pname = "scr";
-  version = "1.0";
+  version = "2.0";
   src = pkgs.fetchFromGitHub {
     owner = "6gk";
     repo = "scr";
     rev = "v${version}";
-    sha256 = "1pq0w3qpap6rsgxashphq5xlhvdyhryjaz7dh0l5rfmh7ydpzf12";
+    sha256 = "18srzjkbhh3n10ayq5nnbnx37vjfzfw0adhkwbg1s157y8hfnlcy";
   };
 
   nativeBuildInputs = [ pkgs.makeWrapper ];
@@ -15,27 +15,14 @@ pkgs.stdenv.mkDerivation rec {
     wrapProgram "$out/bin/scr" --prefix PATH : ${pkgs.lib.makeBinPath (with pkgs; [ slop ffmpeg dmenu xclip shotgun ])}
   '';
   meta = {
-    description = "a screenrecording / screenshotting script written in sh.";
+    description = "Super CRappy SCReenshot SCRipt";
+    longDescription = ''
+      Super CRappy SCReenshot SCRipt
+              (and recording ^)
+      A SCRipt for Sound Cloud Rappers
+    '';
     homepage = "https://github.com/6gk/scr";
     license = pkgs.lib.licenses.mit;
     platforms = pkgs.lib.platforms.all;
   };
 }
-
-
-#let
-
-#scr = pkgs.fetchFromGitHub {
-#owner = "6gk";
-#repo = "scr";
-#rev = "4064159e291e59f4543a676b872c91fe049a3f1e";
-#sha256 = "1pq0w3qpap6rsgxashphq5xlhvdyhryjaz7dh0l5rfmh7ydpzf12";
-#};
-#in
-#pkgs.runCommand "scr"
-#{ buildInputs = with pkgs; [ slop ffmpeg dmenu xclip shotgun ]; }
-#''
-#mkdir -p $out/bin
-#cp ${scr}/scr $out/bin/scr
-#sed -i "2 i export PATH=$PATH" $out/bin/scr
-#''
