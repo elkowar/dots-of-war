@@ -109,7 +109,7 @@ import           XMonad.Layout.WindowArranger
 -- Values -------------------- {{{
 
 myModMask  = mod4Mask
-myLauncher = Rofi.asCommand (def { Rofi.theme = Rofi.bigTheme }) ["-show run"]
+myLauncher = Rofi.asCommand def ["-show run"]
 --myTerminal = "termite --name törminell"
 myTerminal = "alacritty"
 myBrowser = "qutebrowser"
@@ -302,14 +302,14 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
   programLaunchBindings :: [(String, X ())]
   programLaunchBindings =
     [ ("M-p",      spawn myLauncher)
-    , ("M-S-p",    Rofi.showCombi  (def { Rofi.theme = Rofi.bigTheme }) [ "drun", "window", "ssh" ])
-    , ("M-S-e",    Rofi.showNormal (def { Rofi.theme = Rofi.bigTheme, Rofi.fuzzy = False }) "emoji")
+    , ("M-S-p",    Rofi.showCombi  def [ "drun", "window", "ssh" ])
+    , ("M-S-e",    Rofi.showNormal (def { Rofi.fuzzy = False }) "emoji")
     --, ("M-s",      spawn $ scriptFile "rofi-search.sh")
     , ("M-S-o",    spawn $ scriptFile "rofi-open.sh")
     , ("M-n",      scratchpadSubmap)
     , ("M-e",      Rofi.promptRunCommand def specialCommands)
     , ("M-o",      Rofi.promptRunCommand def withSelectionCommands)
-    , ("M-S-C-g",  spawn "killall -INT -g giph") -- stop gif recording
+    , ("M-S-C-g",  spawn "killall -INT -g giph" >> spawn "scr -s") -- stop gif and video recording
 
     --, ("M-b",          launchWithBackgroundInstance (className =? "qutebrowser") "bwrap --bind / / --dev-bind /dev /dev --tmpfs /tmp --tmpfs /run qutebrowser")
     --, ("M-b",          safeSpawnProg "qutebrowser")
@@ -433,6 +433,7 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
     [ ("screenshot",              spawn $ scriptFile "screenshot.sh")
     , ("screenshot to file",      spawn $ scriptFile "screenshot.sh --tofile")
     , ("screenshot full to file", spawn $ scriptFile "screenshot.sh --tofile --fullscreen")
+    , ("screenvideo to file",     spawn (scriptFile "screenvid.sh") >> notify "video" "stop video-recording with M-S-C-g")
     , ("screengif to file",       spawn (scriptFile "screengif.sh") >> notify "gif" "stop gif-recording with M-S-C-g")
     , ("toggleOptimal",           sendMessage ToggleGaps >> toggleWindowSpacingEnabled)
     , ("toggleSpacing",           toggleWindowSpacingEnabled)

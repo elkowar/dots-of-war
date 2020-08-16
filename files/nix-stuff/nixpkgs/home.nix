@@ -7,34 +7,30 @@
 # nix-env -u home-manager
 
 { config, pkgs, ... }:
-let
-  elkowar_local = import ./local/default.nix {};
-  myConf = import ./myConfig.nix;
-in
 {
-  nixpkgs.config.allowUnfree = true;
+  nixpkgs.config = {
+    allowUnfree = true;
+    overlays = [ (import ./overlay) ];
 
-  nixpkgs.config.packageOverrides = pkgs: {
-    nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
-      inherit pkgs;
+    packageOverrides = pkgs: {
+      nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
+        inherit pkgs;
+      };
     };
-    cool-retro-term = (
-      pkgs.writeScriptBin "cool-retro-term" ''
-        #!/bin/sh
-        exec nixGLIntel ${pkgs.cool-retro-term}/bin/cool-retro-term "$@"
-      ''
-    );
+
   };
 
-  profiles = {
+
+  elkowar = {
     base = {
       enable = true;
       enableFish = true;
       enableZsh = true;
     };
     desktop.enable = true;
+    desktop.colors = import ./modules/desktop/colors/gruvbox.nix;
   };
 
 
-  imports = [ ./profiles/base.nix ./profiles/desktop.nix ];
+  imports = [ ./modules ];
 }

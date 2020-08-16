@@ -6,8 +6,6 @@ module Rofi
   , promptRunCommand
   , showNormal
   , showCombi
-  , smallTheme
-  , bigTheme
   , RofiConfig(..)
   )
 where
@@ -22,23 +20,14 @@ rofiCmd :: String
 rofiCmd = "rofi"
 
 data RofiConfig
-  = RofiConfig { theme :: String, caseInsensitive :: Bool, fuzzy :: Bool } deriving (Show, Eq)
+  = RofiConfig { caseInsensitive :: Bool, fuzzy :: Bool } deriving (Show, Eq)
 
 instance Default RofiConfig where
-  def = RofiConfig { theme = smallTheme, caseInsensitive = True, fuzzy = True }
-
-smallTheme :: String
-smallTheme = "/home/leon/nixpkgs/config/rofi/launcher_grid_style.rasi"
-
-bigTheme :: String
-bigTheme = "/home/leon/nixpkgs/config/rofi/launcher_grid_full_style.rasi"
+  def = RofiConfig { caseInsensitive = True, fuzzy = True }
 
 toArgList :: RofiConfig -> [String]
 toArgList RofiConfig {..} = concat
-  [ ["-theme", theme]
-  , addIf caseInsensitive ["-i"]
-  , addIf fuzzy           ["-matching", "fuzzy"]
-  ]
+  [addIf caseInsensitive ["-i"], addIf fuzzy ["-matching", "fuzzy"]]
   where addIf check list = if check then list else []
 
 

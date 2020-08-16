@@ -169,7 +169,7 @@ in
       '';
 
       plugins = let
-        sources = import ./zsh/nix/sources.nix;
+        sources = import ./nix/sources.nix;
       in
         [
           { name = "fzf-tab"; src = sources.fzf-tab; }

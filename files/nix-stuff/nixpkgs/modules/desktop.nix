@@ -1,33 +1,43 @@
 { config, lib, pkgs, ... }:
 let
-  cfg = config.profiles.desktop;
-  elkowar_local = import ../local/default.nix {};
-  myConf = import ../myConfig.nix;
+  cfg = config.elkowar.desktop;
 in
 {
-  options.profiles.desktop = {
+  options.elkowar.desktop = {
     enable = lib.mkEnableOption "Desktop configuration enabled";
   };
 
+  imports = [ ./desktop ];
+
+
+
   config = lib.mkIf cfg.enable {
 
-    gtk = import ../config/gtk.nix { inherit pkgs; inherit myConf; };
 
     home.packages = with pkgs; [
-      elkowar_local.bashtop
-      elkowar_local.liquidctl
+      (pkgs.callPackage ../packages/bashtop.nix { })
+      (pkgs.callPackage ../packages/liquidctl.nix { })
+      (pkgs.callPackage ../packages/scr.nix { })
+      (pkgs.callPackage ../packages/boox.nix { })
 
       cool-retro-term
-      simplescreenrecorder
       gromit-mpx
+      dragon-drop
+      #simplescreenrecorder
       #hyper-haskell
     ];
 
-    programs = {
-      alacritty = import ../config/alacritty.nix { inherit pkgs; inherit myConf; }; # <- https://github.com/guibou/nixGL
-      feh = import ../config/feh.nix;
-      rofi = import ../config/rofi { inherit pkgs; inherit myConf; };
 
+    elkowar.desktop = {
+      gtk.enable = true;
+    };
+
+    elkowar.programs = {
+      alacritty.enable = true;
+      rofi.enable = true;
+    };
+
+    programs = {
       mpv = {
         enable = true;
         bindings = {
@@ -38,6 +48,11 @@ in
           h = "seek -3";
           l = "seek 3";
         };
+      };
+
+      feh = {
+        enable = true;
+        keybindings = { zoom_in = "plus"; zoom_out = "minus"; };
       };
 
     };
