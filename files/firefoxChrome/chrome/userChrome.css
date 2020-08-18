@@ -153,7 +153,6 @@ hbox.tab-content[pinned="true"] .tab-text {
 }
 
 #tabs-newtab-button {
-  list-style-image: url("add.svg") !important;
   opacity: 0.7;
 }
 
@@ -247,14 +246,6 @@ hbox.tab-content[pinned="true"] .tab-text {
 #back-button > .toolbarbutton-icon {
   --backbutton-background: transparent !important;
   border: none !important;
-}
-
-#back-button {
-  list-style-image: url("left-arrow.svg") !important;
-}
-
-#forward-button {
-  list-style-image: url("right-arrow.svg") !important;
 }
 
 toolbar {

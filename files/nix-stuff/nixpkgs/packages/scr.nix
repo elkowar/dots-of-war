@@ -1,18 +1,21 @@
-{ pkgs ? import <nixpkgs> { } }:
-pkgs.stdenv.mkDerivation rec {
+{ fetchFromGitHub, stdenvNoCC, lib, makeWrapper, wmutils-core, procps-ng, slop, ffmpeg, xclip, shotgun, extraPackages ? [] }:
+let
+  binPath = lib.makeBinPath ([ wmutils-core xclip shotgun procps-ng slop ffmpeg ] ++ extraPackages);
+in
+stdenvNoCC.mkDerivation rec {
   pname = "scr";
-  version = "2.0";
-  src = pkgs.fetchFromGitHub {
+  version = "2.1";
+  src = fetchFromGitHub {
     owner = "6gk";
     repo = "scr";
     rev = "v${version}";
-    sha256 = "18srzjkbhh3n10ayq5nnbnx37vjfzfw0adhkwbg1s157y8hfnlcy";
+    sha256 = "0fgmv99zlppi5wa2qylbvnblk9kc6i201byz8m79ld8cwiymabi2";
   };
 
-  nativeBuildInputs = [ pkgs.makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
   installPhase = "install -m755 -D ./scr $out/bin/scr";
   postFixup = ''
-    wrapProgram "$out/bin/scr" --prefix PATH : ${pkgs.lib.makeBinPath (with pkgs; [ slop ffmpeg dmenu xclip shotgun ])}
+    wrapProgram "$out/bin/scr" --prefix PATH : ${binPath}
   '';
   meta = {
     description = "Super CRappy SCReenshot SCRipt";
@@ -22,7 +25,8 @@ pkgs.stdenv.mkDerivation rec {
       A SCRipt for Sound Cloud Rappers
     '';
     homepage = "https://github.com/6gk/scr";
-    license = pkgs.lib.licenses.mit;
-    platforms = pkgs.lib.platforms.all;
+    maintainers = with lib.maintainers; [ elkowar ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
   };
 }

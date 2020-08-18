@@ -1,6 +1,6 @@
 #!/bin/bash
 
-killall -q polybar
+pkill polybar
 echo "---" | tee -a /tmp/polybar1.log /tmp/polybar2.log
 
 

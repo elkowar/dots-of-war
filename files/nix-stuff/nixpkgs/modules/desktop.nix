@@ -38,6 +38,7 @@ in
     elkowar.programs = {
       alacritty.enable = true;
       rofi.enable = true;
+      firefox.enable = false;
     };
 
     programs = {

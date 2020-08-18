@@ -12,6 +12,7 @@ executable my-xmonad
         DescribedSubmap
         TiledDragging
         WindowSwallowing
+        FancyBorders
 
     default-language: Haskell2010
     ghc-options:      -Wall -threaded -fno-warn-missing-signatures

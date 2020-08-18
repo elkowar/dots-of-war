@@ -23,6 +23,7 @@ import qualified XMonad.Util.ExtensibleState as XS
 import qualified Rofi
 import qualified DescribedSubmap
 import qualified TiledDragging
+import qualified FancyBorders
 --import qualified WindowSwallowing
 
 import XMonad.Hooks.WindowSwallowing as WindowSwallowing
@@ -74,18 +75,15 @@ import XMonad.Layout.LayoutModifier
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run
 import XMonad.Util.SpawnOnce (spawnOnce)
-import qualified XMonad.Hooks.UrgencyHook as Urgency
 import XMonad.Util.WorkspaceCompare   ( getSortByXineramaPhysicalRule , getSortByIndex)
 
 import qualified Data.Monoid
 import           Data.Monoid                    ( Endo )
-import           Data.Traversable               ( for )
 import           Data.Semigroup                 ( All(..) )
 import qualified System.IO                           as SysIO
 import qualified XMonad.Actions.Navigation2D         as Nav2d
 import qualified XMonad.Config.Desktop               as Desktop
 import qualified XMonad.Hooks.EwmhDesktops           as Ewmh
-import XMonad.Hooks.FadeInactive
 import qualified XMonad.Hooks.ManageHelpers          as ManageHelpers
 import           XMonad.Hooks.DebugStack        ( debugStackString
                                                 , debugStackFullString
@@ -96,9 +94,7 @@ import qualified XMonad.Layout.MultiToggle.Instances as MTog
 import qualified XMonad.Layout.ToggleLayouts         as ToggleLayouts
 import qualified XMonad.StackSet                     as W
 import qualified XMonad.Util.XSelection              as XSel
-import           XMonad.Util.WindowProperties
 import qualified XMonad.Layout.PerScreen             as PerScreen
-import           XMonad.Layout.WindowArranger
 {-# ANN module "HLint: ignore Redundant $" #-}
 {-# ANN module "HLint: ignore Redundant bracket" #-}
 {-# ANN module "HLint: ignore Move brackets to avoid $" #-}
@@ -175,7 +171,9 @@ data EmptyShrinker = EmptyShrinker deriving (Show, Read)
 instance Shrinker EmptyShrinker where
   shrinkIt _ _ = [] :: [String]
 
+
 myLayout = avoidStruts
+         -- $ FancyBorders.fancyBorders borderTheme
          $ smartBorders
          $ MTog.mkToggle1 MTog.FULL
          $ ToggleLayouts.toggleLayouts (rename "Tabbed" . makeTabbed . spacingAndGaps $ ResizableTall 1 (3/100) (1/2) [])
@@ -199,6 +197,11 @@ myLayout = avoidStruts
     vertScreenLayouts =
         ((rename "ThreeCol" $ makeTabbed  $ spacingAndGaps $ Mirror $ reflectHoriz $ ThreeColMid 1 (3/100) (1/2))
      ||| (rename "Horizon"  $               spacingAndGaps $ mouseResizableTileMirrored {draggerType = BordersDragger}))
+
+
+    borderTheme = FancyBorders.FancyBordersTheme { FancyBorders.outerColor = "#282828"
+                                                 , FancyBorders.intBorderWidth = 2
+                                                 }
 
     rename n = renamed [Replace n]
     spacingAndGaps = let gap = 15 -- gap = 20
@@ -502,7 +505,6 @@ main = do
         , logHook            = mconcat [ polybarLogHooks, Ewmh.ewmhDesktopsLogHook, logHook Desktop.desktopConfig, logHook def]
         , startupHook        = mconcat [ myStartupHook, Ewmh.ewmhDesktopsStartup, return () >> checkKeymap myConfig myKeys]
         , manageHook         = mconcat [ manageSpawn, myManageHook, manageHook def]
-        --, focusedBorderColor = aqua
         , focusedBorderColor = "#427b58"
         , normalBorderColor  = "#282828"
         , handleEventHook    = mconcat [ mySwallowEventHook

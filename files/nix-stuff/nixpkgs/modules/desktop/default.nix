@@ -1,1 +1,1 @@
-{ ... }: { imports = [ ./alacritty.nix ./rofi ./colors ./gtk.nix ]; }
+{ ... }: { imports = [ ./alacritty.nix ./rofi ./colors ./gtk.nix ./firefox]; }
