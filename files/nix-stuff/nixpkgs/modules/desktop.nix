@@ -18,12 +18,14 @@ in
       (pkgs.callPackage ../packages/bashtop.nix { })
       (pkgs.callPackage ../packages/liquidctl.nix { })
       (pkgs.callPackage ../packages/scr.nix { })
-      (pkgs.callPackage ../packages/boox.nix { })
+      #(pkgs.callPackage ../packages/boox.nix { })
       (pkgs.callPackage ../packages/mmutils.nix { })
 
       cool-retro-term
       gromit-mpx
       dragon-drop
+      polybarFull
+      discord
       #simplescreenrecorder
       #hyper-haskell
     ];

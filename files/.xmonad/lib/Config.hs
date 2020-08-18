@@ -132,7 +132,7 @@ scratchpads =
   where
 --launchWhatsapp = "gtk-launch chrome-hnpfjngllnobngcgfapefoaidbinmjnm-Default.desktop"
   launchWhatsapp = "google-chrome-stable --start-fullscreen -kiosk --app='https://web.whatsapp.com'"
-  launchDiscord = "discord"
+  launchDiscord = "Discord"
   --launchDiscord = "beautifuldiscord --css /home/leon/.config/beautifuldiscord/custom_discord.css"
 
 
@@ -433,7 +433,7 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
     [ ("screenshot",              spawn $ scriptFile "screenshot.sh")
     , ("screenshot to file",      spawn $ scriptFile "screenshot.sh --tofile")
     , ("screenshot full to file", spawn $ scriptFile "screenshot.sh --tofile --fullscreen")
-    , ("screenvideo to file",     spawn (scriptFile "screenvid.sh") >> notify "video" "stop video-recording with M-S-C-g")
+    , ("screenvideo to file",     spawn (scriptFile "screenvideo.sh") >> notify "video" "stop video-recording with M-S-C-g")
     , ("screengif to file",       spawn (scriptFile "screengif.sh") >> notify "gif" "stop gif-recording with M-S-C-g")
     , ("toggleOptimal",           sendMessage ToggleGaps >> toggleWindowSpacingEnabled)
     , ("toggleSpacing",           toggleWindowSpacingEnabled)
