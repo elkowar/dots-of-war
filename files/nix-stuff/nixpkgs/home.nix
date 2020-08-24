@@ -10,7 +10,9 @@
 {
   nixpkgs.config = {
     allowUnfree = true;
-    overlays = [ (import ./overlay) ];
+    overlays = [
+      (import ./overlay)
+    ];
 
     packageOverrides = pkgs: {
       nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
@@ -26,6 +28,7 @@
       enable = true;
       enableFish = true;
       enableZsh = true;
+      includeNiceToHaves = true;
     };
     desktop.enable = true;
     desktop.colors = import ./modules/desktop/colors/gruvbox.nix;

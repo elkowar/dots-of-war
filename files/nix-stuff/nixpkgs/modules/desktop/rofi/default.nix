@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 let
   cfg = config.elkowar.programs.rofi;
-  myConf = import ../myConfig.nix;
 in
 {
   options.elkowar.programs.rofi = {

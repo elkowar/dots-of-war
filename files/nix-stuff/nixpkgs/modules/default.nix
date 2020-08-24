@@ -1,1 +1,1 @@
-{...}: { imports = [ ./desktop ./term ./base.nix ./desktop.nix ./generalConfig.nix]; }
+{ ... }: { imports = [ ./desktop ./term ./base.nix ./desktop.nix ./generalConfig.nix ]; }

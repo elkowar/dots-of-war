@@ -1,8 +1,7 @@
 { config, lib, pkgs, ... }:
 let
   cfg = config.elkowar.base;
-  elkowar_local = import ../local/default.nix { };
-  myConf = import ../myConfig.nix;
+  elkowar_local = import ../local/default.nix {};
   sources = import ../nix/sources.nix;
 in
 {
@@ -10,6 +9,7 @@ in
     enable = lib.mkEnableOption "Basic profile enabled";
     enableFish = lib.mkEnableOption "Fish shell";
     enableZsh = lib.mkEnableOption "Zsh shell";
+    includeNiceToHaves = lib.mkEnableOption "Add nice-to-have, non-essential programs";
   };
 
   imports = [ ./term ./generalConfig.nix ];
@@ -20,35 +20,43 @@ in
     elkowar.programs.fish.enable = cfg.enableFish;
     elkowar.generalConfig.shellAbbrs = {
       vim = "nvim";
-      tsh = "trash";
-      cxmonad = "nvim /home/leon/.xmonad/lib/Config.hs";
+      cxmonad = "cd ~/.xmonad && nvim /home/leon/.xmonad/lib/Config.hs && cd -";
       cnix = "cd ~/nixpkgs/ && nvim home.nix && cd -";
+      cvim = "cd ~/.config/nvim/ && nvim init.vim && cd -";
 
       gaa = "git add --all";
       gc = "git commit -m ";
       gp = "git push";
-      gs = "git status";
+      gst = "git status";
     };
 
-    home.packages = with pkgs; [
-      (pkgs.callPackage ../packages/fet.sh.nix { })
-      sources.manix
-      direnv
-      rnix-lsp
-      nix-prefetch-git
-      gtop
-      bat
-      websocat
-      niv
-      exa
-      trash-cli
-      mdcat
-      github-cli
-      haskellPackages.nix-tree
-      ripgrep
-      fd
-      jq
+    home.packages = with pkgs; lib.mkMerge [
+      [
+        sources.manix
+        direnv
+        rnix-lsp
+        nix-prefetch-git
+        niv
+        bat
+        exa
+        trash-cli
+        ripgrep
+        fd
+        jq
 
+        cachix
+      ]
+      (
+        lib.mkIf cfg.includeNiceToHaves [
+          haskellPackages.nix-tree
+          cloc
+          fet-sh
+          mdcat
+          github-cli
+          websocat
+          gtop
+        ]
+      )
     ];
 
     programs = {

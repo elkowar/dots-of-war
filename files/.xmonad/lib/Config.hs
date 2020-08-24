@@ -128,7 +128,7 @@ scratchpads =
   where
 --launchWhatsapp = "gtk-launch chrome-hnpfjngllnobngcgfapefoaidbinmjnm-Default.desktop"
   launchWhatsapp = "google-chrome-stable --start-fullscreen -kiosk --app='https://web.whatsapp.com'"
-  launchDiscord = "Discord"
+  launchDiscord = "discocss"
   --launchDiscord = "beautifuldiscord --css /home/leon/.config/beautifuldiscord/custom_discord.css"
 
 
@@ -231,6 +231,8 @@ myStartupHook = do
   spawnOnce "redshift -P -O 5000 &"
   spawn "xset r rate 300 50 &" -- make key repeat quicker
   spawn "/home/leon/.screenlayout/dualscreen-stacked.sh"
+  spawnOnce "xsetroot -cursor_name left_ptr"
+  spawnOnce "xrdb -merge ~/.Xresources"
   io $ threadDelay $ 1000 * 100
   spawnOnce "/home/leon/Downloads/picom --config /home/leon/.config/picom.conf --experimental-backends --backend xrender"  --no-fading-openclose"
   spawn "/home/leon/.config/polybar/launch.sh"

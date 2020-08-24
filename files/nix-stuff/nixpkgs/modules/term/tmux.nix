@@ -16,6 +16,7 @@ in
       keyMode = "vi";
       shortcut = "y";
       terminal = "tmux-256color";
+      escapeTime = 0;
       customPaneNavigationAndResize = true;
       extraConfig = ''
         bind v split-window -h -c "#{pane_current_oath}"
