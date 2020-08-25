@@ -10,12 +10,7 @@ in
   config = lib.mkIf cfg.enable {
     programs.alacritty = {
       enable = true;
-      package = (
-        pkgs.writeScriptBin "alacritty" ''
-          #!/bin/sh
-          exec nixGLIntel ${pkgs.alacritty}/bin/alacritty "$@"
-        ''
-      );
+
       settings = {
         live_config_reload = true;
         window = {

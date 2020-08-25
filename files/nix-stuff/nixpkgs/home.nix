@@ -8,17 +8,16 @@
 
 { config, pkgs, ... }:
 {
-  nixpkgs.config = {
-    allowUnfree = true;
-    overlays = [
-      (import ./overlay)
-    ];
-
-    packageOverrides = pkgs: {
-      nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
-        inherit pkgs;
+  nixpkgs = {
+    config = {
+      allowUnfree = true;
+      packageOverrides = pkgs: {
+        nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
+          inherit pkgs;
+        };
       };
     };
+    overlays = [ (import ./overlay) ];
 
   };
 
@@ -29,15 +28,11 @@
       enableFish = true;
       enableZsh = true;
       includeNiceToHaves = true;
+      includeHaskellDev = true;
     };
     desktop.enable = true;
     desktop.colors = import ./modules/desktop/colors/gruvbox.nix;
   };
 
-
-
-
   imports = [ ./modules ];
-
-
 }

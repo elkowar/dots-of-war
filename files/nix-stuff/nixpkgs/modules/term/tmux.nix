@@ -19,6 +19,7 @@ in
       escapeTime = 0;
       customPaneNavigationAndResize = true;
       extraConfig = ''
+        set -ga terminal-overrides ",*col*:Tc"
         bind v split-window -h -c "#{pane_current_oath}"
         bind b split-window -v -c "#{pane_current_oath}"
         bind c new-window -c "#{pane_current_path}"

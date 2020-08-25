@@ -3,6 +3,15 @@ let
   cfg = config.elkowar.base;
   elkowar_local = import ../local/default.nix {};
   sources = import ../nix/sources.nix;
+
+  addFlags = package: name: flags: pkgs.symlinkJoin {
+    name = name;
+    paths = [ package ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postBuild = ''
+      wrapProgram $out/bin/${name} --add-flags "${flags}"
+    '';
+  };
 in
 {
   options.elkowar.base = {
@@ -10,6 +19,7 @@ in
     enableFish = lib.mkEnableOption "Fish shell";
     enableZsh = lib.mkEnableOption "Zsh shell";
     includeNiceToHaves = lib.mkEnableOption "Add nice-to-have, non-essential programs";
+    includeHaskellDev = lib.mkEnableOption "Include large haskell development packages";
   };
 
   imports = [ ./term ./generalConfig.nix ];
@@ -35,26 +45,37 @@ in
         sources.manix
         direnv
         rnix-lsp
-        nix-prefetch-git
         niv
-        bat
         exa
         trash-cli
         ripgrep
         fd
         jq
+        nodejs
+        nodePackages.bash-language-server
+        nodePackages.dockerfile-language-server-nodejs
+
+        (addFlags bat "bat" "--theme base16")
 
         cachix
       ]
       (
         lib.mkIf cfg.includeNiceToHaves [
+          (addFlags glow "glow" "--style ~/.config/glowStyle.json")
+          mdcat
           haskellPackages.nix-tree
           cloc
           fet-sh
-          mdcat
           github-cli
           websocat
           gtop
+          nix-prefetch
+        ]
+      )
+      (
+        lib.mkIf cfg.includeHaskellDev [
+          cabal2nix
+          cabal-install
         ]
       )
     ];

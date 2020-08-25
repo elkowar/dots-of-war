@@ -23,6 +23,18 @@
         "url": "https://github.com/nmattia/niv/archive/89ae775e9dfc2571f912156dd2f8627e14d4d507.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
+    "nixGL": {
+        "branch": "master",
+        "description": "A wrapper tool for nix OpenGL application",
+        "homepage": null,
+        "owner": "guibou",
+        "repo": "nixGL",
+        "rev": "210c6a8a547b4a548b89b08bd46ffedc396bc4f4",
+        "sha256": "08n0xmqfg63wrzlbffas9nw5jzgkx1answmn8pqyaib3gn7icby2",
+        "type": "tarball",
+        "url": "https://github.com/guibou/nixGL/archive/210c6a8a547b4a548b89b08bd46ffedc396bc4f4.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
     "nixpkgs": {
         "branch": "release-20.03",
         "description": "Nix Packages collection",

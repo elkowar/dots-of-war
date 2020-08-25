@@ -321,6 +321,7 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
     , ("M-b",          safeSpawnProg "firefox")
     , ("M-S-<Return>", spawn "alacritty")
     --, ("M-S-<Return>", launchWithBackgroundInstance (className =? "Alacritty") "alacritty")
+    , ("M-S-<", spawn "flameshot gui")
     ]
 
   miscBindings :: [(String, X ())]

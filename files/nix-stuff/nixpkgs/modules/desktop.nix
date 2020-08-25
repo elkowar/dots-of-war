@@ -12,21 +12,16 @@ in
 
 
   config = lib.mkIf cfg.enable {
-
-
     home.packages = with pkgs; [
-      (pkgs.callPackage ../packages/bashtop.nix { })
-      (pkgs.callPackage ../packages/liquidctl.nix { })
-      (pkgs.callPackage ../packages/scr.nix { })
-      #(pkgs.callPackage ../packages/boox.nix { })
-      (pkgs.callPackage ../packages/mmutils.nix { })
-
+      (scr.override { extraPackages = [ rofi ]; })
+      mmutils
+      liquidctl
+      bashtop
       cool-retro-term
       gromit-mpx
       dragon-drop
       polybarFull
       discord
-      #simplescreenrecorder
       #hyper-haskell
     ];
 
