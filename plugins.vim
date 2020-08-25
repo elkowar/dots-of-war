@@ -10,7 +10,7 @@ call plug#begin('~/.vim/plugged')
   Plug 'tpope/vim-repeat'
 
   Plug 'junegunn/goyo.vim', {'on': 'Goyo'}
-  Plug 'osyo-manga/vim-over', {'on': 'OverCommandLine'} " Substitute preview
+  "Plug 'osyo-manga/vim-over', {'on': 'OverCommandLine'} " Substitute preview
 
   Plug 'liuchengxu/vim-which-key'
 
@@ -27,7 +27,8 @@ call plug#begin('~/.vim/plugged')
   Plug 'vim-airline/vim-airline-themes'
   Plug 'vim-airline/vim-airline'
 
-  Plug 'morhetz/gruvbox'
+  "Plug 'morhetz/gruvbox'
+  Plug 'gruvbox-community/gruvbox'
 
   Plug 'godlygeek/tabular'               " :Tab /regex can align code on occurrences of the given regex. I.e. :Tab /= aligns all = signs in a block.
   Plug 'tpope/vim-surround'
@@ -38,10 +39,11 @@ call plug#begin('~/.vim/plugged')
 
   " <C-n> to select current word. <C-n> to select next occurrence.
   " with multiple lines selected in Visual mode, <C-n> to insert cursor in each line. I not i to insert in Visual-mode.
-  Plug 'terryma/vim-multiple-cursors'
+  "Plug 'terryma/vim-multiple-cursors'
+  Plug 'mg979/vim-visual-multi'
   Plug 'hauleth/sad.vim'          " Use siw instead of ciw. when using . afterwards, will find the next occurrence of the changed word and change it too
   Plug 'wellle/targets.vim'       " more text objects. IE: cin) (change in next parens). generally better handling of surrounding objects.
-  Plug 'haya14busa/incsearch.vim' " Show search result-highlights whilst typing the query
+  "Plug 'haya14busa/incsearch.vim' " Show search result-highlights whilst typing the query
 
   Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } " Fuzzy file opener, use: :FZF or :FZF! for fullscreen
   Plug 'junegunn/fzf.vim'
@@ -62,6 +64,8 @@ call plug#begin('~/.vim/plugged')
   " Language Plugins ----------------------------------------------------- {{{
 
   Plug 'LnL7/vim-nix'
+
+  Plug 'kien/rainbow_parentheses.vim'
 
 
   Plug 'ap/vim-css-color'
@@ -85,7 +89,6 @@ call plug#begin('~/.vim/plugged')
   " Rust
   Plug 'rust-lang/rust.vim'
   Plug 'mattn/webapi-vim'
-
 
 
   Plug 'neoclide/coc.nvim', {'branch': 'release'}

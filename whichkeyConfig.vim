@@ -80,7 +80,8 @@ let g:which_key_map['x'] = {
 "nnoremap <silent> m :<c-u>WhichKey 'm'<CR>
   autocmd! VimEnter * :unmap <space>ig
   autocmd! FileType which_key
-  autocmd! FileType which_key set laststatus=0 noshowmode noruler
+  autocmd! FileType which_key set laststatus=2 noshowmode noruler
     \| autocmd! BufLeave <buffer> set laststatus=2 showmode ruler
+
 set timeoutlen=200
 

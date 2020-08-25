@@ -1,3 +1,19 @@
+hi link haskellOperators GruvboxAqua
+hi link haskellImportKeywords GruvboxPurple
+
+
+au VimEnter * RainbowParenthesesToggle
+au Syntax * RainbowParenthesesLoadRound
+au Syntax * RainbowParenthesesLoadSquare
+au Syntax * RainbowParenthesesLoadBraces
+
+let g:coc_global_extensions = [
+      \ 'coc-yank', 'coc-vimlsp', 'coc-prettier', 'coc-eslint', 
+      \ 'coc-diagnostic', 'coc-yaml', 'coc-tsserver', 'coc-rust-analyzer', 
+      \ 'coc-json', 'coc-go', 'coc-html', 'coc-css', 'coc-clangd'
+      \ ]
+
+
 " vim-jsx
 autocmd! BufRead,BufNewFile *.tsx setlocal syntax=javascript.jsx
 
@@ -7,6 +23,14 @@ let g:user_emmet_settings = { 'javascript': { 'extends': 'jsx' }, 'typescript': 
 let g:user_emmet_mode='n'
 
 
+
+
+" Use <c-space> to trigger completion.
+if has('nvim')
+  inoremap <silent><expr> <c-space> coc#refresh()
+else
+  inoremap <silent><expr> <c-@> coc#refresh()
+endif
 
 " ? idk
 inoremap <silent><expr> <TAB> pumvisible() ? "\<C-n>" : <SID>check_back_space() ? "\<TAB>" : coc#refresh()

@@ -18,6 +18,7 @@ endif
 let mapleader ="\<Space>"
 
 
+
 " Vanilla VIM configuration ------------------------------------ {{{
 
 filetype plugin indent on
@@ -32,6 +33,9 @@ set encoding=utf-8
 set nonumber norelativenumber
 set nocompatible
 set cursorline
+set incsearch
+set hlsearch
+set inccommand=nosplit
 
 " May cause problems!
 if (has("termguicolors"))
@@ -61,6 +65,15 @@ let &t_ut=''
 
 " hide empty line ~'s
 highlight EndOfBuffer ctermfg=black ctermbg=black
+
+
+
+hi NormalFloat ctermbg=black guibg='#1d2021'
+hi Pmenu ctermbg=black guibg='#1d2021'
+hi SignColumn ctermbg=black guibg='#282828'
+hi WhichKeyFloating ctermbg=black guibg='#282828'
+hi link Function GruvboxGreen
+
 
 if !has("nvim")
   set term=xterm-256color
@@ -129,12 +142,14 @@ vnoremap K <Nop>
 " Plugin configuration --------------------------------------------------- {{{
 
 
-" Misc configuration ----------------------------------------------------- {{{
 
+let g:VM_leader = 'm'
 
 autocmd BufReadPost * :DetectIndent 
 let g:detectindent_preferred_expandtab = 1
 let g:detectindent_preferred_indent = 2
+
+autocmd BufReadPost *.hs :set shiftwidth=2
 
 
 let g:sneak#label = 1
@@ -166,9 +181,6 @@ map <Leader>f <Plug>(easymotion-bd-f)
 map <Leader>s <Plug>(easymotion-overwin-f2)
 let g:EasyMotion_smartcase = 1
 
-nmap / <Plug>(incsearch-forward)
-nmap ? <Plug>(incsearch-backward)
-
 let g:signify_sign_delete = '-'
 
 " Airline {{{
@@ -176,25 +188,29 @@ let g:signify_sign_delete = '-'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 0
 
-let g:airline_section_a = '%#__accent_bold#%{airline#util#wrap(airline#parts#mode(),0)}%#__restore__#%{airline#util#append(airline#parts#iminsert(),0)}'
+let g:airline_section_a = '%#__accent#%{airline#util#wrap(airline#parts#mode(),0)}%#__restore__#%{airline#util#append(airline#parts#iminsert(),0)}'
 let g:airline_section_b = ''
 let g:airline_section_c = '%<%<%#__accent_red#%{airline#util#wrap(airline#parts#readonly(),0)}%#__restore__#%#__accent_bold#%{airline#util#wrap(airline#extensions#coc#get_status(),0)}%#__restore__#'
 let g:airline_section_y = ''
 let g:airline_section_z = '%4l% %3v'
 let g:airline_section_warning = '%{airline#extensions#whitespace#check()}%{airline#util#wrap(airline#extensions#coc#get_warning(),0)}'
-
 let airline#extensions#coc#error_symbol = ''
 let airline#extensions#coc#warning_symbol = ''
 let airline#extensions#coc#stl_format_err = '%E{[%e(#%fe)]}'
 let airline#extensions#coc#stl_format_warn = '%W{[%w(#%fw)]}'
 
-
 let g:airline_theme='elkowars_gruvbox'
 
-" }}}
+
+hi airline_tabfill ctermbg=NONE guibg=NONE
+hi airline_b_to_airline_c ctermbg=NONE guibg='#ff0000'
+hi airline_tablabel_right ctermbg=NONE guibg=NONE ctermfg=NONE guifg=NONE
+
 
 " }}}
+
 
 source $VIM_ROOT/whichkeyConfig.vim
 source $VIM_ROOT/lsp.vim
 " }}}
+

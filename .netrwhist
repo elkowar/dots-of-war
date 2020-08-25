@@ -1,0 +1,12 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =2
+let g:netrw_dirhist_2='/home/leon/dotfiles/.vim/plugged/vim-airline-themes/plugin'
+let g:netrw_dirhist_1='/home/leon/dotfiles/.vim/plugged/vim-airline-themes'
+let g:netrw_dirhist_0='/home/leon/dotfiles/.vim/plugged'
+let g:netrw_dirhist_9='/home/leon/coding/projects/rnix-lsp'
+let g:netrw_dirhist_8='/home/leon/coding/projects/rnix-lsp/src'
+let g:netrw_dirhist_7='/home/leon/coding/projects/rnix-lsp'
+let g:netrw_dirhist_6='/home/leon/tmp/nixpkgs/pkgs'
+let g:netrw_dirhist_5='/home/leon/tmp/nixpkgs/pkgs/tools/misc/fet-sh'
+let g:netrw_dirhist_4='/home/leon/tmp/nixpkgs/pkgs/tools/misc/fet.sh'
+let g:netrw_dirhist_3='/home/leon/tmp/nixpkgs/pkgs/tools/misc/pfetch'
