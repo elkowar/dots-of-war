@@ -7,7 +7,7 @@ module Config (main) where
 import qualified Data.Map.Strict as M
 import Control.Concurrent
 import           Control.Exception              ( catch , SomeException)
-import           Control.Monad                  ( filterM
+import           Control.Monad                  (join,  filterM
                                                 , when
                                                 , guard
                                                 )
@@ -64,6 +64,7 @@ import XMonad.Layout.ThreeColumns
 import XMonad.Layout.ResizableThreeColumns
 import XMonad.Layout.WindowSwitcherDecoration
 import XMonad.Layout.DraggingVisualizer
+import XMonad.Hooks.FadeInactive
 --import XMonad.Layout.Hidden as Hidden
 
 import           XMonad.Util.EZConfig           ( additionalKeysP
@@ -85,8 +86,7 @@ import qualified XMonad.Actions.Navigation2D         as Nav2d
 import qualified XMonad.Config.Desktop               as Desktop
 import qualified XMonad.Hooks.EwmhDesktops           as Ewmh
 import qualified XMonad.Hooks.ManageHelpers          as ManageHelpers
-import           XMonad.Hooks.DebugStack        ( debugStackString
-                                                , debugStackFullString
+import           XMonad.Hooks.DebugStack        ( debugStackFullString
                                                 )
 import qualified XMonad.Layout.BoringWindows         as BoringWindows
 import qualified XMonad.Layout.MultiToggle           as MTog
@@ -95,6 +95,7 @@ import qualified XMonad.Layout.ToggleLayouts         as ToggleLayouts
 import qualified XMonad.StackSet                     as W
 import qualified XMonad.Util.XSelection              as XSel
 import qualified XMonad.Layout.PerScreen             as PerScreen
+import Data.Maybe (maybeToList)
 {-# ANN module "HLint: ignore Redundant $" #-}
 {-# ANN module "HLint: ignore Redundant bracket" #-}
 {-# ANN module "HLint: ignore Move brackets to avoid $" #-}
@@ -173,13 +174,11 @@ instance Shrinker EmptyShrinker where
 
 
 myLayout = avoidStruts
-         -- $ FancyBorders.fancyBorders borderTheme
          $ smartBorders
          $ MTog.mkToggle1 MTog.FULL
          $ ToggleLayouts.toggleLayouts (rename "Tabbed" . makeTabbed . spacingAndGaps $ ResizableTall 1 (3/100) (1/2) [])
          $ MTog.mkToggle1 WINDOWDECORATION
          $ draggingVisualizer
-         -- $ Hidden.hiddenWindows
          $ layoutHintsToCenter
          $ layouts
   where
@@ -238,8 +237,17 @@ myStartupHook = do
   spawn "/home/leon/.config/polybar/launch.sh"
   spawnOnce "nitrogen --restore"
   spawnOnce "mailnag"
-  --spawnOnce "flashfocus"
+  spawnOnce "flashfocus"
   for_ ["led1", "led2"] $ \led -> safeSpawn "sudo" ["liquidctl", "set", led, "color", "fixed", "00ffff"]
+  withDisplay $ \dpy -> do
+    r <- asks theRoot
+    a <- getAtom "_NET_SUPPORTED"
+    c <- getAtom "ATOM"
+    f <- getAtom "_GTK_FRAME_EXTENTS"
+    io $ do
+      sup <- (join . maybeToList) <$> getWindowProperty32 dpy a r
+      when (fromIntegral f `notElem` sup) $ do
+        changeProperty32 dpy r a c propModeAppend [fromIntegral f]
 -- }}}
 
 -- Keymap --------------------------------------- {{{
@@ -503,10 +511,14 @@ main = do
                                   then (map show [1..9 :: Int]) ++ ["NSP"]
                                   else (withScreens (fromIntegral currentScreenCount) (map show [1..6 :: Int])) ++ ["NSP"]
         , modMask            = myModMask
-        , borderWidth        = 1
+        , borderWidth        = 0
         , layoutHook         = myLayout
-        , logHook            = mconcat [ polybarLogHooks, Ewmh.ewmhDesktopsLogHook, logHook Desktop.desktopConfig, logHook def]
-        , startupHook        = mconcat [ myStartupHook, Ewmh.ewmhDesktopsStartup, return () >> checkKeymap myConfig myKeys]
+        , logHook            = mconcat [ polybarLogHooks
+                                       , Ewmh.ewmhDesktopsLogHook
+                                       , logHook Desktop.desktopConfig
+                                       --, fadeInactiveLogHook 0.95
+                                       , logHook def]
+        , startupHook        = mconcat [ Ewmh.ewmhDesktopsStartup, myStartupHook, return () >> checkKeymap myConfig myKeys]
         , manageHook         = mconcat [ manageSpawn, myManageHook, manageHook def]
         , focusedBorderColor = "#427b58"
         , normalBorderColor  = "#282828"
@@ -530,7 +542,7 @@ main = do
 
 mySwallowEventHook = WindowSwallowing.swallowEventHook
   (className =? "Alacritty" <||> className =? "Termite" <||> className =? "NOPE Thunar")
-  (return True)
+  (not <$> className =? "Dragon")
 
 
 activateWindowEventHook :: Event -> X All
