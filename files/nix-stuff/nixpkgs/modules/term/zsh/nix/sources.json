@@ -59,6 +59,18 @@
         "url": "https://github.com/olets/zsh-abbr/archive/703ba651e4f9c0ae18402e2462177e6253585386.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
+    "zsh-abbrev-alias": {
+        "branch": "master",
+        "description": "This zsh plugin provides functionality similar to Vim's abbreviation expansion.",
+        "homepage": "",
+        "owner": "momo-lab",
+        "repo": "zsh-abbrev-alias",
+        "rev": "ae2997ea7c1519861ff6712b84379b8d03de4f39",
+        "sha256": "1b5miqli5b5n893k0qd5lxb9w73md4sz1i8g9wzlhyqg4sasxvnx",
+        "type": "tarball",
+        "url": "https://github.com/momo-lab/zsh-abbrev-alias/archive/ae2997ea7c1519861ff6712b84379b8d03de4f39.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
     "zsh-autosuggestions": {
         "branch": "master",
         "description": "Fish-like autosuggestions for zsh",

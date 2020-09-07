@@ -54,6 +54,8 @@ in
         nodejs
         nodePackages.bash-language-server
         nodePackages.dockerfile-language-server-nodejs
+        rust-analyzer
+        cargo-outdated
 
         (addFlags bat "bat" "--theme base16")
 

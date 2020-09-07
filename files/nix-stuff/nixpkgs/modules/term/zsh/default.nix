@@ -12,6 +12,8 @@ let
         (mapAttrs (k: v: ''abbr --session ${k}="${v}" >/dev/null 2>&1'') abbrs)
     );
 
+  keybinds-code = lib.builtins.readFile ./keybinds.zsh;
+
   manFunction = ''
     function man() {
       env \
@@ -166,6 +168,7 @@ in
         ${manFunction}
 
         ${builtins.readFile ./prompt.zsh}
+        ${builtins.readFile ./keybinds.zsh}
       '';
 
       plugins = let

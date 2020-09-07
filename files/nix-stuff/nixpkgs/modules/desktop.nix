@@ -22,6 +22,7 @@ in
       dragon-drop
       polybarFull
       discord
+      my-st
       #hyper-haskell
     ];
 
