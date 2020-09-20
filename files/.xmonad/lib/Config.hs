@@ -14,8 +14,8 @@ import           Control.Monad                  (join,  filterM
 import           Control.Arrow                  ( (>>>) )
 import           Data.List                      ( isPrefixOf
                                                 , isSuffixOf
-                                                , isInfixOf
-                                                , intercalate
+                                                
+                                                
                                                 )
 import qualified Foreign.C.Types
 import System.Exit (exitSuccess)
@@ -27,6 +27,8 @@ import qualified FancyBorders
 --import qualified WindowSwallowing
 
 import XMonad.Hooks.WindowSwallowing as WindowSwallowing
+
+
 
 
 import Data.Foldable                  ( for_ )
@@ -158,13 +160,16 @@ aqua      = "#8ec07c"
 -- Layout ---------------------------------------- {{{
 myTabTheme :: Theme
 myTabTheme = def -- defaultThemeWithButtons
-    { activeColor         = "#1d2021"
-    , inactiveColor       = "#282828"
+    { activeColor         = "#202020" --activeColor         = "#1d2021"
+    , inactiveColor       = "#1d2021" --inactiveColor       = "#282828"
     , activeBorderColor   = "#1d2021"
     , inactiveBorderColor = "#282828"
     , activeTextColor     = "#fbf1c7"
     , inactiveTextColor   = "#fbf1c7"
-    , decoHeight          = 20
+    , decoHeight          = 40
+    , activeBorderWidth   = 0
+    , inactiveBorderWidth = 0
+    , urgentBorderWidth   = 0
     , fontName            = "-misc-cozettevector-*-*-*-*-10-*-*-*-*-*-*-*"
     }
 
@@ -173,8 +178,9 @@ instance Shrinker EmptyShrinker where
   shrinkIt _ _ = [] :: [String]
 
 
-myLayout = avoidStruts
+myLayout = noBorders $ avoidStruts
          $ smartBorders
+         -- $ FancyBorders.fancyBorders borderTheme
          $ MTog.mkToggle1 MTog.FULL
          $ ToggleLayouts.toggleLayouts (rename "Tabbed" . makeTabbed . spacingAndGaps $ ResizableTall 1 (3/100) (1/2) [])
          $ MTog.mkToggle1 WINDOWDECORATION
@@ -187,11 +193,11 @@ myLayout = avoidStruts
     layouts = PerScreen.ifWider 1900 horizScreenLayouts vertScreenLayouts
 
     horizScreenLayouts =
-        ((rename "Tall"      $              spacingAndGaps $ mouseResizableTile         {draggerType = BordersDragger})
+         (rename "Tall"      $              spacingAndGaps $ mouseResizableTile         {draggerType = BordersDragger})
      ||| (rename "Horizon"   $              spacingAndGaps $ mouseResizableTileMirrored {draggerType = BordersDragger})
      ||| (rename "BSP"       $              spacingAndGaps $ borderResize $ emptyBSP)
      ||| (rename "ThreeCol"  $ makeTabbed $ spacingAndGaps $ ResizableThreeColMid 1 (3/100) (1/2) [])
-     ||| (rename "TabbedRow" $ makeTabbed $ spacingAndGaps $ zoomRow))
+     ||| (rename "TabbedRow" $ makeTabbed $ spacingAndGaps $ zoomRow)
 
     vertScreenLayouts =
         ((rename "ThreeCol" $ makeTabbed  $ spacingAndGaps $ Mirror $ reflectHoriz $ ThreeColMid 1 (3/100) (1/2))
@@ -214,8 +220,10 @@ myLayout = avoidStruts
 data WINDOWDECORATION = WINDOWDECORATION deriving (Read, Show, Eq, Typeable)
 instance MTog.Transformer WINDOWDECORATION Window where
   transform WINDOWDECORATION x k = k
-    (windowSwitcherDecoration shrinkText (myTabTheme { activeBorderColor = "#1d2021" }) $ x)
+    (windowSwitcherDecoration EmptyShrinker (myTabTheme { activeBorderColor = "#1d2021" }) $ x)
     (const x)
+
+
 
 -- }}}
 
@@ -322,7 +330,7 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
     , ("M-n",      scratchpadSubmap)
     , ("M-e",      Rofi.promptRunCommand def specialCommands)
     , ("M-o",      Rofi.promptRunCommand def withSelectionCommands)
-    , ("M-S-C-g",  spawn "killall -INT -g giph" >> spawn "scr -s") -- stop gif and video recording
+    , ("M-S-C-g",  spawn "giph --stop" >> spawn "scr -s") -- stop gif and video recording
 
     --, ("M-b",          launchWithBackgroundInstance (className =? "qutebrowser") "bwrap --bind / / --dev-bind /dev /dev --tmpfs /tmp --tmpfs /run qutebrowser")
     --, ("M-b",          safeSpawnProg "qutebrowser")
@@ -542,7 +550,7 @@ main = do
 
 mySwallowEventHook = WindowSwallowing.swallowEventHook
   (className =? "Alacritty" <||> className =? "Termite" <||> className =? "NOPE Thunar")
-  (not <$> className =? "Dragon")
+  (not <$> (className =? "Dragon" <||> className =? "noswallow"))
 
 
 activateWindowEventHook :: Event -> X All

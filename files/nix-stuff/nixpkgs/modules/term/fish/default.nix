@@ -2,6 +2,7 @@
 let
   cfg = config.elkowar.programs.fish;
   myConf = import ../myConfig.nix;
+  sources = import ../../../nix/sources.nix;
 in
 {
   options.elkowar.programs.fish = {
@@ -14,24 +15,18 @@ in
         fish_prompt = builtins.readFile ./fish-prompt.fish;
         fish_greeting = "";
         fish_mode_prompt = "";
+
       };
 
       shellAliases = {
         ls = "exa --icons";
       };
 
-      plugins =
-        [
-          {
-            name = "foreign-env";
-            src = pkgs.fetchFromGitHub {
-              owner = "oh-my-fish";
-              repo = "plugin-foreign-env";
-              rev = "dddd9213272a0ab848d474d0cbde12ad034e65bc";
-              sha256 = "00xqlyl3lffc5l0viin1nyp819wf81fncqyz87jx8ljjdhilmgbs";
-            };
-          }
-        ];
+      plugins = [
+        { name = "fzf"; src = sources.fish-fzf-tab; }
+        { name = "foreign-env"; src = sources.plugin-foreign-env; }
+        { name = "base16-fish"; src = sources.base16-fish; }
+      ];
 
       shellInit = ''
         fish_vi_key_bindings
@@ -41,6 +36,8 @@ in
         set -U FZF_PREVIEW_FILE_CMD "head -n 10 | bat --color=always --decorations=never"
         set -U fish_greeting
 
+
+        base16-gruvbox-dark-medium
 
         #if status is-interactive
         #and not set -q TMUX
@@ -93,6 +90,7 @@ in
         fenv source '$HOME/.nix-profile/etc/profile.d/nix.sh'
         set -g NIX_PATH "$HOME/.nix-defexpr/channels:$NIX_PATH"
         fenv source "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
+
       '';
     };
   };

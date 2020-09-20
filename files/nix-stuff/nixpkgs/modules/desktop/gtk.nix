@@ -26,10 +26,10 @@ in
         gtk-decoration-layout = ":";
         gtk-toolbar-style = "GTK_TOOLBAR_ICONS";
         gtk-toolbar-icon-size = "GTK_ICON_SIZE_LARGE_TOOLBAR";
-        gtk-enable-even-sounds = 0;
+        #gtk-enable-even-sounds = 0;
         gtk-enable-input-feedback-sounds = 0;
         gtk-button-images = 1;
-        ctk-cursor-theme-name = "capitaine-cursors-light";
+        #ctk-cursor-theme-name = "capitaine-cursors-light";
         gtk-cursor-theme-size = 0;
       };
 

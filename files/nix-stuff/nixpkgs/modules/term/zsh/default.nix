@@ -103,7 +103,7 @@ in
       default = {};
     };
   };
-  config = {
+  config = lib.mkIf cfg.enable {
     home.packages = [ pkgs.zsh-completions ];
     programs.zsh = {
       enable = true;
@@ -127,6 +127,7 @@ in
 
       shellAliases = {
         ls = "exa --icons";
+        kaks = "/home/leon/scripts/kak-attatch-session";
       };
 
       initExtraBeforeCompInit = ''

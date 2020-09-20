@@ -1,14 +1,50 @@
 {
+    "base16-fish": {
+        "branch": "master",
+        "description": "🐟 Base16 for fish",
+        "homepage": "",
+        "owner": "tomyun",
+        "repo": "base16-fish",
+        "rev": "675d53a0dd1aed0fc5927f26a900f5347d446459",
+        "sha256": "0lp1s9hg682jwzqn1lgj5mrq5alqn9sqw75gjphmiwmciv147kii",
+        "type": "tarball",
+        "url": "https://github.com/tomyun/base16-fish/archive/675d53a0dd1aed0fc5927f26a900f5347d446459.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "fish-fzf-tab": {
+        "branch": "master",
+        "description": "Ef-🐟-ient fish keybindings for fzf",
+        "homepage": "",
+        "owner": "jethrokuan",
+        "repo": "fzf",
+        "rev": "7643f3832fcaf2cc048f6cfaa583e893ce27e0f6",
+        "sha256": "1pz3iqhcxfzs9ar5ib17hbqql4azjw8q7akzns9mf4rdmr5vhvj0",
+        "type": "tarball",
+        "url": "https://github.com/jethrokuan/fzf/archive/7643f3832fcaf2cc048f6cfaa583e893ce27e0f6.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "fish-gruvbox": {
+        "branch": "master",
+        "description": "gruvbox theme for fish",
+        "homepage": null,
+        "owner": "Jomik",
+        "repo": "fish-gruvbox",
+        "rev": "d8c0463518fb95bed8818a1e7fe5da20cffe6fbd",
+        "sha256": "0hkps4ddz99r7m52lwyzidbalrwvi7h2afpawh9yv6a226pjmck7",
+        "type": "tarball",
+        "url": "https://github.com/Jomik/fish-gruvbox/archive/d8c0463518fb95bed8818a1e7fe5da20cffe6fbd.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
     "manix": {
         "branch": "master",
         "description": "A fast CLI documentation searcher for Nix.",
         "homepage": null,
         "owner": "mlvzk",
         "repo": "manix",
-        "rev": "01895e6ac53a9d40c6f5f783263f4875924ad712",
-        "sha256": "06cn51h8nab85jk4jfhri3v9kvhb4lpni3qk0mn3dvcw5sg5ri2n",
+        "rev": "b428f30d58e2b6955f670e21f881056ab1803541",
+        "sha256": "0fv3sgzwjsgq2h1177r8r1cl5zrfja4ll801sd0bzj3nzmkyww7p",
         "type": "tarball",
-        "url": "https://github.com/mlvzk/manix/archive/01895e6ac53a9d40c6f5f783263f4875924ad712.tar.gz",
+        "url": "https://github.com/mlvzk/manix/archive/b428f30d58e2b6955f670e21f881056ab1803541.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "niv": {
@@ -17,10 +53,10 @@
         "homepage": "https://github.com/nmattia/niv",
         "owner": "nmattia",
         "repo": "niv",
-        "rev": "89ae775e9dfc2571f912156dd2f8627e14d4d507",
-        "sha256": "0ssw6byyn79fpyzswi28s5b85x66xh4xsfhmcfl5mkdxxpmyy0ns",
+        "rev": "dd13098d01eaa6be68237e7e38f96782b0480755",
+        "sha256": "1cfjdbsn0219fjzam1k7nqzkz8fb1ypab50rhyj026qbklqq2kvq",
         "type": "tarball",
-        "url": "https://github.com/nmattia/niv/archive/89ae775e9dfc2571f912156dd2f8627e14d4d507.tar.gz",
+        "url": "https://github.com/nmattia/niv/archive/dd13098d01eaa6be68237e7e38f96782b0480755.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "nixGL": {
@@ -41,10 +77,22 @@
         "homepage": null,
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "14006b724f3d1f25ecf38238ee723d38b0c2f4ce",
-        "sha256": "07hfbilyh818pigfn342v2r05n8061wpjaf1m4h291lf6ydjagis",
+        "rev": "e82b1de75a195856945cadff4f40b7bea9530f67",
+        "sha256": "1l3pq4w5xcdwbj6pdsxkq8spacy91ds28f7svgcsc836v959jcv7",
         "type": "tarball",
-        "url": "https://github.com/NixOS/nixpkgs/archive/14006b724f3d1f25ecf38238ee723d38b0c2f4ce.tar.gz",
+        "url": "https://github.com/NixOS/nixpkgs/archive/e82b1de75a195856945cadff4f40b7bea9530f67.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "plugin-foreign-env": {
+        "branch": "master",
+        "description": "Run foreign bash scripts and capture exported environment variables",
+        "homepage": "",
+        "owner": "oh-my-fish",
+        "repo": "plugin-foreign-env",
+        "rev": "dddd9213272a0ab848d474d0cbde12ad034e65bc",
+        "sha256": "00xqlyl3lffc5l0viin1nyp819wf81fncqyz87jx8ljjdhilmgbs",
+        "type": "tarball",
+        "url": "https://github.com/oh-my-fish/plugin-foreign-env/archive/dddd9213272a0ab848d474d0cbde12ad034e65bc.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     }
 }

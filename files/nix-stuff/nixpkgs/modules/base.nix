@@ -54,7 +54,6 @@ in
         nodejs
         nodePackages.bash-language-server
         nodePackages.dockerfile-language-server-nodejs
-        rust-analyzer
         cargo-outdated
 
         (addFlags bat "bat" "--theme base16")
@@ -72,6 +71,11 @@ in
           websocat
           gtop
           nix-prefetch
+          cargo-bloat
+          sccache
+          bpytop
+          cargo-watch
+          cargo-expand
         ]
       )
       (
