@@ -84,8 +84,8 @@ let
     realpath=\''${(Qe)~realpath}
     "
 
-    zstyle ':fzf-tab:complete:cd:*' extra-opts --preview=$extract'exa --icons -1 --color=always $realpath'
-    zstyle ':fzf-tab:complete:nvim:*' extra-opts --preview=$extract'bat -p --color=always $realpath'
+    zstyle ':fzf-tab:complete:*:*' extra-opts --preview=$extract'/home/leon/scripts/preview.sh $realpath'
+    #zstyle ':fzf-tab:complete:nvim:*' extra-opts --preview=$extract'bat -p --color=always $realpath'
 
     #zstyle ':fzf-tab:complete:ls:*' extra-opts --preview=$extract'exa --icons -1 --color=always $realpath'
     #zstyle ':fzf-tab:complete:*:*' extra-opts --preview=$extract'if [ -f $realpath ]; then bat -p --color=always $realpath; else exa --icons -1 --color=always $realpath; fi'

@@ -505,6 +505,7 @@ main = do
   currentScreenCount :: Int <- countScreens
   let monitorIndices = [0..currentScreenCount - 1]
 
+
   -- create a fifo named pipe for every monitor (called /tmp/xmonad-state-bar0, etc)
   for_ monitorIndices (\idx -> safeSpawn "mkfifo" ["/tmp/xmonad-state-bar" ++ show idx])
 
@@ -550,7 +551,7 @@ main = do
 
 mySwallowEventHook = WindowSwallowing.swallowEventHook
   (className =? "Alacritty" <||> className =? "Termite" <||> className =? "NOPE Thunar")
-  (not <$> (className =? "Dragon" <||> className =? "noswallow"))
+  ((not <$> (className =? "Dragon" <||> className =? "noswallow")) <||> className =? "re") -- remove that last part
 
 
 activateWindowEventHook :: Event -> X All
@@ -587,6 +588,7 @@ fullscreenFixEventHook (ClientMessageEvent _ _ _ dpy win typ (_:dats)) = do
   return $ All True
 fullscreenFixEventHook _ = return $ All True
 
+  
 
 
 

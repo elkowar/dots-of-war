@@ -55,8 +55,9 @@ in
         nodePackages.bash-language-server
         nodePackages.dockerfile-language-server-nodejs
         cargo-outdated
-
-        (addFlags bat "bat" "--theme base16")
+        manix
+        catimg
+        bat
 
         cachix
       ]
@@ -76,6 +77,8 @@ in
           bpytop
           cargo-watch
           cargo-expand
+          gdbgui
+          lldb
         ]
       )
       (
