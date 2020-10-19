@@ -14,8 +14,7 @@ import           Control.Monad                  (join,  filterM
 import           Control.Arrow                  ( (>>>) )
 import           Data.List                      ( isPrefixOf
                                                 , isSuffixOf
-                                                
-                                                
+                                                , isInfixOf
                                                 )
 import qualified Foreign.C.Types
 import System.Exit (exitSuccess)
@@ -355,8 +354,8 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
     , ("M-M1-<Delete>", sendMessage Rotate)
 
     -- Media
-    , ("<XF86AudioRaiseVolume>", spawn "amixer sset Master 5%+")
-    , ("<XF86AudioLowerVolume>", spawn "amixer sset Master 5%-")
+    , ("<XF86AudioRaiseVolume>", spawn "~/.config/eww/popup.sh 3 volume_popup && amixer sset Master 5%+")
+    , ("<XF86AudioLowerVolume>", spawn "~/.config/eww/popup.sh 3 volume_popup && amixer sset Master 5%-")
     , ("M-S-C-,", (notify "hi" (show $ map (\(a, _) -> show a) workspaceBindings)) >> (notify "ho" (show removedKeys)))
     , ("M-<Backspace>", spawn "flash_window")
     , ("M-g", incScreenWindowSpacing 5)
@@ -551,8 +550,11 @@ main = do
 
 mySwallowEventHook = WindowSwallowing.swallowEventHook
   (className =? "Alacritty" <||> className =? "Termite" <||> className =? "NOPE Thunar")
-  ((not <$> (className =? "Dragon" <||> className =? "noswallow")) <||> className =? "re") -- remove that last part
+  ((not <$> (className =* "eww" <||> className =? "Dragon" <||> className =? "noswallow")) <||> className =? "re") -- remove that last part
 
+
+(=*) :: Query String  -> String -> Query Bool
+query =* value = (value `isInfixOf`) <$> query
 
 activateWindowEventHook :: Event -> X All
 activateWindowEventHook (ClientMessageEvent { ev_message_type = messageType, ev_window = window }) = withWindowSet $ \ws -> do

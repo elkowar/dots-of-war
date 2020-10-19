@@ -23,6 +23,7 @@ in
       dragon-drop
       polybarFull
       discord
+      pinta
       #hyper-haskell
     ];
 

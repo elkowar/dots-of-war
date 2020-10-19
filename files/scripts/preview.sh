@@ -3,7 +3,7 @@
 
 case "$(file --mime-type "$1")" in
   *text*)
-    bat --color always --plain --theme base16 "$1"
+    bat --color always --plain --theme gruvbox "$1"
     ;;
   *image* | *pdf)
     if command -v timg; then 
