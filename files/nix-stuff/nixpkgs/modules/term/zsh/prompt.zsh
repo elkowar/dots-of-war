@@ -34,7 +34,7 @@ function _my_prompt() {
   echo -n "%F{$__bright_green} $(dir)"
   echo -n "%F{$__bright_white} $(git_status)"
   if [ ! "$exit_code" = 0 ]; then
-    echo -n "%F{red}REEEEEEEEEEE $exit_code"
+    echo -n "%F{red} REEEEEEEEEEE $exit_code"
   fi
   echo
   # %3{stuff%} tell's zsh that the characters are printed as 3 chars wide

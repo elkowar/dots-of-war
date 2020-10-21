@@ -1,0 +1,109 @@
+<eww>
+  <definitions>
+
+    <def name="test">
+      <box space-evenly="false" spacing="10">
+        testing {{shit}}
+        <scale value="50" />
+
+        <button onclick="notify-send 'ree' 'this is {{shit}}'">click me</button>
+        <calendar show-heading="false" show-day-names="false" day="2" onclick="notify-send 'asdf' '{}'" />
+        notify-send 'ree' 'this is {{shit}}'
+        <multiple text="{{shit}}" />
+      </box>
+    </def>
+
+    <def name="multiple">
+      <box orientation="v" space-evenly="false">
+        <box>{{text}}</box>
+        <box>{{text}}</box>
+        <box>{{text}}</box>
+        <box>{{text}}</box>
+        <box>{{text}}</box>
+      </box>
+    </def>
+
+    <def name="volume_popup">
+      <box orientation="v" space-evenly="true">
+        <scale flipped="true" orientation="v" value="{{volume}}" min="0" max="100" onchange="amixer sset 'Master' {}%" />
+      </box>
+    </def>
+
+    <def name="music">
+      <box orientation="h" valign="start" space-evenly="false" hexpand="true">
+        <image path="{{song-image}}" width="150" height="150" />
+        <box orientation="v" halign="fill" space-evenly="false" vexpand="true" hexpand="true">
+          <box class="data" vexpand="true">
+            <box orientation="v" halign="start">
+              <label class="songname" halign="start" limit-width="30" text="{{song-name}}" />
+              <box space-evenly="false" halign="start">
+                <label class="key" text="Album: "/>
+                <label halign="start" limit-width="30" text="{{song-album}}" />
+              </box>
+              <box space-evenly="false" halign="start">
+                <label class="key" text="By:    "/>
+                <label halign="start" limit-width="30" text="{{song-artist}}" />
+              </box>
+            </box>
+          </box>
+          <scale visible="{{song-show-progress}}" min="0" max="1" value="{{song-position}}" />
+          <box class="buttons" hexpand="true">
+            <button onclick="playerctl previous"></button>
+            <button onclick="playerctl play-pause">{{song-playpause}}</button>
+            <button onclick="playerctl next"></button>
+          </box>
+        </box>
+      </box>
+    </def>
+
+  </definitions>
+
+
+  <variables>
+    <script-var name="volume">
+      amixer sget 'Master' | grep 'Front Left:' | sed 's/.*\[\(.*\)%\].*/\1/g';
+      LANG=C pactl subscribe | grep --line-buffered sink | while read -r _; do
+        amixer sget 'Master' | grep 'Front Left:' | sed 's/.*\[\(.*\)%\].*/\1/g'
+      done
+    </script-var>
+
+    <var name="shit">
+      shit
+    </var>
+
+    <var name="song-image"></var>
+    <var name="song-name"></var>
+    <var name="song-album"></var>
+    <var name="song-artist"></var>
+    <var name="song-show-progress">false</var>
+    <var name="song-playpause"></var>
+    <!--<script-var name="song-position" interval="5s">-->
+    <!--playerctl position-->
+    <!--</script-var>-->
+  </variables>
+
+
+  <windows>
+    <window screen="0" name="main_window" stacking="fg">
+      <pos x="50px" y="0px" />
+      <size x="30%" y="20%" />
+      <widget>
+        <test ree="test" />
+      </widget>
+    </window>
+    <window screen="0" name="volume_popup">
+      <size x="20" y="300" />
+      <pos x="2500" y="720" />
+      <widget>
+        <volume_popup />
+      </widget>
+    </window>
+    <window screen="0" name="music">
+      <pos x="80%" y="6%" />
+      <size x="18%" y="10%" />
+      <widget>
+        <music />
+      </widget>
+    </window>
+  </windows>
+</eww>

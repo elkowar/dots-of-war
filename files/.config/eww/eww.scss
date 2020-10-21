@@ -1,0 +1,64 @@
+entry {
+  padding: 10px;
+  background: red;
+}
+
+.main_window {
+  all: unset;
+  background: #1d2021;
+}
+
+.volume_popup {
+  &,
+  & * {
+    all: unset;
+  }
+  background: #1d2021;
+  border-radius: 50px;
+
+  scale trough {
+    border-radius: 50px;
+    background-color: #ebdbb2;
+    highlight {
+      min-width: 30px;
+      border-bottom-left-radius: 50px;
+      border-bottom-right-radius: 50px;
+      background-color: #8ec07c;
+    }
+  }
+}
+
+.music {
+  &,
+  & * {
+    all: unset;
+  }
+
+  .data {
+    margin: 15px;
+    margin-left: 45px;
+
+    .songname {
+      color: #8ec07c;
+    }
+
+    .key {
+      color: #928374;
+    }
+  }
+
+  .buttons {
+    min-height: 50px;
+  }
+
+  button, button * {
+    border: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .buttons {
+    background: #1d2021;
+    //box-shadow: 0 0 10px -5px rgba(0,0,0, 0.5);
+  }
+}
