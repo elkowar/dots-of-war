@@ -1,3 +1,3 @@
-#!/bin/dash
+#! /bin/sh
 
-curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash
+curl -fsL "https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh" | bash

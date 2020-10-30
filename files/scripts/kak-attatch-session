@@ -1,12 +1,10 @@
-#!/bin/sh
-
+#! /bin/sh
 
 kak -clear
 
 session="${PWD##*/}"
 
-if ! kak -l | grep -q "$session"; then
+[ ! "$(kak -l | grep -iq "$session")" ] && \
   kak -d -s "$session" &
-fi
 
 kak -c "$session" "$@"

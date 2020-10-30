@@ -1,10 +1,10 @@
-#!/bin/sh
+#! /bin/sh
 
-calc_percentage() {
+calc_percentage () {
   echo "$(($(("$1" / 100)) * "$2"))"
 }
 
-help() {
+help () {
   cat << EOT
 Usage: resizeGif.sh <input-file> [OPTIONS]
 
@@ -17,10 +17,9 @@ Options:
 EOT
 }
 
-if [ -z "$1" ]; then
-  help
+[ -z "$1" ] && \
+  help && \
   exit 1
-fi
 
 IN_FILE="$1"
 shift
@@ -50,35 +49,29 @@ done
 
 
 
-base_resolution=$(identify "$IN_FILE" | awk 'NR==1{print $3}')
+base_resolution="$(identify "$IN_FILE" | awk 'NR==1{print $3}')"
 x_res="$(echo "$base_resolution" | sed 's/\(.*\)x\(.*\)/\1/g')"
 y_res="$(echo "$base_resolution" | sed 's/\(.*\)x\(.*\)/\2/g')"
 
 
-if [ -n "$PERCENTAGE" ]; then
-  x_scaled="$(calc_percentage "$x_res" "$PERCENTAGE")"
-  y_scaled="$(calc_percentage "$y_res" "$PERCENTAGE")"
-elif [ -n "$COARSE_IN" ]; then
-  arg_x="$(echo "$COARSE_IN" | sed 's/\(.*\)x\(.*\)/\1/g')"
-  arg_y="$(echo "$COARSE_IN" | sed 's/\(.*\)x\(.*\)/\2/g')"
-  x_fact="$(( $((arg_x * 100)) / x_res))"
-  y_fact="$(( $((arg_y * 100)) / y_res))"
-  if [ "$x_fact" -lt "$y_fact" ]; then
-    lower_fact="$x_fact"
-  else
-    lower_fact="$y_fact"
-  fi
-
-  x_scaled="$(calc_percentage "$x_res" "$lower_fact")"
-  y_scaled="$(calc_percentage "$y_res" "$lower_fact")"
-else
-  echo "You need to give --percentage or --coarse-in."
+[ -n "$PERCENTAGE" ] && \
+  x_scaled="$(calc_percentage "$x_res" "$PERCENTAGE")" && \
+  y_scaled="$(calc_percentage "$y_res" "$PERCENTAGE")" || \
+[ -n "$COARSE_IN" ] && \
+  arg_x="$(echo "$COARSE_IN" | sed 's/\(.*\)x\(.*\)/\1/g')" && \
+  arg_y="$(echo "$COARSE_IN" | sed 's/\(.*\)x\(.*\)/\2/g')" && \
+  x_fact="$(( $((arg_x * 100)) / x_res))" && \
+  y_fact="$(( $((arg_y * 100)) / y_res))" && \
+[ "$x_fact" -lt "$y_fact" ] && \
+    lower_fact="$x_fact" || \
+    lower_fact="$y_fact" && \
+  x_scaled="$(calc_percentage "$x_res" "$lower_fact")" && \
+  y_scaled="$(calc_percentage "$y_res" "$lower_fact")" || \
+  echo "You need to give --percentage or --coarse-in." && \
   exit 1
-fi
 
-if [ -z "$OUT_FILE" ]; then
+[ -z "$OUT_FILE" ] && \
   OUT_FILE="smaller_${IN_FILE}"
-fi
 
 echo "resizing to ${x_scaled}x${y_scaled}"
 

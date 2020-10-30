@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /bin/sh
 
 # distance in meter, duration in sekunden ( hier: per auto )
 
@@ -20,6 +20,6 @@ distance() {
     echo "{\"name\": \"$name\", \"dist\": $result}"
     sleep 2
     done
-  }
+}
 
 cat ~/tmp/coordinates.json | distance

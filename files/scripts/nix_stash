@@ -1,20 +1,19 @@
-#!/bin/sh
+#! /bin/sh
 
 NIX_STASH_DIR="$XDG_CONFIG_HOME/nix_stash"
 FILE_STACK_PATH="$NIX_STASH_DIR/nix_stash_stack"
 
 # pop the last line from the file-stack and return it
-pop_from_file_stack() {
+pop_from_file_stack () {
   line="$(tail -n 1 "$FILE_STACK_PATH")"
-  if [ -z "$line" ]; then
-    exit 1
-  fi
+  [ -z "$line" ] && \
+      exit 1
   sed -i "$ d" "$FILE_STACK_PATH"
   echo "$line"
 }
 
 
-do_pop() {
+do_pop () {
   last_file="$(pop_from_file_stack)" || exit 1
   echo "restoring $last_file"
   trash "$last_file"
@@ -23,19 +22,17 @@ do_pop() {
 }
 
 
-do_stash() {
+do_stash () {
   config_file="$(realpath --no-symlinks "$1")"
-  if [ ! -L "$config_file" ]; then
-    echo "Given file is not a symlink into the nix-store"
+  [ ! -L "$config_file" ] && \
+    echo "Given file is not a symlink into the nix-store" && \
     exit 1
-  fi
 
   file_in_store="$(readlink -f "$config_file")"
 
-  if ! echo "$file_in_store" | grep -q "/nix/store"; then
-    echo "file is not a symlink into the nix store"
+  [ ! "$(echo "$file_in_store" | grep -iq "/nix/store")" ] && \
+    echo "file is not a symlink into the nix store" && \
     exit 1
-  fi
 
   # remove the symlink and write the path to the stack
   mkdir -p "$NIX_STASH_DIR"
@@ -50,11 +47,11 @@ do_stash() {
   "$EDITOR" "$config_file"
 }
 
-do_list() {
+do_list () {
   cat "$FILE_STACK_PATH"
 }
 
-print_usage() {
+print_usage () {
   echo "usage: $0 {<filepath> | pop | list}"
   echo "  to stash a file:   $0 <filepath>"
   echo "  to restore a file: $0 pop"
@@ -66,16 +63,13 @@ case "$1" in
   "")
     print_usage
     ;;
-  pop) 
-    do_pop 
+  pop)
+    do_pop
     ;;
   list)
     do_list
     ;;
-  *) 
-    do_stash "$1" 
+  *)
+    do_stash "$1"
     ;;
 esac
-
-
-

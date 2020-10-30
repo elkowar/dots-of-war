@@ -1,25 +1,22 @@
-#!/bin/sh
+#! /bin/sh
 
-print_host()
-{   
-    [ -z "$HOST" ] && cat /etc/hostname || printf "$HOST\n"
+print_host () {
+    [ -z "$HOST" ] && cat "/etc/hostname" || printf "%s\n" "$HOST"
 }
 
-print_kernel()
-{
-    kernel=$(uname -r)
+print_kernel () {
+    kernel="$(uname -r)"
     kernel="${kernel%%_*}"
     kernel="${kernel%%-*}"
-    printf "$kernel\n" 
+    printf "%s\n" "$kernel"
 }
 
-print_pkgs()
-{   
-    C() { command -v "$@" >/dev/null 2>&1 ; }
-    if [ -d /bedrock ] ; then
+print_pkgs () {
+    C () { command -v "$@" >"/dev/null" 2>&1 ; }
+    if [ -d "/bedrock" ] ; then
         pkgs="N/A"
     elif C dpkg ; then
-        pkgs="$(printf $(dpkg-query -f '${binary:Package}\n' -W | wc -l))"
+        pkgs="$(printf "$(dpkg-query -f "${binary:Package}\n" -W | wc -l)")"
     elif C rpm  ; then
         pkgs="$(rpm -qa | wc -l)"
     elif C pacman ; then
@@ -39,57 +36,50 @@ print_pkgs()
     else
         pkgs="N/A"
     fi
-    printf "$pkgs\n"
+    printf "%s\n" "$pkgs"
 }
 
-print_shell()
-{
+print_shell () {
     shell="${SHELL##*/}"
-    printf "$shell\n"
+    printf "%s\n" "$shell"
 }
 
-print_os()
-{
+print_os () {
     if [ -e /etc/os-release ] && . /etc/os-release ; then
-        printf "$PRETTY_NAME\n"
-    elif [ -d /bedrock ] ; then
-        cat /bedrock/etc/bedrock-release
+        printf "%s\n" "$PRETTY_NAME"
+    elif [ -d "/bedrock" ] ; then
+        cat "/bedrock/etc/bedrock-release"
     else
-        uname -s || printf "N/A\n"
+        uname -s || printf "%s\n" "N/A"
     fi
 }
 
-print_wal()
-{
-    wal=$(xrdb -q | grep wallpaper | awk 'NR == 2 {print $2}')
-    printf "$wal\n"
+print_wal () {
+    wal="$(xrdb -q | grep wallpaper | awk 'NR == 2 {print $2}')"
+    printf "%s\n" "$wal"
 }
 
-print_colors()
-{
+print_colors () {
     colors="$(xrdb -q | grep "#include" | awk '{print $2}')"
     colors="${colors##*/}"
     colors=${colors%\"}
-    printf "$colors\n"
+    printf "%s\n" "$colors"
 }
 
-print_user()
-{
+print_user () {
     if [ -z "$LOGNAME" ]; then
-        printf "N/A\n"
+        printf "%s\n" "N/A"
     else
-        printf "$LOGNAME\n"
+        printf "%s\n" "$LOGNAME"
     fi
 }
 
-print_resolution()
-{
+print_resolution () {
     printf "\n"
 }
 
 
-set_colors()
-{
+set_colors () {
     r="\033[32m"
     re="\033[0m"
     gb="\033[42m"
@@ -99,22 +89,21 @@ set_colors()
 
 }
 
-print_colors()
-{
+print_colors () {
     printf "\n"
     printf " \e[41m    \e[42m    \e[43m    \e[44m    \e[45m    \e[46m    \e[0m\n"
     printf "\n"
 }
 
-print_wm()
-{
-    if command -v xprop >/dev/null 2>&1 ; then
-        WM=$(xprop -id $(xprop -root -notype | awk '$1=="_NET_SUPPORTING_WM_CHECK:"{print $5}') -notype -f _NET_WM_NAME 8t | grep "WM_NAME" | cut -f2 -d \")
-    else
+print_wm () {
+    [ "$(command -v xprop >/dev/null 2>&1)" ] && \
+        WM="$(xprop -id "$(xprop -root -notype \
+        | awk '$1=="_NET_SUPPORTING_WM_CHECK:"{print $5}')" -notype -f _NET_WM_NAME 8t \
+        | grep -i "WM_NAME" \
+        | cut -f2 -d \")" || \
         WM="TTY"
-    fi
-   
-    printf "$WM\n"
+
+    printf "%s\n" "$WM"
 }
 
 set_colors
@@ -129,4 +118,3 @@ printf " $r│ HOS:$re %-30s$r│$re\n" "$(print_host)"
 printf " $r│ USE:$re %-30s$r│$re\n" "$(whoami)"
 printf " $r└────────────────────────────────────┘$re\n"
 printf "\n"
-

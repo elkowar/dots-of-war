@@ -1,22 +1,23 @@
-#!/bin/bash
-cd $(dirname "$0")
-function poll(){
-    id=$(curl -H 'Accept: application/vnd.twitchtv.v5+json' \
+#! /bin/sh
+cd "$(dirname "$0")"
+poll () {
+    id="$(curl -H 'Accept: application/vnd.twitchtv.v5+json' \
     -H 'Client-ID: fendbm5b5q1c2820m59sbdv9z95vs4' \
-    -X GET "https://api.twitch.tv/kraken/users?login=$notify_me" | jq -c '.users[] |._id'| tr -d '"' | tr '\n' ',')
-    live=$(curl -H 'Accept: application/vnd.twitchtv.v5+json' \
+    -X GET "https://api.twitch.tv/kraken/users?login=$notify_me" | jq -c '.users[] |._id'| tr -d '"' | tr '\n' ',')"
+    live="$(curl -H 'Accept: application/vnd.twitchtv.v5+json' \
     -H 'Client-ID: fendbm5b5q1c2820m59sbdv9z95vs4' \
-    -X GET "https://api.twitch.tv/kraken/streams/?channel=$id" | jq -c '.streams[] | .channel | {"": .name , " playing " : .game , " " : .status}' | tr -d '\{\}\,\"\:' | awk '{print $0"\n"}')
+    -X GET "https://api.twitch.tv/kraken/streams/?channel=$id" \
+    | jq -c '.streams[] | .channel | {"": .name , " playing " : .game , " " : .status}' | tr -d '\{\}\,\"\:' | awk '{print $0"\n"}')"
     echo "$live"
     if [ -z "$live" ]; then
 	echo "No one is on"
     else
 	notify-send -u critical "Theatron" "$live"
-	name=$(echo $live | awk '{print $1}')
+	name="$(echo "$live" | awk '{print $1}')"
 	notify_me="${notify_me//$name}"
-	echo $notify_me
+	echo "$notify_me"
     fi
-    sleep $1
+    sleep "$1"
 }
 
 # The first argument is the interval
@@ -25,9 +26,9 @@ function poll(){
 
 # Add strings for people you want to be notified about, ex. notify_me="imaqtpie,reckful"
 notify_me="reckful,imaqtpie,strawbunnyhunny,pokimane,sodapoppin,methodjosh,nerites,forsen,asmongold,disguisedtoast,avoidingthepuddle,cxlibri"
-if [[ $1 == "once" ]];then
+if [ "$1" = "once" ];then
     poll 0
-elif [[ -n $1 ]];then
+elif [ -n $1 ];then
 while true
 do
     poll "$1"

@@ -1,2 +1,3 @@
-#!/bin/bash
-curl "cheat.sh/$*"
+#! /bin/sh
+
+curl -fsL "cheat.sh/$*"

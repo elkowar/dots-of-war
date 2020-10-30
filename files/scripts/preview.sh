@@ -1,27 +1,22 @@
-#!/bin/sh
+#! /bin/sh
 
+type="$(file --mime-type "$@")"
 
-case "$(file --mime-type "$1")" in
+case "$type" in
   *text*)
-    bat --color always --plain --theme gruvbox "$1"
+    bat --color always --plain --theme gruvbox "$@"
     ;;
   *image* | *pdf)
-    if command -v timg; then 
-      timg -g50x50 -E -F "$1"
-    elif command -v catimg; then
-      catimg -w 100 -r 2 "$1"
-    else
+      [ "$(command -v timg)" ] && \
+      timg -g50x50 -E -F "$@" || \
+      [ "$(command -v catimg)" ] && \
+      catimg -w 100 -r 2 "$@" || \
       echo "Install timg or catimg to view images!"
-    fi
     ;;
   *directory*)
-    exa --icons -1 --color=always "$1"
+    exa --icons -1 --color=always "$@"
     ;;
   *)
     echo "unknown file format"
     ;;
 esac
-
-
-
-

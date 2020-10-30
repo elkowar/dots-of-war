@@ -1,15 +1,11 @@
-#!/bin/bash
+#! /bin/sh
 
 repo_url="$1"
 rev="$2"
 
-
-
-if [ -n "$rev" ]; then
-  output="$(nix-prefetch-git "$repo_url" --rev "$rev" 2>/dev/null)" 
-else
-  output="$(nix-prefetch-git "$repo_url" 2>/dev/null)"
-fi
+[ -n "$rev" ] && \
+  output="$(nix-prefetch-git "$repo_url" --rev "$rev" 2>"/dev/null")" || \
+  output="$(nix-prefetch-git "$repo_url" 2>"/dev/null")"
 
 
 
