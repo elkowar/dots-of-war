@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 
 
 
@@ -10,6 +10,12 @@ getData() {
   eww update song-name "$(playerctl metadata --format "{{ xesam:title }}")"
   wget -O /tmp/music-file "$(playerctl metadata --format "{{ mpris:artUrl }}"| fixArtUrl)"
   eww update song-image /tmp/music-file
+  if [ -f /tmp/music-file ]; then
+    eww update song-image-visible true
+  else
+    eww update song-image-visible false
+  fi
+
   eww update song-album "$(playerctl metadata --format "{{ xesam:album }}")"
   eww update song-artist "$(playerctl metadata --format "{{ xesam:artist }}")"
   if [ "spotify" = "$(playerctl metadata | head -n1 | awk '{ print $1 }')" ]; then
@@ -28,5 +34,5 @@ getData() {
 
 }
 
-#getData
-cat <(playerctl metadata --format '{{ title }}' -F & playerctl status -F) | while read -r _; do getData; done;
+getData
+cat <(playerctl metadata --format '{{ title }}' -F & playerctl status -F) 2>&1 /dev/null

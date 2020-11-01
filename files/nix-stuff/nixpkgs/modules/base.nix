@@ -79,6 +79,7 @@ in
           cargo-expand
           gdbgui
           lldb
+          zola
         ]
       )
       (

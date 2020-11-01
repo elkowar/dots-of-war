@@ -17,10 +17,17 @@ entry {
   border-radius: 50px;
 
   scale trough {
+    padding: 10px;
     border-radius: 50px;
     background-color: #ebdbb2;
+
+    slider {
+      background: red;
+    }
+
     highlight {
-      min-width: 30px;
+      padding: 10px;
+      min-height: 30px;
       border-bottom-left-radius: 50px;
       border-bottom-right-radius: 50px;
       background-color: #8ec07c;
@@ -49,16 +56,22 @@ entry {
 
   .buttons {
     min-height: 50px;
-  }
-
-  button, button * {
-    border: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  .buttons {
     background: #1d2021;
-    //box-shadow: 0 0 10px -5px rgba(0,0,0, 0.5);
+    box-shadow: 0 0 10px -5px rgba(0, 0, 0, 0.5);
   }
 }
+
+
+  scale trough {
+    padding: 10px;
+    border-radius: 50px;
+    background-color: #ebdbb2;
+
+    highlight {
+      padding: 10px;
+      min-height: 30px;
+      border-bottom-left-radius: 50px;
+      border-bottom-right-radius: 50px;
+      background-color: #8ec07c;
+    }
+  }

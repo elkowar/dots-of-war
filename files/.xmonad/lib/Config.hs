@@ -159,7 +159,7 @@ aqua      = "#8ec07c"
 -- Layout ---------------------------------------- {{{
 myTabTheme :: Theme
 myTabTheme = def -- defaultThemeWithButtons
-    { activeColor         = "#202020" --activeColor         = "#1d2021"
+    { activeColor         = "#1d2021" --activeColor         = "#1d2021"
     , inactiveColor       = "#1d2021" --inactiveColor       = "#282828"
     , activeBorderColor   = "#1d2021"
     , inactiveBorderColor = "#282828"
@@ -588,6 +588,11 @@ fullscreenFixEventHook (ClientMessageEvent _ _ _ dpy win typ (_:dats)) = do
     withWindowAttributes dpy win $ \attrs ->
       liftIO $ resizeWindow dpy win (fromIntegral $ wa_width attrs + 1) (fromIntegral $ wa_height attrs)
   return $ All True
+--fullscreenFixEventHook (ClientMessageEvent { ev_event_type, ev_window }) = do
+  --if ev_event_type == propertyNotify then
+    --spawn $ "notify-send 'hi'" ++ show ev_window
+    --else return ()
+  --return $ All True
 fullscreenFixEventHook _ = return $ All True
 
   
