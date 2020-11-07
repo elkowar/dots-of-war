@@ -24,6 +24,7 @@ in
       polybarFull
       discord
       pinta
+      espanso
       #hyper-haskell
     ];
 

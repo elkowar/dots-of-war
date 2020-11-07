@@ -80,6 +80,7 @@ in
           gdbgui
           lldb
           zola
+          python38Packages.pylint
         ]
       )
       (

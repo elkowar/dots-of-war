@@ -152,6 +152,10 @@ in
         autoload -Uz promptinit && promptinit
 
 
+        # control-backspace
+        bindkey '^H' backward-kill-word
+
+
         #_comp_options+=(globdots)
 
         # enable cdr command

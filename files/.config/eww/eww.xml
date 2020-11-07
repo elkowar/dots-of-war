@@ -4,7 +4,7 @@
     <def name="test">
       <box space-evenly="false" spacing="10">
         testing {{shit}}
-        <scale value="50" orientation="v" min="0" max="100" flipped="true"/>
+        <scale value="50" orientation="v" min="0" max="100" flipped="true" />
 
         <button onclick="notify-send 'ree' 'this is {{shit}}'">click me</button>
         <calendar show-heading="false" show-day-names="false" day="2" onclick="notify-send 'asdf' '{}'" />
@@ -21,9 +21,9 @@
         <box>{{text}}</box>
         <box>{{text}}</box>
 
-        <label text="reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" limit-width="5" wrap="true"/>
-        <input onchange="notify-send 'ree' '{}'"/>
-          {{date}}
+        <label text="reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" limit-width="5" wrap="true" />
+        <input onchange="notify-send 'ree' '{}'" />
+        {{date}}
       </box>
     </def>
 
@@ -63,12 +63,12 @@
 
 
   <variables>
-    <!--<script-var name="volume">-->
-      <!--amixer sget 'Master' | grep 'Front Left:' | sed 's/.*\[\(.*\)%\].*/\1/g';-->
-      <!--LANG=C pactl subscribe | grep REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE-line-buffered sink | while read -r _; do-->
-        <!--amixer sget 'Master' | grep 'Front Left:' | sed 's/.*\[\(.*\)%\].*/\1/g'-->
-      <!--done-->
-    <!--</script-var>-->
+    <script-var name="volume">
+    amixer sget 'Master' | grep 'Front Left:' | sed 's/.*\[\(.*\)%\].*/\1/g';
+    LANG=C pactl subscribe | grep REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE-line-buffered sink | while read -r _; do
+    amixer sget 'Master' | grep 'Front Left:' | sed 's/.*\[\(.*\)%\].*/\1/g'
+    done
+    </script-var>
 
     <var name="shit">
       shit
@@ -85,33 +85,29 @@
       date
     </script-var>
     <!--<script-var name="xyz">-->
-      <!--tail -F /home/leon/test | while read -r _; do notify-send "Hi"; done-->
+    <!--tail -F /home/leon/test | while read -r _; do notify-send "Hi"; done-->
     <!--</script-var>-->
 
     <!--<script-var name="foo">-->
-      <!--tail -F /home/leon/test-->
+    <!--tail -F /home/leon/test-->
     <!--</script-var>-->
   </variables>
 
 
   <windows>
     <window screen="0" name="main_window" stacking="fg">
-      <pos x="50px" y="0px" />
-      <size x="30%" y="20%" />
+      <geometry anchor="top center"/>
       <widget>
         <test ree="test" />
       </widget>
     </window>
     <window screen="0" name="volume_popup">
-      <size x="20" y="300" />
-      <pos x="2500" y="720" />
+      <geometry />
       <widget>
         <volume_popup />
       </widget>
     </window>
     <window screen="0" name="music">
-      <pos x="80%" y="6%" />
-      <size x="18%" y="10%" />
       <widget>
         <music />
       </widget>
