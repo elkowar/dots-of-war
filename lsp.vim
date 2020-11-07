@@ -2,16 +2,42 @@ hi link haskellOperators GruvboxAqua
 hi link haskellImportKeywords GruvboxPurple
 
 
+let g:vista_default_executive = 'coc'
+let g:vista_sidebar_position = 'vertical topleft'
+let g:vista_sidebar_width = '50'
+
+
+
 au VimEnter * RainbowParenthesesToggle
 au Syntax * RainbowParenthesesLoadRound
 au Syntax * RainbowParenthesesLoadSquare
 au Syntax * RainbowParenthesesLoadBraces
 
+
+" Use <C-l> for trigger snippet expand.
+imap <C-l> <Plug>(coc-snippets-expand)
+
+" Use <C-j> for select text for visual placeholder of snippet.
+vmap <C-j> <Plug>(coc-snippets-select)
+
+" Use <C-j> for jump to next placeholder, it's default of coc.nvim
+let g:coc_snippet_next = '<c-j>'
+
+" Use <C-k> for jump to previous placeholder, it's default of coc.nvim
+let g:coc_snippet_prev = '<c-k>'
+
+" Use <C-j> for both expand and jump (make expand higher priority.)
+imap <C-j> <Plug>(coc-snippets-expand-jump)
+
+" Use <leader>x for convert visual selected code to snippet
+xmap <leader>x  <Plug>(coc-convert-snippet)
+
 let g:coc_global_extensions = [
       \ 'coc-yank', 'coc-vimlsp', 'coc-prettier', 'coc-eslint', 
-      \ 'coc-diagnostic', 'coc-yaml', 'coc-tsserver', 'coc-rust-analyzer', 
+      \ 'coc-diagnostic', 'coc-yaml', 'coc-tsserver', 
       \ 'coc-json', 'coc-go', 'coc-html', 'coc-css', 'coc-clangd'
       \ ]
+" 'coc-rust-analyzer', 
 
 
 " vim-jsx
@@ -33,8 +59,9 @@ else
 endif
 
 " ? idk
-inoremap <silent><expr> <TAB> pumvisible() ? "\<C-n>" : <SID>check_back_space() ? "\<TAB>" : coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+"inoremap <silent><expr> <TAB> pumvisible() ? "\<C-n>" : <SID>check_back_space() ? "\<TAB>" : coc#refresh()
+"inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
 
 
 function! Show_documentation()

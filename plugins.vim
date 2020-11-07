@@ -7,6 +7,8 @@ endif
 
 call plug#begin('~/.vim/plugged')
 
+Plug 'branwright1/salvation-vim'
+
   Plug 'tpope/vim-repeat'
 
   Plug 'junegunn/goyo.vim', {'on': 'Goyo'}
@@ -61,7 +63,19 @@ call plug#begin('~/.vim/plugged')
   Plug 'pechorin/any-jump.vim'
   Plug 'justinmk/vim-sneak'
   Plug 'psliwka/vim-smoothie'
+
+  Plug 'editorconfig/editorconfig-vim'
+
+
+  Plug 'honza/vim-snippets'
+
+  Plug 'liuchengxu/vista.vim'
+
+
   " Language Plugins ----------------------------------------------------- {{{
+
+  "Plug 'satabin/hocon-vim'
+  Plug 'GEverding/vim-hocon'
 
   Plug 'LnL7/vim-nix'
 
@@ -92,5 +106,7 @@ call plug#begin('~/.vim/plugged')
 
 
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
   " }}}
 call plug#end()
+

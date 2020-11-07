@@ -137,6 +137,7 @@ noremap <silent> <leader>h :bprevious<CR>
 nnoremap K <Nop>
 vnoremap K <Nop>
 
+
 " }}}
 
 " Plugin configuration --------------------------------------------------- {{{
@@ -202,9 +203,9 @@ let airline#extensions#coc#stl_format_warn = '%W{[%w(#%fw)]}'
 let g:airline_theme='elkowars_gruvbox'
 
 
-hi airline_tabfill ctermbg=NONE guibg=NONE
-hi airline_b_to_airline_c ctermbg=NONE guibg='#ff0000'
-hi airline_tablabel_right ctermbg=NONE guibg=NONE ctermfg=NONE guifg=NONE
+autocmd BufWinEnter * :hi airline_tabfill ctermbg=NONE guibg=NONE
+autocmd BufWinEnter * :hi airline_b_to_airline_c ctermbg=NONE guibg='#ff0000'
+autocmd BufWinEnter * :hi airline_tablabel_right ctermbg=NONE guibg=NONE ctermfg=NONE guifg=NONE
 
 
 " }}}
@@ -214,3 +215,36 @@ source $VIM_ROOT/whichkeyConfig.vim
 source $VIM_ROOT/lsp.vim
 " }}}
 
+
+function RebindShit(newKey)
+  let b:RemappedSpace={ 
+        \ 'old': maparg("<Space>", "i"),
+        \ 'cur': a:newKey
+        \ }
+  exe 'inoremap <buffer> <Space>' a:newKey
+endfun
+
+function! UnbindSpaceStuff()
+  if get(b:, "RemappedSpace", {}) != {}
+    exe 'iunmap <buffer> <Space>'
+    if b:RemappedSpace['old'] != ""
+      exe 'inoremap <buffer> <space>' b:RemappedSpace['old']
+    endif
+    unlet b:RemappedSpace
+  endif
+endfun
+
+augroup UnmapSpaceStuff
+  autocmd!
+  autocmd InsertLeave * call UnbindSpaceStuff()
+augroup END
+
+
+nnoremap <Tab>j :call RebindShit("_")<CR>a
+nnoremap <Tab>k :call RebindShit("::")<CR>a
+
+inoremap <Tab>j <space><C-o>:call RebindShit("_")<CR>
+inoremap <Tab>k <space><C-o>:call RebindShit("::")<CR>
+
+
+nnoremap ö a

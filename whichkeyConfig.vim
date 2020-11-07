@@ -3,6 +3,7 @@ vnoremap <silent> <leader> :<c-u>'WhichKeyVisual '<Space>'<CR>
 let g:which_key_map = {}
 call which_key#register('<Space>', "g:which_key_map")
 
+
 let g:which_key_map = {
       \ 'h' : 'which_key_ignore', 'l' : 'which_key_ignore',
       \ 'f' : 'which_key_ignore', 's': 'which_key_ignore' ,
@@ -25,16 +26,17 @@ let g:which_key_map['m'] = {
       \ 't' : [ '<Plug>(coc-type-definition)'  , 'show type definition'  ] ,
       \ 'i' : [ '<Plug>(coc-implementation)'   , 'show implementation'   ] ,
       \ 'r' : [ '<Plug>(coc-references)'       , 'show references'       ] ,
+      \ 'b' : [ '<Plug>(coc-refactor)'         , 'refactor'              ] ,
       \ 'n' : [ '<Plug>(coc-rename)'           , 'rename'                ] ,
       \ 'F' : [ '<Plug>(coc-format-selected)'  , 'format selection'      ] ,
       \ 'f' : [ '<Plug>(coc-format)'           , 'format file'           ] ,
-      \ 'v' : [ '<Plug>(coc-codeaction)'       , 'apply codeaction'      ] ,
+      \ 'v' : [ ':CocCommand actions.open'     , 'apply codeaction'      ] ,
       \ 'V' : [ '<Plug>(coc-fix-current)'      , 'apply quickfix'        ] ,
       \ 'e' : [ ':CocList diagnostics'         , 'list all errors'       ] ,
       \ 'L' : [ '<Plug>(coc-diagnostics-next)' , 'go to next error'      ] ,
       \ 'H' : [ '<Plug>(coc-diagnostics-prev)' , 'go to prev error'      ] ,
       \}
-
+ 
 
 let g:which_key_map['a'] = {
       \ 'name': '+Bookmarks',
