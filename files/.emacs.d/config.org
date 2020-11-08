@@ -103,6 +103,7 @@ Clipboard shit is fucked, so this is necessary to unfuck.
 
 #+BEGIN_SRC emacs-lisp
   (setq-default tab-width 4)
+  (setq-default indent-tabs-mode nil)
 #+END_SRC
 
 ** Font
@@ -177,14 +178,23 @@ Ugly.
 
 #+begin_src emacs-lisp
 
-  (use-package doom-modeline
-	:config
+(use-package doom-modeline
+    :config
 	(setq doom-modeline-icon (display-graphic-p))
 	(setq doom-modeline-env-version t)
 	(setq doom-modeline-project-detection 'project)
-	(setq doom-modeline-height 0)
+	(setq doom-modeline-height 1)
 	(doom-modeline-mode t))
 #+end_src
+
+
+#+begin_src emacs-lisp
+
+  (use-package highlight-parentheses
+	:config
+	(highlight-parentheses-mode 1))
+#+end_src
+
 
 * TODO NAME THIS
   
@@ -252,11 +262,6 @@ fix the naming for which-key
 	  :prefix "SPC"
 	  :states '(normal motion)
 	  :keymaps 'override)
-	(general-create-definer elk-local-leader-def
-	  :prefix "SPC m"
-	  :states '(normal motion)
-	  :keymaps 'local)
-
 	(elk-leader-def
 	  "a" 'org-agenda
 	  "s" 'org-store-link
@@ -346,7 +351,7 @@ Emacs is lacks a good editor.
  #+END_SRC
 
 
-
+ 
 ** Undo-tree
 
 Undo tree is based.
@@ -392,8 +397,45 @@ And set up some keybinds!
 	  "s" '(evil-mc-make-cursor-in-visual-selection-beg  :wk "cursor at selection"))
 #+end_src
 
+* Git integration
+
+** Diff-hl gitgutter
+#+BEGIN_SRC emacs-lisp
+  (use-package diff-hl
+	:init
+	:config
+	(diff-hl-mode t))
+#+END_SRC
+
+
+** Magit
+
+#+BEGIN_SRC emacs-lisp
+  (use-package magit
+	:init
+	:config
+	(rainbow-delimiters-mode t))
+  (use-package evil-magit
+	:init
+	:config
+	(rainbow-delimiters-mode t))
+
+  (which-key-add-key-based-replacements "SPC g" "Git shit")
+  (elk-leader-def
+	:prefix "SPC g"
+	"s" '(magit-status :wk "status"))
+#+END_SRC
+
+
+
+
 * Code stuff
-  
+** general builtin stuff
+enable highlighting matching parentheses
+#+begin_src emacs-lisp
+(show-paren-mode 1)
+(setq show-paren-delay 0)
+#+end_src
 ** Rainbow everything!
 
 because rainbows are fancy!
@@ -427,35 +469,39 @@ because rainbows are fancy!
 #+END_SRC
 
 
-* Git integration
 
-** Diff-hl gitgutter
+* Language support
+** Lisp
+
+*** parinfer
+
+Install the plugin
+
 #+BEGIN_SRC emacs-lisp
-  (use-package diff-hl
-	:init
-	:config
-	(diff-hl-mode t))
+  (use-package parinfer
+    :ensure t
+    :init
+    (progn
+      (setq parinfer-lighters '("Parinfer:Indent" . "Parinfer:Paren"))
+      (setq parinfer-auto-switch-indent-mode t)
+      (setq parinfer-extensions '(defaults pretty-parens evil smart-tab smart-yank))
+      (add-hook 'emacs-lisp-mode-hook #'parinfer-mode))) 
 #+END_SRC
 
-
-** Magit
+and set up some keybinds!
 
 #+BEGIN_SRC emacs-lisp
-  (use-package magit
-	:init
-	:config
-	(rainbow-delimiters-mode t))
-  (use-package evil-magit
-	:init
-	:config
-	(rainbow-delimiters-mode t))
-
-  (which-key-add-key-based-replacements "SPC g" "Git shit")
   (elk-leader-def
-	:prefix "SPC g"
-	"s" '(magit-status :wk "status"))
+	:prefix "SPC m" "-" '(parinfer-toggle-mode :wk "toggle parinfer mode"))
 #+END_SRC
 
 
+Also, let's integrate it with out bar:
 
+- TODO Fix this
 
+#+BEGIN_SRC emacs-lisp
+  (defun update-parinfer-mode-status (x)
+    (setq global-mode-string (format "fuck: %s %s" x parinfer--mode)))
+  (add-hook 'parinfer-switch-mode-hook 'update-parinfer-mode-status)
+#+END_SRC
