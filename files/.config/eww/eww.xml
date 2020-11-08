@@ -81,8 +81,15 @@
     <var name="song-artist"></var>
     <var name="song-show-progress">false</var>
     <var name="song-playpause"></var>
-    <script-var name="date" interval="1s">
+    <!--<script-var name="date" interval="1s">-->
+      <!--date-->
+      <!--</script-var>-->
+    <script-var name="date">
+      while true; do
+      sleep 1;
+      notify-send 'hi' 'ho'
       date
+      done
     </script-var>
     <!--<script-var name="xyz">-->
     <!--tail -F /home/leon/test | while read -r _; do notify-send "Hi"; done-->
@@ -97,6 +104,12 @@
   <windows>
     <window screen="0" name="main_window" stacking="fg">
       <geometry anchor="top center"/>
+      <widget>
+        <test ree="test" />
+      </widget>
+    </window>
+    <window screen="0" name="main_window2" stacking="fg">
+      <geometry anchor="bottom right"/>
       <widget>
         <test ree="test" />
       </widget>

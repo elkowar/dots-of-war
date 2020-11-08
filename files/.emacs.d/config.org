@@ -1,0 +1,312 @@
+#+TITLE: Emacs Config
+
+* General Settings
+
+Typing =:ensure t= everywhere is very bothersome so I'd rather *not* do that.
+
+#+BEGIN_SRC emacs-lisp
+  (require 'use-package-ensure)
+  (setq use-package-always-ensure t)
+#+END_SRC
+
+Don't create all the custom things.
+
+#+BEGIN_SRC emacs-lisp
+  (defconst custom-file "/dev/null")
+#+END_SRC
+
+I don't want my Emacs to create loads of backup files, swap files, etc.
+
+#+BEGIN_SRC emacs-lisp
+  (setq make-backup-files nil)
+  (setq auto-save-default nil)
+#+END_SRC
+
+Nor do I need all the (Windows 2000-esque) UI.
+
+#+BEGIN_SRC emacs-lisp
+  (scroll-bar-mode -1)
+  (tool-bar-mode -1)
+  (tooltip-mode -1)
+  (menu-bar-mode -1)
+#+END_SRC
+
+When I fire up Emacs I want to be greeted with an empty =*scratch*= buffer, not the weird GNU screen.
+
+#+BEGIN_SRC emacs-lisp
+  (setq inhibit-splash-screen t
+        initial-scratch-message "")
+#+END_SRC
+
+The whole yes or no prompt takes too much time to type out. y and n is much better.
+
+#+BEGIN_SRC emacs-lisp
+  (defalias 'yes-or-no-p 'y-or-n-p)
+#+END_SRC
+
+UTF-8 is good and should be the default for everything.
+
+#+BEGIN_SRC emacs-lisp
+  (setq locale-coding-system 'utf-8)
+  (set-terminal-coding-system 'utf-8)
+  (set-keyboard-coding-system 'utf-8)
+  (set-selection-coding-system 'utf-8)
+  (prefer-coding-system 'utf-8)
+#+END_SRC
+
+Which key makes Emacs self documenting.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package which-key
+    :config
+	(setq which-key-idle-delay 0.25)
+    (which-key-mode 1))
+#+END_SRC
+
+Tramp is awesome for editing remote files.
+By default it's slow as fuck though.
+
+#+BEGIN_SRC emacs-lisp
+  (setq tramp-default-method "ssh")
+#+END_SRC
+
+Avoid typing stupid code block thingys all the time.
+
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'org-structure-template-alist
+	       '("el" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC"))
+#+END_SRC
+
+
+* Looks
+
+** tab width
+
+#+BEGIN_SRC emacs-lisp
+  (setq-default tab-width 4)
+#+END_SRC
+
+** =nyan-mode=
+
+Nya-nya-nya-nya-nya...
+
+#+BEGIN_SRC emacs-lisp
+  (use-package nyan-mode
+    :config
+    (nyan-mode))
+#+END_SRC
+
+
+** Font
+
+I prefer Source Code Pro for now.
+
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'default-frame-alist
+               '(font . "xos4 Terminus"))
+#+END_SRC
+
+** COMMENT Line numbers
+
+#+BEGIN_SRC emacs-lisp
+  (use-package linum-relative
+    :config
+    (setq linum-relative-backend 'display-line-numbers-mode)
+    (linum-relative-global-mode 1))
+#+END_SRC
+
+
+** Color Theme
+
+#+BEGIN_SRC emacs-lisp
+  (use-package gruvbox-theme
+    :config
+    (load-theme 'gruvbox t))
+#+END_SRC
+
+** Beacon
+
+Highlights the cursor each time I switch windows.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package beacon
+    :config
+    (beacon-mode 1))
+#+END_SRC
+
+** Fringe
+   
+Ugly.
+
+#+BEGIN_SRC emacs-lisp
+  (fringe-mode '(10 . 10))
+#+END_SRC
+
+
+* TODO NAME THIS
+  
+** Ivy
+
+ Ivy for completing stuff, etc. is huge.
+
+ #+BEGIN_SRC emacs-lisp
+   (use-package counsel
+     :config
+     (ivy-mode)
+	 (setq ivy-re-builders-alist '((t . ivy--regex-fuzzy)))
+	 (setq ivy-initial-inputs-alist nil)
+
+     :bind
+     ("C-s" . swiper)
+     ("M-x". counsel-M-x))
+ #+END_SRC
+
+** flx
+   
+Flx does fancy fuzzy matching with good sorting
+
+
+ #+BEGIN_SRC emacs-lisp
+   (use-package flx
+	 :config
+	 )
+ #+END_SRC
+
+ 
+* general.el
+
+#+BEGIN_SRC emacs-lisp
+  (use-package general
+	:config
+	(general-evil-setup)
+	(general-def
+	  :states '(normal motion)
+	  "SPC" nil)
+
+	(general-create-definer elk-leader-def
+	  :prefix "SPC"
+	  :states '(normal motion)
+	  :keymaps 'override)
+	(general-create-definer elk-local-leader-def
+	  :prefix "SPC m"
+	  :states '(normal motion)
+	  :keymaps 'local)
+
+	(elk-leader-def
+	  "a" 'org-agenda
+	  "s" 'org-store-link
+	  "c" 'org-capture
+	  "t" '((lambda () (interactive) (org-capture nil "t")) :which-key "org-capture whatever")
+	  "f" '(counsel-find-file :which-key "open a file")
+	  "1" 'delete-other-windows
+	  "0" 'delete-window
+	  )
+
+	(which-key-add-key-based-replacements "SPC y" "Emacs stuff")
+	(elk-leader-def
+	  :prefix "SPC y"
+	  "c" '((lambda () (interactive) (find-file "~/.emacs.d/config.org")) :which-key "open config.org")
+	  "r" '((lambda () (interactive) (load-file "~/.emacs.d/init.el")) :which-key "reload config.org")))
+#+END_SRC
+
+
+
+* Window management
+
+#+BEGIN_SRC emacs-lisp
+  (which-key-add-key-based-replacements "SPC b" "Window management")
+  (elk-leader-def
+	:prefix "SPC b"
+	"c" '(delete-window :which-key "close window")
+	"b" '(counsel-switch-buffer :which-key "Switch buffer")
+	"d" '(kill-buffer :which-key "close buffer")
+	"s" '(split-window-below :which-key "h-split")
+	"v" '(split-window-right :which-key "v-split"))
+#+END_SRC
+
+
+* Editing
+  
+** =evil-mode=
+
+Emacs is lacks a good editor.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package evil
+    :init
+    (setq evil-want-keybinding nil)
+	(setq evil-want-C-u-scroll t)
+	(setq evil-want-fine-undo 'fine)
+	(setq evil-undo-system 'undo-tree)
+    :config
+    (evil-mode 1))
+#+END_SRC
+
+
+*** evil-org-mode
+
+ #+BEGIN_SRC emacs-lisp
+   (use-package evil-org
+     :after org
+     :config
+     (add-hook 'org-mode-hook 'evil-org-mode)
+     (add-hook 'evil-org-mode-hook
+		   (lambda ()
+		 (evil-org-set-key-theme)))
+     (require 'evil-org-agenda)
+     (evil-org-agenda-set-keys))
+ #+END_SRC
+
+
+*** evil-collection
+
+ Keybinds for common modes.
+ Makes evil work everywhere.
+
+ #+BEGIN_SRC emacs-lisp
+   (use-package evil-collection
+     :after evil
+     :config
+     (evil-collection-init))
+ #+END_SRC
+
+** Undo-tree
+
+Undo tree is based.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package undo-tree
+    :init
+    :config
+	(global-undo-tree-mode t))
+#+END_SRC
+
+
+** ace-jump
+
+#+BEGIN_SRC emacs-lisp
+  (use-package ace-jump-mode)
+  (elk-leader-def "x" 'ace-jump-mode)
+#+END_SRC
+
+
+* Code stuff
+
+** Rainbow everything!
+
+because rainbows are fancy!
+
+#+BEGIN_SRC emacs-lisp
+  (use-package rainbow-delimiters
+	:init
+	:config
+	(rainbow-delimiters-mode t))
+
+  (use-package rainbow-blocks
+	:init
+	:config
+	(rainbow-blocks-mode t))
+#+END_SRC
+
+
+
