@@ -92,15 +92,18 @@ Clipboard shit is fucked, so this is necessary to unfuck.
 ;; (run-at-time nil (* 5 60) 'recentf-save-list)
 #+END_SRC
 
+** VTerm
+   
+#+begin_src emacs-lisp
+(use-package vterm)
+#+end_src
 
 * Looks
-
 ** tab width
 
 #+BEGIN_SRC emacs-lisp
   (setq-default tab-width 4)
 #+END_SRC
-
 
 ** Font
 
@@ -120,13 +123,12 @@ I prefer Source Code Pro for now.
     (linum-relative-global-mode 1))
 #+END_SRC
 
-
 ** Color Theme
 
 #+BEGIN_SRC emacs-lisp
   (use-package gruvbox-theme
     :config
-    (load-theme 'gruvbox t))
+    (load-theme 'gruvbox-dark-medium t))
 #+END_SRC
 
 ** Beacon
@@ -147,6 +149,42 @@ Ugly.
   (fringe-mode '(10 . 10))
 #+END_SRC
 
+** COMMENT Mode-line
+
+#+begin_src emacs-lisp
+
+  (use-package telephone-line
+	  :config
+	  (setq telephone-line-lhs
+			  '((evil   . (telephone-line-evil-tag-segment))
+			  (blue . (telephone-line-vc-segment
+						  telephone-line-process-segment))
+			  (nil . (telephone-line-buffer-segment))))
+	  (setq telephone-line-rhs
+			  '((nil    . (telephone-line-misc-info-segment))
+			  (accent . (telephone-line-major-mode-segment))
+			  (evil   . (telephone-line-airline-position-segment))))
+	  (setq telephone-line-primary-left-separator 'telephone-line-cubed-left
+			telephone-line-secondary-left-separator 'telephone-line-cubed-hollow-left
+			telephone-line-primary-right-separator 'telephone-line-cubed-right
+			telephone-line-secondary-right-separator 'telephone-line-cubed-hollow-right)
+	  (setq telephone-line-height 24
+			telephone-line-evil-use-short-tag t)
+	  (telephone-line-mode t))
+#+end_src
+
+** doom-modeline
+
+#+begin_src emacs-lisp
+
+  (use-package doom-modeline
+	:config
+	(setq doom-modeline-icon (display-graphic-p))
+	(setq doom-modeline-env-version t)
+	(setq doom-modeline-project-detection 'project)
+	(setq doom-modeline-height 0)
+	(doom-modeline-mode t))
+#+end_src
 
 * TODO NAME THIS
   
@@ -177,7 +215,6 @@ Flx does fancy fuzzy matching with good sorting
 	 )
  #+END_SRC
  
- 
 * Projectile
 
 
@@ -187,8 +224,15 @@ Flx does fancy fuzzy matching with good sorting
 	(projectile-mode t))
 (use-package counsel-projectile
 	:after projectile counsel
-	:config
-	)
+	:config)
+#+end_src
+
+
+fix the naming for which-key
+
+#+begin_src emacs-lisp
+(add-to-list 'which-key-replacement-alist
+	'((nil . "projectile-\\([[:alnum:]-]+\\)") . (nil . "\\1")))
 #+end_src
 
 * general.el
@@ -201,6 +245,9 @@ Flx does fancy fuzzy matching with good sorting
 	  :states '(normal motion)
 	  "SPC" nil)
 
+	(general-create-definer elk-noleader-def
+	  :states '(normal motion)
+	  :keymaps 'override)
 	(general-create-definer elk-leader-def
 	  :prefix "SPC"
 	  :states '(normal motion)
@@ -228,7 +275,6 @@ Flx does fancy fuzzy matching with good sorting
 #+END_SRC
 
 
-
 * Window management
 
 #+BEGIN_SRC emacs-lisp
@@ -243,7 +289,6 @@ Flx does fancy fuzzy matching with good sorting
 	"s" '(split-window-below :wk "h-split")
 	"v" '(split-window-right :wk "v-split"))
 #+END_SRC
-
 
 * Editing
   
@@ -322,6 +367,30 @@ Undo tree is based.
   (elk-leader-def "x" 'ace-jump-mode)
 #+END_SRC
 
+** Multicursor
+
+Install the package
+
+#+begin_src emacs-lisp
+  (use-package evil-mc
+	:config
+	(evil-mc-mode 1))
+#+end_src
+
+
+And set up some keybinds!
+
+#+begin_src emacs-lisp
+  (which-key-add-key-based-replacements "SPC d" "Multicursor")
+  (elk-leader-def
+	  :prefix "SPC d"
+	  "j" '(evil-mc-make-cursor-move-next-line :wk "cursor below")
+	  "u" '(evil-mc-undo-last-added-cursor  :wk "undo cursor")
+	  "d" '(evil-mc-undo-all-cursors  :wk "remove all cursors")
+	  "n" '(evil-mc-make-and-goto-next-match  :wk "next match")
+	  "m" '(evil-mc-skip-and-goto-next-match  :wk "skip and next match")
+	  "s" '(evil-mc-make-cursor-in-visual-selection-beg  :wk "cursor at selection"))
+#+end_src
 
 * Code stuff
   
@@ -358,7 +427,6 @@ because rainbows are fancy!
 #+END_SRC
 
 
-
 * Git integration
 
 ** Diff-hl gitgutter
@@ -385,9 +453,7 @@ because rainbows are fancy!
   (which-key-add-key-based-replacements "SPC g" "Git shit")
   (elk-leader-def
 	:prefix "SPC g"
-	"s" '(magit-status :wk "status")
-	"b" '(counsel-switch-buffer :wk "Switch buffer")
-	"d" '(kill-buffer :wk "close buffer"))
+	"s" '(magit-status :wk "status"))
 #+END_SRC
 
 
