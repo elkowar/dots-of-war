@@ -63,18 +63,33 @@ Which key makes Emacs self documenting.
     (which-key-mode 1))
 #+END_SRC
 
-Tramp is awesome for editing remote files.
-By default it's slow as fuck though.
+
+** Restart emacs
+   
+Restarting emacs from within emacs!
 
 #+BEGIN_SRC emacs-lisp
-  (setq tramp-default-method "ssh")
+(use-package restart-emacs
+	:config
+	(setq restart-emacs-restore-frames t))
 #+END_SRC
 
-Avoid typing stupid code block thingys all the time.
+** disable clipboard whatever
+
+
+Clipboard shit is fucked, so this is necessary to unfuck.
 
 #+BEGIN_SRC emacs-lisp
-  (add-to-list 'org-structure-template-alist
-	       '("el" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC"))
+	(setq x-select-enable-clipboard-manager nil)
+#+END_SRC
+
+** Store recent files
+
+#+BEGIN_SRC emacs-lisp
+(recentf-mode 1)
+(setq recentf-max-menu-items 25)
+(setq recentf-max-saved-items 25)
+;; (run-at-time nil (* 5 60) 'recentf-save-list)
 #+END_SRC
 
 
@@ -84,16 +99,6 @@ Avoid typing stupid code block thingys all the time.
 
 #+BEGIN_SRC emacs-lisp
   (setq-default tab-width 4)
-#+END_SRC
-
-** =nyan-mode=
-
-Nya-nya-nya-nya-nya...
-
-#+BEGIN_SRC emacs-lisp
-  (use-package nyan-mode
-    :config
-    (nyan-mode))
 #+END_SRC
 
 
@@ -171,8 +176,21 @@ Flx does fancy fuzzy matching with good sorting
 	 :config
 	 )
  #+END_SRC
-
  
+ 
+* Projectile
+
+
+#+begin_src emacs-lisp
+(use-package projectile
+	:config
+	(projectile-mode t))
+(use-package counsel-projectile
+	:after projectile counsel
+	:config
+	)
+#+end_src
+
 * general.el
 
 #+BEGIN_SRC emacs-lisp
@@ -195,18 +213,18 @@ Flx does fancy fuzzy matching with good sorting
 	(elk-leader-def
 	  "a" 'org-agenda
 	  "s" 'org-store-link
-	  "c" 'org-capture
-	  "t" '((lambda () (interactive) (org-capture nil "t")) :which-key "org-capture whatever")
-	  "f" '(counsel-find-file :which-key "open a file")
+	  "t" '((lambda () (interactive) (org-capture nil "t")) :wk "org-capture whatever")
+	  "f" '(counsel-find-file :wk "open a file")
 	  "1" 'delete-other-windows
 	  "0" 'delete-window
+	  "p" '(:keymap projectile-command-map :wk "Project")
 	  )
 
 	(which-key-add-key-based-replacements "SPC y" "Emacs stuff")
 	(elk-leader-def
 	  :prefix "SPC y"
-	  "c" '((lambda () (interactive) (find-file "~/.emacs.d/config.org")) :which-key "open config.org")
-	  "r" '((lambda () (interactive) (load-file "~/.emacs.d/init.el")) :which-key "reload config.org")))
+	  "c" '((lambda () (interactive) (find-file "~/.emacs.d/config.org")) :wk "open config.org")
+	  "r" '((lambda () (interactive) (load-file "~/.emacs.d/init.el")) :wk "reload config.org")))
 #+END_SRC
 
 
@@ -217,11 +235,13 @@ Flx does fancy fuzzy matching with good sorting
   (which-key-add-key-based-replacements "SPC b" "Window management")
   (elk-leader-def
 	:prefix "SPC b"
-	"c" '(delete-window :which-key "close window")
-	"b" '(counsel-switch-buffer :which-key "Switch buffer")
-	"d" '(kill-buffer :which-key "close buffer")
-	"s" '(split-window-below :which-key "h-split")
-	"v" '(split-window-right :which-key "v-split"))
+	"c" '(delete-window :wk "close window")
+	"f" '(counsel-buffer-or-recentf :wk "Switch to file")
+	"b" '(counsel-switch-buffer :wk "Switch buffer")
+	"o" '(counsel-switch-buffer-other-window :wk "Switch buffer in other window")
+	"d" '(kill-buffer :wk "close buffer")
+	"s" '(split-window-below :wk "h-split")
+	"v" '(split-window-right :wk "v-split"))
 #+END_SRC
 
 
@@ -264,11 +284,23 @@ Emacs is lacks a good editor.
  Makes evil work everywhere.
 
  #+BEGIN_SRC emacs-lisp
-   (use-package evil-collection
-     :after evil
-     :config
-     (evil-collection-init))
+ (use-package evil-collection
+	:after evil
+	:config
+	(evil-collection-init))
  #+END_SRC
+
+*** evil-surround
+
+ #+BEGIN_SRC emacs-lisp
+ (use-package evil-surround
+	:ensure t
+	:after evil
+	:config
+	(global-evil-surround-mode t))
+ #+END_SRC
+
+
 
 ** Undo-tree
 
@@ -278,7 +310,8 @@ Undo tree is based.
   (use-package undo-tree
     :init
     :config
-	(global-undo-tree-mode t))
+	(global-undo-tree-mode t)
+	(setq undo-tree-auto-save-history t))
 #+END_SRC
 
 
@@ -291,7 +324,7 @@ Undo tree is based.
 
 
 * Code stuff
-
+  
 ** Rainbow everything!
 
 because rainbows are fancy!
@@ -307,6 +340,56 @@ because rainbows are fancy!
 	:config
 	(rainbow-blocks-mode t))
 #+END_SRC
+
+
+
+
+
+
+** Nerdcommenter
+
+#+BEGIN_SRC emacs-lisp
+  (use-package evil-nerd-commenter)
+  (which-key-add-key-based-replacements "SPC c" "Commenting")
+  (elk-leader-def
+	:prefix "SPC c"
+	"SPC" '(evilnc-comment-or-uncomment-lines :wk "toggle comment")
+	"c" '(evilnc-copy-and-comment-lines :wk "copy and comment"))
+#+END_SRC
+
+
+
+* Git integration
+
+** Diff-hl gitgutter
+#+BEGIN_SRC emacs-lisp
+  (use-package diff-hl
+	:init
+	:config
+	(diff-hl-mode t))
+#+END_SRC
+
+
+** Magit
+
+#+BEGIN_SRC emacs-lisp
+  (use-package magit
+	:init
+	:config
+	(rainbow-delimiters-mode t))
+  (use-package evil-magit
+	:init
+	:config
+	(rainbow-delimiters-mode t))
+
+  (which-key-add-key-based-replacements "SPC g" "Git shit")
+  (elk-leader-def
+	:prefix "SPC g"
+	"s" '(magit-status :wk "status")
+	"b" '(counsel-switch-buffer :wk "Switch buffer")
+	"d" '(kill-buffer :wk "close buffer"))
+#+END_SRC
+
 
 
 
