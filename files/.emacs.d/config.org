@@ -471,6 +471,31 @@ because rainbows are fancy!
 
 
 * Language support
+  
+** LSP-mode
+
+#+begin_src emacs-lisp
+
+  (use-package lsp-mode
+    :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
+           (rustic . lsp)
+           (lsp-mode . lsp-enable-which-key-integration))
+    :commands lsp)
+
+  (use-package company)
+  (use-package lsp-ui :commands lsp-ui-mode)
+  (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
+  (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
+  (use-package dap-mode)
+  ;; (use-package dap-LANGUAGE) to load the dap adapter for your language
+#+end_src
+
+** Rust
+
+#+begin_src emacs-lisp
+  (use-package rustic)
+#+end_src
+
 ** Lisp
 
 *** parinfer
