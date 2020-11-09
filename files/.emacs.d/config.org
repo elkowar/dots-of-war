@@ -1,13 +1,25 @@
+
 #+TITLE: Emacs Config
 
 * General Settings
 
+=cl-lib= adds a few things from common-lisp emulation, adding things like =cl-loop=
+
+#+begin_src emacs-lisp
+(use-package cl-lib)
+#+end_src
+
+** Sane defaults
+
 Typing =:ensure t= everywhere is very bothersome so I'd rather *not* do that.
+This automatically adds =:ensure t= everyhwere!
 
 #+BEGIN_SRC emacs-lisp
   (require 'use-package-ensure)
   (setq use-package-always-ensure t)
 #+END_SRC
+
+
 
 Don't create all the custom things.
 
@@ -54,16 +66,11 @@ UTF-8 is good and should be the default for everything.
   (prefer-coding-system 'utf-8)
 #+END_SRC
 
-Which key makes Emacs self documenting.
+Disable the bell, as the audible bell is highly anoying and pointless
 
-#+BEGIN_SRC emacs-lisp
-  (use-package which-key
-    :config
-	(setq which-key-idle-delay 0.25)
-    (which-key-mode 1))
-#+END_SRC
-
-
+#+begin_src emacs-lisp
+(setq visible-bell 1)
+#+end_src
 ** Restart emacs
    
 Restarting emacs from within emacs!
@@ -84,12 +91,23 @@ Clipboard shit is fucked, so this is necessary to unfuck.
 #+END_SRC
 
 ** Store recent files
-
+   
 #+BEGIN_SRC emacs-lisp
 (recentf-mode 1)
 (setq recentf-max-menu-items 25)
 (setq recentf-max-saved-items 25)
 ;; (run-at-time nil (* 5 60) 'recentf-save-list)
+#+END_SRC
+
+** Which-key
+   
+Which key makes Emacs self documenting.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package which-key
+    :config
+	(setq which-key-idle-delay 0.25)
+    (which-key-mode 1))
 #+END_SRC
 
 ** VTerm
@@ -99,7 +117,7 @@ Clipboard shit is fucked, so this is necessary to unfuck.
 #+end_src
 
 * Looks
-** tab width
+** indentation 
 
 #+BEGIN_SRC emacs-lisp
   (setq-default tab-width 4)
@@ -108,11 +126,9 @@ Clipboard shit is fucked, so this is necessary to unfuck.
 
 ** Font
 
-I prefer Source Code Pro for now.
-
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'default-frame-alist
-               '(font . "xos4 Terminus"))
+               '(font . "Iosevka Medium"))
 #+END_SRC
 
 ** COMMENT Line numbers
@@ -150,6 +166,34 @@ Ugly.
   (fringe-mode '(10 . 10))
 #+END_SRC
 
+** Line-wrapping
+Line wrapping is confusing, more than anything else.
+Thus, let's disable it!
+#+begin_src emacs-lisp
+(setq-default truncate-lines 1)
+#+end_src
+
+** Org-mode codeblocks
+
+Let's make org-mode codeblocks look good!
+
+For this, we first set the code-block background and make it extend to the full width.
+#+begin_src emacs-lisp
+  (set-face-attribute 'org-block nil
+                      :background "#1d2021"
+                      :extend t)
+#+end_src
+
+Additionally, we make the top and bottom lines of the block smaller and darker.
+#+begin_src emacs-lisp
+  (cl-loop for face in '(org-block-begin-line org-block-end-line) do
+        (set-face-attribute face nil
+                            :foreground "#504945"
+                            :background  "#1a1d1e"
+                            :height 0.8
+                            :extend t))
+#+end_src
+
 ** COMMENT Mode-line
 
 #+begin_src emacs-lisp
@@ -174,7 +218,7 @@ Ugly.
 	  (telephone-line-mode t))
 #+end_src
 
-** doom-modeline
+** COMMENT doom-modeline
 
 #+begin_src emacs-lisp
 
@@ -195,10 +239,7 @@ Ugly.
 	(highlight-parentheses-mode 1))
 #+end_src
 
-
-* TODO NAME THIS
-  
-** Ivy
+* Ivy
 
  Ivy for completing stuff, etc. is huge.
 
@@ -214,27 +255,16 @@ Ugly.
      ("M-x". counsel-M-x))
  #+END_SRC
 
-** flx
-   
 Flx does fancy fuzzy matching with good sorting
 
-
  #+BEGIN_SRC emacs-lisp
-   (use-package flx
-	 :config
-	 )
+   (use-package flx)
  #+END_SRC
  
 * Projectile
-
-
 #+begin_src emacs-lisp
-(use-package projectile
-	:config
-	(projectile-mode t))
-(use-package counsel-projectile
-	:after projectile counsel
-	:config)
+(use-package projectile :config (projectile-mode t))
+(use-package counsel-projectile :after projectile counsel)
 #+end_src
 
 
@@ -249,44 +279,43 @@ fix the naming for which-key
 
 #+BEGIN_SRC emacs-lisp
   (use-package general
-	:config
-	(general-evil-setup)
-	(general-def
-	  :states '(normal motion)
-	  "SPC" nil)
+    :config
+    (general-evil-setup)
+    (general-def
+      :states '(normal motion)
+      "SPC" nil)
 
-	(general-create-definer elk-noleader-def
-	  :states '(normal motion)
-	  :keymaps 'override)
-	(general-create-definer elk-leader-def
-	  :prefix "SPC"
-	  :states '(normal motion)
-	  :keymaps 'override)
-	(elk-leader-def
-	  "a" 'org-agenda
-	  "s" 'org-store-link
-	  "t" '((lambda () (interactive) (org-capture nil "t")) :wk "org-capture whatever")
-	  "f" '(counsel-find-file :wk "open a file")
-	  "1" 'delete-other-windows
-	  "0" 'delete-window
-	  "p" '(:keymap projectile-command-map :wk "Project")
-	  )
+    (general-create-definer elk-noleader-def
+      :states '(normal motion)
+      :keymaps 'override)
+    (general-create-definer elk-leader-def
+      :prefix "SPC"
+      :states '(normal motion)
+      :keymaps 'override)
+    (elk-leader-def
+      "a" 'org-agenda
+      "s" 'org-store-link
+      "t" '((lambda () (interactive) (org-capture nil "t")) :wk "org-capture whatever")
+      "f" '(counsel-find-file :wk "open a file")
+      "1" 'delete-other-windows
+      "0" 'delete-window
+      "p" '(:keymap projectile-command-map :wk "Project")
+      )
 
-	(which-key-add-key-based-replacements "SPC y" "Emacs stuff")
-	(elk-leader-def
-	  :prefix "SPC y"
-	  "c" '((lambda () (interactive) (find-file "~/.emacs.d/config.org")) :wk "open config.org")
-	  "r" '((lambda () (interactive) (load-file "~/.emacs.d/init.el")) :wk "reload config.org")))
+    (which-key-add-key-based-replacements "SPC y" "Emacs stuff")
+    (elk-leader-def
+      :prefix "SPC y"
+      "c" '((lambda () (interactive) (find-file "~/.emacs.d/config.org")) :wk "open config.org")
+      "r" '((lambda () (interactive) (load-file "~/.emacs.d/init.el")) :wk "reload config.org")))
 #+END_SRC
 
-
 * Window management
-
 #+BEGIN_SRC emacs-lisp
   (which-key-add-key-based-replacements "SPC b" "Window management")
   (elk-leader-def
 	:prefix "SPC b"
-	"c" '(delete-window :wk "close window")
+	"c" '(kill-buffer-and-window :wk "close window and buffer")
+	"w" '(delete-window :wk "close window")
 	"f" '(counsel-buffer-or-recentf :wk "Switch to file")
 	"b" '(counsel-switch-buffer :wk "Switch buffer")
 	"o" '(counsel-switch-buffer-other-window :wk "Switch buffer in other window")
@@ -296,8 +325,7 @@ fix the naming for which-key
 #+END_SRC
 
 * Editing
-  
-** =evil-mode=
+** evil-mode
 
 Emacs is lacks a good editor.
 
@@ -344,28 +372,26 @@ Emacs is lacks a good editor.
 
  #+BEGIN_SRC emacs-lisp
  (use-package evil-surround
-	:ensure t
 	:after evil
 	:config
 	(global-evil-surround-mode t))
  #+END_SRC
 
-
- 
 ** Undo-tree
-
+   
 Undo tree is based.
 
 #+BEGIN_SRC emacs-lisp
   (use-package undo-tree
-    :init
     :config
-	(global-undo-tree-mode t)
-	(setq undo-tree-auto-save-history t))
+    (global-undo-tree-mode t)
+    (setq undo-tree-auto-save-history t)
+    (push '("." . "~/.emacs.d/undo-tree-history") undo-tree-history-directory-alist))
 #+END_SRC
 
-
 ** ace-jump
+   
+Jump through the code faster than ever before!
 
 #+BEGIN_SRC emacs-lisp
   (use-package ace-jump-mode)
@@ -373,19 +399,10 @@ Undo tree is based.
 #+END_SRC
 
 ** Multicursor
-
-Install the package
-
+Install the package and set up some binds!
 #+begin_src emacs-lisp
-  (use-package evil-mc
-	:config
-	(evil-mc-mode 1))
-#+end_src
-
-
-And set up some keybinds!
-
-#+begin_src emacs-lisp
+  (use-package evil-mc :config (evil-mc-mode 1))
+  
   (which-key-add-key-based-replacements "SPC d" "Multicursor")
   (elk-leader-def
 	  :prefix "SPC d"
@@ -398,27 +415,15 @@ And set up some keybinds!
 #+end_src
 
 * Git integration
-
 ** Diff-hl gitgutter
 #+BEGIN_SRC emacs-lisp
-  (use-package diff-hl
-	:init
-	:config
-	(diff-hl-mode t))
+  (use-package diff-hl :config (diff-hl-mode t))
 #+END_SRC
 
-
 ** Magit
-
 #+BEGIN_SRC emacs-lisp
-  (use-package magit
-	:init
-	:config
-	(rainbow-delimiters-mode t))
-  (use-package evil-magit
-	:init
-	:config
-	(rainbow-delimiters-mode t))
+  (use-package magit)
+  (use-package evil-magit)
 
   (which-key-add-key-based-replacements "SPC g" "Git shit")
   (elk-leader-def
@@ -426,39 +431,28 @@ And set up some keybinds!
 	"s" '(magit-status :wk "status"))
 #+END_SRC
 
-
-
-
 * Code stuff
 ** general builtin stuff
+   
 enable highlighting matching parentheses
+
 #+begin_src emacs-lisp
 (show-paren-mode 1)
 (setq show-paren-delay 0)
 #+end_src
+
+let's also turn lambdas into _actual_ lambdas:
+#+begin_src emacs-lisp
+(global-prettify-symbols-mode t)
+#+end_src
+
 ** Rainbow everything!
-
-because rainbows are fancy!
-
+because rainbows are fabulous!
 #+BEGIN_SRC emacs-lisp
-  (use-package rainbow-delimiters
-	:init
-	:config
-	(rainbow-delimiters-mode t))
-
-  (use-package rainbow-blocks
-	:init
-	:config
-	(rainbow-blocks-mode t))
+  (use-package rainbow-delimiters :config (rainbow-delimiters-mode t))
+  (use-package rainbow-blocks :config (rainbow-blocks-mode t))
 #+END_SRC
-
-
-
-
-
-
 ** Nerdcommenter
-
 #+BEGIN_SRC emacs-lisp
   (use-package evil-nerd-commenter)
   (which-key-add-key-based-replacements "SPC c" "Commenting")
@@ -468,14 +462,9 @@ because rainbows are fancy!
 	"c" '(evilnc-copy-and-comment-lines :wk "copy and comment"))
 #+END_SRC
 
-
-
 * Language support
-  
 ** LSP-mode
-
 #+begin_src emacs-lisp
-
   (use-package lsp-mode
     :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
            (rustic . lsp)
@@ -489,7 +478,6 @@ because rainbows are fancy!
   (use-package dap-mode)
   ;; (use-package dap-LANGUAGE) to load the dap adapter for your language
 #+end_src
-
 ** Rust
 
 #+begin_src emacs-lisp
@@ -497,7 +485,6 @@ because rainbows are fancy!
 #+end_src
 
 ** Lisp
-
 *** parinfer
 
 Install the plugin
@@ -527,6 +514,7 @@ Also, let's integrate it with out bar:
 
 #+BEGIN_SRC emacs-lisp
   (defun update-parinfer-mode-status (x)
-    (setq global-mode-string (format "fuck: %s %s" x parinfer--mode)))
+    (setq global-mode-string (format "%s" x parinfer--mode)))
   (add-hook 'parinfer-switch-mode-hook 'update-parinfer-mode-status)
 #+END_SRC
+
