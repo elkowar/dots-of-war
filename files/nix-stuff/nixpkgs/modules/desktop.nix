@@ -14,7 +14,6 @@ in
   config = lib.mkIf cfg.enable {
     home.packages = with pkgs; [
       (scr.override { extraPackages = [ rofi ]; })
-      my-st
       mmutils
       liquidctl
       bashtop

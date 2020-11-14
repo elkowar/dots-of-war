@@ -40,9 +40,9 @@ in
         vte-terminal {
           padding: 10px;
         }
-        #Emacs > box {
+        /*#Emacs > box {
           padding: 20px;
-        }
+        }*/
       '';
     };
   };

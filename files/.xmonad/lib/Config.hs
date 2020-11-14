@@ -9,16 +9,17 @@ import Control.Concurrent
 import           Control.Exception              ( catch , SomeException)
 import           Control.Monad                  (join,  filterM
                                                 , when
-                                                , guard
+                                                
                                                 )
 import           Control.Arrow                  ( (>>>) )
 import           Data.List                      ( isPrefixOf
                                                 , isSuffixOf
                                                 , isInfixOf
                                                 )
-import qualified Foreign.C.Types
+import qualified Data.List
 import System.Exit (exitSuccess)
 import qualified XMonad.Util.ExtensibleState as XS
+import qualified Data.Char
 import qualified Rofi
 import qualified DescribedSubmap
 import qualified TiledDragging
@@ -35,7 +36,6 @@ import Data.Foldable                  ( for_ )
 
 import Data.Function ((&))
 
-import qualified XMonad.Layout.Decoration
 import XMonad hiding ((|||))
 import XMonad.Actions.CopyWindow
 import XMonad.Actions.PhysicalScreens ( horizontalScreenOrderer )
@@ -65,7 +65,6 @@ import XMonad.Layout.ThreeColumns
 import XMonad.Layout.ResizableThreeColumns
 import XMonad.Layout.WindowSwitcherDecoration
 import XMonad.Layout.DraggingVisualizer
-import XMonad.Hooks.FadeInactive
 --import XMonad.Layout.Hidden as Hidden
 
 import           XMonad.Util.EZConfig           ( additionalKeysP
@@ -73,13 +72,11 @@ import           XMonad.Util.EZConfig           ( additionalKeysP
                                                 , checkKeymap
                                                 )
 
-import XMonad.Layout.LayoutModifier
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run
 import XMonad.Util.SpawnOnce (spawnOnce)
 import XMonad.Util.WorkspaceCompare   ( getSortByXineramaPhysicalRule , getSortByIndex)
 
-import qualified Data.Monoid
 import           Data.Monoid                    ( Endo )
 import           Data.Semigroup                 ( All(..) )
 import qualified System.IO                           as SysIO
@@ -96,7 +93,9 @@ import qualified XMonad.Layout.ToggleLayouts         as ToggleLayouts
 import qualified XMonad.StackSet                     as W
 import qualified XMonad.Util.XSelection              as XSel
 import qualified XMonad.Layout.PerScreen             as PerScreen
-import Data.Maybe (maybeToList)
+import Data.Maybe (catMaybes, maybeToList, fromMaybe)
+import qualified Data.Bifunctor
+import Data.Bifunctor
 {-# ANN module "HLint: ignore Redundant $" #-}
 {-# ANN module "HLint: ignore Redundant bracket" #-}
 {-# ANN module "HLint: ignore Move brackets to avoid $" #-}
@@ -133,7 +132,7 @@ scratchpads =
   launchDiscord = "discocss"
   --launchDiscord = "beautifuldiscord --css /home/leon/.config/beautifuldiscord/custom_discord.css"
 
-
+-- }}}
 
 -- Colors ------ {{{
 fg        = "#ebdbb2"
@@ -154,7 +153,6 @@ purple    = "#d3869b"
 aqua      = "#8ec07c"
 -- }}}
 
--- }}}
 
 -- Layout ---------------------------------------- {{{
 myTabTheme :: Theme
@@ -179,7 +177,7 @@ instance Shrinker EmptyShrinker where
 
 myLayout = noBorders $ avoidStruts
          $ smartBorders
-         -- $ FancyBorders.fancyBorders borderTheme
+         --  $ FancyBorders.fancyBorders borderTheme
          $ MTog.mkToggle1 MTog.FULL
          $ ToggleLayouts.toggleLayouts (rename "Tabbed" . makeTabbed . spacingAndGaps $ ResizableTall 1 (3/100) (1/2) [])
          $ MTog.mkToggle1 WINDOWDECORATION
@@ -308,6 +306,7 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
                        BoringWindows.focusDown
                        onGroup W.focusDown'
                        windows W.focusMaster)
+
     ]
 
   multiMonitorBindings :: [(String, X ())]
@@ -492,6 +491,7 @@ myManageHook = composeAll
   , title     =? "Something"                   --> doFloat
   , className =? "termite_floating"            --> ManageHelpers.doRectFloat(W.RationalRect 0.2 0.2 0.6 0.6)
   , className =? "bar_system_status_indicator" --> ManageHelpers.doRectFloat (W.RationalRect 0.7 0.05 0.29 0.26)
+  , title     =? "discord.com hat Ihren Bildschirm freigegeben" --> doShift "NSP"
   , manageDocks
   , namedScratchpadManageHook scratchpads
   ]
@@ -503,6 +503,10 @@ main :: IO ()
 main = do
   currentScreenCount :: Int <- countScreens
   let monitorIndices = [0..currentScreenCount - 1]
+
+
+  foo <- getXrdbValue "*.color11"
+  spawn $ "notify-send 'fuck' '|" ++ foo ++ "|'"
 
 
   -- create a fifo named pipe for every monitor (called /tmp/xmonad-state-bar0, etc)
@@ -687,3 +691,66 @@ ifLayoutName check onLayoutA onLayoutB = do
 getActiveLayoutDescription :: X String
 getActiveLayoutDescription = (description . W.layout . W.workspace . W.current) <$> gets windowset
 -- }}}
+
+
+
+
+
+
+
+
+
+newtype ActionCycleState = ActionCycleState (M.Map String Int) deriving Typeable
+instance ExtensionClass ActionCycleState where
+  initialValue = ActionCycleState mempty
+
+getActionCycle :: String -> ActionCycleState -> Maybe Int
+getActionCycle name (ActionCycleState s) = M.lookup name s
+
+nextActionCycle :: String -> Int -> ActionCycleState -> ActionCycleState
+nextActionCycle name maxNum (ActionCycleState s) = ActionCycleState $ M.update (\n -> Just $ (n + 1) `mod` maxNum) name s
+
+setActionCycle :: String -> Int -> ActionCycleState -> ActionCycleState
+setActionCycle name n (ActionCycleState s)= ActionCycleState $ M.insert name n s
+
+cycleAction :: String -> [X ()] -> X ()
+cycleAction _ [] = pure ()
+cycleAction name actions = do
+  idx <- XS.gets (getActionCycle name) >>= \case
+    Just x -> do
+      XS.modify (nextActionCycle name (length actions))
+      pure x
+    Nothing -> do
+      XS.modify (setActionCycle name 1)
+      pure 0
+
+  sequence_ $ actions `safeIdx` idx
+
+
+
+
+safeIdx :: [a] -> Int -> Maybe a
+safeIdx list i
+  | i < length list = Just $ list !! i
+  | otherwise       = Nothing
+
+
+getXrdbValue :: String -> IO String
+getXrdbValue key = fromMaybe "" . findValue key <$> runProcessWithInput "xrdb" ["-query"] ""
+  where
+    findValue :: String -> String -> Maybe String
+    findValue xresKey xres =
+      snd <$> ( Data.List.find ((== xresKey) . fst)
+                $ catMaybes
+                $ splitAtColon
+                <$> lines xres
+              )
+
+    splitAtColon :: String -> Maybe (String, String)
+    splitAtColon str = splitAtTrimming str <$> (Data.List.elemIndex ':' str)
+
+    splitAtTrimming :: String -> Int -> (String, String)
+    splitAtTrimming str idx = bimap trim trim . (second tail) $ splitAt idx str
+
+    trim :: String -> String
+    trim = Data.List.dropWhileEnd (Data.Char.isSpace) . Data.List.dropWhile (Data.Char.isSpace)
