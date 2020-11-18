@@ -61,17 +61,16 @@ entry {
   }
 }
 
+scale trough {
+  padding: 10px;
+  border-radius: 50px;
+  background-color: #ebdbb2;
 
-  scale trough {
+  highlight {
     padding: 10px;
-    border-radius: 50px;
-    background-color: #ebdbb2;
-
-    highlight {
-      padding: 10px;
-      min-height: 30px;
-      border-bottom-left-radius: 50px;
-      border-bottom-right-radius: 50px;
-      background-color: #8ec07c;
-    }
+    min-width: 30px;
+    border-bottom-left-radius: 50px;
+    border-bottom-right-radius: 50px;
+    background-color: #8ec07c;
   }
+}

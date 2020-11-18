@@ -194,13 +194,44 @@
 --scrollbar-chrome-size: /*[[scrollbar-chrome-size]]*/;
 --elevation-1: /*[[elevation-1]]*/;
 --elevation-2: /*[[elevation-2]]*/;
+
+--color-notifications-row-read-bg: /*[[base-2]]*/;
+--color-bg-canvas: /*[[base-2]]*/;
+--color-border-primary: /*[[base-2]]*/;
   }
 }
 
 @-moz-document regexp(".*github.*") {
 }
+
+
+
 @-moz-document domain("github.com"), domain("github.community") {
-  .Box > .bg-gray-dark:nth-child(2):last-of-type {
+
+    .notifications-v2.notification-shelf {
+        background: var(--base-3);
+        border-bottom: none !important;
+        box-shadow: none;
+    }
+    .gh-header-shadow {
+        border-bottom: none;
+    }
+    
+    /*
+    .notifications-list-item, .notifications-list-item > * {
+        background-color: var(--base-3) !important;
+    }*/
+
+    
+    .UnderlineNav {
+        box-shadow: none;
+    }
+    
+    .btn, .social-count {
+        box-shadow: 0 0 5px 0 rgba(0,0,0, 0.1);
+    }
+    
+    .Box > .bg-gray-dark:nth-child(2):last-of-type {
     color: var(--text-primary) !important;
     border-color: var(--base-1) !important;
     background-color: var(--base-3) !important;

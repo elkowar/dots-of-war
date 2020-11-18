@@ -30,7 +30,8 @@ import XMonad.Hooks.WindowSwallowing as WindowSwallowing
 
 
 
-
+import XMonad.Hooks.WindowedFullscreenFix
+--import XMonad.Util.ActionCycle
 import Data.Foldable                  ( for_ )
 
 
@@ -96,6 +97,8 @@ import qualified XMonad.Layout.PerScreen             as PerScreen
 import Data.Maybe (catMaybes, maybeToList, fromMaybe)
 import qualified Data.Bifunctor
 import Data.Bifunctor
+import GHC.IO.Unsafe (unsafePerformIO)
+import qualified Data.List.NonEmpty
 {-# ANN module "HLint: ignore Redundant $" #-}
 {-# ANN module "HLint: ignore Redundant bracket" #-}
 {-# ANN module "HLint: ignore Move brackets to avoid $" #-}
@@ -307,6 +310,13 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
                        onGroup W.focusDown'
                        windows W.focusMaster)
 
+
+--    -- TODO remove
+--    , ("M-S-l", do
+--        result <- cycleActionWithResult "ree" $ Data.List.NonEmpty.fromList [ pure "hi", pure "Ho", pure "test" ]
+--        spawn $ "notify-send 'teset' '" ++ result ++ "'"
+--      )
+
     ]
 
   multiMonitorBindings :: [(String, X ())]
@@ -336,6 +346,9 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
     , ("M-S-<Return>", spawn "alacritty")
     --, ("M-S-<Return>", launchWithBackgroundInstance (className =? "Alacritty") "alacritty")
     , ("M-S-<", spawn "flameshot gui")
+
+
+    , ("M-S-h", fuckshit)
     ]
 
   miscBindings :: [(String, X ())]
@@ -505,9 +518,6 @@ main = do
   let monitorIndices = [0..currentScreenCount - 1]
 
 
-  foo <- getXrdbValue "*.color11"
-  spawn $ "notify-send 'fuck' '|" ++ foo ++ "|'"
-
 
   -- create a fifo named pipe for every monitor (called /tmp/xmonad-state-bar0, etc)
   for_ monitorIndices (\idx -> safeSpawn "mkfifo" ["/tmp/xmonad-state-bar" ++ show idx])
@@ -537,7 +547,7 @@ main = do
         , handleEventHook    = mconcat [ mySwallowEventHook
                                        , activateWindowEventHook
                                        , handleEventHook Desktop.desktopConfig
-                                       , fullscreenFixEventHook
+                                       , windowedFullscreenFixEventHook
                                        , Ewmh.ewmhDesktopsEventHook
                                        ]
         --, handleEventHook  = minimizeEventHook <+> handleEventHook def <+> hintsEventHook -- <+> Ewmh.fullscreenEventHook
@@ -550,6 +560,7 @@ main = do
     $ myConfig
 
 -- }}}
+
 
 
 mySwallowEventHook = WindowSwallowing.swallowEventHook
@@ -592,11 +603,6 @@ fullscreenFixEventHook (ClientMessageEvent _ _ _ dpy win typ (_:dats)) = do
     withWindowAttributes dpy win $ \attrs ->
       liftIO $ resizeWindow dpy win (fromIntegral $ wa_width attrs + 1) (fromIntegral $ wa_height attrs)
   return $ All True
---fullscreenFixEventHook (ClientMessageEvent { ev_event_type, ev_window }) = do
-  --if ev_event_type == propertyNotify then
-    --spawn $ "notify-send 'hi'" ++ show ev_window
-    --else return ()
-  --return $ All True
 fullscreenFixEventHook _ = return $ All True
 
   
@@ -687,7 +693,7 @@ ifLayoutName check onLayoutA onLayoutB = do
   layout <- getActiveLayoutDescription
   if (check layout) then onLayoutA else onLayoutB
 
--- Get the name of the active layout.
+-- | Get the name of the active layout.
 getActiveLayoutDescription :: X String
 getActiveLayoutDescription = (description . W.layout . W.workspace . W.current) <$> gets windowset
 -- }}}
@@ -698,42 +704,46 @@ getActiveLayoutDescription = (description . W.layout . W.workspace . W.current) 
 
 
 
+-- 
+-- 
+-- newtype ActionCycleState = ActionCycleState (M.Map String Int) deriving Typeable
+-- instance ExtensionClass ActionCycleState where
+--   initialValue = ActionCycleState mempty
+-- 
+-- getActionCycle :: String -> ActionCycleState -> Maybe Int
+-- getActionCycle name (ActionCycleState s) = M.lookup name s
+-- 
+-- nextActionCycle :: String -> Int -> ActionCycleState -> ActionCycleState
+-- nextActionCycle name maxNum (ActionCycleState s) = ActionCycleState $ M.update (\n -> Just $ (n + 1) `mod` maxNum) name s
+-- 
+-- setActionCycle :: String -> Int -> ActionCycleState -> ActionCycleState
+-- setActionCycle name n (ActionCycleState s)= ActionCycleState $ M.insert name n s
+-- 
+-- cycleAction :: String -> [X ()] -> X ()
+-- cycleAction _ [] = pure ()
+-- cycleAction name actions = do
+--   idx <- XS.gets (getActionCycle name) >>= \case
+--     Just x -> do
+--       XS.modify (nextActionCycle name (length actions))
+--       pure x
+--     Nothing -> do
+--       XS.modify (setActionCycle name 1)
+--       pure 0
+-- 
+--   sequence_ $ actions `safeIdx` idx
+-- 
+-- 
+-- 
+-- 
+-- safeIdx :: [a] -> Int -> Maybe a
+-- safeIdx list i
+--   | i < length list = Just $ list !! i
+--   | otherwise       = Nothing
+-- 
 
 
-newtype ActionCycleState = ActionCycleState (M.Map String Int) deriving Typeable
-instance ExtensionClass ActionCycleState where
-  initialValue = ActionCycleState mempty
-
-getActionCycle :: String -> ActionCycleState -> Maybe Int
-getActionCycle name (ActionCycleState s) = M.lookup name s
-
-nextActionCycle :: String -> Int -> ActionCycleState -> ActionCycleState
-nextActionCycle name maxNum (ActionCycleState s) = ActionCycleState $ M.update (\n -> Just $ (n + 1) `mod` maxNum) name s
-
-setActionCycle :: String -> Int -> ActionCycleState -> ActionCycleState
-setActionCycle name n (ActionCycleState s)= ActionCycleState $ M.insert name n s
-
-cycleAction :: String -> [X ()] -> X ()
-cycleAction _ [] = pure ()
-cycleAction name actions = do
-  idx <- XS.gets (getActionCycle name) >>= \case
-    Just x -> do
-      XS.modify (nextActionCycle name (length actions))
-      pure x
-    Nothing -> do
-      XS.modify (setActionCycle name 1)
-      pure 0
-
-  sequence_ $ actions `safeIdx` idx
-
-
-
-
-safeIdx :: [a] -> Int -> Maybe a
-safeIdx list i
-  | i < length list = Just $ list !! i
-  | otherwise       = Nothing
-
+unsafeGetXrdbValue :: String -> String
+unsafeGetXrdbValue = unsafePerformIO . getXrdbValue
 
 getXrdbValue :: String -> IO String
 getXrdbValue key = fromMaybe "" . findValue key <$> runProcessWithInput "xrdb" ["-query"] ""
@@ -754,3 +764,10 @@ getXrdbValue key = fromMaybe "" . findValue key <$> runProcessWithInput "xrdb" [
 
     trim :: String -> String
     trim = Data.List.dropWhileEnd (Data.Char.isSpace) . Data.List.dropWhile (Data.Char.isSpace)
+
+
+
+fuckshit = getActiveLayoutDescription >>= debugShit
+
+debugShit :: MonadIO m => String -> m ()
+debugShit x = spawn $ "notify-send 'Debug' '" ++ x ++ "'"
