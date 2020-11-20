@@ -4,13 +4,18 @@ let g:which_key_map = {}
 call which_key#register('<Space>', "g:which_key_map")
 
 
+
+
+
 let g:which_key_map = {
       \ 'h' : 'which_key_ignore', 'l' : 'which_key_ignore',
       \ 'f' : 'which_key_ignore', 's': 'which_key_ignore' ,
       \ 'c' : { 'name': '+comment_out' },
       \ 'e' : { 'name': '+emmet' },
+      \ '[' : ['<Plug>(YoinkPostPasteSwapBack)',    'Swap last paste backwards' ],
+      \ ']' : ['<Plug>(YoinkPostPasteSwapForward)', 'Swap last paste backwards' ],
       \ 'z' : { 'name': '+folds', 'c': ['foldclose', 'close fold'],
-                                \ 'o': ['foldopen', 'open fold'] ,
+                                \ 'o': ['foldopen',  'open fold'] ,
                                 \ }
       \ }
 
@@ -19,9 +24,9 @@ let g:which_key_map = {
 let g:which_key_map['m'] = {
       \ 'name' : '+Code-actions'               ,
       \ 'd' : [ ':call Show_documentation()'   , 'show documentation'    ] ,
-      \ 's' : [ ':CocList -I symbols'          , 'list symbols'          ] ,
-      \ 'o' : [ ':CocList outline'             , 'show outline'          ] ,
-      \ 'c' : [ ':CocList commands'            , 'show all coc-commands' ] ,
+      \ 's' : [ ':CocFzfList symbols'          , 'list symbols'          ] ,
+      \ 'o' : [ ':CocFzfList outline'             , 'show outline'          ] ,
+      \ 'c' : [ ':CocFzfList commands'            , 'show all coc-commands' ] ,
       \ 'g' : [ '<Plug>(coc-definition)'       , 'go to definition'      ] ,
       \ 't' : [ '<Plug>(coc-type-definition)'  , 'show type definition'  ] ,
       \ 'i' : [ '<Plug>(coc-implementation)'   , 'show implementation'   ] ,
@@ -60,7 +65,7 @@ let g:which_key_map['v'] = {
 
 let g:which_key_map['b'] = {
       \ 'name': '+buffers'  ,
-      \ 'o' : ['Buffers'    ,  'select open buffer'  ] ,
+      \ 'b' : ['Buffers'    ,  'select open buffer'  ] ,
       \ 'c' : [':bdelete!'  ,  'close open buffer'   ] ,
       \ 'w' : [':bwipeout!' ,  'wipeout open buffer' ] ,
       \ }
@@ -72,7 +77,7 @@ let g:which_key_map['x'] = {
       \ 'h' : [':History:'      ,  'search command history'],
       \ 'c' : [':Commands'      ,  'search through commands'],
       \ 's' : ['OverCommandLine',  'Substitute with preview'],
-      \ 'y' : [':CocList -A --normal yank', 'Show yank history']
+      \ 'y' : [':CocFzfList -A --normal yank', 'Show yank history']
       \ }
 
 " CocList -A --normal yank needs :CocInstall coc-yank

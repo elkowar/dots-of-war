@@ -6,9 +6,6 @@ endif
 
 
 call plug#begin('~/.vim/plugged')
-
-Plug 'branwright1/salvation-vim'
-
   Plug 'tpope/vim-repeat'
 
   Plug 'junegunn/goyo.vim', {'on': 'Goyo'}
@@ -55,8 +52,6 @@ Plug 'branwright1/salvation-vim'
 
   Plug 'jiangmiao/auto-pairs'
 
-  Plug 'junegunn/vim-peekaboo' " highlight jump points (f, t)
-
   Plug 'machakann/vim-highlightedyank'
 
   Plug 'ciaranm/detectindent'
@@ -71,7 +66,13 @@ Plug 'branwright1/salvation-vim'
 
   Plug 'liuchengxu/vista.vim'
 
+  Plug 'antoinemadec/coc-fzf'
 
+  Plug 'tommcdo/vim-exchange'
+
+  Plug 'puremourning/vimspector'
+
+  Plug 'svermeulen/vim-yoink'
   " Language Plugins ----------------------------------------------------- {{{
 
   "Plug 'satabin/hocon-vim'

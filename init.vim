@@ -1,4 +1,3 @@
-
 " __   _(_)_ __ ___  _ __ ___
 " \ \ / / | '_ ` _ \| '__/ __|
 "  \ V /| | | | | | | | | (__
@@ -7,6 +6,7 @@
 let g:vim_config_root = expand('<sfile>:p:h')
 let $VIM_ROOT = g:vim_config_root
 
+let g:vimspector_enable_mappings = 'HUMAN'
 
 source $VIM_ROOT/plugins.vim
 
@@ -17,6 +17,8 @@ endif
 
 let mapleader ="\<Space>"
 
+
+let g:signify_sign_show_text = 1
 
 
 " Vanilla VIM configuration ------------------------------------ {{{
@@ -70,7 +72,7 @@ highlight EndOfBuffer ctermfg=black ctermbg=black
 
 hi NormalFloat ctermbg=black guibg='#1d2021'
 hi Pmenu ctermbg=black guibg='#1d2021'
-hi SignColumn ctermbg=black guibg='#282828'
+hi SignColumn ctermbg=NONE guibg='#282828'
 hi WhichKeyFloating ctermbg=black guibg='#282828'
 hi link Function GruvboxGreen
 
@@ -159,6 +161,7 @@ nmap <S-DEL> <Plug>Sneak_S
 omap   <DEL> <Plug>Sneak_s
 omap <S-DEL> <Plug>Sneak_S
 
+
 " FZF showing previews
 command! -bang -nargs=? -complete=dir Files
     \ call fzf#vim#files(<q-args>, fzf#vim#with_preview({'options': ['--layout=reverse', '--info=inline']}), <bang>0)
@@ -182,7 +185,11 @@ map <Leader>f <Plug>(easymotion-bd-f)
 map <Leader>s <Plug>(easymotion-overwin-f2)
 let g:EasyMotion_smartcase = 1
 
-let g:signify_sign_delete = '-'
+let g:signify_sign_add               = '▍'
+let g:signify_sign_delete            = '▍'
+let g:signify_sign_delete_first_line = '▍'
+let g:signify_sign_change            = '▍'
+
 
 " Airline {{{
 
@@ -211,11 +218,10 @@ autocmd BufWinEnter * :hi airline_tablabel_right ctermbg=NONE guibg=NONE ctermfg
 " }}}
 
 
-source $VIM_ROOT/whichkeyConfig.vim
-source $VIM_ROOT/lsp.vim
+
 " }}}
 
-
+" :: and _ as space {{{
 function RebindShit(newKey)
   let b:RemappedSpace={ 
         \ 'old': maparg("<Space>", "i"),
@@ -248,3 +254,17 @@ inoremap <Tab>k <space><C-o>:call RebindShit("::")<CR>
 
 
 nnoremap ö a
+
+
+" }}}
+
+
+hi SignifyLineDelete cterm=NONE gui=NONE guifg='#ff0000'
+hi SignifyLineChange cterm=NONE gui=NONE guifg='#ff0000'
+
+hi SignifyLineAdd    cterm=NONE gui=NONE guifg='#ff0000'
+
+
+source $VIM_ROOT/whichkeyConfig.vim
+source $VIM_ROOT/lsp.vim
+
