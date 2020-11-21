@@ -65,7 +65,7 @@ hi Comment cterm=italic
 let &t_ut=''
 
 " hide empty line ~'s
-highlight EndOfBuffer ctermfg=black ctermbg=black
+highlight EndOfBuffer ctermfg=black ctermbg=black guibg=NONE guifg='#282828'
 
 
 hi Pmenu ctermbg=black guibg='#1d2021'
@@ -216,7 +216,8 @@ function! AirlineInit()
   let g:airline_section_b = ''
   let g:airline_section_c = '
         \%<%<
-        \%#__accent_red#%{airline#util#wrap(airline#parts#readonly(),0)}
+        \%#__accent_red#
+        \%{airline#util#wrap(airline#parts#readonly(),0)}
         \%#__restore__#
         \%#__accent_bold#
         \%{airline#util#wrap(airline#extensions#coc#get_status(),0)}
