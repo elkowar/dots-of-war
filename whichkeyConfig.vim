@@ -9,7 +9,7 @@ call which_key#register('<Space>', "g:which_key_map")
 
 let g:which_key_map = {
       \ 'h' : 'which_key_ignore', 'l' : 'which_key_ignore',
-      \ 'f' : 'which_key_ignore', 's': 'which_key_ignore' ,
+      "\ 'f' : 'which_key_ignore', 's': 'which_key_ignore' ,
       \ 'c' : { 'name': '+comment_out' },
       \ 'e' : { 'name': '+emmet' },
       \ '[' : ['<Plug>(YoinkPostPasteSwapBack)',    'Swap last paste backwards' ],
@@ -44,6 +44,13 @@ let g:which_key_map['m'] = {
       \ 'O' : [ '<Plug>(coc-openlink)'         , 'open link under cursor'      ] ,
       \}
  
+let g:which_key_map['f'] = {
+      \ 'name': '+folds',
+      \ 'o': [ ':foldopen'  , 'open fold'             ] ,
+      \ 'n': [ ':foldclose' , 'close fold'            ] ,
+      \ 'j': [ 'zj'         , 'jump to next fold'     ] ,
+      \ 'k': [ 'zk'         , 'jump to previous fold' ] ,
+      \ }
 
 let g:which_key_map['a'] = {
       \ 'name': '+Bookmarks',

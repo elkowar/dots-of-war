@@ -146,8 +146,6 @@ vnoremap K <Nop>
 
 " Plugin configuration --------------------------------------------------- {{{
 
-
-
 let g:VM_leader = 'm'
 
 autocmd BufReadPost * :DetectIndent
@@ -190,9 +188,9 @@ au Syntax * RainbowParenthesesLoadBraces
 
 nnoremap <C-p> :Files<CR>
 
-map <Leader>f <Plug>(easymotion-bd-f)
-map <Leader>s <Plug>(easymotion-overwin-f2)
-let g:EasyMotion_smartcase = 1
+"map <Leader>f <Plug>(easymotion-bd-f)
+"map <Leader>s <Plug>(easymotion-overwin-f2)
+"let g:EasyMotion_smartcase = 1
 
 let g:signify_sign_add               = '▍'
 let g:signify_sign_delete            = '▍'
@@ -204,32 +202,46 @@ hi SignifySignDelete cterm=NONE gui=NONE guifg='#fb4934'
 hi SignifySignChange cterm=NONE gui=NONE guifg='#83a598'
 hi SignifySignAdd    cterm=NONE gui=NONE guifg='#8ec07c'
 
-
-" Airline {{{
+" Airline -------------------------------------------------------------------------- {{{
 
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 0
 
-let g:airline_section_a = '%#__accent#%{airline#util#wrap(airline#parts#mode(),0)}%#__restore__#%{airline#util#append(airline#parts#iminsert(),0)}'
-let g:airline_section_b = ''
-let g:airline_section_c = '%<%<%#__accent_red#%{airline#util#wrap(airline#parts#readonly(),0)}%#__restore__#%#__accent_bold#%{airline#util#wrap(airline#extensions#coc#get_status(),0)}%#__restore__#'
-let g:airline_section_y = ''
-let g:airline_section_z = '%4l% %3v'
-let g:airline_section_warning = '%{airline#extensions#whitespace#check()}%{airline#util#wrap(airline#extensions#coc#get_warning(),0)}'
-let airline#extensions#coc#error_symbol = ''
-let airline#extensions#coc#warning_symbol = ''
-let airline#extensions#coc#stl_format_err = '%E{[%e(#%fe)]}'
-let airline#extensions#coc#stl_format_warn = '%W{[%w(#%fw)]}'
+function! AirlineInit()
+  let g:airline_section_a = '
+        \%#__accent#
+        \%{airline#util#wrap(airline#parts#mode(),0)}
+        \%#__restore__#
+        \%{airline#util#append(airline#parts#iminsert(),0)}'
+  let g:airline_section_b = ''
+  let g:airline_section_c = '
+        \%<%<
+        \%#__accent_red#%{airline#util#wrap(airline#parts#readonly(),0)}
+        \%#__restore__#
+        \%#__accent_bold#
+        \%{airline#util#wrap(airline#extensions#coc#get_status(),0)}
+        \%#__restore__#'
+
+  let g:airline_section_y = ''
+  let g:airline_section_z = '%4l% %3v'
+
+  let g:airline_section_warning = '
+        \%{airline#extensions#whitespace#check()}
+        \%{airline#util#wrap(airline#extensions#coc#get_warning(),0)}'
+
+  let airline#extensions#coc#error_symbol = ''
+  let airline#extensions#coc#warning_symbol = ''
+  let airline#extensions#coc#stl_format_err = '%E{[%e(#%fe)]}'
+  let airline#extensions#coc#stl_format_warn = '%W{[%w(#%fw)]}'
+endfun
+autocmd User AirlineAfterInit call AirlineInit()
+
 
 let g:airline_theme='elkowars_gruvbox'
-
 
 " update airline themes properly... idk why this is so weird
 function! s:update_highlights()
   hi airline_tabfill ctermbg=NONE guibg=NONE
-  hi airline_a_to_airline_b ctermbg=NONE guibg='#ff0000'
-  hi airline_b_to_airline_c ctermbg=NONE guibg='#ff0000'
-  hi airline_c_to_airline_x ctermbg=NONE guibg=NONE
   hi airline_tablabel_right ctermbg=NONE guibg=NONE ctermfg=NONE guifg=NONE
 endfunction
 autocmd User AirlineAfterTheme call s:update_highlights()
@@ -240,7 +252,8 @@ autocmd User AirlineAfterTheme call s:update_highlights()
 
 " }}}
 
-" :: and _ as space {{{
+" :: and _ as space ------------------------------------------------------------------- {{{
+
 function RebindShit(newKey)
   let b:RemappedSpace={
         \ 'old': maparg("<Space>", "i"),

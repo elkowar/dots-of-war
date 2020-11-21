@@ -6,6 +6,7 @@ endif
 
 
 call plug#begin('~/.vim/plugged')
+
   Plug 'tpope/vim-repeat'
 
   Plug 'junegunn/goyo.vim', {'on': 'Goyo'}
@@ -32,7 +33,7 @@ call plug#begin('~/.vim/plugged')
   Plug 'godlygeek/tabular'               " :Tab /regex can align code on occurrences of the given regex. I.e. :Tab /= aligns all = signs in a block.
   Plug 'tpope/vim-surround'
 
-  Plug 'easymotion/vim-easymotion'       " press <leader>f [somekey] to have quick-movement to any occurrence of the key
+  "Plug 'easymotion/vim-easymotion'       " press <leader>f [somekey] to have quick-movement to any occurrence of the key
   Plug 'christoomey/vim-tmux-navigator'  " good integration with tmux pane switching
   Plug 'nathanaelkane/vim-indent-guides' " Can be toggled using <leader>ig (intent-guides)
 
