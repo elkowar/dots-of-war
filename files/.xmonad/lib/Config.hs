@@ -111,7 +111,8 @@ import qualified Data.List.NonEmpty
 myModMask  = mod4Mask
 myLauncher = Rofi.asCommand def ["-show run"]
 --myTerminal = "termite --name törminell"
-myTerminal = "alacritty"
+--myTerminal = "alacritty"
+myTerminal = "st"
 myBrowser = "qutebrowser"
 useSharedWorkspaces = False
 --myBrowser = "google-chrome-stable"
@@ -241,7 +242,8 @@ myStartupHook = do
   spawnOnce "xsetroot -cursor_name left_ptr"
   spawnOnce "xrdb -merge ~/.Xresources"
   io $ threadDelay $ 1000 * 100
-  spawnOnce "/home/leon/Downloads/picom --config /home/leon/.config/picom.conf --experimental-backends --backend xrender"  --no-fading-openclose"
+  --spawnOnce "/home/leon/Downloads/picom --config /home/leon/.config/picom.conf --experimental-backends --backend xrender"  --no-fading-openclose"
+  spawnOnce "picom --config /home/leon/.config/picom.conf --experimental-backends --backend glx"  --no-fading-openclose"
   spawn "/home/leon/.config/polybar/launch.sh"
   spawnOnce "nitrogen --restore"
   spawnOnce "mailnag"
@@ -343,7 +345,7 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
     --, ("M-b",          launchWithBackgroundInstance (className =? "qutebrowser") "bwrap --bind / / --dev-bind /dev /dev --tmpfs /tmp --tmpfs /run qutebrowser")
     --, ("M-b",          safeSpawnProg "qutebrowser")
     , ("M-b",          safeSpawnProg "firefox")
-    , ("M-S-<Return>", spawn "alacritty")
+    , ("M-S-<Return>", spawn myTerminal)
     --, ("M-S-<Return>", launchWithBackgroundInstance (className =? "Alacritty") "alacritty")
     , ("M-S-<", spawn "flameshot gui")
 
@@ -608,7 +610,10 @@ fullscreenFixEventHook _ = return $ All True
   
 
 
-
+foo :: X ()
+foo = do
+  x <- ask
+  pure ()
 
 
 -- POLYBAR Kram -------------------------------------- {{{

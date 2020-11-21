@@ -97,7 +97,7 @@ in
       "Xft.rgba" = "rgb";
       "Xft.lcdfilter" = "lcddefault";
 
-      "st.font" = "Terminus (TTF):pixelsize=12";
+      "st.font" = "Terminus (TTF):pixelsize=16";
       "*.background" = primary.background;
       "*.foreground" = primary.foreground;
       "*.color0" = normal.black;
