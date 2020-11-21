@@ -25,21 +25,23 @@ let g:which_key_map['m'] = {
       \ 'name' : '+Code-actions'               ,
       \ 'd' : [ ':call Show_documentation()'   , 'show documentation'    ] ,
       \ 's' : [ ':CocFzfList symbols'          , 'list symbols'          ] ,
-      \ 'o' : [ ':CocFzfList outline'             , 'show outline'          ] ,
-      \ 'c' : [ ':CocFzfList commands'            , 'show all coc-commands' ] ,
+      \ 'o' : [ ':CocFzfList outline'          , 'show outline'          ] ,
+      \ 'c' : [ ':CocFzfList commands'         , 'show all coc-commands' ] ,
       \ 'g' : [ '<Plug>(coc-definition)'       , 'go to definition'      ] ,
       \ 't' : [ '<Plug>(coc-type-definition)'  , 'show type definition'  ] ,
       \ 'i' : [ '<Plug>(coc-implementation)'   , 'show implementation'   ] ,
-      \ 'r' : [ '<Plug>(coc-references)'       , 'show references'       ] ,
+      \ 'r' : [ '<Plug>(coc-references-used)'  , 'show references'       ] ,
       \ 'b' : [ '<Plug>(coc-refactor)'         , 'refactor'              ] ,
       \ 'n' : [ '<Plug>(coc-rename)'           , 'rename'                ] ,
       \ 'F' : [ '<Plug>(coc-format-selected)'  , 'format selection'      ] ,
       \ 'f' : [ '<Plug>(coc-format)'           , 'format file'           ] ,
       \ 'v' : [ ':CocCommand actions.open'     , 'apply codeaction'      ] ,
-      \ 'V' : [ '<Plug>(coc-fix-current)'      , 'apply quickfix'        ] ,
+      \ 'V' : [ '<Plug>(coc-codeaction)'       , 'codeaction current buffer' ] ,
       \ 'e' : [ ':CocList diagnostics'         , 'list all errors'       ] ,
-      \ 'L' : [ '<Plug>(coc-diagnostics-next)' , 'go to next error'      ] ,
-      \ 'H' : [ '<Plug>(coc-diagnostics-prev)' , 'go to prev error'      ] ,
+      \ 'L' : [ '<Plug>(coc-diagnostic-next)'  , 'go to next error'      ] ,
+      \ 'H' : [ '<Plug>(coc-diagnostic-prev)'  , 'go to prev error'      ] ,
+      \ 'a' : [ '<Plug>(coc-diagnostic-info)'  , 'diagnostics info'      ] ,
+      \ 'O' : [ '<Plug>(coc-openlink)'         , 'open link under cursor'      ] ,
       \}
  
 
@@ -77,7 +79,7 @@ let g:which_key_map['x'] = {
       \ 'h' : [':History:'      ,  'search command history'],
       \ 'c' : [':Commands'      ,  'search through commands'],
       \ 's' : ['OverCommandLine',  'Substitute with preview'],
-      \ 'y' : [':CocFzfList -A --normal yank', 'Show yank history']
+      \ 'y' : [':CocFzfList yank', 'Show yank history']
       \ }
 
 " CocList -A --normal yank needs :CocInstall coc-yank
@@ -87,8 +89,8 @@ let g:which_key_map['x'] = {
 "nnoremap <silent> m :<c-u>WhichKey 'm'<CR>
   autocmd! VimEnter * :unmap <space>ig
   autocmd! FileType which_key
-  autocmd! FileType which_key set laststatus=2 noshowmode noruler
-    \| autocmd! BufLeave <buffer> set laststatus=2 showmode ruler
+  "autocmd! FileType which_key set laststatus=2 noshowmode noruler
+    "\| autocmd! BufLeave <buffer> set laststatus=2 showmode ruler
 
 set timeoutlen=200
 

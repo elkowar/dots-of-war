@@ -18,14 +18,13 @@ endif
 let mapleader ="\<Space>"
 
 
-let g:signify_sign_show_text = 1
-
 
 " Vanilla VIM configuration ------------------------------------ {{{
 
 filetype plugin indent on
 syntax on
 
+set noshowmode " mode is already shown in airline
 set foldmethod=marker
 set undodir=~/.vim/undo-dir
 set undofile
@@ -69,11 +68,15 @@ let &t_ut=''
 highlight EndOfBuffer ctermfg=black ctermbg=black
 
 
+hi Pmenu ctermbg=black guibg='#1d2021'
+hi PmenuSel guibg='#8ec07c'
+hi PmenuSbar guibg='#1d2021'
+hi PmenuThumb guibg='#3c3836'
+
+hi WhichKeyFloating ctermbg=black guibg='#282828'
 
 hi NormalFloat ctermbg=black guibg='#1d2021'
-hi Pmenu ctermbg=black guibg='#1d2021'
 hi SignColumn ctermbg=NONE guibg='#282828'
-hi WhichKeyFloating ctermbg=black guibg='#282828'
 hi link Function GruvboxGreen
 
 
@@ -117,7 +120,6 @@ augroup basics
   autocmd BufRead,BufNewFile *.ddl setlocal filetype=sql
 augroup END
 
-highlight Pmenu ctermbg=black guibg=black
 
 
 " ===============
@@ -148,7 +150,7 @@ vnoremap K <Nop>
 
 let g:VM_leader = 'm'
 
-autocmd BufReadPost * :DetectIndent 
+autocmd BufReadPost * :DetectIndent
 let g:detectindent_preferred_expandtab = 1
 let g:detectindent_preferred_indent = 2
 
@@ -179,6 +181,13 @@ let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 let g:qs_lazy_highlight = 1
 
 
+
+au VimEnter * RainbowParenthesesToggle
+au Syntax * RainbowParenthesesLoadRound
+au Syntax * RainbowParenthesesLoadSquare
+au Syntax * RainbowParenthesesLoadBraces
+
+
 nnoremap <C-p> :Files<CR>
 
 map <Leader>f <Plug>(easymotion-bd-f)
@@ -189,6 +198,11 @@ let g:signify_sign_add               = '▍'
 let g:signify_sign_delete            = '▍'
 let g:signify_sign_delete_first_line = '▍'
 let g:signify_sign_change            = '▍'
+let g:signify_sign_show_text = 1
+
+hi SignifySignDelete cterm=NONE gui=NONE guifg='#fb4934'
+hi SignifySignChange cterm=NONE gui=NONE guifg='#83a598'
+hi SignifySignAdd    cterm=NONE gui=NONE guifg='#8ec07c'
 
 
 " Airline {{{
@@ -210,10 +224,15 @@ let airline#extensions#coc#stl_format_warn = '%W{[%w(#%fw)]}'
 let g:airline_theme='elkowars_gruvbox'
 
 
-autocmd BufWinEnter * :hi airline_tabfill ctermbg=NONE guibg=NONE
-autocmd BufWinEnter * :hi airline_b_to_airline_c ctermbg=NONE guibg='#ff0000'
-autocmd BufWinEnter * :hi airline_tablabel_right ctermbg=NONE guibg=NONE ctermfg=NONE guifg=NONE
-
+" update airline themes properly... idk why this is so weird
+function! s:update_highlights()
+  hi airline_tabfill ctermbg=NONE guibg=NONE
+  hi airline_a_to_airline_b ctermbg=NONE guibg='#ff0000'
+  hi airline_b_to_airline_c ctermbg=NONE guibg='#ff0000'
+  hi airline_c_to_airline_x ctermbg=NONE guibg=NONE
+  hi airline_tablabel_right ctermbg=NONE guibg=NONE ctermfg=NONE guifg=NONE
+endfunction
+autocmd User AirlineAfterTheme call s:update_highlights()
 
 " }}}
 
@@ -223,7 +242,7 @@ autocmd BufWinEnter * :hi airline_tablabel_right ctermbg=NONE guibg=NONE ctermfg
 
 " :: and _ as space {{{
 function RebindShit(newKey)
-  let b:RemappedSpace={ 
+  let b:RemappedSpace={
         \ 'old': maparg("<Space>", "i"),
         \ 'cur': a:newKey
         \ }
@@ -257,12 +276,6 @@ nnoremap ö a
 
 
 " }}}
-
-
-hi SignifyLineDelete cterm=NONE gui=NONE guifg='#ff0000'
-hi SignifyLineChange cterm=NONE gui=NONE guifg='#ff0000'
-
-hi SignifyLineAdd    cterm=NONE gui=NONE guifg='#ff0000'
 
 
 source $VIM_ROOT/whichkeyConfig.vim

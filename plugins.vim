@@ -73,15 +73,15 @@ call plug#begin('~/.vim/plugged')
   Plug 'puremourning/vimspector'
 
   Plug 'svermeulen/vim-yoink'
-  " Language Plugins ----------------------------------------------------- {{{
 
-  "Plug 'satabin/hocon-vim'
-  Plug 'GEverding/vim-hocon'
+  Plug 'Shougo/echodoc.vim'
+  Plug 'kien/rainbow_parentheses.vim'
+
+  " Language Plugins ----------------------------------------------------- {{{
 
   Plug 'LnL7/vim-nix'
 
-  Plug 'kien/rainbow_parentheses.vim'
-
+  Plug 'kevinoid/vim-jsonc'
 
   Plug 'ap/vim-css-color'
   Plug 'pangloss/vim-javascript' " syntax highlighting JS
