@@ -21,9 +21,11 @@ format_workspaces() {
 
 
 if [ "$MONITOR" = "HDMI-A-0" ]; then
-  tail -F /tmp/xmonad-state-bar1 | stdbuf -o0 cat | format_workspaces 
-else
+  tail -F /tmp/xmonad-state-bar2 | stdbuf -o0 cat | format_workspaces 
+elif [ "$MONITOR" = "DisplayPort-1" ]; then
   tail -F /tmp/xmonad-state-bar0 | stdbuf -o0 cat | format_workspaces 
+else
+  tail -F /tmp/xmonad-state-bar1 | stdbuf -o0 cat | format_workspaces 
 fi
 
 #while true; do

@@ -84,12 +84,19 @@ in
           gitAndTools.gitflow
           gitAndTools.tig
           gitAndTools.gitui
+          #pakcs
+          rlwrap
+          irssi
+          hexchat
+          swiPrologWithGui
+          kmonad
         ]
       )
       (
         lib.mkIf cfg.includeHaskellDev [
           cabal2nix
           cabal-install
+          ormolu
         ]
       )
     ];

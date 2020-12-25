@@ -35,6 +35,18 @@
         "url": "https://github.com/Jomik/fish-gruvbox/archive/d8c0463518fb95bed8818a1e7fe5da20cffe6fbd.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
+    "kmonad": {
+        "branch": "master",
+        "description": "An advanced keyboard manager",
+        "homepage": null,
+        "owner": "david-janssen",
+        "repo": "kmonad",
+        "rev": "9ea39845c722a0b7408abdbdc6d1d829c6af1e9d",
+        "sha256": "1paxk2jslyx4hcyrawh6vj1bz5vq3z2bd7ag8jn2r6g6mh1bfb30",
+        "type": "tarball",
+        "url": "https://github.com/david-janssen/kmonad/archive/9ea39845c722a0b7408abdbdc6d1d829c6af1e9d.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
     "manix": {
         "branch": "master",
         "description": "A fast CLI documentation searcher for Nix.",

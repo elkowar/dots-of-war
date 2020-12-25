@@ -28,7 +28,9 @@ SINK_BLACKLIST=(
 # Maps PulseAudio sink names to human-readable names
 declare -A SINK_NICKNAMES
 SINK_NICKNAMES["alsa_output.usb-Native_Instruments_Komplete_Audio_6_77316682-00.analog-surround-21"]="📢"
-SINK_NICKNAMES["alsa_output.usb-Fujitsu_UC_C_USB_Value_Headset_Fujitsu_UC_C_USB_Value_Headset-00.analog-stereo"]="🎧"
+SINK_NICKNAMES["alsa_output.usb-Fujitsu_UC_C_USB_Value_Headset_Fujitsu_UC_C_USB_Value_Headset-00.analog-stereo"]="F🎧"
+SINK_NICKNAMES["alsa_output.usb-SteelSeries_SteelSeries_Arctis_9_000000000000-00.analog-stereo"]="🎧"
+
 
 
 # Environment & global constants for the script

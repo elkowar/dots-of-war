@@ -1,0 +1,1 @@
+fromList [("Eval: ",["pure $ show \"Hi\"","pure $ show \"Hi\"","pure $ show \"Hi\""])]

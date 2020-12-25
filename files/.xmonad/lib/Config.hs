@@ -18,7 +18,6 @@ import           Data.List                      ( isPrefixOf
                                                 )
 import qualified Data.List
 import System.Exit (exitSuccess)
-import qualified XMonad.Util.ExtensibleState as XS
 import qualified Data.Char
 import qualified Rofi
 import qualified DescribedSubmap
@@ -73,6 +72,7 @@ import           XMonad.Util.EZConfig           ( additionalKeysP
                                                 , checkKeymap
                                                 )
 
+
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run
 import XMonad.Util.SpawnOnce (spawnOnce)
@@ -110,12 +110,8 @@ import qualified Data.List.NonEmpty
 
 myModMask  = mod4Mask
 myLauncher = Rofi.asCommand def ["-show run"]
---myTerminal = "termite --name törminell"
---myTerminal = "alacritty"
-myTerminal = "st"
-myBrowser = "qutebrowser"
+myTerminal = "alacritty"
 useSharedWorkspaces = False
---myBrowser = "google-chrome-stable"
 
 {-| adds the scripts-directory path to the filename of a script |-}
 scriptFile :: String -> String
@@ -139,20 +135,8 @@ scratchpads =
 -- }}}
 
 -- Colors ------ {{{
-fg        = "#ebdbb2"
-bg        = "#282828"
 gray      = "#888974"
-bg1       = "#3c3836"
-bg2       = "#504945"
-bg3       = "#665c54"
-bg4       = "#7c6f64"
-
-green     = "#b8bb26"
-darkgreen = "#98971a"
 red       = "#fb4934"
-darkred   = "#cc241d"
-yellow    = "#fabd2f"
-blue      = "#83a598"
 purple    = "#d3869b"
 aqua      = "#8ec07c"
 -- }}}
@@ -236,9 +220,10 @@ myStartupHook = do
   --spawnOnce "nm-applet &"
   --spawnOnce "udiskie -s &" -- Mount USB sticks automatically. -s is smart systray mode: systray icon if something is mounted
   spawnOnce "xfce4-clipman &"
-  spawnOnce "redshift -P -O 5000 &"
+  --spawnOnce "redshift -P -O 5000 &"
   spawn "xset r rate 300 50 &" -- make key repeat quicker
-  spawn "/home/leon/.screenlayout/dualscreen-stacked.sh"
+  --spawn "/home/leon/.screenlayout/dualscreen-stacked.sh"
+  spawn "/home/leon/.screenlayout/tripplescreen.sh"
   spawnOnce "xsetroot -cursor_name left_ptr"
   spawnOnce "xrdb -merge ~/.Xresources"
   io $ threadDelay $ 1000 * 100
@@ -323,9 +308,11 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
 
   multiMonitorBindings :: [(String, X ())]
   multiMonitorBindings =
-    [ ("M-s",   multiMonitorOperation W.view 1)
+    [ ("M-s",   multiMonitorOperation W.view 2)
+    , ("M-a",   multiMonitorOperation W.view 1)
     , ("M-d",   multiMonitorOperation W.view 0)
-    , ("M-S-s", (multiMonitorOperation W.shift 1) >> multiMonitorOperation W.view 1)
+    , ("M-S-s", (multiMonitorOperation W.shift 2) >> multiMonitorOperation W.view 2)
+    , ("M-S-a", (multiMonitorOperation W.shift 1) >> multiMonitorOperation W.view 1)
     , ("M-S-d", (multiMonitorOperation W.shift 0) >> multiMonitorOperation W.view 0)
     , ("M-C-s", windows swapScreenContents)
     ]
@@ -362,6 +349,11 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
 
     , ("M-S-C-c", kill1)
     , ("M-S-C-q", io exitSuccess)
+
+
+    -- useless binding simply to not accidentally quit firefox
+    , ("C-q", pure ())
+
 
     -- Binary space partitioning
     , ("M-<Delete>",    sendMessage Swap)
@@ -608,12 +600,6 @@ fullscreenFixEventHook (ClientMessageEvent _ _ _ dpy win typ (_:dats)) = do
 fullscreenFixEventHook _ = return $ All True
 
   
-
-
-foo :: X ()
-foo = do
-  x <- ask
-  pure ()
 
 
 -- POLYBAR Kram -------------------------------------- {{{

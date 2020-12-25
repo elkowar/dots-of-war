@@ -11,4 +11,5 @@ self: super: {
   nixGL = import sources.nixGL { };
   scr = super.callPackage ../packages/scr.nix { };
   my-st = super.callPackage ../packages/st/st-tanish2002 { };
+  kmonad = import "${sources.kmonad}/nix";
 }

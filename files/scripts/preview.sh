@@ -1,5 +1,8 @@
 #!/bin/sh
 
+case "$1" in
+  -*) exit 0;;
+esac
 
 case "$(file --mime-type "$1")" in
   *text*)

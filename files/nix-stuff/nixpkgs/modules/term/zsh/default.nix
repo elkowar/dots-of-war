@@ -167,6 +167,8 @@ in
         #zle -N deer
         #bindkey '\ek' deer
 
+        source ~/.profile
+
         ${fzf-tab-stuff}
         ${fixedKeybinds}
         ${makeAbbrs cfg.abbrs}

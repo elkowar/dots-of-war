@@ -82,6 +82,7 @@ in
           enable = true;
           settings.global = dunst_settings;
           settings.urgency_normal = dunst_settings;
+
           settings.urgency_low = dunst_settings;
         };
     };
@@ -98,6 +99,7 @@ in
       "Xft.lcdfilter" = "lcddefault";
 
       "st.font" = "Terminus (TTF):pixelsize=16";
+
       "*.background" = primary.background;
       "*.foreground" = primary.foreground;
       "*.color0" = normal.black;

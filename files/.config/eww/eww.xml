@@ -2,7 +2,7 @@
   <definitions>
 
     <def name="test">
-      <box space-evenly="false" spacing="10">
+      <box class="{{some_var}}"  space-evenly="false" spacing="10">
         testing {{shit}}
         <scale value="50" orientation="v" min="0" max="100" flipped="true" />
 
@@ -34,7 +34,7 @@
     </def>
 
     <def name="music">
-      <box orientation="h" valign="start" space-evenly="false" hexpand="true">
+      <box class="hi ho" orientation="h" valign="start" space-evenly="false" hexpand="true">
         <image visible="{{song-image-visible}}" path="{{song-image}}" width="150" height="150" />
         <box orientation="v" halign="fill" space-evenly="false" vexpand="true" hexpand="true">
           <box class="data" vexpand="true">
@@ -73,6 +73,7 @@
     <var name="shit">
       shit
     </var>
+    <var name="some_var"></var>
 
     <var name="song-image"></var>
     <var name="song-image-visible">true</var>

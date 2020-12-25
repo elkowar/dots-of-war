@@ -13,13 +13,14 @@ executable my-xmonad
         TiledDragging
         WindowSwallowing
         FancyBorders
+        WsContexts
 
     default-language: Haskell2010
     ghc-options:      -Wall -threaded -fno-warn-missing-signatures
     build-depends:
         base -any,
-        xmonad >=0.13,
-        xmonad-contrib >=0.13,
+        xmonad >=0.15,
+        xmonad-contrib >=0.16,
         dbus >=1.2.12,
         iwlib >=0.1.0,
         netlink >=1.1.1.0,
