@@ -99,6 +99,8 @@ import qualified Data.Bifunctor
 import Data.Bifunctor
 import GHC.IO.Unsafe (unsafePerformIO)
 import qualified Data.List.NonEmpty
+import Control.Monad (msum)
+import XMonad.Layout.LayoutModifier
 {-# ANN module "HLint: ignore Redundant $" #-}
 {-# ANN module "HLint: ignore Redundant bracket" #-}
 {-# ANN module "HLint: ignore Move brackets to avoid $" #-}
@@ -163,43 +165,50 @@ instance Shrinker EmptyShrinker where
   shrinkIt _ _ = [] :: [String]
 
 
-myLayout = noBorders $ avoidStruts
-         $ smartBorders
-         --  $ FancyBorders.fancyBorders borderTheme
-         $ MTog.mkToggle1 MTog.FULL
-         $ ToggleLayouts.toggleLayouts (rename "Tabbed" . makeTabbed . spacingAndGaps $ ResizableTall 1 (3/100) (1/2) [])
-         $ MTog.mkToggle1 WINDOWDECORATION
-         $ draggingVisualizer
-         $ layoutHintsToCenter
+myLayout = noBorders 
+         . avoidStruts
+         . smartBorders
+         . MTog.mkToggle1 MTog.FULL
+         . ToggleLayouts.toggleLayouts tabbedTall
+         . MTog.mkToggle1 WINDOWDECORATION
+         . draggingVisualizer
+         . layoutHintsToCenter
          $ layouts
   where
     -- | if the screen is wider than 1900px it's horizontal, so use horizontal layouts.
     -- if it's not, it's vertical, so use layouts for vertical screens.
-    layouts = PerScreen.ifWider 1900 horizScreenLayouts vertScreenLayouts
+    layouts = PerScreen.ifWider 1900 (PerScreen.ifWider 3000 chonkyScreenLayouts horizScreenLayouts) vertScreenLayouts
 
-    horizScreenLayouts =
-         (rename "Tall"      $              spacingAndGaps $ mouseResizableTile         {draggerType = BordersDragger})
-     ||| (rename "Horizon"   $              spacingAndGaps $ mouseResizableTileMirrored {draggerType = BordersDragger})
-     ||| (rename "BSP"       $              spacingAndGaps $ borderResize $ emptyBSP)
-     ||| (rename "ThreeCol"  $ makeTabbed $ spacingAndGaps $ ResizableThreeColMid 1 (3/100) (1/2) [])
-     ||| (rename "TabbedRow" $ makeTabbed $ spacingAndGaps $ zoomRow)
+    chonkyScreenLayouts = (rn "UltraTall" $ withGaps $ centeredIfSingle 0.6 resizableThreeCol) ||| horizScreenLayouts
+
+    horizScreenLayouts = 
+         (rn "Tall"      $              withGaps $ mouseResizableTile         {draggerType = BordersDragger})
+     ||| (rn "Horizon"   $              withGaps $ mouseResizableTileMirrored {draggerType = BordersDragger})
+     ||| (rn "BSP"       $              withGaps $ borderResize $ emptyBSP)
+     ||| (rn "ThreeCol"  $ mkTabbed $ withGaps $ resizableThreeCol)
+     ||| (rn "TabbedRow" $ mkTabbed $ withGaps $ zoomRow)
 
     vertScreenLayouts =
-        ((rename "ThreeCol" $ makeTabbed  $ spacingAndGaps $ Mirror $ reflectHoriz $ ThreeColMid 1 (3/100) (1/2))
-     ||| (rename "Horizon"  $               spacingAndGaps $ mouseResizableTileMirrored {draggerType = BordersDragger}))
+        ((rn "ThreeCol" $ mkTabbed $ withGaps $ Mirror $ reflectHoriz $ ThreeColMid 1 (3/100) (1/2))
+     ||| (rn "Horizon"  $            withGaps $ mouseResizableTileMirrored {draggerType = BordersDragger}))
 
+    -- | Simple tall layout with tab support
+    tabbedTall = rn "Tabbed" . mkTabbed . withGaps $ ResizableTall 1 (3/100) (1/2) []
+    -- | Specific instance of ResizableThreeCol
+    resizableThreeCol = ResizableThreeColMid 1 (3/100) (1/2) []
 
-    borderTheme = FancyBorders.FancyBordersTheme { FancyBorders.outerColor = "#282828"
-                                                 , FancyBorders.intBorderWidth = 2
-                                                 }
+    rn n = renamed [Replace n]
 
-    rename n = renamed [Replace n]
-    spacingAndGaps = let gap = 15 -- gap = 20
-                         border = Border gap gap gap gap
-                     in spacingRaw False border True border True
+    withGaps = spacingRaw False border True border True
+      where gap = 15
+            border = Border gap gap gap gap
 
     -- | transform a layout into supporting tabs
-    makeTabbed layout = BoringWindows.boringWindows . windowNavigation . addTabs shrinkText myTabTheme $ subLayout [] Simplest $ layout
+    mkTabbed layout = BoringWindows.boringWindows . windowNavigation . addTabs shrinkText myTabTheme $ subLayout [] Simplest $ layout
+
+
+
+-- LayoutModifier and layout definitions ---------- {{{
 
 -- | window decoration layout modifier. this needs you to add `dragginVisualizer` yourself
 data WINDOWDECORATION = WINDOWDECORATION deriving (Read, Show, Eq, Typeable)
@@ -209,6 +218,39 @@ instance MTog.Transformer WINDOWDECORATION Window where
     (const x)
 
 
+-- | Layout modifier that tells layouts to only use a percentage of the screen, leaving space on the sides.
+newtype Smaller a = Smaller Double
+  deriving (Show, Read)
+instance LayoutModifier Smaller a where
+  modifyLayout (Smaller ratio) workspace rect = runLayout workspace (rectangleCenterPiece ratio rect)
+
+-- | Layout Modifier that places a window in the center of the screen, 
+-- leaving room on the left and right, if there is only a single window
+newtype CenteredIfSingle a = CenteredIfSingle Double deriving (Show, Read)
+instance LayoutModifier CenteredIfSingle Window where
+  pureModifier (CenteredIfSingle ratio) r _ [(onlyWindow, _)] = ([(onlyWindow, rectangleCenterPiece ratio r)], Nothing)
+  pureModifier _ _ _ winRects = (winRects, Nothing)
+
+-- | Layout Modifier that places a window in the center of the screen, 
+-- leaving room on the left and right, if there is only a single window
+centeredIfSingle :: Double -> l a -> ModifiedLayout CenteredIfSingle l a
+centeredIfSingle ratio = ModifiedLayout (CenteredIfSingle ratio)
+
+
+-- | Give the center piece of a rectangle by taking the given percentage 
+-- of the rectangle and taking that in the middle.
+rectangleCenterPiece :: Double -> Rectangle -> Rectangle
+rectangleCenterPiece ratio (Rectangle rx ry rw rh) = Rectangle start ry width rh
+  where 
+    sides = floor $ ((fi rw) * (1.0 - ratio)) / 2
+    start = (fi rx) + sides
+    width = fi $ (fi rw) - (sides * 2)
+
+
+fi :: (Integral a, Num b) => a -> b
+fi = fromIntegral
+
+-- }}}
 
 -- }}}
 

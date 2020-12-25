@@ -24,6 +24,7 @@ in
       discord
       pinta
       espanso
+      barrier
       #hyper-haskell
     ];
 
