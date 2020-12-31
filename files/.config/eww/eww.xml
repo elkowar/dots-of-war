@@ -6,6 +6,7 @@
         testing {{shit}}
         <scale value="50" orientation="v" min="0" max="100" flipped="true" />
 
+        <button onclick="pgrep 'eww' &amp;&amp; echo '' || echo ''">Test bug</button>
         <button onclick="notify-send 'ree' 'this is {{shit}}'">click me</button>
         <calendar show-heading="false" show-day-names="false" day="2" onclick="notify-send 'asdf' '{}'" />
         notify-send 'ree' 'this is {{shit}}'
@@ -104,6 +105,7 @@
 
   <windows>
     <window screen="0" name="main_window" stacking="fg">
+      <!--<struts top="250" top_end_x="1920"/>-->
       <geometry anchor="top center"/>
       <widget>
         <test ree="test" />

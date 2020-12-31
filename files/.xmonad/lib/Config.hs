@@ -18,18 +18,16 @@ import           Data.List                      ( isPrefixOf
                                                 )
 import qualified Data.List
 import System.Exit (exitSuccess)
-import qualified Data.Char
 import qualified Rofi
 import qualified DescribedSubmap
 import qualified TiledDragging
-import qualified FancyBorders
 --import qualified WindowSwallowing
 
 import XMonad.Hooks.WindowSwallowing as WindowSwallowing
 
 
 
-import XMonad.Hooks.WindowedFullscreenFix
+--import XMonad.Hooks.WindowedFullscreenFix
 --import XMonad.Util.ActionCycle
 import Data.Foldable                  ( for_ )
 
@@ -95,12 +93,10 @@ import qualified XMonad.StackSet                     as W
 import qualified XMonad.Util.XSelection              as XSel
 import qualified XMonad.Layout.PerScreen             as PerScreen
 import Data.Maybe (catMaybes, maybeToList, fromMaybe)
-import qualified Data.Bifunctor
 import Data.Bifunctor
 import GHC.IO.Unsafe (unsafePerformIO)
-import qualified Data.List.NonEmpty
-import Control.Monad (msum)
 import XMonad.Layout.LayoutModifier
+--import XMonad.Layout.MultiColumns (multiCol)
 {-# ANN module "HLint: ignore Redundant $" #-}
 {-# ANN module "HLint: ignore Redundant bracket" #-}
 {-# ANN module "HLint: ignore Move brackets to avoid $" #-}
@@ -182,11 +178,12 @@ myLayout = noBorders
     chonkyScreenLayouts = (rn "UltraTall" $ withGaps $ centeredIfSingle 0.6 resizableThreeCol) ||| horizScreenLayouts
 
     horizScreenLayouts = 
-         (rn "Tall"      $              withGaps $ mouseResizableTile         {draggerType = BordersDragger})
-     ||| (rn "Horizon"   $              withGaps $ mouseResizableTileMirrored {draggerType = BordersDragger})
-     ||| (rn "BSP"       $              withGaps $ borderResize $ emptyBSP)
+         (rn "Tall"      $            withGaps $ centeredIfSingle 0.7 mouseResizableTile {draggerType = BordersDragger})
+     ||| (rn "Horizon"   $            withGaps $ mouseResizableTileMirrored {draggerType = BordersDragger})
+     ||| (rn "BSP"       $            withGaps $ borderResize $ emptyBSP)
      ||| (rn "ThreeCol"  $ mkTabbed $ withGaps $ resizableThreeCol)
      ||| (rn "TabbedRow" $ mkTabbed $ withGaps $ zoomRow)
+     --  ||| (rn "Colm"      $ mkTabbed $ withGaps $ centeredIfSingle 0.7 (multiCol [1] 2 0.05))
 
     vertScreenLayouts =
         ((rn "ThreeCol" $ mkTabbed $ withGaps $ Mirror $ reflectHoriz $ ThreeColMid 1 (3/100) (1/2))
@@ -195,7 +192,7 @@ myLayout = noBorders
     -- | Simple tall layout with tab support
     tabbedTall = rn "Tabbed" . mkTabbed . withGaps $ ResizableTall 1 (3/100) (1/2) []
     -- | Specific instance of ResizableThreeCol
-    resizableThreeCol = ResizableThreeColMid 1 (3/100) (1/2) []
+    resizableThreeCol = ResizableThreeColMid 1 (3/100) (2/5) []
 
     rn n = renamed [Replace n]
 
@@ -294,13 +291,6 @@ myMouseBindings (XConfig {XMonad.modMask = modMask'}) = M.fromList
   [((modMask' .|. shiftMask, button1), TiledDragging.tiledDrag)]
 
 
-multiMonitorOperation :: (WorkspaceId -> WindowSet -> WindowSet) -> ScreenId -> X ()
-multiMonitorOperation operation n = do
-  monitor <- screenWorkspace n
-  case monitor of
-    Just mon -> windows $ operation mon
-    Nothing -> return ()
-
 -- Default mappings that need to be removed
 removedKeys :: [String]
 removedKeys = ["M-<Tab>", "M-S-c", "M-S-q", "M-h", "M-l", "M-j", "M-k", "M-S-<Return>"]
@@ -340,22 +330,16 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
                        windows W.focusMaster)
 
 
---    -- TODO remove
---    , ("M-S-l", do
---        result <- cycleActionWithResult "ree" $ Data.List.NonEmpty.fromList [ pure "hi", pure "Ho", pure "test" ]
---        spawn $ "notify-send 'teset' '" ++ result ++ "'"
---      )
-
     ]
 
   multiMonitorBindings :: [(String, X ())]
   multiMonitorBindings =
-    [ ("M-s",   multiMonitorOperation W.view 2)
-    , ("M-a",   multiMonitorOperation W.view 1)
-    , ("M-d",   multiMonitorOperation W.view 0)
-    , ("M-S-s", (multiMonitorOperation W.shift 2) >> multiMonitorOperation W.view 2)
-    , ("M-S-a", (multiMonitorOperation W.shift 1) >> multiMonitorOperation W.view 1)
-    , ("M-S-d", (multiMonitorOperation W.shift 0) >> multiMonitorOperation W.view 0)
+    [ ("M-s",   windows $ withFocusedOnScreen 2 W.view)
+    , ("M-a",   windows $ withFocusedOnScreen 1 W.view)
+    , ("M-d",   windows $ withFocusedOnScreen 0 W.view)
+    , ("M-S-s", windows $ withFocusedOnScreen 2 (\wsp -> W.view wsp >> W.shift wsp))
+    , ("M-S-a", windows $ withFocusedOnScreen 1 (\wsp -> W.view wsp >> W.shift wsp))
+    , ("M-S-d", windows $ withFocusedOnScreen 0 (\wsp -> W.view wsp >> W.shift wsp))
     , ("M-C-s", windows swapScreenContents)
     ]
 
@@ -422,9 +406,12 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
         | wspNum <- [1..9 :: Int]
         ]
     where
+    runActionOnWorkspace :: (VirtualWorkspace -> WindowSet -> WindowSet) -> Int -> X ()
     runActionOnWorkspace action wspNum = do
       wsps <- workspaces' <$> asks config
-      windows $ onCurrentScreen action (wsps !! (wspNum - 1))
+      if length wsps > (wspNum - 1) 
+         then windows $ onCurrentScreen action (wsps !! (wspNum - 1))
+         else pure ()
 
 
   windowControlBindings :: [(String, X ())]
@@ -583,7 +570,7 @@ main = do
         , handleEventHook    = mconcat [ mySwallowEventHook
                                        , activateWindowEventHook
                                        , handleEventHook Desktop.desktopConfig
-                                       , windowedFullscreenFixEventHook
+                                       , fullscreenFixEventHook
                                        , Ewmh.ewmhDesktopsEventHook
                                        ]
         --, handleEventHook  = minimizeEventHook <+> handleEventHook def <+> hintsEventHook -- <+> Ewmh.fullscreenEventHook
@@ -612,14 +599,13 @@ activateWindowEventHook (ClientMessageEvent { ev_message_type = messageType, ev_
   activateWindowAtom <- getAtom "_NET_ACTIVE_WINDOW"
 
   when (messageType == activateWindowAtom) $
-    if window `elem` (concatMap (W.integrate' . W.stack . W.workspace) (W.current ws : W.visible ws))
+    if window `elem` W.allWindows ws
       then windows (W.focusWindow window)
       else do
         shouldRaise <- runQuery (className =? "discord" <||> className =? "web.whatsapp.com") window
         if shouldRaise
-           then windows (W.shiftWin (W.tag $ W.workspace $ W.current ws) window)
-           -- TODO make this respect the independentScreen stuff, such that it doesn't raise a workspace on the wrong monitro
-           else windows (W.focusWindow window)
+           then windows (W.shiftWin (W.currentTag ws) window)
+           else withWindowSet $ focusWindowIndependentScreens window
   return $ All True
 activateWindowEventHook _ = return $ All True
 
@@ -675,7 +661,6 @@ polybarPP monitor = namedScratchpadFilterOutWorkspacePP . (if useSharedWorkspace
   }
     where
       withMargin                 = wrap " " " "
-      removeWord substr          = unwords . filter (/= substr) . words
       removeWords wrds           = unwords . filter (`notElem` wrds). words
       withFont fNum              = wrap ("%{T" ++ show (fNum :: Int) ++ "}") "%{T}"
       withBG col                 = wrap ("%{B" ++ col ++ "}") "%{B-}"
@@ -729,6 +714,35 @@ ifLayoutName check onLayoutA onLayoutB = do
 -- | Get the name of the active layout.
 getActiveLayoutDescription :: X String
 getActiveLayoutDescription = (description . W.layout . W.workspace . W.current) <$> gets windowset
+
+
+
+
+-- | Focus a window, switching workspace on the correct Xinerama screen if neccessary - respecting IndependentLayouts
+focusWindowIndependentScreens :: Window -> WindowSet -> X ()
+focusWindowIndependentScreens window ws
+  | Just window == W.peek ws = pure ()
+  | otherwise = case W.findTag window ws of 
+      Just tag -> windows $ W.focusWindow window . withFocusedOnScreen (unmarshallS tag) W.view
+      Nothing -> pure ()
+
+
+-- | Get the workspace that is active on a given screen
+screenOnMonitor :: ScreenId -> WindowSet -> Maybe (W.Screen WorkspaceId (Layout Window) Window ScreenId ScreenDetail)
+screenOnMonitor screenId ws = Data.List.find ((screenId ==) . W.screen) (W.current ws : W.visible ws)
+
+
+-- | Convert a function that needs a workspace id into a windowset transformation by providing it with the workspace currently focused on a given screen.
+withFocusedOnScreen 
+  :: ScreenId                                -- ^ screen from which the workspaceId will be taken
+  -> (WorkspaceId -> WindowSet -> WindowSet) -- ^ operation that will be transformed
+  -> (WindowSet -> WindowSet)
+withFocusedOnScreen screenId operation ws =
+  case screenOnMonitor screenId ws of
+    Just wsp -> operation (W.tag $ W.workspace wsp) ws
+    Nothing -> ws
+
+
 -- }}}
 
 
@@ -794,9 +808,6 @@ getXrdbValue key = fromMaybe "" . findValue key <$> runProcessWithInput "xrdb" [
 
     splitAtTrimming :: String -> Int -> (String, String)
     splitAtTrimming str idx = bimap trim trim . (second tail) $ splitAt idx str
-
-    trim :: String -> String
-    trim = Data.List.dropWhileEnd (Data.Char.isSpace) . Data.List.dropWhile (Data.Char.isSpace)
 
 
 
