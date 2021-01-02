@@ -9,6 +9,7 @@ self: super: {
   carp-new = super.callPackage ./carp-new.nix {};
   liquidctl = super.callPackage ../packages/liquidctl.nix { };
   mmutils = super.callPackage ../packages/mmutils.nix { };
+  git-fuzzy = super.callPackage ../packages/git-fuzzy.nix { };
   nixGL = import sources.nixGL { };
   scr = super.callPackage ../packages/scr.nix { };
   my-st = super.callPackage ../packages/st/st-tanish2002 { };

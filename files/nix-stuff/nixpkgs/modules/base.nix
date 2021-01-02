@@ -90,6 +90,8 @@ in
           hexchat
           swiPrologWithGui
           kmonad
+          gitAndTools.delta
+          git-fuzzy
         ]
       )
       (

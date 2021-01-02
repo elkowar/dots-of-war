@@ -44,7 +44,7 @@ import XMonad.Hooks.SetWMName (setWMName)
 import XMonad.Layout.BinarySpacePartition
 import XMonad.Layout.BorderResize
 import XMonad.Layout.Gaps
-import XMonad.Layout.IndependentScreens
+--import qualified XMonad.Layout.IndependentScreens as IS
 import XMonad.Layout.LayoutCombinators ((|||))
 import XMonad.Layout.LayoutHints
 import XMonad.Layout.MouseResizableTile
@@ -96,6 +96,7 @@ import Data.Maybe (catMaybes, maybeToList, fromMaybe)
 import Data.Bifunctor
 import GHC.IO.Unsafe (unsafePerformIO)
 import XMonad.Layout.LayoutModifier
+import qualified IndependentScreens as IS
 --import XMonad.Layout.MultiColumns (multiCol)
 {-# ANN module "HLint: ignore Redundant $" #-}
 {-# ANN module "HLint: ignore Redundant bracket" #-}
@@ -334,12 +335,12 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
 
   multiMonitorBindings :: [(String, X ())]
   multiMonitorBindings =
-    [ ("M-s",   windows $ withFocusedOnScreen 2 W.view)
-    , ("M-a",   windows $ withFocusedOnScreen 1 W.view)
-    , ("M-d",   windows $ withFocusedOnScreen 0 W.view)
-    , ("M-S-s", windows $ withFocusedOnScreen 2 (\wsp -> W.view wsp >> W.shift wsp))
-    , ("M-S-a", windows $ withFocusedOnScreen 1 (\wsp -> W.view wsp >> W.shift wsp))
-    , ("M-S-d", windows $ withFocusedOnScreen 0 (\wsp -> W.view wsp >> W.shift wsp))
+    [ ("M-s",   windows $ IS.focusScreen 2)
+    , ("M-a",   windows $ IS.focusScreen 1)
+    , ("M-d",   windows $ IS.focusScreen 0)
+    , ("M-S-s", windows $ IS.withWspOnScreen 2 (\wsp -> W.view wsp . W.shift wsp))
+    , ("M-S-a", windows $ IS.withWspOnScreen 1 (\wsp -> W.view wsp . W.shift wsp))
+    , ("M-S-d", windows $ IS.withWspOnScreen 0 (\wsp -> W.view wsp . W.shift wsp))
     , ("M-C-s", windows swapScreenContents)
     ]
 
@@ -406,12 +407,13 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
         | wspNum <- [1..9 :: Int]
         ]
     where
-    runActionOnWorkspace :: (VirtualWorkspace -> WindowSet -> WindowSet) -> Int -> X ()
+    runActionOnWorkspace :: (IS.VirtualWorkspace -> WindowSet -> WindowSet) -> Int -> X ()
     runActionOnWorkspace action wspNum = do
-      wsps <- workspaces' <$> asks config
-      if length wsps > (wspNum - 1) 
-         then windows $ onCurrentScreen action (wsps !! (wspNum - 1))
-         else pure ()
+      desiredWsp <- IS.nthWorkspace (wspNum - 1)
+      case desiredWsp of
+        Just wsp -> windows $ IS.onCurrentScreen action wsp
+        Nothing -> pure ()
+      
 
 
   windowControlBindings :: [(String, X ())]
@@ -537,7 +539,7 @@ myManageHook = composeAll
 -- Main ------------------------------------ {{{
 main :: IO ()
 main = do
-  currentScreenCount :: Int <- countScreens
+  currentScreenCount :: Int <- IS.countScreens
   let monitorIndices = [0..currentScreenCount - 1]
 
 
@@ -554,7 +556,7 @@ main = do
         { terminal           = myTerminal
         , workspaces         = if useSharedWorkspaces
                                   then (map show [1..9 :: Int]) ++ ["NSP"]
-                                  else (withScreens (fromIntegral currentScreenCount) (map show [1..6 :: Int])) ++ ["NSP"]
+                                  else (IS.withScreens (fromIntegral currentScreenCount) (map show [1..6 :: Int])) ++ ["NSP"]
         , modMask            = myModMask
         , borderWidth        = 0
         , layoutHook         = myLayout
@@ -605,10 +607,9 @@ activateWindowEventHook (ClientMessageEvent { ev_message_type = messageType, ev_
         shouldRaise <- runQuery (className =? "discord" <||> className =? "web.whatsapp.com") window
         if shouldRaise
            then windows (W.shiftWin (W.currentTag ws) window)
-           else withWindowSet $ focusWindowIndependentScreens window
+           else windows (IS.focusWindow' window)
   return $ All True
 activateWindowEventHook _ = return $ All True
-
 
 
 
@@ -621,9 +622,13 @@ fullscreenFixEventHook (ClientMessageEvent _ _ _ dpy win typ (_:dats)) = do
   fullscreen <- getAtom "_NET_WM_STATE_FULLSCREEN"
   when (typ == wmstate && fromIntegral fullscreen `elem` dats) $ do
     withWindowAttributes dpy win $ \attrs ->
-      liftIO $ resizeWindow dpy win (fromIntegral $ wa_width attrs - 1) (fromIntegral $ wa_height attrs)
-    withWindowAttributes dpy win $ \attrs ->
-      liftIO $ resizeWindow dpy win (fromIntegral $ wa_width attrs + 1) (fromIntegral $ wa_height attrs)
+      liftIO $ do
+        resizeWindow dpy win (fromIntegral $ wa_width attrs - 1) (fromIntegral $ wa_height attrs)
+        resizeWindow dpy win (fromIntegral $ wa_width attrs) (fromIntegral $ wa_height attrs)
+    --withWindowAttributes dpy win $ \attrs ->
+      --liftIO $ resizeWindow dpy win (fromIntegral $ wa_width attrs - 1) (fromIntegral $ wa_height attrs)
+    --withWindowAttributes dpy win $ \attrs ->
+      --liftIO $ resizeWindow dpy win (fromIntegral $ wa_width attrs + 1) (fromIntegral $ wa_height attrs)
   return $ All True
 fullscreenFixEventHook _ = return $ All True
 
@@ -643,7 +648,7 @@ polybarLogHook monitor = do
 -- swapping namedScratchpadFilterOutWorkspacePP and marshallPP  will throw "Prelude.read no Parse" errors..... wtf
 -- | create a polybar Pretty printer, marshalled for given monitor.
 polybarPP :: ScreenId -> PP
-polybarPP monitor = namedScratchpadFilterOutWorkspacePP . (if useSharedWorkspaces then id else marshallPP $ fromIntegral monitor) $ def
+polybarPP monitor = namedScratchpadFilterOutWorkspacePP . (if useSharedWorkspaces then id else IS.marshallPP $ fromIntegral monitor) $ def
   { ppCurrent          = withFG aqua . withMargin . withFont 5 . const "__active__"
   , ppVisible          = withFG aqua . withMargin . withFont 5 . const "__active__"
   , ppUrgent           = withFG red  . withMargin . withFont 5 . const "__urgent__"
@@ -690,13 +695,13 @@ dropEndWhile test xs  = if test $ last xs then dropEndWhile test (init xs) else 
 catchAndNotifyAny :: IO () -> IO ()
 catchAndNotifyAny ioAction = catch ioAction (\(e :: SomeException) -> notify "Xmonad exception" (show e))
 
-getVisibleWorkspacesTagsOnMonitor :: ScreenId -> X [VirtualWorkspace]
+getVisibleWorkspacesTagsOnMonitor :: ScreenId -> X [IS.VirtualWorkspace]
 getVisibleWorkspacesTagsOnMonitor monitor = do
   ws <- gets windowset
   return $ W.current ws : W.visible ws
     |> map (W.tag . W.workspace)
-    |> filter (\tag -> monitor == fromIntegral (unmarshallS tag))
-    |> map unmarshallW
+    |> filter (\tag -> monitor == fromIntegral (IS.unmarshallS tag))
+    |> map IS.unmarshallW
 
 
 notify :: MonadIO m => String -> String -> m ()
@@ -715,32 +720,6 @@ ifLayoutName check onLayoutA onLayoutB = do
 getActiveLayoutDescription :: X String
 getActiveLayoutDescription = (description . W.layout . W.workspace . W.current) <$> gets windowset
 
-
-
-
--- | Focus a window, switching workspace on the correct Xinerama screen if neccessary - respecting IndependentLayouts
-focusWindowIndependentScreens :: Window -> WindowSet -> X ()
-focusWindowIndependentScreens window ws
-  | Just window == W.peek ws = pure ()
-  | otherwise = case W.findTag window ws of 
-      Just tag -> windows $ W.focusWindow window . withFocusedOnScreen (unmarshallS tag) W.view
-      Nothing -> pure ()
-
-
--- | Get the workspace that is active on a given screen
-screenOnMonitor :: ScreenId -> WindowSet -> Maybe (W.Screen WorkspaceId (Layout Window) Window ScreenId ScreenDetail)
-screenOnMonitor screenId ws = Data.List.find ((screenId ==) . W.screen) (W.current ws : W.visible ws)
-
-
--- | Convert a function that needs a workspace id into a windowset transformation by providing it with the workspace currently focused on a given screen.
-withFocusedOnScreen 
-  :: ScreenId                                -- ^ screen from which the workspaceId will be taken
-  -> (WorkspaceId -> WindowSet -> WindowSet) -- ^ operation that will be transformed
-  -> (WindowSet -> WindowSet)
-withFocusedOnScreen screenId operation ws =
-  case screenOnMonitor screenId ws of
-    Just wsp -> operation (W.tag $ W.workspace wsp) ws
-    Nothing -> ws
 
 
 -- }}}
