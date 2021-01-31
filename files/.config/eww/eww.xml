@@ -1,7 +1,7 @@
 <eww>
   <definitions>
 
-    <def name="test">
+   <def name="test">
       <box class="{{some_var}}"  space-evenly="false" spacing="10">
         testing {{shit}}
         <scale value="50" orientation="v" min="0" max="100" flipped="true" />
@@ -11,18 +11,19 @@
         <calendar show-heading="false" show-day-names="false" day="2" onclick="notify-send 'asdf' '{}'" />
         notify-send 'ree' 'this is {{shit}}'
         <multiple text="{{shit}}" />
+
       </box>
     </def>
 
     <def name="multiple">
       <box orientation="v" space-evenly="false">
-        <box>{{text}}</box>
-        <box>{{text}}</box>
-        <box>{{text}}</box>
+        <box>{{text}}test</box>
+        <box class="whatever lol">{{text}}</box>
+        <box style="color: blue;">{{text}}</box>
         <box>{{text}}</box>
         <box>{{text}}</box>
 
-        <label text="reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" limit-width="5" wrap="true" />
+        <label onscroll="notify-send '{{shit}}' {}" text="reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" limit-width="5" wrap="true" />
         <input onchange="notify-send 'ree' '{}'" />
         {{date}}
       </box>
@@ -76,6 +77,7 @@
     </var>
     <var name="some_var"></var>
 
+
     <var name="song-image"></var>
     <var name="song-image-visible">true</var>
     <var name="song-name"></var>
@@ -93,6 +95,7 @@
       date
       done
     </script-var>
+
     <!--<script-var name="xyz">-->
     <!--tail -F /home/leon/test | while read -r _; do notify-send "Hi"; done-->
     <!--</script-var>-->
@@ -104,14 +107,14 @@
 
 
   <windows>
-    <window screen="0" name="main_window" stacking="fg">
+    <window screen="DisplayPort-0" name="mw" stacking="fg" focusable="false">
       <!--<struts top="250" top_end_x="1920"/>-->
-      <geometry anchor="top center"/>
+      <geometry anchor="center" width="200px" height="200px" x="0px" y="0px"/>
       <widget>
         <test ree="test" />
       </widget>
     </window>
-    <window screen="0" name="main_window2" stacking="fg">
+    <window screen="0" name="mw2" stacking="fg">
       <geometry anchor="bottom right"/>
       <widget>
         <test ree="test" />

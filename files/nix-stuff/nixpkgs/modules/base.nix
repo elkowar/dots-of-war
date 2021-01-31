@@ -38,6 +38,8 @@ in
       gc = "git commit -m ";
       gp = "git push";
       gst = "git status";
+      g = "git fuzzy";
+      cr = "cargo run --";
     };
 
     home.packages = with pkgs; lib.mkMerge [

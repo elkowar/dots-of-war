@@ -601,16 +601,23 @@ activateWindowEventHook (ClientMessageEvent { ev_message_type = messageType, ev_
   activateWindowAtom <- getAtom "_NET_ACTIVE_WINDOW"
 
   when (messageType == activateWindowAtom) $
-    if window `elem` W.allWindows ws
+    if window `elem` (W.integrate' $ W.stack $ W.workspace $ W.current ws)
       then windows (W.focusWindow window)
       else do
         shouldRaise <- runQuery (className =? "discord" <||> className =? "web.whatsapp.com") window
         if shouldRaise
            then windows (W.shiftWin (W.currentTag ws) window)
-           else windows (IS.focusWindow' window)
+           else windows (focusWindow' window)
   return $ All True
 activateWindowEventHook _ = return $ All True
 
+-- | Focus a window, switching workspace on the correct Xinerama screen if neccessary.
+focusWindow' :: Window -> WindowSet -> WindowSet
+focusWindow' window ws
+  | Just window == W.peek ws = ws
+  | otherwise = case W.findTag window ws of
+      Just tag ->  IS.focusScreen (IS.unmarshallS tag) ws
+      Nothing -> ws
 
 
 -- | Fixes fullscreen behaviour of chromium based apps by quickly applying and undoing a resize.

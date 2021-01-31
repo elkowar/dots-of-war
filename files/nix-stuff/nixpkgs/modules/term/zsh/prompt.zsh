@@ -20,9 +20,9 @@ git_status() {
   local BRANCH=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/*\s*\(.*\)/\1/')
 
   if [ ! -z $BRANCH ]; then
-    echo -n "(%F{$__bright_cyan}$BRANCH"
-    [ ! -z "$(git status --short)" ] && echo -n "%F{$__bright_white}*%f"
-    echo -n ")"
+    echo -n "(%F{$__bright_cyan}$BRANCH%F{$__bright_white}"
+    [ ! -z "$(git status --short)" ] && echo -n "*"
+    echo -n ")%f"
   fi
 }
 

@@ -26,6 +26,7 @@ in
       espanso
       barrier
       #hyper-haskell
+      font-manager
     ];
 
 
