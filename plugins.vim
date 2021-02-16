@@ -6,7 +6,6 @@ endif
 
 
 call plug#begin('~/.vim/plugged')
-
   Plug 'tpope/vim-repeat'
 
   Plug 'junegunn/goyo.vim', {'on': 'Goyo'}
@@ -26,6 +25,11 @@ call plug#begin('~/.vim/plugged')
 
   Plug 'vim-airline/vim-airline-themes'
   Plug 'vim-airline/vim-airline'
+
+  " buffer line
+  if has('nvim')
+    Plug 'romgrk/barbar.nvim'
+  endif
 
   "Plug 'morhetz/gruvbox'
   Plug 'gruvbox-community/gruvbox'
@@ -71,15 +75,21 @@ call plug#begin('~/.vim/plugged')
 
   Plug 'tommcdo/vim-exchange'
 
-  Plug 'puremourning/vimspector'
+  if !has('nvim')
+    Plug 'puremourning/vimspector'
+  endif
 
   Plug 'svermeulen/vim-yoink'
 
   Plug 'Shougo/echodoc.vim'
   Plug 'kien/rainbow_parentheses.vim'
 
+  Plug 'bhurlow/vim-parinfer'
+
   " Language Plugins ----------------------------------------------------- {{{
 
+  Plug 'ziglang/zig.vim'
+  Plug 'bduggan/vim-raku'
   Plug 'LnL7/vim-nix'
 
   Plug 'kevinoid/vim-jsonc'
@@ -107,7 +117,10 @@ call plug#begin('~/.vim/plugged')
   Plug 'mattn/webapi-vim'
 
 
-  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  "Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  Plug 'thyrgle/vim-dyon'
+
+  "Plug 'mxw/vim-prolog'
 
   " }}}
 call plug#end()

@@ -7,13 +7,16 @@ call which_key#register('<Space>', "g:which_key_map")
 
 
 
+      "\ 'h' : 'which_key_ignore', 'l' : 'which_key_ignore' ,
+      "\ 'h' : ':bprevious', 'l' : ':bnext' ,
 let g:which_key_map = {
-      \ 'h' : 'which_key_ignore', 'l' : 'which_key_ignore',
-      "\ 'f' : 'which_key_ignore', 's': 'which_key_ignore' ,
+      \ 'h' : [':BufferPrevious', 'prev buffer'], 'l' : [':BufferNext', 'next buffer'] ,
+      \ 'f' : 'which_key_ignore', 's': 'which_key_ignore' ,
       \ 'c' : { 'name': '+comment_out' },
       \ 'e' : { 'name': '+emmet' },
       \ '[' : ['<Plug>(YoinkPostPasteSwapBack)',    'Swap last paste backwards' ],
       \ ']' : ['<Plug>(YoinkPostPasteSwapForward)', 'Swap last paste backwards' ],
+      \ ':' : [':Commands'                        , 'Search command with fzf'   ],
       \ 'z' : { 'name': '+folds', 'c': ['foldclose', 'close fold'],
                                 \ 'o': ['foldopen',  'open fold'] ,
                                 \ }
@@ -35,7 +38,8 @@ let g:which_key_map['m'] = {
       \ 'n' : [ '<Plug>(coc-rename)'           , 'rename'                ] ,
       \ 'F' : [ '<Plug>(coc-format-selected)'  , 'format selection'      ] ,
       \ 'f' : [ '<Plug>(coc-format)'           , 'format file'           ] ,
-      \ 'v' : [ ':CocCommand actions.open'     , 'apply codeaction'      ] ,
+      "\ 'v' : [ ':CocCommand actions.open'     , 'apply codeaction'      ] ,
+      \ 'v' : [ '<Plug>(coc-codeaction)'     , 'apply codeaction'      ] ,
       \ 'V' : [ '<Plug>(coc-codeaction)'       , 'codeaction current buffer' ] ,
       \ 'e' : [ ':CocList diagnostics'         , 'list all errors'       ] ,
       \ 'L' : [ '<Plug>(coc-diagnostic-next)'  , 'go to next error'      ] ,
@@ -72,11 +76,12 @@ let g:which_key_map['v'] = {
       \ 'i' : [':IndentGuidesToggle'             , 'toggle indent guides' ] ,
       \ }
 
+ " :bwipeout! bdelete!
 let g:which_key_map['b'] = {
-      \ 'name': '+buffers'  ,
-      \ 'b' : ['Buffers'    ,  'select open buffer'  ] ,
-      \ 'c' : [':bdelete!'  ,  'close open buffer'   ] ,
-      \ 'w' : [':bwipeout!' ,  'wipeout open buffer' ] ,
+      \ 'name': '+buffers',
+      \ 'b' : ['BufferPick' ,   'select open buffer'  ] ,
+      \ 'c' : ['BufferClose',   'close open buffer'   ] ,
+      \ 'w' : ['BufferWipeout', 'wipeout open buffer' ] ,
       \ }
 
 let g:which_key_map['x'] = {

@@ -1,5 +1,7 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhistcnt =2
+let g:netrw_dirhistcnt =4
+let g:netrw_dirhist_4='/home/leon/a-box-of-gruv/styles'
+let g:netrw_dirhist_3='/home/leon/tmp/pythonshit'
 let g:netrw_dirhist_2='/home/leon/dotfiles/.vim'
 let g:netrw_dirhist_1='/home/leon/.config/discord'
 let g:netrw_dirhist_0='/home/leon/coding/projects/eww/src'
@@ -8,5 +10,3 @@ let g:netrw_dirhist_8='/home/leon/coding/plover-plugins/plover_retro_surround'
 let g:netrw_dirhist_7='/home/leon/coding/plover-plugins/plover_retro_surround/plover_retro_surround.egg-info'
 let g:netrw_dirhist_6='/home/leon/.config/coc/extensions'
 let g:netrw_dirhist_5='/home/leon/.config/elkowar_phocus'
-let g:netrw_dirhist_4='/home/leon/coding/projects/eww/docs'
-let g:netrw_dirhist_3='/home/leon/tmp/test/content'
