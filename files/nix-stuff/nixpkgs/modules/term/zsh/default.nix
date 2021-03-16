@@ -132,62 +132,70 @@ in
 
       initExtraBeforeCompInit = ''
 
-    zstyle ':completion:*' menu select
-    zstyle ':completion::complete:*' gain-privileges 1
-    zstyle ':completion:*' list-prompt ""
-    zstyle ':completion:*' select-prompt ""
-    zmodload zsh/complist
+        zstyle ':completion:*' menu select
+        zstyle ':completion::complete:*' gain-privileges 1
+        zstyle ':completion:*' list-prompt ""
+        zstyle ':completion:*' select-prompt ""
+        zmodload zsh/complist
 
-    fpath+=( /usr/share/zsh/site-functions/ )
-  '';
-
-      initExtra = ''
-        export MANPAGER='nvim +Man! +"set nocul" +"set noshowcmd" +"set noruler" +"set noshowmode" +"set laststatus=2" +"set statusline=\ %t"'
-        export MANPAGER='nvim +Man! +"set nocul" +"set noshowcmd" +"set noruler" +"set noshowmode" +"set laststatus=0"'
-
-        setopt nobeep
-
-        setopt HIST_IGNORE_ALL_DUPS
-        autoload -Uz colors && colors
-        autoload -Uz promptinit && promptinit
+        fpath+=( /usr/share/zsh/site-functions/ )
+    '';
 
 
-        # control-backspace
-        bindkey '^H' backward-kill-word
+    profileExtra = ''
+      [[ -f /home/leon/.profile ]] && . /home/leon/.profile
+      #case $(tty) in
+          #/dev/tty*) [[ $XDG_VTNR -le 2 ]] && tbsm;;
+      #esac
+    '';
+
+    initExtra = ''
+      export MANPAGER='nvim +Man! +"set nocul" +"set noshowcmd" +"set noruler" +"set noshowmode" +"set laststatus=2" +"set statusline=\ %t"'
+      export MANPAGER='nvim +Man! +"set nocul" +"set noshowcmd" +"set noruler" +"set noshowmode" +"set laststatus=0"'
+
+      setopt nobeep
+
+      setopt HIST_IGNORE_ALL_DUPS
+      autoload -Uz colors && colors
+      autoload -Uz promptinit && promptinit
 
 
-        #_comp_options+=(globdots)
+      # control-backspace
+      bindkey '^H' backward-kill-word
 
-        # enable cdr command
-        autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
-        add-zsh-hook chpwd chpwd_recent_dirs
 
-        # deer is a ranger-style file manager directly in the shell that doesn't fully context-switch
-        #source ~/nixpkgs/config/deer.zsh
-        #zle -N deer
-        #bindkey '\ek' deer
+      #_comp_options+=(globdots)
 
-        source ~/.profile
+      # enable cdr command
+      autoload -Uz chpwd_recent_dirs cdr add-zsh-hook
+      add-zsh-hook chpwd chpwd_recent_dirs
 
-        ${fzf-tab-stuff}
-        ${fixedKeybinds}
-        ${makeAbbrs cfg.abbrs}
-        ${manFunction}
+      # deer is a ranger-style file manager directly in the shell that doesn't fully context-switch
+      #source ~/nixpkgs/config/deer.zsh
+      #zle -N deer
+      #bindkey '\ek' deer
 
-        ${builtins.readFile ./prompt.zsh}
-        ${builtins.readFile ./keybinds.zsh}
-      '';
+      source ~/.profile
 
-      plugins = let
-        sources = import ./nix/sources.nix;
-      in
-        [
-          { name = "fzf-tab"; src = sources.fzf-tab; }
-          { name = "zsh-autosuggestions"; src = sources.zsh-autosuggestions; }
-          { name = "history-substring-search"; src = sources.zsh-history-substring-search; }
-          { name = "zsh-abbr"; src = sources.zsh-abbr; }
-          { name = "fast-syntax-highlighting"; src = sources.fast-syntax-highlighting; }
-        ];
+      ${fzf-tab-stuff}
+      ${fixedKeybinds}
+      ${makeAbbrs cfg.abbrs}
+      ${manFunction}
+
+      ${builtins.readFile ./prompt.zsh}
+      ${builtins.readFile ./keybinds.zsh}
+    '';
+
+    plugins = let
+      sources = import ./nix/sources.nix;
+    in
+      [
+        { name = "fzf-tab"; src = sources.fzf-tab; }
+        { name = "zsh-autosuggestions"; src = sources.zsh-autosuggestions; }
+        { name = "history-substring-search"; src = sources.zsh-history-substring-search; }
+        { name = "zsh-abbr"; src = sources.zsh-abbr; }
+        { name = "fast-syntax-highlighting"; src = sources.fast-syntax-highlighting; }
+      ];
     };
   };
 }

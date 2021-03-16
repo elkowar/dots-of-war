@@ -1,9 +1,29 @@
 <eww>
+  <includes>
+    <file path="./foo.xml"/>
+  </includes>
   <definitions>
+  
+    <def name="pxbar">
+      <progress value="{{volume}}" orientation="v" halign="start" flipped="true"/>
+    </def>
 
    <def name="test">
       <box class="{{some_var}}"  space-evenly="false" spacing="10">
         testing {{shit}}
+
+        is shit true? {{shit == true}}
+        is shit "shit"? {{shit == "shit"}}
+
+        true and false 🤔 {{ true && false }}
+        fancy ass math {{ 12 + 5 * 12 * 4 }}
+
+        <if-else cond="{{shit == 'yea'}}">
+          <box>hi</box>
+          <box>ho</box>
+        </if-else>
+
+
         <scale value="50" orientation="v" min="0" max="100" flipped="true" />
 
         <button onclick="pgrep 'eww' &amp;&amp; echo '' || echo ''">Test bug</button>
@@ -11,6 +31,8 @@
         <calendar show-heading="false" show-day-names="false" day="2" onclick="notify-send 'asdf' '{}'" />
         notify-send 'ree' 'this is {{shit}}'
         <multiple text="{{shit}}" />
+
+        <!--<literal content="{{code}}"/>-->
 
       </box>
     </def>
@@ -24,8 +46,9 @@
         <box>{{text}}</box>
 
         <label onscroll="notify-send '{{shit}}' {}" text="reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" limit-width="5" wrap="true" />
-        <input onchange="notify-send 'ree' '{}'" />
+        <!--<input onchange="eww update code='{}'" />-->
         {{date}}
+        {{date-tail}}
       </box>
     </def>
 
@@ -67,15 +90,16 @@
   <variables>
     <script-var name="volume">
     amixer sget 'Master' | grep 'Front Left:' | sed 's/.*\[\(.*\)%\].*/\1/g';
-    LANG=C pactl subscribe | grep REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE-line-buffered sink | while read -r _; do
-    amixer sget 'Master' | grep 'Front Left:' | sed 's/.*\[\(.*\)%\].*/\1/g'
+    LANG=C pactl subscribe | grep --line-buffered sink | while read -r _; do
+      amixer sget 'Master' | grep 'Front Left:' | sed 's/.*\[\(.*\)%\].*/\1/g'
     done
     </script-var>
 
     <var name="shit">
-      shit
+      true
     </var>
     <var name="some_var"></var>
+    <var name="code"></var>
 
 
     <var name="song-image"></var>
@@ -88,13 +112,23 @@
     <!--<script-var name="date" interval="1s">-->
       <!--date-->
       <!--</script-var>-->
-    <script-var name="date">
+    <script-var name="date-tail">
       while true; do
       sleep 1;
       notify-send 'hi' 'ho'
       date
       done
     </script-var>
+
+    <script-var name="date" interval="1s">
+      date
+    </script-var>
+
+
+
+    
+
+
 
     <!--<script-var name="xyz">-->
     <!--tail -F /home/leon/test | while read -r _; do notify-send "Hi"; done-->
@@ -107,8 +141,15 @@
 
 
   <windows>
-    <window screen="DisplayPort-0" name="mw" stacking="fg" focusable="false">
-      <!--<struts top="250" top_end_x="1920"/>-->
+    <window screen="0" name="px" stacking="fg" focusable="false">
+      <geometry anchor="center left" width="10px" height="100%" x="1px" y="0px"/>
+      <widget>
+        <pxbar/>
+      </widget>
+    </window>
+    <window screen="1" name="mw" stacking="fg" focusable="false">
+    <!--<window screen="2" name="mw" stacking="fg" focusable="false">-->
+      <reserve side="l" distance="500px"/>
       <geometry anchor="center" width="200px" height="200px" x="0px" y="0px"/>
       <widget>
         <test ree="test" />
@@ -117,7 +158,8 @@
     <window screen="0" name="mw2" stacking="fg">
       <geometry anchor="bottom right"/>
       <widget>
-        <test ree="test" />
+        <foo/>
+        <!--<test ree="test" />-->
       </widget>
     </window>
     <window screen="0" name="volume_popup">

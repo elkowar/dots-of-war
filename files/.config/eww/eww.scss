@@ -75,7 +75,6 @@ scale trough {
   }
 }
 
-
 .this {
   border: 10px solid blue;
 }
@@ -92,4 +91,39 @@ scale trough {
 
 .lol {
   color: red;
+}
+
+window {
+  background: none;
+}
+
+progressbar {
+  min-width: 1px;
+
+  trough {
+    min-width: 1px;
+    //background-color: #ebdbb255;
+  }
+
+  &, & * {
+    all: unset;
+  }
+
+  progress {
+    min-width: 1px;
+    //background-color: #8CD68F;
+    //box-shadow: 0 0 10px 3px #8CD68F22;
+  }
+}
+
+progressbar progress {
+    background: repeating-linear-gradient(0deg, #458588, #8ec07c); /*, #b8bb26, #fabd2f);*/
+    background-size: 100% 200%;
+
+    animation: AnimationName 1s linear infinite;
+}
+
+@keyframes AnimationName {
+    0%{background-position:0% 0%}
+    100%{background-position:0% 200%}
 }

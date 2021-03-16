@@ -27,6 +27,15 @@ in
       barrier
       #hyper-haskell
       font-manager
+
+      sqlite-web
+
+      #flameshot
+
+
+      sxhkd
+      okular
+
     ];
 
 
@@ -59,6 +68,8 @@ in
       };
 
     };
+
+    systemd.user.services.dunst.Environment.DISPLAY = ":1";
 
     services = {
       mpd = {

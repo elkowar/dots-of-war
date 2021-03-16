@@ -1,6 +1,6 @@
 {-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE MultiParamTypeClasses, DeriveDataTypeable, TypeSynonymInstances, FlexibleInstances, FlexibleContexts, ScopedTypeVariables, LambdaCase #-}
-{-# OPTIONS_GHC -fno-warn-missing-signatures -fno-warn-unused-binds #-}
+{-# OPTIONS_GHC -fno-warn-missing-signatures -fno-warn-unused-binds -fno-warn-Wno-unused-top-binds #-}
 -- Imports -------------------------------------------------------- {{{
 
 module Config (main) where
@@ -97,6 +97,7 @@ import Data.Bifunctor
 import GHC.IO.Unsafe (unsafePerformIO)
 import XMonad.Layout.LayoutModifier
 import qualified IndependentScreens as IS
+import Data.List (find)
 --import XMonad.Layout.MultiColumns (multiCol)
 {-# ANN module "HLint: ignore Redundant $" #-}
 {-# ANN module "HLint: ignore Redundant bracket" #-}
@@ -272,7 +273,7 @@ myStartupHook = do
   spawn "/home/leon/.config/polybar/launch.sh"
   spawnOnce "nitrogen --restore"
   spawnOnce "mailnag"
-  spawnOnce "flashfocus"
+  spawn "flashfocus"
   for_ ["led1", "led2"] $ \led -> safeSpawn "sudo" ["liquidctl", "set", led, "color", "fixed", "00ffff"]
   withDisplay $ \dpy -> do
     r <- asks theRoot
@@ -347,7 +348,7 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
   programLaunchBindings :: [(String, X ())]
   programLaunchBindings =
     [ ("M-p",      spawn myLauncher)
-    , ("M-S-p",    Rofi.showCombi  def [ "drun", "window", "ssh" ])
+    , ("M-S-p",    Rofi.showCombi  def [ "drun", "ssh" ])
     , ("M-S-e",    Rofi.showNormal (def { Rofi.fuzzy = False }) "emoji")
     --, ("M-s",      spawn $ scriptFile "rofi-search.sh")
     , ("M-S-o",    spawn $ scriptFile "rofi-open.sh")
@@ -469,6 +470,18 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
         { W.current = currentScreen { W.workspace = otherWsp   { W.tag = W.tag currentWsp } }
         , W.visible = (otherScreen  { W.workspace = currentWsp { W.tag = W.tag otherWsp } } : (tail $ W.visible ws))
         }
+
+  swapCurrentWspContentsWith :: Eq i => i -> W.StackSet i l a sid sd -> W.StackSet i l a sid sd
+  swapCurrentWspContentsWith other ws = 
+    case find ((other ==) . W.tag) $ W.workspaces ws of
+      Just otherWsp -> W.mapWorkspace (swapWith otherWsp) ws
+      Nothing -> ws
+    where 
+      currentWsp = W.workspace $ W.current ws
+      swapWith otherWsp w 
+        | W.tag w == other            = currentWsp { W.tag = W.tag otherWsp }
+        | W.tag w == W.tag currentWsp = otherWsp   { W.tag = W.tag currentWsp }
+        | otherwise                   = w
 
 
 
@@ -632,10 +645,6 @@ fullscreenFixEventHook (ClientMessageEvent _ _ _ dpy win typ (_:dats)) = do
       liftIO $ do
         resizeWindow dpy win (fromIntegral $ wa_width attrs - 1) (fromIntegral $ wa_height attrs)
         resizeWindow dpy win (fromIntegral $ wa_width attrs) (fromIntegral $ wa_height attrs)
-    --withWindowAttributes dpy win $ \attrs ->
-      --liftIO $ resizeWindow dpy win (fromIntegral $ wa_width attrs - 1) (fromIntegral $ wa_height attrs)
-    --withWindowAttributes dpy win $ \attrs ->
-      --liftIO $ resizeWindow dpy win (fromIntegral $ wa_width attrs + 1) (fromIntegral $ wa_height attrs)
   return $ All True
 fullscreenFixEventHook _ = return $ All True
 
@@ -655,7 +664,7 @@ polybarLogHook monitor = do
 -- swapping namedScratchpadFilterOutWorkspacePP and marshallPP  will throw "Prelude.read no Parse" errors..... wtf
 -- | create a polybar Pretty printer, marshalled for given monitor.
 polybarPP :: ScreenId -> PP
-polybarPP monitor = namedScratchpadFilterOutWorkspacePP . (if useSharedWorkspaces then id else IS.marshallPP $ fromIntegral monitor) $ def
+polybarPP monitor = filterOutWsPP ["NSP"] . (if useSharedWorkspaces then id else IS.marshallPP $ fromIntegral monitor) $ def
   { ppCurrent          = withFG aqua . withMargin . withFont 5 . const "__active__"
   , ppVisible          = withFG aqua . withMargin . withFont 5 . const "__active__"
   , ppUrgent           = withFG red  . withMargin . withFont 5 . const "__urgent__"
@@ -733,48 +742,6 @@ getActiveLayoutDescription = (description . W.layout . W.workspace . W.current) 
 
 
 
-
-
-
-
--- 
--- 
--- newtype ActionCycleState = ActionCycleState (M.Map String Int) deriving Typeable
--- instance ExtensionClass ActionCycleState where
---   initialValue = ActionCycleState mempty
--- 
--- getActionCycle :: String -> ActionCycleState -> Maybe Int
--- getActionCycle name (ActionCycleState s) = M.lookup name s
--- 
--- nextActionCycle :: String -> Int -> ActionCycleState -> ActionCycleState
--- nextActionCycle name maxNum (ActionCycleState s) = ActionCycleState $ M.update (\n -> Just $ (n + 1) `mod` maxNum) name s
--- 
--- setActionCycle :: String -> Int -> ActionCycleState -> ActionCycleState
--- setActionCycle name n (ActionCycleState s)= ActionCycleState $ M.insert name n s
--- 
--- cycleAction :: String -> [X ()] -> X ()
--- cycleAction _ [] = pure ()
--- cycleAction name actions = do
---   idx <- XS.gets (getActionCycle name) >>= \case
---     Just x -> do
---       XS.modify (nextActionCycle name (length actions))
---       pure x
---     Nothing -> do
---       XS.modify (setActionCycle name 1)
---       pure 0
--- 
---   sequence_ $ actions `safeIdx` idx
--- 
--- 
--- 
--- 
--- safeIdx :: [a] -> Int -> Maybe a
--- safeIdx list i
---   | i < length list = Just $ list !! i
---   | otherwise       = Nothing
--- 
-
-
 unsafeGetXrdbValue :: String -> String
 unsafeGetXrdbValue = unsafePerformIO . getXrdbValue
 
@@ -801,3 +768,12 @@ fuckshit = getActiveLayoutDescription >>= debugShit
 
 debugShit :: MonadIO m => String -> m ()
 debugShit x = spawn $ "notify-send 'Debug' '" ++ x ++ "'"
+
+
+
+lastLayout :: X ()
+lastLayout = lastLayout' 123
+  where 
+    lastLayout' :: Int -> X ()
+    lastLayout' 0 = pure ()
+    lastLayout' n = sendMessage NextLayout >> lastLayout' (n - 1)

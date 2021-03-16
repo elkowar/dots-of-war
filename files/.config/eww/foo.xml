@@ -1,0 +1,13 @@
+<eww>
+  <definitions>
+    <def name="foo">
+      <box>Hey this is a foo</box>
+    </def>
+  </definitions>
+
+  <variables>
+    <var name="shit">
+      shit
+    </var>
+  </variables>
+</eww>
