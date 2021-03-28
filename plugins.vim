@@ -6,6 +6,8 @@ endif
 
 
 call plug#begin('~/.vim/plugged')
+
+  Plug 'tweekmonster/startuptime.vim'
   Plug 'tpope/vim-repeat'
 
   Plug 'junegunn/goyo.vim', {'on': 'Goyo'}
@@ -28,7 +30,7 @@ call plug#begin('~/.vim/plugged')
 
   " buffer line
   if has('nvim')
-    Plug 'romgrk/barbar.nvim'
+    "Plug 'romgrk/barbar.nvim'
   endif
 
   "Plug 'morhetz/gruvbox'
@@ -117,7 +119,7 @@ call plug#begin('~/.vim/plugged')
   Plug 'mattn/webapi-vim'
 
 
-  "Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
   Plug 'thyrgle/vim-dyon'
 
   "Plug 'mxw/vim-prolog'

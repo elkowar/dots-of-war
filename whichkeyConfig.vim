@@ -9,8 +9,9 @@ call which_key#register('<Space>', "g:which_key_map")
 
       "\ 'h' : 'which_key_ignore', 'l' : 'which_key_ignore' ,
       "\ 'h' : ':bprevious', 'l' : ':bnext' ,
+      "\ 'h' : [':BufferPrevious', 'prev buffer'], 'l' : [':BufferNext', 'next buffer'] ,
 let g:which_key_map = {
-      \ 'h' : [':BufferPrevious', 'prev buffer'], 'l' : [':BufferNext', 'next buffer'] ,
+      \ 'h' : [':bprevious', 'prev buffer'], 'l' : [':bnext', 'next buffer'],
       \ 'f' : 'which_key_ignore', 's': 'which_key_ignore' ,
       \ 'c' : { 'name': '+comment_out' },
       \ 'e' : { 'name': '+emmet' },
@@ -39,8 +40,8 @@ let g:which_key_map['m'] = {
       \ 'F' : [ '<Plug>(coc-format-selected)'  , 'format selection'      ] ,
       \ 'f' : [ '<Plug>(coc-format)'           , 'format file'           ] ,
       "\ 'v' : [ ':CocCommand actions.open'     , 'apply codeaction'      ] ,
-      \ 'v' : [ '<Plug>(coc-codeaction)'     , 'apply codeaction'      ] ,
-      \ 'V' : [ '<Plug>(coc-codeaction)'       , 'codeaction current buffer' ] ,
+      \ 'v' : [ '<Plug>(coc-codeaction-cursor)', 'apply codeaction'      ] ,
+      \ 'V' : [ '<Plug>(coc-codeaction-line)'  , 'codeaction current line'] ,
       \ 'e' : [ ':CocList diagnostics'         , 'list all errors'       ] ,
       \ 'L' : [ '<Plug>(coc-diagnostic-next)'  , 'go to next error'      ] ,
       \ 'H' : [ '<Plug>(coc-diagnostic-prev)'  , 'go to prev error'      ] ,
@@ -77,11 +78,14 @@ let g:which_key_map['v'] = {
       \ }
 
  " :bwipeout! bdelete!
+      "\ 'b' : ['BufferPick' ,   'select open buffer'  ] ,
+      "\ 'c' : ['BufferClose',   'close open buffer'   ] ,
+      "\ 'w' : ['BufferWipeout', 'wipeout open buffer' ] ,
 let g:which_key_map['b'] = {
       \ 'name': '+buffers',
-      \ 'b' : ['BufferPick' ,   'select open buffer'  ] ,
-      \ 'c' : ['BufferClose',   'close open buffer'   ] ,
-      \ 'w' : ['BufferWipeout', 'wipeout open buffer' ] ,
+      \ 'b' : [':Buffers' ,   'select open buffer'  ] ,
+      \ 'c' : [':bdelete!',   'close open buffer'   ] ,
+      \ 'w' : [':bwipeout!', 'wipeout open buffer' ] ,
       \ }
 
 let g:which_key_map['x'] = {

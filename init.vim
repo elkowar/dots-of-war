@@ -4,7 +4,7 @@
 "   \_/ |_|_| |_| |_|_|  \___|
 
 
-set runtimepath^=~/coding/tmp/coc.nvim/
+"set runtimepath^=~/coding/tmp/coc.nvim/
 
 let g:vim_config_root = expand('<sfile>:p:h')
 let $VIM_ROOT = g:vim_config_root
@@ -217,7 +217,7 @@ let g:signify_sign_add               = '▍'
 let g:signify_sign_delete            = '▍'
 let g:signify_sign_delete_first_line = '▍'
 let g:signify_sign_change            = '▍'
-let g:signify_sign_show_text = 0
+"let g:signify_sign_show_text = 0
 
 hi SignifySignDelete cterm=NONE gui=NONE guifg='#fb4934'
 hi SignifySignChange cterm=NONE gui=NONE guifg='#83a598'
@@ -273,30 +273,30 @@ autocmd User AirlineAfterTheme call s:update_highlights()
 
 " Barbar --------------------------------------------------------------------------- {{{
 
-if has('nvim')
-  let bufferline = get(g:, 'bufferline', {})
-  let bufferline.auto_hide = v:false
-  let bufferline.animation = v:true
-  let bufferline.icons = v:false
+"if has('nvim')
+  "let bufferline = get(g:, 'bufferline', {})
+  "let bufferline.auto_hide = v:false
+  "let bufferline.animation = v:true
+  "let bufferline.icons = v:false
 
-  let bufferline.icon_separator_active = ' '
-  let bufferline.icon_separator_active = ' '
-  "let bufferline.icon_separator_inactive = '▎'
-  "let bufferline.icon_separator_inactive = '▎'
-  let bufferline.icon_close_tab = '◆'
-  let bufferline.icon_close_tab_modified = '●'
-  let bufferline.maximum_padding = 1
+  "let bufferline.icon_separator_active = ' '
+  "let bufferline.icon_separator_active = ' '
+  ""let bufferline.icon_separator_inactive = '▎'
+  ""let bufferline.icon_separator_inactive = '▎'
+  "let bufferline.icon_close_tab = '◆'
+  "let bufferline.icon_close_tab_modified = '●'
+  "let bufferline.maximum_padding = 1
 
-  hi! BufferVisible  guibg='#282828' guifg='#282828'
-  hi! BufferCurrent  guibg='#689d6a' guifg='#282828'
-  hi! BufferInactive guibg='#3c3836' guifg='#282828'
-  hi! BufferTabpageFill guibg='#282828' guifg='#282828'
-  hi! BufferCurrentSign guibg='#689d6a' guifg='#689d6a'
+  "hi! BufferVisible  guibg='#282828' guifg='#282828'
+  "hi! BufferCurrent  guibg='#689d6a' guifg='#282828'
+  "hi! BufferInactive guibg='#3c3836' guifg='#282828'
+  "hi! BufferTabpageFill guibg='#282828' guifg='#282828'
+  "hi! BufferCurrentSign guibg='#689d6a' guifg='#689d6a'
 
-  hi! BufferVisibleMod  guibg='#282828' guifg='#8ec07c'
-  hi! BufferCurrentMod  guibg='#282828' guifg='#8ec07c'
-  hi! BufferInactiveMod guibg='#3c3836' guifg='#8ec07c'
-endif
+  "hi! BufferVisibleMod  guibg='#282828' guifg='#8ec07c'
+  "hi! BufferCurrentMod  guibg='#282828' guifg='#8ec07c'
+  "hi! BufferInactiveMod guibg='#3c3836' guifg='#8ec07c'
+"endif
 
 
 " }}}
@@ -340,6 +340,7 @@ nnoremap ö a
 
 
 " }}}
+
 
 
 source $VIM_ROOT/whichkeyConfig.vim
