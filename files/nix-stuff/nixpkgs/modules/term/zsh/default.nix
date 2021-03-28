@@ -195,6 +195,7 @@ in
         { name = "history-substring-search"; src = sources.zsh-history-substring-search; }
         { name = "zsh-abbr"; src = sources.zsh-abbr; }
         { name = "fast-syntax-highlighting"; src = sources.fast-syntax-highlighting; }
+        { name = "wd"; src = sources.wd; }
       ];
     };
   };

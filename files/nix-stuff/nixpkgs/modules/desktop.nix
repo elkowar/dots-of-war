@@ -19,7 +19,6 @@ in
       bashtop
       cool-retro-term
       gromit-mpx
-      dragon-drop
       polybarFull
       discord
       pinta

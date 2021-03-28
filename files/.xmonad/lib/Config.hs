@@ -110,7 +110,8 @@ import Data.List (find)
 
 myModMask  = mod4Mask
 myLauncher = Rofi.asCommand def ["-show run"]
-myTerminal = "alacritty"
+--myTerminal = "alacritty"
+myTerminal = "wezterm"
 useSharedWorkspaces = False
 
 {-| adds the scripts-directory path to the filename of a script |-}

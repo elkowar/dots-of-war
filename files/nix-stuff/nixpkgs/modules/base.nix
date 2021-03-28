@@ -34,6 +34,8 @@ in
       cnix = "cd ~/nixpkgs/ && nvim home.nix && cd -";
       cvim = "cd ~/.config/nvim/ && nvim init.vim && cd -";
 
+      ra = "ranger";
+
       gaa = "git add --all";
       gc = "git commit -m ";
       gp = "git push";

@@ -5,10 +5,10 @@
         "homepage": "http://zdharma.org",
         "owner": "zdharma",
         "repo": "fast-syntax-highlighting",
-        "rev": "865566ce48cfd9bb5cdbaf5b1a74b0a675f4ccd4",
-        "sha256": "00d6nssh73k26w69fdp8iff1xghyr8ziy5w5a2li0z9lvm6j0nik",
+        "rev": "a62d721affc771de2c78201d868d80668a84c1e1",
+        "sha256": "0kwrkxkgsx9cchdrp9jg3p47y6h9w6dgv6zqapzczmx7slgmf4p3",
         "type": "tarball",
-        "url": "https://github.com/zdharma/fast-syntax-highlighting/archive/865566ce48cfd9bb5cdbaf5b1a74b0a675f4ccd4.tar.gz",
+        "url": "https://github.com/zdharma/fast-syntax-highlighting/archive/a62d721affc771de2c78201d868d80668a84c1e1.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "fzf-tab": {
@@ -17,10 +17,10 @@
         "homepage": null,
         "owner": "Aloxaf",
         "repo": "fzf-tab",
-        "rev": "d92299baafdf197c93a88e54f9bbc1c8bb31d427",
-        "sha256": "046fbhp5777iwl6n901db84bbmxbjgnh5gv9yqy9x15s8ikagzdl",
+        "rev": "0c36bdcf6a80ec009280897f07f56969f94d377e",
+        "sha256": "0ymp9ky0jlkx9b63jajvpac5g3ll8snkf8q081g0yw42b9hwpiid",
         "type": "tarball",
-        "url": "https://github.com/Aloxaf/fzf-tab/archive/d92299baafdf197c93a88e54f9bbc1c8bb31d427.tar.gz",
+        "url": "https://github.com/Aloxaf/fzf-tab/archive/0c36bdcf6a80ec009280897f07f56969f94d377e.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "niv": {
@@ -29,10 +29,10 @@
         "homepage": "https://github.com/nmattia/niv",
         "owner": "nmattia",
         "repo": "niv",
-        "rev": "f73bf8d584148677b01859677a63191c31911eae",
-        "sha256": "0jlmrx633jvqrqlyhlzpvdrnim128gc81q5psz2lpp2af8p8q9qs",
+        "rev": "af958e8057f345ee1aca714c1247ef3ba1c15f5e",
+        "sha256": "1qjavxabbrsh73yck5dcq8jggvh3r2jkbr6b5nlz5d9yrqm9255n",
         "type": "tarball",
-        "url": "https://github.com/nmattia/niv/archive/f73bf8d584148677b01859677a63191c31911eae.tar.gz",
+        "url": "https://github.com/nmattia/niv/archive/af958e8057f345ee1aca714c1247ef3ba1c15f5e.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "nixpkgs": {
@@ -41,10 +41,22 @@
         "homepage": "https://github.com/NixOS/nixpkgs",
         "owner": "NixOS",
         "repo": "nixpkgs-channels",
-        "rev": "289466dd6a11c65a7de4a954d6ebf66c1ad07652",
-        "sha256": "0r5ja052s86fr54fm1zlhld3fwawz2w1d1gd6vbvpjrpjfyajibn",
+        "rev": "75f4ba05c63be3f147bcc2f7bd4ba1f029cedcb1",
+        "sha256": "157c64220lf825ll4c0cxsdwg7cxqdx4z559fdp7kpz0g6p8fhhr",
         "type": "tarball",
-        "url": "https://github.com/NixOS/nixpkgs-channels/archive/289466dd6a11c65a7de4a954d6ebf66c1ad07652.tar.gz",
+        "url": "https://github.com/NixOS/nixpkgs-channels/archive/75f4ba05c63be3f147bcc2f7bd4ba1f029cedcb1.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "wd": {
+        "branch": "master",
+        "description": ":rocket: Jump to custom directories in zsh",
+        "homepage": "",
+        "owner": "mfaerevaag",
+        "repo": "wd",
+        "rev": "38afa73ca85a557aef89438ad9fd60b5b41cdbc7",
+        "sha256": "08y6f6b9231h1nhvc1gamvhrkd00r69m5m2cng991pb8iykmag97",
+        "type": "tarball",
+        "url": "https://github.com/mfaerevaag/wd/archive/38afa73ca85a557aef89438ad9fd60b5b41cdbc7.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "zsh-abbr": {
@@ -53,10 +65,10 @@
         "homepage": "",
         "owner": "olets",
         "repo": "zsh-abbr",
-        "rev": "703ba651e4f9c0ae18402e2462177e6253585386",
-        "sha256": "0aln7ashadbgharfn4slhimbw624ai82p4yizsxwvz70y4dv0wpg",
+        "rev": "28e3543cbfbc66e6e569fe2a3f681820d6d73188",
+        "sha256": "0y1hi20s51fws9m18b3lbpcbja2b39lj729a4kyvipv7irwilhgw",
         "type": "tarball",
-        "url": "https://github.com/olets/zsh-abbr/archive/703ba651e4f9c0ae18402e2462177e6253585386.tar.gz",
+        "url": "https://github.com/olets/zsh-abbr/archive/28e3543cbfbc66e6e569fe2a3f681820d6d73188.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "zsh-abbrev-alias": {
@@ -65,10 +77,10 @@
         "homepage": "",
         "owner": "momo-lab",
         "repo": "zsh-abbrev-alias",
-        "rev": "ae2997ea7c1519861ff6712b84379b8d03de4f39",
-        "sha256": "1b5miqli5b5n893k0qd5lxb9w73md4sz1i8g9wzlhyqg4sasxvnx",
+        "rev": "b9fecabca3798785f262976d5ffb315a134e1344",
+        "sha256": "0gcc9017yyz0kf7lwqaqgaxw23pl5icwsx44w4fkhx8whqn5yxw1",
         "type": "tarball",
-        "url": "https://github.com/momo-lab/zsh-abbrev-alias/archive/ae2997ea7c1519861ff6712b84379b8d03de4f39.tar.gz",
+        "url": "https://github.com/momo-lab/zsh-abbrev-alias/archive/b9fecabca3798785f262976d5ffb315a134e1344.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "zsh-autosuggestions": {
