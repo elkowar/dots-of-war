@@ -7,6 +7,9 @@ endif
 
 call plug#begin('~/.vim/plugged')
 
+  Plug 'Olical/aniseed', { 'tag': 'v3.16.0' }
+  Plug 'bakpakin/fennel.vim'
+
   Plug 'tweekmonster/startuptime.vim'
   Plug 'tpope/vim-repeat'
 
@@ -57,7 +60,7 @@ call plug#begin('~/.vim/plugged')
   Plug 'unblevable/quick-scope'   " highlight targets when pressing f<character>
   Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() } } " :MarkdownPreview for live markdown preview
 
-  Plug 'jiangmiao/auto-pairs'
+  "Plug 'jiangmiao/auto-pairs'
 
   Plug 'machakann/vim-highlightedyank'
 
@@ -88,6 +91,9 @@ call plug#begin('~/.vim/plugged')
 
   Plug 'bhurlow/vim-parinfer'
 
+  Plug 'Olical/conjure', {'tag': 'v4.17.0'}
+
+
   " Language Plugins ----------------------------------------------------- {{{
 
   Plug 'ziglang/zig.vim'
@@ -101,7 +107,7 @@ call plug#begin('~/.vim/plugged')
   Plug 'ianks/vim-tsx'
   Plug 'leafgarland/typescript-vim'
   Plug 'sheerun/vim-polyglot'    " Syntax highlighting for most languages
-  Plug 'mattn/emmet-vim'
+  "Plug 'mattn/emmet-vim'
 
   Plug 'udalov/kotlin-vim'
 
@@ -119,10 +125,27 @@ call plug#begin('~/.vim/plugged')
   Plug 'mattn/webapi-vim'
 
 
-  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  "Plug 'neoclide/coc.nvim', {'branch': 'release'}
   Plug 'thyrgle/vim-dyon'
 
+  Plug 'tjdevries/nlua.nvim'
+  Plug 'nvim-lua/completion-nvim'
+
   "Plug 'mxw/vim-prolog'
+
+  Plug 'neovim/nvim-lspconfig'
+  Plug 'hrsh7th/nvim-compe'
+  Plug 'glepnir/lspsaga.nvim'
+  Plug 'cohama/lexima.vim'
+
+  Plug 'nvim-lua/popup.nvim'
+  Plug 'nvim-lua/plenary.nvim'
+  Plug 'nvim-telescope/telescope.nvim'
+
+  Plug 'RishabhRD/popfix'
+  Plug 'RishabhRD/nvim-lsputils'
+
+  Plug 'nvim-telescope/telescope-media-files.nvim'
 
   " }}}
 call plug#end()

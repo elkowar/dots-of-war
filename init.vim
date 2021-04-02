@@ -207,7 +207,12 @@ au Syntax * RainbowParenthesesLoadSquare
 au Syntax * RainbowParenthesesLoadBraces
 
 
-nnoremap <silent> <C-p> :Files<CR>
+"nnoremap <silent> <C-p> :Files<CR>
+nnoremap <silent> <C-p> :Telescope find_files<CR>
+
+
+lua require('telescope').load_extension('media_files')
+
 
 "map <Leader>f <Plug>(easymotion-bd-f)
 "map <Leader>s <Plug>(easymotion-overwin-f2)
@@ -344,5 +349,19 @@ nnoremap ö a
 
 
 source $VIM_ROOT/whichkeyConfig.vim
-source $VIM_ROOT/lsp.vim
 
+luafile $VIM_ROOT/lsp.lua
+"source $VIM_ROOT/lsp.vim
+
+
+" this is apparently necessary for nvim-lsp stuff
+set completeopt=menuone,noselect
+
+
+inoremap <silent><expr> <C-Space> compe#complete()
+inoremap <silent><expr> <CR> compe#confirm('<CR>')
+inoremap <silent><expr> <esc> compe#close('<esc>')
+
+
+"nnoremap <silent> <C-d> <cmd>lua require('lspsaga.action').smart_scroll_with_saga(1)<CR>
+"nnoremap <silent> <C-u> <cmd>lua require('lspsaga.action').smart_scroll_with_saga(-1)<CR>
