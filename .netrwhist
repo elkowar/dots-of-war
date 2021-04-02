@@ -1,5 +1,6 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhistcnt =7
+let g:netrw_dirhistcnt =8
+let g:netrw_dirhist_8='/home/leon/coding/projects/trup-rs/src/commands'
 let g:netrw_dirhist_7='/home/leon/coding/projects/trup-rs/src/features/ban'
 let g:netrw_dirhist_6='/home/leon/coding/projects/trup-rs/migrations'
 let g:netrw_dirhist_5='/home/leon/coding/projects/trup-rs/.git'
@@ -9,4 +10,3 @@ let g:netrw_dirhist_2='/home/leon/dotfiles/.vim'
 let g:netrw_dirhist_1='/home/leon/.config/discord'
 let g:netrw_dirhist_0='/home/leon/coding/projects/eww/src'
 let g:netrw_dirhist_9='/home/leon/.config/polybar'
-let g:netrw_dirhist_8='/home/leon/coding/plover-plugins/plover_retro_surround'
