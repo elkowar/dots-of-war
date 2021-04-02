@@ -10,6 +10,9 @@ call plug#begin('~/.vim/plugged')
   Plug 'Olical/aniseed', { 'tag': 'v3.16.0' }
   Plug 'bakpakin/fennel.vim'
 
+  " general purpose lua wrappers for nvim stuff
+  Plug 'norcalli/nvim.lua'
+
   Plug 'tweekmonster/startuptime.vim'
   Plug 'tpope/vim-repeat'
 
@@ -128,10 +131,13 @@ call plug#begin('~/.vim/plugged')
   "Plug 'neoclide/coc.nvim', {'branch': 'release'}
   Plug 'thyrgle/vim-dyon'
 
+  Plug 'bakpakin/fennel.vim'
+
   Plug 'tjdevries/nlua.nvim'
   Plug 'nvim-lua/completion-nvim'
 
   "Plug 'mxw/vim-prolog'
+
 
   Plug 'neovim/nvim-lspconfig'
   Plug 'hrsh7th/nvim-compe'

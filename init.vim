@@ -54,7 +54,7 @@ set autoindent smartindent noet expandtab
 set nowrap
 set noshowmode " hide the mode as shown by vim, because the status line does it better!
 
-set completeopt=longest,menuone " Enable autocompletion
+set completeopt=longest,menuone,noselect " Enable autocompletion
 set laststatus=2
 set noshowmode
 
@@ -353,14 +353,13 @@ source $VIM_ROOT/whichkeyConfig.vim
 luafile $VIM_ROOT/lsp.lua
 "source $VIM_ROOT/lsp.vim
 
-
-" this is apparently necessary for nvim-lsp stuff
-set completeopt=menuone,noselect
+let g:aniseed#env = v:true
 
 
-inoremap <silent><expr> <C-Space> compe#complete()
-inoremap <silent><expr> <CR> compe#confirm('<CR>')
-inoremap <silent><expr> <esc> compe#close('<esc>')
+
+"inoremap <silent><expr> <C-Space> compe#complete()
+"inoremap <silent><expr> <CR> compe#confirm('<CR>')
+"inoremap <silent><expr> <esc> compe#close('<esc>')
 
 
 "nnoremap <silent> <C-d> <cmd>lua require('lspsaga.action').smart_scroll_with_saga(1)<CR>

@@ -1,7 +1,7 @@
-nnoremap <silent> <leader> :<c-u>WhichKey '<Space>'<CR>
-vnoremap <silent> <leader> :<c-u>'WhichKeyVisual '<Space>'<CR>
-let g:which_key_map = {}
-call which_key#register('<Space>', "g:which_key_map")
+"nnoremap <silent> <leader> :<c-u>WhichKey '<Space>'<CR>
+"vnoremap <silent> <leader> :<c-u>'WhichKeyVisual '<Space>'<CR>
+"let g:which_key_map = {}
+"call which_key#register('<Space>', "g:which_key_map")
 
 
 
@@ -10,18 +10,18 @@ call which_key#register('<Space>', "g:which_key_map")
       "\ 'h' : 'which_key_ignore', 'l' : 'which_key_ignore' ,
       "\ 'h' : ':bprevious', 'l' : ':bnext' ,
       "\ 'h' : [':BufferPrevious', 'prev buffer'], 'l' : [':BufferNext', 'next buffer'] ,
-let g:which_key_map = {
-      \ 'h' : [':bprevious', 'prev buffer'], 'l' : [':bnext', 'next buffer'],
-      \ 'f' : 'which_key_ignore', 's': 'which_key_ignore' ,
-      \ 'c' : { 'name': '+comment_out' },
-      \ 'e' : { 'name': '+emmet' },
-      \ '[' : ['<Plug>(YoinkPostPasteSwapBack)',    'Swap last paste backwards' ],
-      \ ']' : ['<Plug>(YoinkPostPasteSwapForward)', 'Swap last paste backwards' ],
-      \ ':' : [':Commands'                        , 'Search command with fzf'   ],
-      \ 'z' : { 'name': '+folds', 'c': ['foldclose', 'close fold'],
-                                \ 'o': ['foldopen',  'open fold'] ,
-                                \ }
-      \ }
+"let g:which_key_map = {
+      "\ 'h' : [':bprevious', 'prev buffer'], 'l' : [':bnext', 'next buffer'],
+      "\ 'f' : 'which_key_ignore', 's': 'which_key_ignore' ,
+      "\ 'c' : { 'name': '+comment_out' },
+      "\ 'e' : { 'name': '+emmet' },
+      "\ '[' : ['<Plug>(YoinkPostPasteSwapBack)',    'Swap last paste backwards' ],
+      "\ ']' : ['<Plug>(YoinkPostPasteSwapForward)', 'Swap last paste backwards' ],
+      "\ ':' : [':Commands'                        , 'Search command with fzf'   ],
+      "\ 'z' : { 'name': '+folds', 'c': ['foldclose', 'close fold'],
+                                "\ 'o': ['foldopen',  'open fold'] ,
+                                "\ }
+      "\ }
 
       "\ 's' : [ ':CocFzfList symbols'          , 'list symbols'          ] ,
 
@@ -45,25 +45,26 @@ let g:which_key_map = {
       "\ 'a' : [ ':call luaeval("vim.lsp.diagnostic.show_line_diagnostics()")' , 'diagnostics info'       ] ,
       "\ }
 
-let g:which_key_map['m'] = {
-      \ 'name' : '+Code-actions'                                  ,
-      \ 'd' : [ ':Lspsaga hover_doc'                              , 'show documentation'     ] ,
-      \ 'b' : [ ':Lspsaga lsp_finder'                             , 'find stuff'             ] ,
-      \ 'x' : [ ':Lspsaga preview_definition'                     , 'Preview definition'     ] ,
-      \ 'o' : [ ':Telescope lsp_document_symbols'                 , 'symbols in document'    ] ,
-      \ 's' : [ ':Telescope lsp_workspace_symbols'                , 'symbols in workspace'   ] ,
-      \ 'g' : [ ':call luaeval("vim.lsp.buf.definition()")'       , 'go to definition'       ] ,
-      \ 't' : [ ':Lspsaga signature_help'                         , 'Show signature help'    ] ,
-      \ 'i' : [ ':call luaeval("vim.lsp.buf.implementation()")'   , 'show implementation'    ] ,
-      \ 'r' : [ ':call luaeval("vim.lsp.buf.references()")'       , 'show references'        ] ,
-      \ 'n' : [ ':Lspsaga rename'                                 , 'rename'                 ] ,
-      \ 'f' : [ ':call luaeval("vim.lsp.buf.formatting()")'       , 'format file'            ] ,
-      \ 'v' : [ ':Lspsaga code_action'                            , 'apply codeaction'       ] ,
-      \ 'e' : [ ':call luaeval("vim.lsp.diagnostic.goto_next()")' , 'Jump to the next error' ] ,
-      \ 'E' : [ ':Telescope lsp_workspace_diagnostics'            , 'List diagnostics'       ] ,
-      \ 'a' : [ ':Lspsaga show_cursor_diagnostics'                , 'Cursor diagnostics'     ] ,
-      \ 'A' : [ ':Lspsaga show_line_diagnostics'                  , 'Line diagnostics'       ] ,
-      \ }
+" this is the one!
+"let g:which_key_map['m'] = {
+      "\ 'name' : '+Code-actions'                                  ,
+      "\ 'd' : [ ':Lspsaga hover_doc'                              , 'show documentation'     ] ,
+      "\ 'b' : [ ':Lspsaga lsp_finder'                             , 'find stuff'             ] ,
+      "\ 'x' : [ ':Lspsaga preview_definition'                     , 'Preview definition'     ] ,
+      "\ 'o' : [ ':Telescope lsp_document_symbols'                 , 'symbols in document'    ] ,
+      "\ 's' : [ ':Telescope lsp_workspace_symbols'                , 'symbols in workspace'   ] ,
+      "\ 'g' : [ ':call luaeval("vim.lsp.buf.definition()")'       , 'go to definition'       ] ,
+      "\ 't' : [ ':Lspsaga signature_help'                         , 'Show signature help'    ] ,
+      "\ 'i' : [ ':call luaeval("vim.lsp.buf.implementation()")'   , 'show implementation'    ] ,
+      "\ 'r' : [ ':call luaeval("vim.lsp.buf.references()")'       , 'show references'        ] ,
+      "\ 'n' : [ ':Lspsaga rename'                                 , 'rename'                 ] ,
+      "\ 'f' : [ ':call luaeval("vim.lsp.buf.formatting()")'       , 'format file'            ] ,
+      "\ 'v' : [ ':Lspsaga code_action'                            , 'apply codeaction'       ] ,
+      "\ 'e' : [ ':call luaeval("vim.lsp.diagnostic.goto_next()")' , 'Jump to the next error' ] ,
+      "\ 'E' : [ ':Telescope lsp_workspace_diagnostics'            , 'List diagnostics'       ] ,
+      "\ 'a' : [ ':Lspsaga show_cursor_diagnostics'                , 'Cursor diagnostics'     ] ,
+      "\ 'A' : [ ':Lspsaga show_line_diagnostics'                  , 'Line diagnostics'       ] ,
+      "\ }
 
 "let g:which_key_map['m'] = {
       "\ 'name' : '+Code-actions'               ,
@@ -89,54 +90,44 @@ let g:which_key_map['m'] = {
       "\ 'O' : [ '<Plug>(coc-openlink)'         , 'open link under cursor'      ] ,
       "\}
  
-let g:which_key_map['f'] = {
-      \ 'name': '+folds',
-      \ 'o': [ ':foldopen'  , 'open fold'             ] ,
-      \ 'n': [ ':foldclose' , 'close fold'            ] ,
-      \ 'j': [ 'zj'         , 'jump to next fold'     ] ,
-      \ 'k': [ 'zk'         , 'jump to previous fold' ] ,
-      \ }
+"let g:which_key_map['f'] = {
+      "\ 'name': '+folds',
+      "\ 'o': [ ':foldopen'  , 'open fold'             ] ,
+      "\ 'n': [ ':foldclose' , 'close fold'            ] ,
+      "\ 'j': [ 'zj'         , 'jump to next fold'     ] ,
+      "\ 'k': [ 'zk'         , 'jump to previous fold' ] ,
+      "\ }
 
-let g:which_key_map['a'] = {
-      \ 'name': '+Bookmarks',
-      \ ' ' : ['<Plug>(coc-bookmark-toggle)'              , 'toggle bookmark'        ] ,
-      \ 'a' : ['<Plug>(coc-bookmark-annotate)'            , 'annotate bookmark'      ] ,
-      \ 'j' : ['<Plug>(coc-bookmark-next)'                , 'next bookmark'          ] ,
-      \ 'k' : ['<Plug>(coc-bookmark-prev)'                , 'prev bookmark'          ] ,
-      \ 'l' : [':CocList bookmark'                        , 'list bookmarks'         ] ,
-      \ 'c' : [':CocCommand bookmark.clearForCurrentFile' , 'clear for current file' ] ,
-      \ 'C' : [':CocCommand bookmark.clearForAllFiles'    , 'clear for all files'    ]
-      \}
 
-" mappings for view and layout
-let g:which_key_map['v'] = {
-      \ 'name' : '+view-and-layout',
-      \ 'n' : [':set relativenumber!'            , 'toggle relative numbers' ] ,
-      \ 'm' : [':set nonumber! norelativenumber' , 'toggle numbers'] ,
-      \ 'g' : [':Goyo | set linebreak'           , 'toggle focus mode'    ] ,
-      \ 'i' : [':IndentGuidesToggle'             , 'toggle indent guides' ] ,
-      \ }
+"" mappings for view and layout
+"let g:which_key_map['v'] = {
+      "\ 'name' : '+view-and-layout',
+      "\ 'n' : [':set relativenumber!'            , 'toggle relative numbers' ] ,
+      "\ 'm' : [':set nonumber! norelativenumber' , 'toggle numbers'] ,
+      "\ 'g' : [':Goyo | set linebreak'           , 'toggle focus mode'    ] ,
+      "\ 'i' : [':IndentGuidesToggle'             , 'toggle indent guides' ] ,
+      "\ }
 
- " :bwipeout! bdelete!
-      "\ 'b' : ['BufferPick' ,   'select open buffer'  ] ,
-      "\ 'c' : ['BufferClose',   'close open buffer'   ] ,
-      "\ 'w' : ['BufferWipeout', 'wipeout open buffer' ] ,
-let g:which_key_map['b'] = {
-      \ 'name': '+buffers',
-      \ 'b' : [':Buffers' ,   'select open buffer'  ] ,
-      \ 'c' : [':bdelete!',   'close open buffer'   ] ,
-      \ 'w' : [':bwipeout!', 'wipeout open buffer' ] ,
-      \ }
+ "" :bwipeout! bdelete!
+      ""\ 'b' : ['BufferPick' ,   'select open buffer'  ] ,
+      ""\ 'c' : ['BufferClose',   'close open buffer'   ] ,
+      ""\ 'w' : ['BufferWipeout', 'wipeout open buffer' ] ,
+"let g:which_key_map['b'] = {
+      "\ 'name': '+buffers',
+      "\ 'b' : [':Buffers' ,   'select open buffer'  ] ,
+      "\ 'c' : [':bdelete!',   'close open buffer'   ] ,
+      "\ 'w' : [':bwipeout!', 'wipeout open buffer' ] ,
+      "\ }
 
-let g:which_key_map['x'] = {
-      \ 'name' : '+other',
-      \ 'f' : ['NERDTreeToggle' ,  '<Ctrl+F> show file tree'],
-      \ 'p' : ['FZF'            ,  '<Ctrl+p> search file (c-v/c-x to open in split)' ] ,
-      \ 'h' : [':History:'      ,  'search command history'],
-      \ 'c' : [':Commands'      ,  'search through commands'],
-      \ 's' : ['OverCommandLine',  'Substitute with preview'],
-      \ 'y' : [':CocFzfList yank', 'Show yank history']
-      \ }
+"let g:which_key_map['x'] = {
+      "\ 'name' : '+other',
+      "\ 'f' : ['NERDTreeToggle' ,  '<Ctrl+F> show file tree'],
+      "\ 'p' : ['FZF'            ,  '<Ctrl+p> search file (c-v/c-x to open in split)' ] ,
+      "\ 'h' : [':History:'      ,  'search command history'],
+      "\ 'c' : [':Commands'      ,  'search through commands'],
+      "\ 's' : ['OverCommandLine',  'Substitute with preview'],
+      "\ 'y' : [':CocFzfList yank', 'Show yank history']
+      "\ }
 
 " CocList -A --normal yank needs :CocInstall coc-yank
 
@@ -148,5 +139,5 @@ let g:which_key_map['x'] = {
   "autocmd! FileType which_key set laststatus=2 noshowmode noruler
     "\| autocmd! BufLeave <buffer> set laststatus=2 showmode ruler
 
-set timeoutlen=200
+"set timeoutlen=200
 
