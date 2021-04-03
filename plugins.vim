@@ -31,8 +31,10 @@ call plug#begin('~/.vim/plugged')
 
   Plug 'preservim/nerdcommenter'
 
-  Plug 'vim-airline/vim-airline-themes'
-  Plug 'vim-airline/vim-airline'
+  Plug 'glepnir/galaxyline.nvim'
+
+  "Plug 'vim-airline/vim-airline-themes'
+  "Plug 'vim-airline/vim-airline'
 
   " buffer line
   if has('nvim')

@@ -1,21 +1,18 @@
 (module keybinds
   {require {a aniseed.core
             nvim aniseed.nvim
-            util util}
+            utils utils
+            fennel aniseed.fennel}
    require-macros [macros]})
 
+(utils.noremap :n :<leader> ":<c-u>WhichKey '<Space>'<CR>")
+(utils.noremap :v :<leader> ":<c-u>WhichKeyVisual '<Space>'<CR>")
 
-(util.noremap :n :<leader> ":<c-u>WhichKey '<Space>'<CR>")
-(util.noremap :v :<leader> ":<c-u>WhichKeyVisual '<Space>'<CR>")
+(utils.mapexpr :i :<C-Space> "compe#complete()")
+(utils.mapexpr :i :<CR> "compe#confirm('<CR>')")
+(utils.mapexpr :i :<esc> "compe#complete('<esc>')")
 
-
-(util.mapexpr :i :<C-Space> "compe#complete()")
-(util.mapexpr :i :<CR> "compe#confirm('<CR>')")
-(util.mapexpr :i :<esc> "compe#complete('<esc>')")
-
-
-
-(fn le [s] (.. ":call luaeval \"" s "\")"))
+(fn le [s] (.. ":call luaeval(\"" s "\")"))
 
 (set nvim.g.which_key_map {})
 (nvim.command "call which_key#register('<Space>', \"g:which_key_map\")")
@@ -68,11 +65,9 @@
 
 (set nvim.o.timeoutlen 200)
 
+
+
 ; TODO
 ; autocmd! VimEnter * :unmap <space>ig
 ; autocmd! FileType which_key)
-
-
-
-
 
