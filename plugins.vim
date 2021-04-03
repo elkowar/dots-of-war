@@ -7,6 +7,8 @@ endif
 
 call plug#begin('~/.vim/plugged')
 
+  Plug 'akinsho/nvim-bufferline.lua'
+
   Plug 'Olical/aniseed', { 'tag': 'v3.16.0' }
   Plug 'bakpakin/fennel.vim'
 
