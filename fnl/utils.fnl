@@ -53,4 +53,8 @@
 
 
 (defn highlight [group colset] 
-  (nvim.command (.. "hi " group " guifg='" colset.fg "' guibg='" colset.bg "'")))
+  (nvim.command (.. "hi " group " guifg='" colset.fg "' guibg='" colset.bg "' gui=NONE")))
+
+
+(defn comp [f g ...]
+  (f (g ...)))
