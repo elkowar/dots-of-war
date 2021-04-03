@@ -54,7 +54,7 @@
               :calc true 
               :nvim_lsp true 
               :nvim_lua true 
-              :vsnip false }})
+              :vsnip false}})
 
 
 (saga.init_lsp_saga 

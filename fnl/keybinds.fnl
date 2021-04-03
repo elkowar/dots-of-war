@@ -5,12 +5,13 @@
             fennel aniseed.fennel}
    require-macros [macros]})
 
+
 (utils.noremap :n :<leader> ":<c-u>WhichKey '<Space>'<CR>")
 (utils.noremap :v :<leader> ":<c-u>WhichKeyVisual '<Space>'<CR>")
 
 (utils.mapexpr :i :<C-Space> "compe#complete()")
-(utils.mapexpr :i :<CR> "compe#confirm('<CR>')")
-(utils.mapexpr :i :<esc> "compe#complete('<esc>')")
+(utils.mapexpr :i :<CR> "compe#confirm(lexima#expand('<LT>CR>', 'i'))")
+(utils.mapexpr :i :<esc> "compe#close('<esc>')")
 
 (fn le [s] (.. ":call luaeval(\"" s "\")"))
 
@@ -61,7 +62,12 @@
           "n" [":set relativenumber!"             "toggle relative numbers"] 
           "m" [":set nonumber! norelativenumber"  "toggle numbers"] 
           "g" [":Goyo | set linebreak"            "toggle focus mode"] 
-          "i" [":IndentGuidesToggle"              "toggle indent guides"]}})
+          "i" [":IndentGuidesToggle"              "toggle indent guides"]}
+
+    "b" { :name "+buffers"
+          "b" [":Buffers"   "select open buffer"]
+          "c" [":bdelete!"  "close open buffer"]
+          "w" [":bwipeout!" "wipeout open buffer"]}})
 
 (set nvim.o.timeoutlen 200)
 

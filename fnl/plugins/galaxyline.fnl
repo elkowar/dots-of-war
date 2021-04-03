@@ -34,19 +34,8 @@
     "" { :text "VISUAL BLOCK" :colors { :bg colors.neutral_blue :fg colors.dark0}}})
 
 
- 
-(fn get-mode-data []
-  (or (. modes (nvim.fn.mode))
-      { :text (nvim.fn.mode) 
-        :colors {:bg colors.neutral_orange :fg colors.dark0}})) 
-
 (fn buf-empty? [] 
   (= 1 (nvim.fn.empty (nvim.fn.expand "%:t"))))
-
-(fn checkwidth [] 
-  (and (< 35 (/ (nvim.fn.winwidth 0) 2))
-       (not buf-empty?)))
-
 
 (fn get-current-file-name []
   (let [file (nvim.fn.expand "%:t")]
@@ -55,6 +44,16 @@
       nvim.bo.readonly (.. "RO " file)
       (and nvim.bo.modifiable nvim.bo.modified) (.. file " ")
       file)))
+ 
+(fn get-mode-data []
+  (or (. modes (nvim.fn.mode))
+      { :text (nvim.fn.mode) 
+        :colors {:bg colors.neutral_orange :fg colors.dark0}})) 
+
+(fn vim-mode-provider []
+  (let [modedata (get-mode-data)] 
+    (utils.highlight "GalaxyViMode" modedata.colors)
+    (.. "  " modedata.text " "))) 
 
 
 (utils.highlight "StatusLine" {:bg colors.dark1 :fg colors.light0 })
@@ -62,47 +61,38 @@
 
 
 (set galaxyline.section.left
-  [ { :ViMode { :provider
-                (fn []
-                  (let [modedata (get-mode-data)] 
-                    (utils.highlight "GalaxyViMode" modedata.colors)
-                    (.. "  " modedata.text " "))) }}
-           
+  [ { :ViMode { :provider vim-mode-provider}}
     { :FileName { :provider get-current-file-name
-                  :highlight [colors.light4 colors.dark1] }}
+                  :highlight [colors.light4 colors.dark1]}}
     { :Space { :provider (fn [] "")
-               :highlight [colors.light0 colors.dark1] }}])
-                  
+               :highlight [colors.light0 colors.dark1]}}])
       
-(fn provider-lsp-diag [kind]
+(fn make-lsp-diagnostic-provider [kind]
   (fn []
     (let [n (vim.lsp.diagnostic.get_count 0 kind)]
-      (if 
-        (= n 0) ""
-        (.. " " n " ")))))
+      (if (= n 0) "" (.. " " n " ")))))
 
+(fn git-branch-provider []
+  (let [branch (gl-vcs.get_git_branch)]
+    (if (= "master" branch) "" branch)))
+  
 (set galaxyline.section.right
-  [ { :GitBranch { :provider (fn [] 
-                               (let [branch (gl-vcs.get_git_branch)]
-                                 (if (= "master" branch) "" branch)))
-                   :highlight [colors.light4 colors.dark1] }} 
+  [ { :GitBranch { :provider git-branch-provider
+                   :highlight [colors.light4 colors.dark1]}} 
     { :FileType { :provider (fn [] nvim.bo.filetype)
-                  :highlight [colors.neutral_aqua colors.dark1] }}
+                  :highlight [colors.neutral_aqua colors.dark1]}}
 
-    { :DiagnosticInfo { :provider (provider-lsp-diag "Info")
-                        :highlight [colors.dark1 colors.neutral_blue] }}
-    { :DiagnosticWarn { :provider (provider-lsp-diag "Warning")
+    { :DiagnosticInfo { :provider (make-lsp-diagnostic-provider "Info")
+                        :highlight [colors.dark1 colors.neutral_blue]}}
+    { :DiagnosticWarn { :provider (make-lsp-diagnostic-provider "Warning")
                         :highlight [colors.dark1 colors.neutral_yellow]
-                         :separator "" }}
-    { :DiagnosticError { :provider (provider-lsp-diag "Error")
+                         :separator ""}}
+    { :DiagnosticError { :provider (make-lsp-diagnostic-provider "Error")
                          :highlight [colors.dark1 colors.bright_red]
-                         :separator "" }}
+                         :separator ""}}
     { :LineInfo { :provider (fn [] (.. " " (gl-fileinfo.line_column) " "))
                   :highlight "GalaxyViMode"
-                  :separator "" }}])
-
-
-
+                  :separator ""}}])
 
 (do
   (fn add-segment-defaults [data] 

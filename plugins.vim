@@ -138,7 +138,7 @@ call plug#begin('~/.vim/plugged')
   Plug 'bakpakin/fennel.vim'
 
   Plug 'tjdevries/nlua.nvim'
-  Plug 'nvim-lua/completion-nvim'
+  "Plug 'nvim-lua/completion-nvim'
 
   "Plug 'mxw/vim-prolog'
 

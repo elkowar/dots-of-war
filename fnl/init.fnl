@@ -7,9 +7,7 @@
             gl plugins.galaxyline
             lsp plugins.lsp}
     require-macros [macros]})
-    ;include {keybinds keybinds }})
 
-(local colors (utils.colors))
 
 (global pp 
   (fn [x] 
@@ -19,6 +17,7 @@
 
 
 
+(local colors (utils.colors))
 (local bufferline (require "bufferline"))
 
 ; :h bufferline-lua-highlights
