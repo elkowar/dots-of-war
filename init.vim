@@ -9,8 +9,6 @@
 let g:vim_config_root = expand('<sfile>:p:h')
 let $VIM_ROOT = g:vim_config_root
 
-let g:vimspector_enable_mappings = 'HUMAN'
-
 source $VIM_ROOT/plugins.vim
 
 

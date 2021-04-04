@@ -53,8 +53,11 @@
 
 
 (defn highlight [group colset] 
-  (nvim.command (.. "hi " group " guifg='" colset.fg "' guibg='" colset.bg "' gui=NONE")))
+  (let [default { :fg "NONE" :bg "NONE" :gui "NONE"}
+        opts (a.merge default colset)]
+    (nvim.command (.. "hi! "group" guifg='"opts.fg"' guibg='"opts.bg"' gui='"opts.gui"'"))))
 
 
-(defn comp [f g ...]
-  (f (g ...)))
+(defn comp [f g]
+  (fn [...]
+    (f (g ...))))

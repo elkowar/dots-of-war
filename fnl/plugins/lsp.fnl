@@ -4,6 +4,7 @@
             nvim aniseed.nvim 
             lsp lspconfig 
             saga lspsaga 
+            utils utils
             compe compe}
 
 
@@ -12,16 +13,17 @@
 
 (fn on_attach [client bufnr]
   (if client.resolved_capabilities.document_highlight
-    (vim.api.nvim_exec
-      "hi LspReferenceRead cterm=bold ctermbg=red guibg='#8ec07c' guifg='#282828' 
-       hi LspReferenceText cterm=bold ctermbg=red guibg='#8ec07c' guifg='#282828' 
-       hi LspReferenceWrite cterm=bold ctermbg=red guibg='#8ec07c' guifg='#282828' 
-       augroup lsp_document_highlight
-         autocmd! * <buffer> 
-         autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight() 
-         autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
-       augroup END"
-      false)))
+    (do
+      (utils.highlight "LspReferenceRead"  {:gui "underline"})
+      (utils.highlight "LspReferenceText"  {:gui "underline"})
+      (utils.highlight "LspReferenceWrite" {:gui "underline"})
+      (vim.api.nvim_exec
+         "augroup lsp_document_highlight
+           autocmd! * <buffer> 
+           autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight() 
+           autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
+         augroup END"
+        false))))
 
 
 (lsp.rust_analyzer.setup { :on_attach on_attach })
@@ -29,7 +31,7 @@
 (lsp.vimls.setup { :on_attach on_attach })
 (lsp.tsserver.setup { :on_attach on_attach })
 (lsp.bashls.setup { :on_attach on_attach })
-(lsp.html.setup { :on_attach on_attach })
+(lsp.html.setup { :on_attach on_attach})
 
 (lsp.denols.setup { :on_attach on_attach
     :root_dir (lsp.util.root_pattern ".git") })
@@ -68,3 +70,11 @@
                           :scroll_up "<C-u>" 
                           :scroll_down "<C-d>"}})
  
+
+(utils.highlight "LspSagaCodeActionTitle"    {:fg "#8ec07c"})
+(utils.highlight "LspSagaBorderTitle"        {:fg "#8ec07c"})
+(utils.highlight "LspSagaCodeActionContent"  {:fg "#8ec07c"})
+(utils.highlight "LspSagaFinderSelection"    {:fg "#8ec07c"})
+(utils.highlight "LspSagaDiagnosticHeader"   {:fg "#8ec07c"})
+
+(set nvim.o.signcolumn "yes")
