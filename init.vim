@@ -346,25 +346,9 @@ nnoremap ö a
 
 
 
-source $VIM_ROOT/whichkeyConfig.vim
-
-"luafile $VIM_ROOT/lsp.lua
-"source $VIM_ROOT/lsp.vim
+"source $VIM_ROOT/whichkeyConfig.vim
 
 let g:aniseed#env = v:true
 
-
 let g:lexima_no_default_rules = v:true
 call lexima#set_default_rules()
-
-"inoremap <silent><expr> <C-Space> compe#complete()
-"inoremap <silent><expr> <CR> compe#confirm('<CR>')
-"inoremap <silent><expr> <esc> compe#close('<esc>')
-
-
-"nnoremap <silent> <C-d> <cmd>lua require('lspsaga.action').smart_scroll_with_saga(1)<CR>
-"nnoremap <silent> <C-u> <cmd>lua require('lspsaga.action').smart_scroll_with_saga(-1)<CR>
-
-
-
-

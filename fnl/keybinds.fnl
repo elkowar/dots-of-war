@@ -71,9 +71,6 @@
 
 (set nvim.o.timeoutlen 200)
 
-
-
-; TODO
-; autocmd! VimEnter * :unmap <space>ig
-; autocmd! FileType which_key)
-
+(nvim.command
+  "autocmd! VimEnter * :unmap <space>ig
+   autocmd! FileType which_key")
