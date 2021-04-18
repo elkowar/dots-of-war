@@ -7,6 +7,8 @@ endif
 
 call plug#begin('~/.vim/plugged')
 
+  Plug 'kevinhwang91/nvim-bqf'
+
   Plug 'akinsho/nvim-bufferline.lua'
 
   Plug 'Olical/aniseed', { 'tag': 'v3.16.0' }
@@ -102,7 +104,7 @@ call plug#begin('~/.vim/plugged')
   Plug 'neovim/nvim-lspconfig'
   Plug 'hrsh7th/nvim-compe'
   Plug 'glepnir/lspsaga.nvim'
-  Plug 'cohama/lexima.vim'
+  "Plug 'cohama/lexima.vim'
 
   Plug 'nvim-lua/popup.nvim'
   Plug 'nvim-lua/plenary.nvim'

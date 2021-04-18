@@ -26,17 +26,16 @@
         false))))
 
 
-(lsp.rust_analyzer.setup { :on_attach on_attach })
+(lsp.rust_analyzer.setup { :on_attach on_attach})
 (lsp.jsonls.setup { :on_attach on_attach })
 (lsp.vimls.setup { :on_attach on_attach })
-(lsp.tsserver.setup { :on_attach on_attach })
+(lsp.tsserver.setup { :on_attach on_attach :root_dir (lsp.util.root_pattern "package.json")})
 (lsp.bashls.setup { :on_attach on_attach })
 (lsp.html.setup { :on_attach on_attach})
-
 (lsp.denols.setup { :on_attach on_attach
-    :root_dir (lsp.util.root_pattern ".git") })
-(lsp.hls.setup { :on_attach on_attach }
-    :settings { :languageServerHaskell { :formattingProvider "stylish-haskell" }})
+                    :root_dir (lsp.util.root_pattern ".git")})
+(lsp.hls.setup { :on_attach on_attach
+                 :settings { :languageServerHaskell { :formattingProvider "stylish-haskell"}}})
 
 (compe.setup 
   { :enabled true
@@ -76,5 +75,6 @@
 (utils.highlight "LspSagaCodeActionContent"  {:fg "#8ec07c"})
 (utils.highlight "LspSagaFinderSelection"    {:fg "#8ec07c"})
 (utils.highlight "LspSagaDiagnosticHeader"   {:fg "#8ec07c"})
+(utils.highlight "TargetWord"   {:fg "#8ec07c"})
 
 (set nvim.o.signcolumn "yes")

@@ -121,6 +121,11 @@ augroup basics
 
   " file type assignments
   autocmd BufRead,BufNewFile *.ddl setlocal filetype=sql
+
+
+  " Auto-close quickfix list after entry is selected
+  autocmd FileType qf nnoremap <buffer> <CR> <CR>:cclose<CR>
+
 augroup END
 
 
@@ -345,10 +350,12 @@ nnoremap ö a
 " }}}
 
 
+" how 2 highlight group at cursor
+":exe 'hi '.synIDattr(synID(line("."), col("."), 0),"name")
 
 "source $VIM_ROOT/whichkeyConfig.vim
 
 let g:aniseed#env = v:true
 
-let g:lexima_no_default_rules = v:true
-call lexima#set_default_rules()
+"let g:lexima_no_default_rules = v:true
+"call lexima#set_default_rules()

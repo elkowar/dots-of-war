@@ -3,10 +3,12 @@
             fennel aniseed.fennel 
             nvim aniseed.nvim 
             kb keybinds 
-            utils utils
-            gl plugins.galaxyline
-            lsp plugins.lsp}
+            utils utils}
     require-macros [macros]})
+
+(require "plugins.telescope")
+(require "plugins.lsp")
+(require "plugins.galaxyline")
 
 
 (global pp 
@@ -49,3 +51,5 @@
         :warning_visible visible
         :separator visible
         :indicator_selected {:guibg colors.neutral_aqua :guifg colors.neutral_aqua}}}))
+
+

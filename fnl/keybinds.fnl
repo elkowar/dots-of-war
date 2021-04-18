@@ -10,7 +10,7 @@
 (utils.noremap :v :<leader> ":<c-u>WhichKeyVisual '<Space>'<CR>")
 
 (utils.mapexpr :i :<C-Space> "compe#complete()")
-(utils.mapexpr :i :<CR> "compe#confirm(lexima#expand('<LT>CR>', 'i'))")
+;(utils.mapexpr :i :<CR> "compe#confirm(lexima#expand('<LT>CR>', 'i'))")
 (utils.mapexpr :i :<esc> "compe#close('<esc>')")
 
 (fn le [s] (.. ":call luaeval(\"" s "\")"))
@@ -23,6 +23,8 @@
     "l" [ ":bnext" "next buffer"]
     "f" "which_key_ignore"
     "s" "which_key_ignore"
+    "o" [":Telescope live_grep"              "Grep files"]
+    "p" [":Telescope file_browser"           "Open file-browser"]
     "[" ["<Plug>(YoinkPostPasteSwapBack)"    "Swap last paste backwards"]
     "]" ["<Plug>(YoinkPostPasteSwapForward)" "Swap last paste backwards"]
     ":" [":Commands"                         "Search command with fzf"]
@@ -49,6 +51,7 @@
           "g" [ (le "vim.lsp.buf.definition()")        "go to definition"] 
           "i" [ (le "vim.lsp.buf.implementation()")    "show implementation"] 
           "r" [ (le "vim.lsp.buf.references()")        "show references"] 
+          ;"r" [ ":Telescope lsp_references"            "show references"] 
           "f" [ (le "vim.lsp.buf.formatting()")        "format file"]}
           
 
