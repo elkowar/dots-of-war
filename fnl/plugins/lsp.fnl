@@ -3,6 +3,7 @@
             fennel aniseed.fennel 
             nvim aniseed.nvim 
             lsp lspconfig 
+            lsp-configs lspconfig.configs
             saga lspsaga 
             utils utils
             compe compe}
@@ -26,16 +27,46 @@
         false))))
 
 
-(lsp.rust_analyzer.setup { :on_attach on_attach})
-(lsp.jsonls.setup { :on_attach on_attach })
-(lsp.vimls.setup { :on_attach on_attach })
+(fn better_root_pattern [patterns except-patterns]
+  "match path if one of the given patterns is matched, EXCEPT if one of the except-patterns is matched"
+  (fn [path] 
+    (when (not ((lsp.util.root_pattern except-patterns) path))
+      ((lsp.util.root_pattern patterns) path))))
+
+
+(local capabilities (vim.lsp.protocol.make_client_capabilities))
+(set capabilities.textDocument.completion.completionItem.snippetSupport true)
+(set capabilities.textDocument.completion.completionItem.resolveSupport
+      { :properties ["documentation"  "detail"  "additionalTextEdits"]})
+
+(lsp.rust_analyzer.setup { :on_attach on_attach
+                           :capabilities capabilities}) 
+(lsp.vimls.setup { :on_attach on_attach})
 (lsp.tsserver.setup { :on_attach on_attach :root_dir (lsp.util.root_pattern "package.json")})
 (lsp.bashls.setup { :on_attach on_attach })
 (lsp.html.setup { :on_attach on_attach})
 (lsp.denols.setup { :on_attach on_attach
-                    :root_dir (lsp.util.root_pattern ".git")})
+                    :root_dir (better_root_pattern [".git"] ["package.json"])})
 (lsp.hls.setup { :on_attach on_attach
                  :settings { :languageServerHaskell { :formattingProvider "stylish-haskell"}}})
+
+
+(lsp.jsonls.setup 
+  { :on_attach on_attach
+    :commands { :Format [ (fn [] (vim.lsp.buf.range_formatting [] [0 0] [(vim.fn.line "$") 0]))]}})
+
+  
+
+
+(when (not lsp.erlangls)
+  (set lsp-configs.erlangls
+    { :default_config 
+      { :cmd ["erlang_ls"]
+        :filetypes ["lua"]
+        :root_dir (lsp.util.root_pattern "rebar.config")
+        :settings {}}}))
+(lsp.erlangls.setup {})
+
 
 (compe.setup 
   { :enabled true

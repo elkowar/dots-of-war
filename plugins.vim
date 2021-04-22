@@ -66,7 +66,7 @@ call plug#begin('~/.vim/plugged')
 
   Plug 'bhurlow/vim-parinfer'
 
-  Plug 'Olical/conjure', {'tag': 'v4.17.0'}
+  "Plug 'Olical/conjure', {'tag': 'v4.17.0'}
 
 
   " Language Plugins ----------------------------------------------------- {{{
@@ -102,6 +102,8 @@ call plug#begin('~/.vim/plugged')
 
 
   Plug 'neovim/nvim-lspconfig'
+
+  "Plug 'nvim-lua/completion-nvim'
   Plug 'hrsh7th/nvim-compe'
   Plug 'glepnir/lspsaga.nvim'
   "Plug 'cohama/lexima.vim'

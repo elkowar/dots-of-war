@@ -15,7 +15,7 @@
   (fn [x] 
     (print (fennel.view x))))
 
-(set nvim.g.conjure#client#fennel#aniseed#aniseed_module_prefix "aniseed.")
+;(set nvim.g.conjure#client#fennel#aniseed#aniseed_module_prefix "aniseed.")
 
 
 
@@ -51,5 +51,4 @@
         :warning_visible visible
         :separator visible
         :indicator_selected {:guibg colors.neutral_aqua :guifg colors.neutral_aqua}}}))
-
 

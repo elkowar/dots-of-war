@@ -15,23 +15,23 @@
 (local colors (utils.colors))
 
 (local modes 
-  { :n  { :text "NORMAL"        :colors { :bg colors.neutral_aqua :fg colors.dark0}}
+  { :n  { :text "NORMAL"        :colors { :bg colors.neutral_aqua   :fg colors.dark0}}
     :i  { :text "INSERT"        :colors { :bg colors.neutral_yellow :fg colors.dark0}}
-    :c  { :text "CMD"           :colors { :bg colors.neutral_aqua :fg colors.dark0}}
-    :ce { :text "NORMEX"        :colors { :bg colors.neutral_aqua :fg colors.dark0}}
-    :cv { :text "EX"            :colors { :bg colors.neutral_aqua :fg colors.dark0}}
-    :ic { :text "INSCOMP"       :colors { :bg colors.neutral_aqua :fg colors.dark0}}
-    :no { :text "OP-PENDING"    :colors { :bg colors.neutral_aqua :fg colors.dark0}}
-    :r  { :text "HIT-ENTER"     :colors { :bg colors.neutral_aqua :fg colors.dark0}}
-    :r? { :text "CONFIRM"       :colors { :bg colors.neutral_aqua :fg colors.dark0}}
-    :R  { :text "REPLACE"       :colors { :bg colors.neutral_aqua :fg colors.dark0}}
-    :Rv { :text "VIRTUAL"       :colors { :bg colors.neutral_aqua :fg colors.dark0}}
-    :s  { :text "SELECT"        :colors { :bg colors.neutral_aqua :fg colors.dark0}}
-    :S  { :text "SELECT"        :colors { :bg colors.neutral_aqua :fg colors.dark0}}
-    :t  { :text "TERM"          :colors { :bg colors.neutral_aqua :fg colors.dark0}}
-    :v  { :text "VISUAL"        :colors { :bg colors.neutral_blue :fg colors.dark0}}
-    :V  { :text "VISUAL LINE"   :colors { :bg colors.neutral_blue :fg colors.dark0}}
-    "" { :text "VISUAL BLOCK" :colors { :bg colors.neutral_blue :fg colors.dark0}}})
+    :c  { :text "CMD"           :colors { :bg colors.neutral_aqua   :fg colors.dark0}}
+    :ce { :text "NORMEX"        :colors { :bg colors.neutral_aqua   :fg colors.dark0}}
+    :cv { :text "EX"            :colors { :bg colors.neutral_aqua   :fg colors.dark0}}
+    :ic { :text "INSCOMP"       :colors { :bg colors.neutral_aqua   :fg colors.dark0}}
+    :no { :text "OP-PENDING"    :colors { :bg colors.neutral_aqua   :fg colors.dark0}}
+    :r  { :text "HIT-ENTER"     :colors { :bg colors.neutral_aqua   :fg colors.dark0}}
+    :r? { :text "CONFIRM"       :colors { :bg colors.neutral_aqua   :fg colors.dark0}}
+    :R  { :text "REPLACE"       :colors { :bg colors.neutral_aqua   :fg colors.dark0}}
+    :Rv { :text "VIRTUAL"       :colors { :bg colors.neutral_aqua   :fg colors.dark0}}
+    :s  { :text "SELECT"        :colors { :bg colors.neutral_aqua   :fg colors.dark0}}
+    :S  { :text "SELECT"        :colors { :bg colors.neutral_aqua   :fg colors.dark0}}
+    :t  { :text "TERM"          :colors { :bg colors.neutral_aqua   :fg colors.dark0}}
+    :v  { :text "VISUAL"        :colors { :bg colors.neutral_blue   :fg colors.dark0}}
+    :V  { :text "VISUAL LINE"   :colors { :bg colors.neutral_blue   :fg colors.dark0}}
+    "" { :text "VISUAL BLOCK" :colors { :bg colors.neutral_blue   :fg colors.dark0}}})
 
 
 (fn buf-empty? [] 
