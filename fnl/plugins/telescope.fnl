@@ -13,5 +13,5 @@
   {:defaults
     {:i { "<esc>" actions.close}}})
 
-            
+(telescope.load_extension "media_files")
              

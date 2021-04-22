@@ -123,7 +123,7 @@ augroup basics
   autocmd BufRead,BufNewFile *.ddl setlocal filetype=sql
 
 
-  " Auto-close quickfix list after entry is selected
+  " Auto-close quickfix list when element 
   autocmd FileType qf nnoremap <buffer> <CR> <CR>:cclose<CR>
 
 augroup END
@@ -214,7 +214,6 @@ au Syntax * RainbowParenthesesLoadBraces
 nnoremap <silent> <C-p> :Telescope find_files<CR>
 
 
-lua require('telescope').load_extension('media_files')
 
 
 "map <Leader>f <Plug>(easymotion-bd-f)
