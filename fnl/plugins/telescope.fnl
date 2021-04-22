@@ -15,3 +15,4 @@
 
 (telescope.load_extension "media_files")
              
+(utils.noremap :n :<C-p> ":Telescope find_files<CR>")
