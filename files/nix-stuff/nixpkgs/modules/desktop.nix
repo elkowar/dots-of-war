@@ -68,7 +68,7 @@ in
 
     };
 
-    systemd.user.services.dunst.Environment.DISPLAY = ":1";
+    #systemd.user.services.dunst.Environment.DISPLAY = ":1";
 
     services = {
       mpd = {
@@ -80,23 +80,23 @@ in
         enable = true;
       };
 
-      dunst =
-        let dunst_settings = {
-          geometry = "500x5-30+50";
-          background = cfg.colors.primary.bg_darker;
-          foreground = cfg.colors.primary.foreground;
-          padding = "20px";
-          horizontal_padding = "20px";
-          font = "Terminus (TTF)";
-        };
-        in
-        {
-          enable = true;
-          settings.global = dunst_settings;
-          settings.urgency_normal = dunst_settings;
+      #dunst =
+        #let dunst_settings = {
+          #geometry = "500x5-30+50";
+          #background = cfg.colors.primary.bg_darker;
+          #foreground = cfg.colors.primary.foreground;
+          #padding = "20px";
+          #horizontal_padding = "20px";
+          #font = "Terminus (TTF)";
+        #};
+        #in
+        #{
+          #enable = true;
+          #settings.global = dunst_settings;
+          #settings.urgency_normal = dunst_settings;
 
-          settings.urgency_low = dunst_settings;
-        };
+          #settings.urgency_low = dunst_settings;
+        #};
     };
 
     xresources.properties = with config.elkowar.desktop.colors; {

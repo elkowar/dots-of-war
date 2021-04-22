@@ -10,7 +10,7 @@ in
   config = lib.mkIf cfg.enable {
     gtk = {
       enable = true;
-      theme.name = "my_phocus";
+      theme.name = "elkowars_phocus";
       iconTheme.name = "oomox-materia-dark";
       #iconTheme.name = "Numix";
       #font.name = "Terminus (TTF) 12";

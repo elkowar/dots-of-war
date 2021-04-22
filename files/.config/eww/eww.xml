@@ -10,13 +10,26 @@
 
    <def name="test">
       <box class="{{some_var}}"  space-evenly="false" spacing="10">
-        testing {{shit}}
+        testing {{shit}} bruh
 
         is shit true? {{shit == true}}
         is shit "shit"? {{shit == "shit"}}
 
-        true and false 🤔 {{ true && false }}
+        true and false 🤔 
+        {{ true && false }}
+        
         fancy ass math {{ 12 + 5 * 12 * 4 }}
+
+
+          bruh &quot; &lt; fuck &gt;
+        "
+        <label text="&lt; &gt; bruh &quot;"/>
+
+
+        {{bruh.hi}} HEHE {{bruh.ho}}
+        Watch this:
+        {{bruh.list[bruh.myIndex]}}
+
 
         <if-else cond="{{shit == 'yea'}}">
           <box>hi</box>
@@ -125,6 +138,11 @@
     </script-var>
 
 
+    <var name="bruh">
+      {"hi": "ho"}
+    </var>
+
+
 
     
 
@@ -149,7 +167,7 @@
     </window>
     <window screen="1" name="mw" stacking="fg" focusable="false">
     <!--<window screen="2" name="mw" stacking="fg" focusable="false">-->
-      <reserve side="l" distance="500px"/>
+      <!--<reserve side="l" distance="500px"/>-->
       <geometry anchor="center" width="200px" height="200px" x="0px" y="0px"/>
       <widget>
         <test ree="test" />

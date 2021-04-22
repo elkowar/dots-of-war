@@ -5,9 +5,9 @@ echo "---" | tee -a /tmp/polybar1.log /tmp/polybar2.log
 
 
 outputs=$(xrandr --query | grep " connected" | cut -d" " -f1)
-tray_output=HDMI-A-0
+tray_output=HDMI-A-1
 for m in $outputs; do
-  if [[ $m != "DP-1" ]]; then
+  if [[ $m != "DisplayPort-1" ]]; then
     tray_output=$m
   fi
 done

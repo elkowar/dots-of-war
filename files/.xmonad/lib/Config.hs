@@ -265,7 +265,7 @@ myStartupHook = do
   --spawnOnce "redshift -P -O 5000 &"
   spawn "xset r rate 300 50 &" -- make key repeat quicker
   --spawn "/home/leon/.screenlayout/dualscreen-stacked.sh"
-  spawn "/home/leon/.screenlayout/tripplescreen.sh"
+  spawn "/home/leon/.screenlayout/tripplescreen-fixed.sh"
   spawnOnce "xsetroot -cursor_name left_ptr"
   spawnOnce "xrdb -merge ~/.Xresources"
   io $ threadDelay $ 1000 * 100
@@ -338,18 +338,19 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
   multiMonitorBindings :: [(String, X ())]
   multiMonitorBindings =
     [ ("M-s",   windows $ IS.focusScreen 2)
-    , ("M-a",   windows $ IS.focusScreen 1)
-    , ("M-d",   windows $ IS.focusScreen 0)
+    , ("M-a",   windows $ IS.focusScreen 0)
+    , ("M-d",   windows $ IS.focusScreen 1)
     , ("M-S-s", windows $ IS.withWspOnScreen 2 (\wsp -> W.view wsp . W.shift wsp))
-    , ("M-S-a", windows $ IS.withWspOnScreen 1 (\wsp -> W.view wsp . W.shift wsp))
-    , ("M-S-d", windows $ IS.withWspOnScreen 0 (\wsp -> W.view wsp . W.shift wsp))
+    , ("M-S-a", windows $ IS.withWspOnScreen 0 (\wsp -> W.view wsp . W.shift wsp))
+    , ("M-S-d", windows $ IS.withWspOnScreen 1 (\wsp -> W.view wsp . W.shift wsp))
     , ("M-C-s", windows swapScreenContents)
     ]
 
   programLaunchBindings :: [(String, X ())]
   programLaunchBindings =
     [ ("M-p",      spawn myLauncher)
-    , ("M-S-p",    Rofi.showCombi  def [ "drun", "ssh" ])
+    --, ("M-S-p",    Rofi.showCombi  def [ "drun", "ssh" ])
+    , ("M-S-p",    Rofi.showNormal def "drun")
     , ("M-S-e",    Rofi.showNormal (def { Rofi.fuzzy = False }) "emoji")
     --, ("M-s",      spawn $ scriptFile "rofi-search.sh")
     , ("M-S-o",    spawn $ scriptFile "rofi-open.sh")
