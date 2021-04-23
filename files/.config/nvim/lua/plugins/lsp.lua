@@ -19,11 +19,11 @@ end
 local function _1_(...)
   local ok_3f_0_, val_0_ = nil, nil
   local function _1_()
-    return {require("aniseed.core"), require("compe"), require("aniseed.fennel"), require("lspconfig"), require("lspconfig.configs"), require("aniseed.nvim"), require("lspsaga"), require("utils")}
+    return {require("aniseed.core"), require("compe"), require("aniseed.fennel"), require("lspconfig"), require("lspconfig.configs"), require("lsp_signature"), require("aniseed.nvim"), require("lspsaga"), require("utils")}
   end
   ok_3f_0_, val_0_ = pcall(_1_)
   if ok_3f_0_ then
-    _0_0["aniseed/local-fns"] = {["require-macros"] = {macros = true}, require = {["lsp-configs"] = "lspconfig.configs", a = "aniseed.core", compe = "compe", fennel = "aniseed.fennel", lsp = "lspconfig", nvim = "aniseed.nvim", saga = "lspsaga", utils = "utils"}}
+    _0_0["aniseed/local-fns"] = {["require-macros"] = {macros = true}, require = {["lsp-configs"] = "lspconfig.configs", a = "aniseed.core", compe = "compe", fennel = "aniseed.fennel", lsp = "lspconfig", lsp_signature = "lsp_signature", nvim = "aniseed.nvim", saga = "lspsaga", utils = "utils"}}
     return val_0_
   else
     return print(val_0_)
@@ -35,13 +35,15 @@ local compe = _local_0_[2]
 local fennel = _local_0_[3]
 local lsp = _local_0_[4]
 local lsp_configs = _local_0_[5]
-local nvim = _local_0_[6]
-local saga = _local_0_[7]
-local utils = _local_0_[8]
+local lsp_signature = _local_0_[6]
+local nvim = _local_0_[7]
+local saga = _local_0_[8]
+local utils = _local_0_[9]
 local _2amodule_2a = _0_0
 local _2amodule_name_2a = "plugins.lsp"
 do local _ = ({nil, _0_0, {{nil}, nil, nil, nil}})[2] end
 local function on_attach(client, bufnr)
+  lsp_signature.on_attach()
   if client.resolved_capabilities.document_highlight then
     utils.highlight("LspReferenceRead", {gui = "underline"})
     utils.highlight("LspReferenceText", {gui = "underline"})

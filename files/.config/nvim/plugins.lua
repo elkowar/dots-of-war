@@ -13,11 +13,17 @@ vim.cmd [[packadd packer.nvim]]
 
 require("packer").startup(function(use)
   
-  use_rocks 'rtsisyk/fun'
+  use_rocks "rtsisyk/fun"
 
+  -- better quickfix window
   use "kevinhwang91/nvim-bqf"
 
-  use "akinsho/nvim-bufferline.lua"
+  -- json query stuff
+  use {
+    "gennaro-tedesco/nvim-jqx",
+    ft = { "json" }
+  }
+
 
   use {
     "Olical/aniseed", 
@@ -26,30 +32,21 @@ require("packer").startup(function(use)
 
   -- general purpose lua wrappers for nvim stuff
   use "norcalli/nvim.lua"
-
+  use "akinsho/nvim-bufferline.lua"
   use "tweekmonster/startuptime.vim"
   use "tpope/vim-repeat"
-
   use {
     "junegunn/goyo.vim",
     cmd = "Goyo",
   }
-
   use "liuchengxu/vim-which-key"
-
   use "mhinz/vim-signify"
-
   use "tpope/vim-fugitive"
-
   use "preservim/nerdcommenter"
-
   use "glepnir/galaxyline.nvim"
-
   use "gruvbox-community/gruvbox"
-
   use "godlygeek/tabular"               -- :Tab /regex can align code on occurrences of the given regex. I.e. :Tab /= aligns all = signs in a block.
   use "tpope/vim-surround"
-
   use "christoomey/vim-tmux-navigator"  -- good integration with tmux pane switching
   use "nathanaelkane/vim-indent-guides" -- Can be toggled using <leader>ig (intent-guides)
 
@@ -59,7 +56,6 @@ require("packer").startup(function(use)
   use "mg979/vim-visual-multi"
   use "hauleth/sad.vim"          -- Use siw instead of ciw. when using . afterwards, will find the next occurrence of the changed word and change it too
   use "wellle/targets.vim"       -- more text objects. IE: cin) (change in next parens). generally better handling of surrounding objects.
-
   use "unblevable/quick-scope"   -- highlight targets when pressing f<character>
   use {
     "iamcco/markdown-preview.nvim", 
@@ -67,21 +63,18 @@ require("packer").startup(function(use)
   }
 
   use "machakann/vim-highlightedyank"
-
   use "ciaranm/detectindent"
   use "pechorin/any-jump.vim"
   use "justinmk/vim-sneak"
   use "psliwka/vim-smoothie"
-
   use "editorconfig/editorconfig-vim"
-
   use "honza/vim-snippets"
-
   use "tommcdo/vim-exchange"
-
   use "kien/rainbow_parentheses.vim"
-
   use "bhurlow/vim-parinfer"
+
+
+  use "ray-x/lsp_signature.nvim"
 
   -- Language Plugins ----------------------------------------------------- {{{
 

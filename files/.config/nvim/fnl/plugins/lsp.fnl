@@ -6,13 +6,12 @@
             lsp-configs lspconfig.configs
             saga lspsaga 
             utils utils
-            compe compe}
-
-
+            compe compe
+            lsp_signature lsp_signature}
     require-macros [macros]})
 
-
 (fn on_attach [client bufnr]
+  (lsp_signature.on_attach)
   (if client.resolved_capabilities.document_highlight
     (do
       (utils.highlight "LspReferenceRead"  {:gui "underline"})

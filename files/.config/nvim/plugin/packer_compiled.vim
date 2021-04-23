@@ -109,6 +109,10 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/leon/.local/share/nvim/site/pack/packer/start/haskell-vim"
   },
+  ["lsp_signature.nvim"] = {
+    loaded = true,
+    path = "/home/leon/.local/share/nvim/site/pack/packer/start/lsp_signature.nvim"
+  },
   ["lspsaga.nvim"] = {
     loaded = true,
     path = "/home/leon/.local/share/nvim/site/pack/packer/start/lspsaga.nvim"
@@ -136,6 +140,11 @@ _G.packer_plugins = {
   ["nvim-compe"] = {
     loaded = true,
     path = "/home/leon/.local/share/nvim/site/pack/packer/start/nvim-compe"
+  },
+  ["nvim-jqx"] = {
+    loaded = false,
+    needs_bufread = false,
+    path = "/home/leon/.local/share/nvim/site/pack/packer/opt/nvim-jqx"
   },
   ["nvim-lspconfig"] = {
     loaded = true,
@@ -310,6 +319,13 @@ time("Defining lazy-load commands", true)
 vim.cmd [[command! -nargs=* -range -bang -complete=file Goyo lua require("packer.load")({'goyo.vim'}, { cmd = "Goyo", l1 = <line1>, l2 = <line2>, bang = <q-bang>, args = <q-args> }, _G.packer_plugins)]]
 time("Defining lazy-load commands", false)
 
+vim.cmd [[augroup packer_load_aucmds]]
+vim.cmd [[au!]]
+  -- Filetype lazy-loads
+time("Defining lazy-load filetype autocommands", true)
+vim.cmd [[au FileType json ++once lua require("packer.load")({'nvim-jqx'}, { ft = "json" }, _G.packer_plugins)]]
+time("Defining lazy-load filetype autocommands", false)
+vim.cmd("augroup END")
 if should_profile then save_profiles() end
 
 END
