@@ -1,0 +1,36 @@
+#!/bin/sh -x
+#   top text
+#
+#  bottom text
+
+dir=/home/leon/copy-pasta/meme-maker
+c=${XDG_CACHE_HOME:=$HOME/.cache}/meme.png
+
+# template
+file=$(ls "$dir" | rofi -dmenu -p file)
+[ -f "$dir/$file" ] || exit 1
+
+# TOP TEXT
+top=$(:| rofi -dmenu -p top | sed "s/'/\\\\\\\\\\\\'/g")
+# BOTTOM TEXT
+bottom=$(:| rofi -dmenu -p bottom | sed "s/'/\\\\\\\\\\\\'/g")
+[ "$bottom$top" ] || exit 1
+
+# prevent repetition of a stupidly long line
+a=':x=(w-text_w)/2:fontcolor=white:bordercolor=black:borderw=3'
+b=':fontsize=30'
+case $file in
+	grave)
+		a=${a%?}0
+		ffmpeg -y -loglevel error -i "$dir/$file" \
+			-vf "drawtext=font=Comic Sans MS:text=$top:y=350$a:fontsize=80, drawtext='font=Comic Sans MS:text=$bottom':y=660$a:fontsize=50" \
+			"$c";;
+	*)
+		# draw the top/bottom text with ffmpeg (no likey imagemagick)
+		ffmpeg -y -loglevel error -i "$dir/$file" \
+			-vf "drawtext=text=$top:y=30$a$b, drawtext=text=$bottom:y=h-60$a$b" \
+			"$c"
+esac
+
+# copy to clipboard
+xclip -sel clip -t image/png "$c"
