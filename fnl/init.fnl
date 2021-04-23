@@ -50,5 +50,13 @@
         :warning_selected selected
         :warning_visible visible
         :separator visible
-        :indicator_selected {:guibg colors.neutral_aqua :guifg colors.neutral_aqua}}}))
+        :indicator_selected {:guibg colors.neutral_aqua :guifg colors.neutral_aqua}
+
+        ; stuff I've never seen before :thonk:
+        :pick_selected {:guibg colors.bright_red :guifg colors.bright_red}
+        :tab_selected {:guibg colors.bright_green :guifg colors.bright_green}
+        :tab {:guibg colors.bright_yellow :guifg colors.bright_yellow}}}))
+
+
+(utils.highlight :BufferLineInfoSelected { :bg colors.neutral_aqua :fg colors.dark0 :gui "NONE"})
 
