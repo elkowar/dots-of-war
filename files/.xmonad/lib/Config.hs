@@ -365,7 +365,8 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
     , ("M-b",          safeSpawnProg "google-chrome-stable")
     , ("M-S-<Return>", spawn myTerminal)
     --, ("M-S-<Return>", launchWithBackgroundInstance (className =? "Alacritty") "alacritty")
-    , ("M-S-<", spawn "flameshot gui")
+    , ("M-S-<",    spawn "flameshot gui")
+    , ("M-z",      spawn $ scriptFile "copy-pasta.sh")
 
 
     , ("M-S-h", fuckshit)
