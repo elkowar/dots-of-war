@@ -1,5 +1,9 @@
 use: rofi -dmenu -i
 
+menu: copy :: -no-custom
+  make => /home/leon/scripts/memeaker
+  copy => /home/leon/scripts/copy-pasta.sh
+
 menu: set-redshift :: -no-custom
   off     => redshift -x
   medium  => redshift -P -O 5000

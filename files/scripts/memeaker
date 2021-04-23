@@ -6,6 +6,8 @@
 dir=/home/leon/copy-pasta/meme-maker
 c=${XDG_CACHE_HOME:=$HOME/.cache}/meme.png
 
+rm "$c"
+
 # template
 file=$(ls "$dir" | rofi -dmenu -p file)
 [ -f "$dir/$file" ] || exit 1
