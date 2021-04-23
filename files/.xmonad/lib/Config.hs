@@ -274,6 +274,7 @@ myStartupHook = do
   spawn "/home/leon/.config/polybar/launch.sh"
   spawnOnce "nitrogen --restore"
   spawnOnce "mailnag"
+  spawnOnce "flameshot"
   spawn "flashfocus"
   for_ ["led1", "led2"] $ \led -> safeSpawn "sudo" ["liquidctl", "set", led, "color", "fixed", "00ffff"]
   withDisplay $ \dpy -> do
@@ -361,7 +362,7 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
 
     --, ("M-b",          launchWithBackgroundInstance (className =? "qutebrowser") "bwrap --bind / / --dev-bind /dev /dev --tmpfs /tmp --tmpfs /run qutebrowser")
     --, ("M-b",          safeSpawnProg "qutebrowser")
-    , ("M-b",          safeSpawnProg "firefox")
+    , ("M-b",          safeSpawnProg "google-chrome-stable")
     , ("M-S-<Return>", spawn myTerminal)
     --, ("M-S-<Return>", launchWithBackgroundInstance (className =? "Alacritty") "alacritty")
     , ("M-S-<", spawn "flameshot gui")
@@ -633,6 +634,7 @@ focusWindow' window ws
   | otherwise = case W.findTag window ws of
       Just tag ->  IS.focusScreen (IS.unmarshallS tag) ws
       Nothing -> ws
+
 
 
 -- | Fixes fullscreen behaviour of chromium based apps by quickly applying and undoing a resize.

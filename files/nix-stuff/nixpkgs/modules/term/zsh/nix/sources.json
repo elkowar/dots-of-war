@@ -17,10 +17,10 @@
         "homepage": null,
         "owner": "Aloxaf",
         "repo": "fzf-tab",
-        "rev": "0c36bdcf6a80ec009280897f07f56969f94d377e",
-        "sha256": "0ymp9ky0jlkx9b63jajvpac5g3ll8snkf8q081g0yw42b9hwpiid",
+        "rev": "b5e836f1d271507db40e23deadde75d8c9fef078",
+        "sha256": "0rg8wyk39f4v09q4imw3dh6m9i9aijk52175dmjjmqcbszy29wq9",
         "type": "tarball",
-        "url": "https://github.com/Aloxaf/fzf-tab/archive/0c36bdcf6a80ec009280897f07f56969f94d377e.tar.gz",
+        "url": "https://github.com/Aloxaf/fzf-tab/archive/b5e836f1d271507db40e23deadde75d8c9fef078.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "niv": {
@@ -65,10 +65,10 @@
         "homepage": "",
         "owner": "olets",
         "repo": "zsh-abbr",
-        "rev": "28e3543cbfbc66e6e569fe2a3f681820d6d73188",
-        "sha256": "0y1hi20s51fws9m18b3lbpcbja2b39lj729a4kyvipv7irwilhgw",
+        "rev": "7609657a39738ee512af33a5c39733b7ea94cff3",
+        "sha256": "01fp7f8j6i93yqy0p6c2vgq4z1gcdil4mrpqjp4n3akj9w5zxgj8",
         "type": "tarball",
-        "url": "https://github.com/olets/zsh-abbr/archive/28e3543cbfbc66e6e569fe2a3f681820d6d73188.tar.gz",
+        "url": "https://github.com/olets/zsh-abbr/archive/7609657a39738ee512af33a5c39733b7ea94cff3.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "zsh-abbrev-alias": {
