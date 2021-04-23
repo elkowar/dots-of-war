@@ -88,5 +88,5 @@ utils.highlight("LspSagaCodeActionContent", {fg = "#8ec07c"})
 utils.highlight("LspSagaFinderSelection", {fg = "#8ec07c"})
 utils.highlight("LspSagaDiagnosticHeader", {fg = "#8ec07c"})
 utils.highlight("TargetWord", {fg = "#8ec07c"})
-nvim.o.signcolumn = "yes"
+vim.o.signcolumn = "yes"
 return nil

@@ -31,7 +31,10 @@
       (if (~= remapped-space.old "")
         (utils.keymap :i :<Space> remapped-space.old {:buffer true}))
       (set remapped-space nil))))
-  
+ 
+
+
+
 
 (nvim.command "autocmd! InsertLeave * :call v:lua.UnbindSpaceStuff()")
 (utils.keymap :n "<Tab>j" ":call v:lua.RebindShit('_')<CR>")

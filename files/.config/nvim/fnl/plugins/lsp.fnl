@@ -101,4 +101,4 @@
 (utils.highlight "LspSagaDiagnosticHeader"   {:fg "#8ec07c"})
 (utils.highlight "TargetWord"   {:fg "#8ec07c"})
 
-(set nvim.o.signcolumn "yes")
+(set vim.o.signcolumn "yes")

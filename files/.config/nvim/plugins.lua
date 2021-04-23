@@ -32,6 +32,8 @@ require("packer").startup(function(use)
 
   -- general purpose lua wrappers for nvim stuff
   use "norcalli/nvim.lua"
+
+
   use "akinsho/nvim-bufferline.lua"
   use "tweekmonster/startuptime.vim"
   use "tpope/vim-repeat"
