@@ -1,0 +1,157 @@
+verbosity = 3
+[semantic_scopes]
+# Map textmate scopes to kakoune faces for semantic highlighting
+# the underscores are translated to dots, and indicate nesting.
+# That is, if variable_other_field is omitted, it will try the face for
+# variable_other and then variable
+#
+# To see a list of available scopes in the debug buffer, run lsp-semantic-available-scopes
+variable="variable"
+entity_name_function="function"
+entity_name_type="type"
+variable_other_enummember="variable"
+entity_name_namespace="module"
+
+[server]
+# exit session if no requests were received during given period in seconds
+# works only in unix sockets mode (-s/--session)
+# set to 0 to disable
+timeout = 1800 # seconds = 30 minutes
+
+[language.nix]
+filetypes = ["nix"]
+roots = [".git"]
+command = "/home/leon/coding/projects/rnix-lsp/target/debug/rnix-lsp"
+args = []
+
+[language.tsx]
+filetypes = ["typescript", "typescript-tsx"]
+roots = ["package.json", "tsconfig.json"]
+command = "npx"
+args = ["typescript-language-server", "--stdio"]
+
+[language.rust]
+filetypes = ["rust"]
+roots = ["Cargo.toml"]
+command = "rust-analyzer"
+
+[language.crystal]
+filetypes = ["crystal"]
+roots = ["shard.yml"]
+command = "scry"
+
+[language.javascript]
+filetypes = ["javascript"]
+roots = [".flowconfig"]
+command = "flow"
+args = ["lsp"]
+
+[language.json]
+filetypes = ["json"]
+roots = ["package.json"]
+command = "json-languageserver"
+args = ["--stdio"]
+
+[language.css]
+filetypes = ["css"]
+roots = ["package.json"]
+command = "css-languageserver"
+args = ["--stdio"]
+
+[language.html]
+filetypes = ["html"]
+roots = ["package.json"]
+command = "html-languageserver"
+args = ["--stdio"]
+
+[language.ocaml]
+filetypes = ["ocaml"]
+roots = ["Makefile", "opam", "*.opam", "dune"]
+command = "ocaml-language-server"
+args = ["--stdio"]
+
+[language.reason]
+filetypes = ["reason"]
+roots = ["package.json", "Makefile", ".git", ".hg"]
+command = "ocaml-language-server"
+args = ["--stdio"]
+
+[language.ruby]
+filetypes = ["ruby"]
+roots = ["Gemfile"]
+command = "solargraph"
+args = ["stdio"]
+
+[language.python]
+filetypes = ["python"]
+roots = ["requirements.txt", "setup.py", ".git", ".hg"]
+command = "pyls"
+offset_encoding = "utf-8"
+
+[language.c_cpp]
+filetypes = ["c", "cpp"]
+roots = ["compile_commands.json", ".clangd"]
+command = "clangd"
+snippet_support = true
+verbosity = 2
+
+[language.haskell]
+filetypes = ["haskell"]
+roots = ["Setup.hs", "stack.yaml", "*.cabal"]
+command = "hie"
+args = ["--lsp"]
+
+[language.go]
+filetypes = ["go"]
+roots = ["Gopkg.toml", "go.mod", ".git", ".hg"]
+command = "gopls"
+offset_encoding = "utf-8"
+
+[language.bash]
+filetypes = ["sh"]
+roots = [".git", ".hg"]
+command = "bash-language-server"
+args = ["start"]
+
+[language.dart]
+# start shell to find path to dart analysis server source
+filetypes = ["dart"]
+roots = ["pubspec.yaml", ".git"]
+command = "sh"
+args = ["-c", "dart $(dirname $(which dart))/snapshots/analysis_server.dart.snapshot --lsp"]
+
+[language.d]
+filetypes = ["d", "di"]
+roots = [".git", "dub.sdl", "dub.json"]
+command = "dls"
+
+[language.php]
+filetypes = ["php"]
+roots = [".htaccess", "composer.json"]
+command = "intelephense"
+args = ["--stdio"]
+
+[language.php.initialization_options]
+storagePath = "/tmp/intelephense"
+
+[language.nim]
+filetypes = ["nim"]
+roots = ["*.nimble", ".git"]
+command = "nimlsp"
+
+[language.elm]
+filetypes = ["elm"]
+roots = ["elm.json"]
+command = "elm-language-server"
+args = ["--stdio"]
+
+[language.elm.initialization_options]
+runtime = "node"
+elmPath = "elm"
+elmFormatPath = "elm-format"
+elmTestPath = "elm-test"
+
+[language.latex]
+filetypes = ["latex"]
+roots = [".git"]
+command = "texlab"
