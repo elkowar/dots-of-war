@@ -6,13 +6,11 @@
    require-macros [macros]})
 
 
-(utils.noremap :n :<leader> ":<c-u>WhichKey '<Space>'<CR>")
-(utils.noremap :v :<leader> ":<c-u>WhichKeyVisual '<Space>'<CR>")
+(utils.keymap :n :<leader> ":<c-u>WhichKey '<Space>'<CR>")
+(utils.keymap :v :<leader> ":<c-u>WhichKeyVisual '<Space>'<CR>")
 
-;(utils.mapexpr :i :<CR> "compe#confirm(lexima#expand('<LT>CR>', 'i'))")
-
-(utils.mapexpr :i :<C-Space> "compe#complete()")
-(utils.mapexpr :i :<esc> "compe#close('<esc>')")
+(utils.keymap :i :<C-Space> "compe#complete()" {:expr true})
+(utils.keymap :i :<esc> "compe#close('<esc>')" {:expr true})
 
 
 

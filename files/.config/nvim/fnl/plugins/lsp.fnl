@@ -41,11 +41,9 @@
 
 (fn init-lsp [lsp-name ?opts]
   "initialize a language server with defaults"
-  (let [merged-opts {:on_attach on_attach}]
-    (each [k v (pairs (or opts {}))] 
-      (tset merged-opts k v))
+  (let [merged-opts (a.merge {:on_attach on_attach} (or ?opts {}))]
     ((. lsp lsp-name :setup) merged-opts)))
-    
+   
 
 (init-lsp :rust_analyzer { :capabilities capabilities}) 
 (init-lsp :tsserver      { :root_dir (lsp.util.root_pattern "package.json")})

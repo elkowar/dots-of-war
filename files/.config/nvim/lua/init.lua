@@ -41,18 +41,25 @@ do local _ = ({nil, _0_0, {{nil}, nil, nil, nil}})[2] end
 require("plugins.telescope")
 require("plugins.lsp")
 require("plugins.galaxyline")
-local function _2_(x)
-  return print(fennel.view(x))
+require("plugins.bufferline")
+local remapped_space = nil
+_G.RebindShit = function(newKey)
+  remapped_space = {cur = newKey, old = vim.fn.maparg("<Space>", "i")}
+  return utils.keymap("i", "<Space>", newKey, {buffer = true})
 end
-pp = _2_
-local colors = utils.colors()
-local bufferline = require("bufferline")
-do
-  local selected = {gui = "", guibg = colors.neutral_aqua, guifg = colors.dark0}
-  local visible = {gui = "", guibg = colors.dark1, guifg = colors.neutral_aqua}
-  local function _3_(cnt, lvl, diagnostics_dict)
-    return (" (" .. cnt .. ")")
+_G.UnbindSpaceStuff = function()
+  if (remapped_space and (remapped_space ~= {})) then
+    utils["del-keymap"]("i", "<Space>", true)
+    if (remapped_space.old ~= "") then
+      utils.keymap("i", "<Space>", remapped_space.old, {buffer = true})
+    end
+    remapped_space = nil
+    return nil
   end
-  bufferline.setup({highlights = {background = visible, buffer_selected = selected, buffer_visible = visible, error = {guifg = colors.bright_green}, error_selected = selected, error_visible = visible, fill = {guibg = colors.dark0, guifg = colors.light0}, indicator_selected = {guibg = colors.neutral_aqua, guifg = colors.neutral_aqua}, modified = visible, modified_selected = selected, modified_visible = visible, pick_selected = {guibg = colors.bright_red, guifg = colors.bright_red}, separator = visible, tab = {guibg = colors.bright_yellow, guifg = colors.bright_yellow}, tab_selected = {guibg = colors.bright_green, guifg = colors.bright_green}, warning = visible, warning_selected = selected, warning_visible = visible}, options = {diagnostics = "nvim_lsp", diagnostics_indicator = _3_, enforce_regular_tabs = false, show_buffer_close_icons = false, show_close_icon = false, show_tab_indicators = false, tab_size = 10}})
 end
-return utils.highlight("BufferLineInfoSelected", {bg = colors.neutral_aqua, fg = colors.dark0, gui = "NONE"})
+nvim.command("autocmd! InsertLeave * :call v:lua.UnbindSpaceStuff()")
+utils.keymap("n", "<Tab>j", ":call v:lua.RebindShit('_')<CR>")
+utils.keymap("n", "<Tab>k", ":call v:lua.RebindShit('::')<CR>")
+utils.keymap("i", "<Tab>j", "<space><C-o>:call v:lua.RebindShit('_')<CR>")
+utils.keymap("i", "<Tab>k", "<space><C-o>:call v:lua.RebindShit('::')<CR>")
+return utils.keymap("n", "\195\182", "a")

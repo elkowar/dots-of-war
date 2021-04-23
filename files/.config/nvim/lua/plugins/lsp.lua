@@ -61,10 +61,7 @@ local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 capabilities.textDocument.completion.completionItem.resolveSupport = {properties = {"documentation", "detail", "additionalTextEdits"}}
 local function init_lsp(lsp_name, _3fopts)
-  local merged_opts = {on_attach = on_attach}
-  for k, v in pairs((opts or {})) do
-    merged_opts[k] = v
-  end
+  local merged_opts = a.merge({on_attach = on_attach}, (_3fopts or {}))
   return lsp[lsp_name].setup(merged_opts)
 end
 init_lsp("rust_analyzer", {capabilities = capabilities})

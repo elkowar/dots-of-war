@@ -19,11 +19,11 @@ end
 local function _1_(...)
   local ok_3f_0_, val_0_ = nil, nil
   local function _1_()
-    return {require("aniseed.core"), require("aniseed.nvim")}
+    return {require("aniseed.core"), require("fun"), require("aniseed.nvim")}
   end
   ok_3f_0_, val_0_ = pcall(_1_)
   if ok_3f_0_ then
-    _0_0["aniseed/local-fns"] = {["require-macros"] = {macros = true}, require = {a = "aniseed.core", nvim = "aniseed.nvim"}}
+    _0_0["aniseed/local-fns"] = {["require-macros"] = {macros = true}, require = {a = "aniseed.core", fun = "fun", nvim = "aniseed.nvim"}}
     return val_0_
   else
     return print(val_0_)
@@ -31,41 +31,106 @@ local function _1_(...)
 end
 local _local_0_ = _1_(...)
 local a = _local_0_[1]
-local nvim = _local_0_[2]
+local fun = _local_0_[2]
+local nvim = _local_0_[3]
 local _2amodule_2a = _0_0
 local _2amodule_name_2a = "utils"
 do local _ = ({nil, _0_0, {{nil}, nil, nil, nil}})[2] end
-local noremap = nil
+local dbg = nil
 do
   local v_0_ = nil
   do
     local v_0_0 = nil
-    local function noremap0(mode, from, to)
-      return nvim.set_keymap(mode, from, to, {noremap = true, silent = true})
+    local function dbg0(x)
+      a.pr(x)
+      return x
     end
-    v_0_0 = noremap0
-    _0_0["noremap"] = v_0_0
+    v_0_0 = dbg0
+    _0_0["dbg"] = v_0_0
     v_0_ = v_0_0
   end
   local t_0_ = (_0_0)["aniseed/locals"]
-  t_0_["noremap"] = v_0_
-  noremap = v_0_
+  t_0_["dbg"] = v_0_
+  dbg = v_0_
 end
-local mapexpr = nil
+local contains_3f = nil
 do
   local v_0_ = nil
   do
     local v_0_0 = nil
-    local function mapexpr0(mode, from, to)
-      return nvim.set_keymap(mode, from, to, {expr = true, noremap = true, silent = true})
+    local function contains_3f0(list, elem)
+      local function _2_(_241)
+        return (elem == _241)
+      end
+      return fun.any(_2_, list)
     end
-    v_0_0 = mapexpr0
-    _0_0["mapexpr"] = v_0_0
+    v_0_0 = contains_3f0
+    _0_0["contains?"] = v_0_0
     v_0_ = v_0_0
   end
   local t_0_ = (_0_0)["aniseed/locals"]
-  t_0_["mapexpr"] = v_0_
-  mapexpr = v_0_
+  t_0_["contains?"] = v_0_
+  contains_3f = v_0_
+end
+local without_keys = nil
+do
+  local v_0_ = nil
+  do
+    local v_0_0 = nil
+    local function without_keys0(keys, t)
+      local function _2_(_241)
+        return not contains_3f(keys, _241)
+      end
+      return fun.filter(_2_, t)
+    end
+    v_0_0 = without_keys0
+    _0_0["without-keys"] = v_0_0
+    v_0_ = v_0_0
+  end
+  local t_0_ = (_0_0)["aniseed/locals"]
+  t_0_["without-keys"] = v_0_
+  without_keys = v_0_
+end
+local keymap = nil
+do
+  local v_0_ = nil
+  do
+    local v_0_0 = nil
+    local function keymap0(mode, from, to, _3fopts)
+      local full_opts = fun.tomap(without_keys({"buffer"}, a.merge({noremap = true, silent = true}, (_3fopts or {}))))
+      if (_3fopts and (_3fopts).buffer) then
+        return nvim.buf_set_keymap(0, mode, from, to, full_opts)
+      else
+        return nvim.set_keymap(mode, from, to, full_opts)
+      end
+    end
+    v_0_0 = keymap0
+    _0_0["keymap"] = v_0_0
+    v_0_ = v_0_0
+  end
+  local t_0_ = (_0_0)["aniseed/locals"]
+  t_0_["keymap"] = v_0_
+  keymap = v_0_
+end
+local del_keymap = nil
+do
+  local v_0_ = nil
+  do
+    local v_0_0 = nil
+    local function del_keymap0(mode, from, _3fbuf_local)
+      if _3fbuf_local then
+        return nvim.buf_del_keymap(0, mode, from)
+      else
+        return nvim.del_keymap(mode, from)
+      end
+    end
+    v_0_0 = del_keymap0
+    _0_0["del-keymap"] = v_0_0
+    v_0_ = v_0_0
+  end
+  local t_0_ = (_0_0)["aniseed/locals"]
+  t_0_["del-keymap"] = v_0_
+  del_keymap = v_0_
 end
 local colors = nil
 do

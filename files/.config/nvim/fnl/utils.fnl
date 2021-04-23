@@ -1,15 +1,37 @@
 (module utils
   {require {a aniseed.core
-            nvim aniseed.nvim}
+            nvim aniseed.nvim
+            fun fun}
    require-macros [macros]})
-  
-(defn noremap [mode from to]
-  "Sets a mapping with {:noremap true :silent true}."
-  (nvim.set_keymap mode from to {:noremap true :silent true}))
+ 
 
-(defn mapexpr [mode from to]
-  "Sets a mapping with {:noremap true :silent true :expr true}."
-  (nvim.set_keymap mode from to {:noremap true :silent true :expr true}))
+(defn dbg [x]
+  (a.pr x)
+  x)
+
+(defn contains? [list elem]
+  (fun.any #(= elem $1) list))
+
+(defn without-keys [keys t]
+  (fun.filter #(not (contains? keys $1)) t))
+
+(defn keymap [mode from to ?opts]
+  "Set a mapping in the given mode, and some optional parameters, defaulting to {:noremap true :silent true}.
+  If :buffer is set, uses buf_set_keymap rather than set_keymap"
+  (local full-opts 
+    (->> (or ?opts {})
+      (a.merge {:noremap true :silent true})
+      (without-keys [:buffer])
+      fun.tomap))
+  (if (and ?opts (?. ?opts :buffer))
+    (nvim.buf_set_keymap 0 mode from to full-opts)
+    (nvim.set_keymap mode from to full-opts)))
+
+(defn del-keymap [mode from ?buf-local]
+  "Remove a keymap. Arguments: mode, mapping, bool if mapping should be buffer-local."
+  (if ?buf-local
+    (nvim.buf_del_keymap 0 mode from)
+    (nvim.del_keymap mode from)))
 
 
 

@@ -37,10 +37,10 @@ local utils = _local_0_[4]
 local _2amodule_2a = _0_0
 local _2amodule_name_2a = "keybinds"
 do local _ = ({nil, _0_0, {{nil}, nil, nil, nil}})[2] end
-utils.noremap("n", "<leader>", ":<c-u>WhichKey '<Space>'<CR>")
-utils.noremap("v", "<leader>", ":<c-u>WhichKeyVisual '<Space>'<CR>")
-utils.mapexpr("i", "<C-Space>", "compe#complete()")
-utils.mapexpr("i", "<esc>", "compe#close('<esc>')")
+utils.keymap("n", "<leader>", ":<c-u>WhichKey '<Space>'<CR>")
+utils.keymap("v", "<leader>", ":<c-u>WhichKeyVisual '<Space>'<CR>")
+utils.keymap("i", "<C-Space>", "compe#complete()", {expr = true})
+utils.keymap("i", "<esc>", "compe#close('<esc>')", {expr = true})
 local function le(s)
   return (":call luaeval(\"" .. s .. "\")")
 end

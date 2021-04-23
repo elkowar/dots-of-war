@@ -9,8 +9,7 @@
 let g:vim_config_root = expand('<sfile>:p:h')
 let $VIM_ROOT = g:vim_config_root
 
-source $VIM_ROOT/plugins.vim
-
+luafile $VIM_ROOT/plugins.lua
 
 if &shell =~# 'fish$'
     set shell=bash
@@ -218,44 +217,6 @@ hi SignifySignChange cterm=NONE gui=NONE guifg='#83a598'
 hi SignifySignAdd    cterm=NONE gui=NONE guifg='#8ec07c'
 
 " }}}
-
-" }}}
-
-" :: and _ as space ------------------------------------------------------------------- {{{
-
-function RebindShit(newKey)
-  let b:RemappedSpace={
-        \ 'old': maparg("<Space>", "i"),
-        \ 'cur': a:newKey
-        \ }
-  exe 'inoremap <buffer> <Space>' a:newKey
-endfun
-
-function! UnbindSpaceStuff()
-  if get(b:, "RemappedSpace", {}) != {}
-    exe 'iunmap <buffer> <Space>'
-    if b:RemappedSpace['old'] != ""
-      exe 'inoremap <buffer> <space>' b:RemappedSpace['old']
-    endif
-    unlet b:RemappedSpace
-  endif
-endfun
-
-augroup UnmapSpaceStuff
-  autocmd!
-  autocmd InsertLeave * call UnbindSpaceStuff()
-augroup END
-
-
-nnoremap <Tab>j :call RebindShit("_")<CR>a
-nnoremap <Tab>k :call RebindShit("::")<CR>a
-
-inoremap <Tab>j <space><C-o>:call RebindShit("_")<CR>
-inoremap <Tab>k <space><C-o>:call RebindShit("::")<CR>
-
-
-nnoremap ö a
-
 
 " }}}
 
