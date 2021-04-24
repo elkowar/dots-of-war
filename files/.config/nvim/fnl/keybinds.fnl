@@ -37,23 +37,23 @@
           "o" ["foldopen" "open fold"]}
              
     "m" { :name "+Code-actions"
-          "d" [ ":Lspsaga hover_doc"                   "show documentation"] 
-          "b" [ ":Lspsaga lsp_finder"                  "find stuff"] 
-          "x" [ ":Lspsaga preview_definition"          "Preview definition"] 
-          "o" [ ":Telescope lsp_document_symbols"      "symbols in document"] 
-          "s" [ ":Telescope lsp_workspace_symbols"     "symbols in workspace"] 
-          "t" [ ":Lspsaga signature_help"              "Show signature help"] 
-          "n" [ ":Lspsaga rename"                      "rename"] 
-          "v" [ ":Lspsaga code_action"                 "apply codeaction"] 
-          "a" [ ":Lspsaga show_cursor_diagnostics"     "Cursor diagnostics"] 
-          "A" [ ":Lspsaga show_line_diagnostics"       "Line diagnostics"]
-          "E" [ ":Telescope lsp_workspace_diagnostics" "List diagnostics"] 
-          "e" [ (le "vim.lsp.diagnostic.goto_next()")  "Jump to the next error"] 
-          "g" [ (le "vim.lsp.buf.definition()")        "go to definition"] 
-          "i" [ (le "vim.lsp.buf.implementation()")    "show implementation"] 
-          ;"r" [ (le "vim.lsp.buf.references()")        "show references"] 
-          "r" [ ":Telescope lsp_references"            "show references"] 
-          "f" [ (le "vim.lsp.buf.formatting()")        "format file"]}
+          "d" [ ":Lspsaga hover_doc"                       "show documentation"] 
+          "b" [ ":Lspsaga lsp_finder"                      "find stuff"] 
+          "x" [ ":Lspsaga preview_definition"              "Preview definition"] 
+          "o" [ ":SymbolsOutline"                          "Outline"] 
+          "S" [ ":Telescope lsp_document_symbols"          "symbols in document"] 
+          "s" [ ":Telescope lsp_dynamic_workspace_symbols" "symbols in workspace"] 
+          "t" [ ":Lspsaga signature_help"                  "Show signature help"] 
+          "n" [ ":Lspsaga rename"                          "rename"] 
+          "v" [ ":Lspsaga code_action"                     "apply codeaction"] 
+          "a" [ ":Lspsaga show_cursor_diagnostics"         "Cursor diagnostics"] 
+          "A" [ ":Lspsaga show_line_diagnostics"           "Line diagnostics"]
+          "E" [ ":Telescope lsp_workspace_diagnostics"     "List diagnostics"] 
+          "e" [ (le "vim.lsp.diagnostic.goto_next()")      "Jump to the next error"] 
+          "g" [ (le "vim.lsp.buf.definition()")            "go to definition"] 
+          "i" [ (le "vim.lsp.buf.implementation()")        "show implementation"] 
+          "r" [ ":Telescope lsp_references"                "show references"] 
+          "f" [ (le "vim.lsp.buf.formatting()")            "format file"]}
           
 
     "f" { :name "+folds"

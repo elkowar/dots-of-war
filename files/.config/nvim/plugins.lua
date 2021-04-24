@@ -15,6 +15,8 @@ require("packer").startup(function(use)
   
   use_rocks "rtsisyk/fun"
 
+  use "simrat39/symbols-outline.nvim"
+
   -- better quickfix window
   use "kevinhwang91/nvim-bqf"
 

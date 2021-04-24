@@ -7,7 +7,8 @@
             saga lspsaga 
             utils utils
             compe compe
-            lsp_signature lsp_signature}
+            lsp_signature lsp_signature
+            symbols-outline symbols-outline}
     require-macros [macros]})
 
 (fn on_attach [client bufnr]
@@ -59,6 +60,8 @@
 
 ;(lsp.vimls.setup { :on_attach on_attach})
   
+
+(symbols-outline.setup { :highlight_hovered_item true :show_guides true})
 
 
 (compe.setup 

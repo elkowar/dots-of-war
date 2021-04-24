@@ -194,6 +194,10 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/leon/.local/share/nvim/site/pack/packer/start/startuptime.vim"
   },
+  ["symbols-outline.nvim"] = {
+    loaded = true,
+    path = "/home/leon/.local/share/nvim/site/pack/packer/start/symbols-outline.nvim"
+  },
   tabular = {
     loaded = true,
     path = "/home/leon/.local/share/nvim/site/pack/packer/start/tabular"
