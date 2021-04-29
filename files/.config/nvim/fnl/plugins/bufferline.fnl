@@ -20,6 +20,7 @@
         :enforce_regular_tabs false
         :tab_size 10}
 
+      ; https://github.com/akinsho/nvim-bufferline.lua/blob/4ebab39af2376b850724dd29c29579c8e024abe6/lua/bufferline/config.lua#L74
       :highlights 
       { :fill { :guibg colors.dark0 :guifg colors.light0}
         :background visible
@@ -34,6 +35,23 @@
         :warning visible
         :warning_selected selected
         :warning_visible visible
+
+        :duplicate visible
+        :duplicate_visible visible
+        :duplicate_selected selected
+
+        :diagnostic {:guibg colors.dark1 :guifg colors.neutral_red}
+        :diagnostic_visible {:guibg colors.dark1 :guifg colors.neutral_red}
+        :diagnostic_selected {:guibg colors.neutral_aqua :guifg colors.faded_red}
+
+        :info_diagnostic {:guibg "blue" :guifg colors.neutral_yellow}
+        :info_diagnostic_visible {:guibg "blue" :guifg colors.neutral_yellow}
+        :info_diagnostic_selected {:guibg "blue" :guifg colors.faded_yellow}
+
+        :warning_diagnostic {:guibg colors.dark1 :guifg colors.neutral_yellow}
+        :warning_diagnostic_visible {:guibg colors.dark1 :guifg colors.neutral_yellow}
+        :warning_diagnostic_selected {:guibg colors.neutral_aqua :guifg colors.faded_yellow}
+
         :separator visible
         :indicator_selected {:guibg colors.neutral_aqua :guifg colors.neutral_aqua}
 
