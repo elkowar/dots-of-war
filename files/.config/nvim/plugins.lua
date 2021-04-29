@@ -17,6 +17,9 @@ require("packer").startup(function(use)
 
   use "simrat39/symbols-outline.nvim"
 
+  use "folke/which-key.nvim"
+
+
   -- better quickfix window
   use "kevinhwang91/nvim-bqf"
 
@@ -43,7 +46,7 @@ require("packer").startup(function(use)
     "junegunn/goyo.vim",
     cmd = "Goyo",
   }
-  use "liuchengxu/vim-which-key"
+
   use "mhinz/vim-signify"
   use "tpope/vim-fugitive"
   use "preservim/nerdcommenter"

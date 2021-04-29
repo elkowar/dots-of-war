@@ -2,79 +2,76 @@
   {require {a aniseed.core
             nvim aniseed.nvim
             utils utils
-            fennel aniseed.fennel}
+            fennel aniseed.fennel
+            wk which-key}
    require-macros [macros]})
 
-
-(utils.keymap :n :<leader> ":<c-u>WhichKey '<Space>'<CR>")
-(utils.keymap :v :<leader> ":<c-u>WhichKeyVisual '<Space>'<CR>")
 
 (utils.keymap :i :<C-Space> "compe#complete()" {:expr true})
 (utils.keymap :i :<esc> "compe#close('<esc>')" {:expr true})
 
 
 
-(fn le [s] (.. ":call luaeval(\"" s "\")"))
+(wk.setup {})
 
-(set nvim.g.which_key_map {})
-(nvim.command "call which_key#register('<Space>', \"g:which_key_map\")")
+(fn cmd [s desc] [(.. "<cmd>" s "<cr>") desc])
+(fn le [s desc] (cmd (.. "call luaeval(\"" s "\")") desc))
+(fn rebind [s desc] [s desc])
 
-(set nvim.g.which_key_map
-  { "h" [ ":bprevious" "previous buffer"]
-    "l" [ ":bnext" "next buffer"]
-    "f" "which_key_ignore"
-    "s" "which_key_ignore"
-    "o" [":Telescope live_grep"              "Grep files"]
-    "p" [":Telescope file_browser"           "Open file-browser"]
-    "[" ["<Plug>(YoinkPostPasteSwapBack)"    "Swap last paste backwards"]
-    "]" ["<Plug>(YoinkPostPasteSwapForward)" "Swap last paste backwards"]
-    ":" [":Commands"                         "Search command with fzf"]
-    "c" { :name "+comment_out"}
+(wk.register 
+  { "c" { :name "+comment out"}
     "e" { :name "+emmet"}
 
-    "z" { :name "+folds" 
-          "c" ["foldclose" "close fold"]
-          "o" ["foldopen" "open fold"]}
-             
-    "m" { :name "+Code-actions"
-          "d" [ ":Lspsaga hover_doc"                       "show documentation"] 
-          "b" [ ":Lspsaga lsp_finder"                      "find stuff"] 
-          "x" [ ":Lspsaga preview_definition"              "Preview definition"] 
-          "o" [ ":SymbolsOutline"                          "Outline"] 
-          "S" [ ":Telescope lsp_document_symbols"          "symbols in document"] 
-          "s" [ ":Telescope lsp_dynamic_workspace_symbols" "symbols in workspace"] 
-          "t" [ ":Lspsaga signature_help"                  "Show signature help"] 
-          "n" [ ":Lspsaga rename"                          "rename"] 
-          "v" [ ":Lspsaga code_action"                     "apply codeaction"] 
-          "a" [ ":Lspsaga show_cursor_diagnostics"         "Cursor diagnostics"] 
-          "A" [ ":Lspsaga show_line_diagnostics"           "Line diagnostics"]
-          "E" [ ":Telescope lsp_workspace_diagnostics"     "List diagnostics"] 
-          "e" [ (le "vim.lsp.diagnostic.goto_next()")      "Jump to the next error"] 
-          "g" [ (le "vim.lsp.buf.definition()")            "go to definition"] 
-          "i" [ (le "vim.lsp.buf.implementation()")        "show implementation"] 
-          "r" [ ":Telescope lsp_references"                "show references"] 
-          "f" [ (le "vim.lsp.buf.formatting()")            "format file"]}
-          
+    "h" (cmd "bprevious"              "previous buffer")
+    "l" (cmd "bnext"                  "next buffer")
+    "o" (cmd "Telescope live_grep"    "Grep files")
+    "p" (cmd "Telescope file_browser" "Open file-browser")
+    ":" (cmd "Telescope commands"     "Search command with fzf")
+
+    "m" { :name "+Code actions"
+          "d" (cmd "Lspsaga hover_doc"                       "Show documentation") 
+          "b" (cmd "Lspsaga lsp_finder"                      "Find stuff") 
+          "x" (cmd "Lspsaga preview_definition"              "Preview definition") 
+          "o" (cmd "SymbolsOutline"                          "Outline") 
+          "S" (cmd "Telescope lsp_document_symbols"          "Symbols in document") 
+          "s" (cmd "Telescope lsp_dynamic_workspace_symbols" "Symbols in workspace") 
+          "t" (cmd "Lspsaga signature_help"                  "Show signature help") 
+          "n" (cmd "Lspsaga rename"                          "Rename") 
+          "v" (cmd "Lspsaga code_action"                     "Apply codeaction") 
+          "a" (cmd "Lspsaga show_cursor_diagnostics"         "Cursor diagnostics") 
+          "A" (cmd "Lspsaga show_line_diagnostics"           "Line diagnostics")
+          "E" (cmd "Telescope lsp_workspace_diagnostics"     "List diagnostics") 
+          "r" (cmd "Telescope lsp_references"                "Show references") 
+          "e" (le "vim.lsp.diagnostic.goto_next()"           "Jump to the next error") 
+          "g" (le "vim.lsp.buf.definition()"                 "Go to definition") 
+          "i" (le "vim.lsp.buf.implementation()"             "Show implementation") 
+          "f" (le "vim.lsp.buf.formatting()"                 "format file")}
 
     "f" { :name "+folds"
-          "o" [ ":foldopen"   "open fold"] 
-          "n" [ ":foldclose"  "close fold"] 
-          "j" [ "zj"          "jump to next fold"] 
-          "k" [ "zk"          "jump to previous fold"]}
+          "o" (cmd "foldopen"  "open fold") 
+          "n" (cmd "foldclose" "close fold") 
+          "j" (rebind "zj"     "jump to next fold") 
+          "k" (rebind "zk"     "jump to previous fold")}
   
     "v" { :name "+view-and-layout"
-          "n" [":set relativenumber!"             "toggle relative numbers"] 
-          "m" [":set nonumber! norelativenumber"  "toggle numbers"] 
-          "g" [":Goyo | set linebreak"            "toggle focus mode"] 
-          "i" [":IndentGuidesToggle"              "toggle indent guides"]}
+          "n" (cmd "set relativenumber!"             "toggle relative numbers") 
+          "m" (cmd "set nonumber! norelativenumber"  "toggle numbers") 
+          "g" (cmd "Goyo | set linebreak"            "toggle focus mode") 
+          "i" (cmd "IndentGuidesToggle"              "toggle indent guides")}
 
     "b" { :name "+buffers"
-          "b" [":Buffers"   "select open buffer"]
-          "c" [":bdelete!"  "close open buffer"]
-          "w" [":bwipeout!" "wipeout open buffer"]}})
+          "b" (cmd "Buffers"   "select open buffer")
+          "c" (cmd "bdelete!"  "close open buffer")
+          "w" (cmd "bwipeout!" "wipeout open buffer")}}
+
+  { :prefix "<leader>"})
+
+(wk.register
+  { :name "+folds" 
+    "c" (cmd "foldclose" "close fold")
+    "o" (cmd "foldopen"  "open fold")}
+  { :prefix "z"})
+       
 
 (set nvim.o.timeoutlen 200)
 
-(nvim.command
-  "autocmd! VimEnter * :unmap <space>ig
-   autocmd! FileType which_key")

@@ -310,6 +310,10 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/leon/.local/share/nvim/site/pack/packer/start/webapi-vim"
   },
+  ["which-key.nvim"] = {
+    loaded = true,
+    path = "/home/leon/.local/share/nvim/site/pack/packer/start/which-key.nvim"
+  },
   ["yats.vim"] = {
     loaded = true,
     path = "/home/leon/.local/share/nvim/site/pack/packer/start/yats.vim"
