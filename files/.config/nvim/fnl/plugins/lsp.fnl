@@ -8,8 +8,12 @@
             utils utils
             compe compe
             lsp_signature lsp_signature
-            symbols-outline symbols-outline}
+            symbols-outline symbols-outline
+            trouble trouble}
     require-macros [macros]})
+
+
+(local colors (utils.colors))
 
 (fn on_attach [client bufnr]
   (lsp_signature.on_attach)
@@ -97,11 +101,32 @@
                           :scroll_down "<C-d>"}})
  
 
-(utils.highlight "LspSagaCodeActionTitle"    {:fg "#8ec07c"})
-(utils.highlight "LspSagaBorderTitle"        {:fg "#8ec07c"})
-(utils.highlight "LspSagaCodeActionContent"  {:fg "#8ec07c"})
-(utils.highlight "LspSagaFinderSelection"    {:fg "#8ec07c"})
-(utils.highlight "LspSagaDiagnosticHeader"   {:fg "#8ec07c"})
-(utils.highlight "TargetWord"   {:fg "#8ec07c"})
+(utils.highlight "LspSagaCodeActionTitle"   {:fg colors.bright_aqua})
+(utils.highlight "LspSagaBorderTitle"       {:fg colors.bright_aqua})
+(utils.highlight "LspSagaCodeActionContent" {:fg colors.bright_aqua})
+(utils.highlight "LspSagaFinderSelection"   {:fg colors.bright_aqua})
+(utils.highlight "LspSagaDiagnosticHeader"  {:fg colors.bright_aqua})
+(utils.highlight "TargetWord"               {:fg colors.bright_aqua})
+
+
+(utils.highlight "LspTroubleFoldIcon" {:bg "NONE" :fg colors.bright_orange})
+(utils.highlight "LspTroubleCount"    {:bg "NONE" :fg colors.bright_green})
+(utils.highlight "LspTroubleText"     {:bg "NONE" :fg colors.light0})
+
+(utils.highlight "LspTroubleSignError"       {:bg "NONE" :fg colors.bright_red})
+(utils.highlight "LspTroubleSignWarning"     {:bg "NONE" :fg colors.bright_yellow})
+(utils.highlight "LspTroubleSignInformation" {:bg "NONE" :fg colors.bright_aqua})
+(utils.highlight "LspTroubleSignHint"        {:bg "NONE" :fg colors.bright_blue})
+
 
 (set vim.o.signcolumn "yes")
+
+
+
+
+(trouble.setup
+  {:icons false
+   :auto_preview true
+   :auto_close true
+   :auto_open false})
+  

@@ -30,7 +30,7 @@
         :modified_selected selected
         :error visible
         :error_selected selected
-        :error_visible visible
+        :error_visible selected
         :warning visible
         :warning_selected selected
         :warning_visible visible

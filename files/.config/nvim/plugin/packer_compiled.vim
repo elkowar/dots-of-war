@@ -109,6 +109,10 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/leon/.local/share/nvim/site/pack/packer/start/haskell-vim"
   },
+  ["lsp-trouble.nvim"] = {
+    loaded = true,
+    path = "/home/leon/.local/share/nvim/site/pack/packer/start/lsp-trouble.nvim"
+  },
   ["lsp_signature.nvim"] = {
     loaded = true,
     path = "/home/leon/.local/share/nvim/site/pack/packer/start/lsp_signature.nvim"
@@ -301,10 +305,6 @@ _G.packer_plugins = {
   ["vim-visual-multi"] = {
     loaded = true,
     path = "/home/leon/.local/share/nvim/site/pack/packer/start/vim-visual-multi"
-  },
-  ["vim-which-key"] = {
-    loaded = true,
-    path = "/home/leon/.local/share/nvim/site/pack/packer/start/vim-which-key"
   },
   ["webapi-vim"] = {
     loaded = true,

@@ -42,7 +42,8 @@
           "A" (cmd "Lspsaga show_line_diagnostics"           "Line diagnostics")
           "E" (cmd "Telescope lsp_workspace_diagnostics"     "List diagnostics") 
           "r" (cmd "Telescope lsp_references"                "Show references") 
-          "e" (le "vim.lsp.diagnostic.goto_next()"           "Jump to the next error") 
+          "e" (cmd "LspTroubleOpen"                          "Show diagnostics") 
+          ;"e" (le "vim.lsp.diagnostic.goto_next()"           "Jump to the next error") 
           "g" (le "vim.lsp.buf.definition()"                 "Go to definition") 
           "i" (le "vim.lsp.buf.implementation()"             "Show implementation") 
           "f" (le "vim.lsp.buf.formatting()"                 "format file")}
@@ -67,11 +68,12 @@
   { :prefix "<leader>"})
 
 (wk.register
-  { :name "+folds" 
-    "c" (cmd "foldclose" "close fold")
-    "o" (cmd "foldopen"  "open fold")}
-  { :prefix "z"})
-       
+   { 
+     "<tab>" "which_key_ignore"
+     "z" { :name "+folds" 
+           "c" (cmd "foldclose" "close fold")
+           "o" (cmd "foldopen"  "open fold")}})
+           
 
 (set nvim.o.timeoutlen 200)
 
