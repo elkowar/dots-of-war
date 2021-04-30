@@ -15,6 +15,11 @@
 
 (local colors (utils.colors))
 
+(symbols-outline.setup { :highlight_hovered_item true :show_guides true})
+(set vim.o.signcolumn "yes")
+
+; LSP config -------------------------------------------------------------------------------- {{{{{
+
 (fn on_attach [client bufnr]
   (lsp_signature.on_attach)
   (if client.resolved_capabilities.document_highlight
@@ -63,11 +68,9 @@
 
 
 ;(lsp.vimls.setup { :on_attach on_attach})
-  
+; }}}}}
 
-(symbols-outline.setup { :highlight_hovered_item true :show_guides true})
-
-
+; compe -------------------------------------------------------------------------------- {{{{{
 (compe.setup 
   { :enabled true
     :autocomplete false
@@ -88,6 +91,9 @@
               :nvim_lua true 
               :vsnip false}})
 
+; }}}}}
+
+; LSP saga  -------------------------------------------------------------------------------- {{{{{
 
 (saga.init_lsp_saga 
   { :border_style 1
@@ -109,6 +115,16 @@
 (utils.highlight "TargetWord"               {:fg colors.bright_aqua})
 
 
+; }}}}}
+
+; LSP trouble -------------------------------------------------------------------------------- {{{{{
+(trouble.setup
+  {:icons false
+   :auto_preview true
+   :auto_close true
+   :auto_open false})
+  
+
 (utils.highlight "LspTroubleFoldIcon" {:bg "NONE" :fg colors.bright_orange})
 (utils.highlight "LspTroubleCount"    {:bg "NONE" :fg colors.bright_green})
 (utils.highlight "LspTroubleText"     {:bg "NONE" :fg colors.light0})
@@ -118,15 +134,6 @@
 (utils.highlight "LspTroubleSignInformation" {:bg "NONE" :fg colors.bright_aqua})
 (utils.highlight "LspTroubleSignHint"        {:bg "NONE" :fg colors.bright_blue})
 
+; }}}}}
 
-(set vim.o.signcolumn "yes")
-
-
-
-
-(trouble.setup
-  {:icons false
-   :auto_preview true
-   :auto_close true
-   :auto_open false})
-  
+ ; vim:foldmarker={{{{{,}}}}}

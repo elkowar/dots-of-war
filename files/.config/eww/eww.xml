@@ -37,6 +37,10 @@
         </if-else>
 
 
+
+        {{EWW_CORES}} {{EWW_RAM}} {{EWW_DISK}} {{EWW_BATTERY}} {{EWW_CPU]}} {{EWW_NET_UP}} {{EWW_NET_DOWN}}
+
+
         <scale value="50" orientation="v" min="0" max="100" flipped="true" />
 
         <button onclick="pgrep 'eww' &amp;&amp; echo '' || echo ''">Test bug</button>

@@ -40,17 +40,17 @@
         :duplicate_visible visible
         :duplicate_selected selected
 
-        :diagnostic {:guibg colors.dark1 :guifg colors.neutral_red}
-        :diagnostic_visible {:guibg colors.dark1 :guifg colors.neutral_red}
-        :diagnostic_selected {:guibg colors.neutral_aqua :guifg colors.faded_red}
+        :diagnostic          { :gui "" :guibg colors.dark1        :guifg colors.neutral_red}
+        :diagnostic_visible  { :gui "" :guibg colors.dark1        :guifg colors.neutral_red}
+        :diagnostic_selected { :gui "" :guibg colors.neutral_aqua :guifg colors.faded_red}
 
-        :info_diagnostic {:guibg "blue" :guifg colors.neutral_yellow}
-        :info_diagnostic_visible {:guibg "blue" :guifg colors.neutral_yellow}
-        :info_diagnostic_selected {:guibg "blue" :guifg colors.faded_yellow}
+        :info_diagnostic          { :gui "" :guibg "blue" :guifg colors.neutral_yellow}
+        :info_diagnostic_visible  { :gui "" :guibg "blue" :guifg colors.neutral_yellow}
+        :info_diagnostic_selected { :gui "" :guibg "blue" :guifg colors.faded_yellow}
 
-        :warning_diagnostic {:guibg colors.dark1 :guifg colors.neutral_yellow}
-        :warning_diagnostic_visible {:guibg colors.dark1 :guifg colors.neutral_yellow}
-        :warning_diagnostic_selected {:guibg colors.neutral_aqua :guifg colors.faded_yellow}
+        :warning_diagnostic          { :gui "" :guibg colors.dark1        :guifg colors.neutral_yellow}
+        :warning_diagnostic_visible  { :gui "" :guibg colors.dark1        :guifg colors.neutral_yellow}
+        :warning_diagnostic_selected { :gui "" :guibg colors.neutral_aqua :guifg colors.faded_yellow}
 
         :separator visible
         :indicator_selected {:guibg colors.neutral_aqua :guifg colors.neutral_aqua}
