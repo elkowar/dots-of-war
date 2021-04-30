@@ -5,6 +5,7 @@
             kb keybinds 
             utils utils
             nvim-treesitter-configs nvim-treesitter.configs}
+            ;gitsigns gitsigns}
     require-macros [macros]})
 
 (require "plugins.telescope")
@@ -12,14 +13,17 @@
 (require "plugins.galaxyline")
 (require "plugins.bufferline")
 
+(local colors (utils.colors))
+
 ;(set nvim.g.conjure#client#fennel#aniseed#aniseed_module_prefix "aniseed.")
 
 
 (nvim-treesitter-configs.setup 
   { :ensure_installed "all" 
     :highlight { :enable true
-                 :disable ["fennel"] }
-    :indent    { :enable true }
+                 :disable ["fennel"]}
+    :indent    { :enable true
+                 :disable ["lua"]}
 
     :incremental_selection 
       { :enable true
@@ -34,7 +38,26 @@
 
     :context_commentstring { :enable true}})
 
-; " :: and _ as space ------------------------------------------------------------------- <<<<<
+
+; gitsigns.nvim - inactive due to weird issue with keybinds not being removable <<<<<
+; https://github.com/lewis6991/gitsigns.nvim
+;(gitsigns.setup
+  ;{ :signs { :add {:text "▍"}
+             ;:change {:text "▍"}
+             ;:delete {:text "▍"}
+             ;:topdelete {:text "▍"}
+             ;:changedelete {:text "▍"}}}
+  ;{ :keymaps {  :noremap true :buffer true}
+    ;:current_line_blame false})
+
+;(utils.highlight "GitSignsAdd"    {:bg "NONE" :fg colors.bright_aqua})
+;(utils.highlight "GitSignsDelete" {:bg "NONE" :fg colors.neutral_red})
+;(utils.highlight "GitSignsChange" {:bg "NONE" :fg colors.bright_blue})
+
+; >>>>>
+
+
+; " :: and _ as space ------------------------------------------------------------------- <<<<<})
 (var remapped-space nil)
 (fn _G.RebindShit [newKey]
   (set remapped-space {:old (vim.fn.maparg :<Space> :i)

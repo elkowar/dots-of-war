@@ -15,11 +15,11 @@ require("packer").startup(function(use)
 
   use_rocks "rtsisyk/fun"
 
+  use 'pwntester/octo.nvim'
+
   use "p00f/nvim-ts-rainbow"
   use "romgrk/nvim-treesitter-context"
-
   use 'JoosepAlviste/nvim-ts-context-commentstring'
-
   use {
     "nvim-treesitter/nvim-treesitter",
     run = ":TSUpdate"
@@ -59,7 +59,9 @@ require("packer").startup(function(use)
     cmd = "Goyo",
   }
 
-  use "mhinz/vim-signify"
+ use "mhinz/vim-signify"
+  --use "lewis6991/gitsigns.nvim"
+
   use "tpope/vim-fugitive"
   use "preservim/nerdcommenter"
   use "glepnir/galaxyline.nvim"
