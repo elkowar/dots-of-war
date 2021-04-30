@@ -12,13 +12,18 @@ end
 vim.cmd [[packadd packer.nvim]]
 
 require("packer").startup(function(use)
-  
+
   use_rocks "rtsisyk/fun"
 
+  use {
+    "nvim-treesitter/nvim-treesitter",
+    run = ":TSUpdate"
+  }
+
+  --use "code-biscuits/nvim-biscuits"
+
   use "simrat39/symbols-outline.nvim"
-
   use "folke/which-key.nvim"
-
   use "folke/lsp-trouble.nvim"
 
 

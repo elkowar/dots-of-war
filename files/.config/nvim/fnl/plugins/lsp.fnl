@@ -9,7 +9,8 @@
             compe compe
             lsp_signature lsp_signature
             symbols-outline symbols-outline
-            trouble trouble}
+            trouble trouble
+            nvim-treesitter-configs nvim-treesitter.configs}
     require-macros [macros]})
 
 
@@ -17,6 +18,19 @@
 
 (symbols-outline.setup { :highlight_hovered_item true :show_guides true})
 (set vim.o.signcolumn "yes")
+
+(nvim-treesitter-configs.setup 
+  { :ensure_installed "maintained" 
+    :highlight { :enable true}
+    :indent { :enable true}
+    :incremental_selection 
+    { :enable true
+      :keymaps { :init_selection    "gss"
+                 :node_incremental  "gsl"
+                 :node_decremental  "gsh"
+                 :scope_incremental "gsj"
+                 :scope_decremental "gsk"}}})
+
 
 ; LSP config -------------------------------------------------------------------------------- {{{{{
 
@@ -135,5 +149,7 @@
 (utils.highlight "LspTroubleSignHint"        {:bg "NONE" :fg colors.bright_blue})
 
 ; }}}}}
+
+
 
  ; vim:foldmarker={{{{{,}}}}}

@@ -3,7 +3,8 @@
             nvim aniseed.nvim
             utils utils
             fennel aniseed.fennel
-            wk which-key}
+            wk which-key
+            treesitter-selection nvim-treesitter.incremental_selection}
    require-macros [macros]})
 
 
@@ -68,12 +69,25 @@
   { :prefix "<leader>"})
 
 (wk.register
-   { 
-     "<tab>" "which_key_ignore"
+   { "<tab>" "which_key_ignore"
+     "gss" "init selection"
      "z" { :name "+folds" 
            "c" (cmd "foldclose" "close fold")
            "o" (cmd "foldopen"  "open fold")}})
+
+(wk.register
+  { "<tab>" "which_key_ignore"}
+  { :mode "i"})
            
+(wk.register
+  { :name "+Selection"
+    "j" "increment selection"
+    "k" "decrement selection"
+    "l" "increment node"
+    "h" "decrement node"}
+  { :prefix "gs"
+    :mode "v"})
+
 
 (set nvim.o.timeoutlen 200)
 
