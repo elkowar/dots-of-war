@@ -3,7 +3,8 @@
             fennel aniseed.fennel 
             nvim aniseed.nvim 
             kb keybinds 
-            utils utils}
+            utils utils
+            nvim-treesitter-configs nvim-treesitter.configs}
     require-macros [macros]})
 
 (require "plugins.telescope")
@@ -14,8 +15,26 @@
 ;(set nvim.g.conjure#client#fennel#aniseed#aniseed_module_prefix "aniseed.")
 
 
+(nvim-treesitter-configs.setup 
+  { :ensure_installed "all" 
+    :highlight { :enable true
+                 :disable ["fennel"] }
+    :indent    { :enable true }
 
-; " :: and _ as space ------------------------------------------------------------------- {{{
+    :incremental_selection 
+      { :enable true
+        :keymaps { :init_selection    "gss"
+                   :node_incremental  "gsl"
+                   :node_decremental  "gsh"
+                   :scope_incremental "gsj"
+                   :scope_decremental "gsk"}}
+
+    :rainbow { :enable true
+               :extended_mode true}
+
+    :context_commentstring { :enable true}})
+
+; " :: and _ as space ------------------------------------------------------------------- <<<<<
 (var remapped-space nil)
 (fn _G.RebindShit [newKey]
   (set remapped-space {:old (vim.fn.maparg :<Space> :i)
@@ -41,4 +60,6 @@
 (utils.keymap :i "<Tab>k" "<space><C-o>:call v:lua.RebindShit('::')<CR>")
 (utils.keymap :n "ö" "a")
 
-; }}}
+; >>>>>
+
+ ; vim:foldmarker=<<<<<,>>>>>

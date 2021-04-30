@@ -10,7 +10,7 @@
             lsp_signature lsp_signature
             symbols-outline symbols-outline
             trouble trouble
-            nvim-treesitter-configs nvim-treesitter.configs}
+            rust-tools rust-tools}
     require-macros [macros]})
 
 
@@ -18,25 +18,8 @@
 
 (symbols-outline.setup { :highlight_hovered_item true :show_guides true})
 
-(nvim-treesitter-configs.setup 
-  { :ensure_installed "all" 
-    :highlight { :enable true}
-    :indent    { :enable true}
 
-    :incremental_selection 
-      { :enable true
-        :keymaps { :init_selection    "gss"
-                   :node_incremental  "gsl"
-                   :node_decremental  "gsh"
-                   :scope_incremental "gsj"
-                   :scope_decremental "gsk"}}
-
-    :rainbow { :enable true
-               :extended_mode true}
-
-    :context_commentstring { :enable true}})
-
-; LSP config -------------------------------------------------------------------------------- {{{{{
+; LSP config -------------------------------------------------------------------------------- <<<<<
 
 (fn on_attach [client bufnr]
   (lsp_signature.on_attach)
@@ -61,10 +44,6 @@
       ((lsp.util.root_pattern patterns) path))))
 
 
-(local capabilities (vim.lsp.protocol.make_client_capabilities))
-(set capabilities.textDocument.completion.completionItem.snippetSupport true)
-(set capabilities.textDocument.completion.completionItem.resolveSupport
-      { :properties ["documentation" "detail" "additionalTextEdits"]})
 
 (fn init-lsp [lsp-name ?opts]
   "initialize a language server with defaults"
@@ -72,7 +51,12 @@
     ((. lsp lsp-name :setup) merged-opts)))
    
 
-(init-lsp :rust_analyzer { :capabilities capabilities}) 
+(let [capabilities (vim.lsp.protocol.make_client_capabilities)]
+  (set capabilities.textDocument.completion.completionItem.snippetSupport true)
+  (set capabilities.textDocument.completion.completionItem.resolveSupport
+        { :properties ["documentation" "detail" "additionalTextEdits"]})
+  (init-lsp :rust_analyzer { :capabilities capabilities})) 
+
 (init-lsp :tsserver      { :root_dir (lsp.util.root_pattern "package.json")})
 (init-lsp :jsonls        { :commands { :Format [ #(vim.lsp.buf.range_formatting [] [0 0] [(vim.fn.line "$") 0])]}})
 (init-lsp :denols        { :root_dir (better_root_pattern [".git"] ["package.json"])})
@@ -86,9 +70,9 @@
 
 
 ;(lsp.vimls.setup { :on_attach on_attach})
-; }}}}}
+; >>>>>
 
-; compe -------------------------------------------------------------------------------- {{{{{
+; compe -------------------------------------------------------------------------------- <<<<<
 (compe.setup 
   { :enabled true
     :autocomplete false
@@ -109,12 +93,15 @@
               :nvim_lua true 
               :vsnip false}})
 
-; }}}}}
+; >>>>>
 
-; LSP saga  -------------------------------------------------------------------------------- {{{{{
+; LSP saga  -------------------------------------------------------------------------------- <<<<<
 
 (saga.init_lsp_saga 
-  { :border_style 1
+  { :border_style "single" ; single double round plus
+    :code_action_prompt { :enable true
+                          :sign true
+                          :virtual_text false}
     :code_action_keys { :quit "<esc>" :exec "<CR>"} 
     :rename_action_keys { :quit "<esc>" :exec "<CR>"} 
     :finder_action_keys { :quit "<esc>"
@@ -125,6 +112,14 @@
                           :scroll_down "<C-d>"}})
  
 
+(utils.highlight "LspFloatWinNormal"          {:bg colors.dark0_hard})
+(utils.highlight "LspFloatWinBorder"          {:bg colors.dark0_hard :fg colors.dark0_hard})
+(utils.highlight "LspSagaHoverBorder"         {:bg colors.dark0_hard :fg colors.dark0_hard})
+(utils.highlight "LspSagaRenameBorder"        {:bg colors.dark0_hard :fg colors.dark0_hard})
+(utils.highlight "LspSagaSignatureHelpBorder" {:bg colors.dark0_hard :fg colors.dark0_hard})
+(utils.highlight "LspSagaCodeActionBorder"    {:bg colors.dark0_hard :fg colors.dark0_hard})
+(utils.highlight "LspSagaDefPreviewBorder"    {:bg colors.dark0_hard :fg colors.dark0_hard})
+
 (utils.highlight "LspSagaCodeActionTitle"   {:fg colors.bright_aqua})
 (utils.highlight "LspSagaBorderTitle"       {:fg colors.bright_aqua})
 (utils.highlight "LspSagaCodeActionContent" {:fg colors.bright_aqua})
@@ -133,9 +128,9 @@
 (utils.highlight "TargetWord"               {:fg colors.bright_aqua})
 
 
-; }}}}}
+; >>>>>
 
-; LSP trouble -------------------------------------------------------------------------------- {{{{{
+; LSP trouble -------------------------------------------------------------------------------- <<<<<
 (trouble.setup
   {:icons false
    :auto_preview true
@@ -152,9 +147,16 @@
 (utils.highlight "LspTroubleSignInformation" {:bg "NONE" :fg colors.bright_aqua})
 (utils.highlight "LspTroubleSignHint"        {:bg "NONE" :fg colors.bright_blue})
 
-; }}}}}
+; >>>>>
 
+
+; Empty template -------------------------------------------------------------------------------- <<<<<
+
+; >>>>>
+
+(rust-tools.setup { :inlay_hints { :show_parameter_hints false}})
 
 (set vim.o.signcolumn "yes")
 
- ; vim:foldmarker={{{{{,}}}}}
+
+ ; vim:foldmarker=<<<<<,>>>>>

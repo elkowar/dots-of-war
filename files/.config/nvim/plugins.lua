@@ -127,6 +127,8 @@ require("packer").startup(function(use)
   -- use "mxw/vim-prolog"
 
 
+  use "simrat39/rust-tools.nvim"
+
   use "neovim/nvim-lspconfig"
 
   -- use "nvim-lua/completion-nvim"
