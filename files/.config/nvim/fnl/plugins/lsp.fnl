@@ -112,20 +112,28 @@
                           :scroll_down "<C-d>"}})
  
 
-(utils.highlight "LspFloatWinNormal"          {:bg colors.dark0_hard})
-(utils.highlight "LspFloatWinBorder"          {:bg colors.dark0_hard :fg colors.dark0_hard})
-(utils.highlight "LspSagaHoverBorder"         {:bg colors.dark0_hard :fg colors.dark0_hard})
-(utils.highlight "LspSagaRenameBorder"        {:bg colors.dark0_hard :fg colors.dark0_hard})
-(utils.highlight "LspSagaSignatureHelpBorder" {:bg colors.dark0_hard :fg colors.dark0_hard})
-(utils.highlight "LspSagaCodeActionBorder"    {:bg colors.dark0_hard :fg colors.dark0_hard})
-(utils.highlight "LspSagaDefPreviewBorder"    {:bg colors.dark0_hard :fg colors.dark0_hard})
+(utils.highlight [ "LspFloatWinNormal" ] {:bg colors.dark0_hard})
+(utils.highlight [ "LspFloatWinBorder"
+                   "LspSagaHoverBorder"
+                   "LspSagaRenameBorder"
+                   "LspSagaSignatureHelpBorder"
+                   "LspSagaCodeActionBorder"
+                   "LspSagaDefPreviewBorder"
+                   "LspSagaDiagnosticBorder"]
+                 { :bg colors.dark0_hard :fg colors.dark0_hard})
 
-(utils.highlight "LspSagaCodeActionTitle"   {:fg colors.bright_aqua})
-(utils.highlight "LspSagaBorderTitle"       {:fg colors.bright_aqua})
-(utils.highlight "LspSagaCodeActionContent" {:fg colors.bright_aqua})
-(utils.highlight "LspSagaFinderSelection"   {:fg colors.bright_aqua})
-(utils.highlight "LspSagaDiagnosticHeader"  {:fg colors.bright_aqua})
-(utils.highlight "TargetWord"               {:fg colors.bright_aqua})
+(utils.highlight [ "LspSagaDiagnosticTruncateLine"
+                   "LspSagaDocTruncateLine"
+                   "LspSagaShTruncateLine"]
+                 { :bg "NONE" :fg colors.dark0})
+
+(utils.highlight [ "TargetWord"
+                   "LspSagaCodeActionTitle"  
+                   "LspSagaBorderTitle"      
+                   "LspSagaCodeActionContent"
+                   "LspSagaFinderSelection"  
+                   "LspSagaDiagnosticHeader"] 
+                 { :fg colors.bright_aqua})
 
 
 ; >>>>>

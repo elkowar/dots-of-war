@@ -74,10 +74,12 @@
     :gray "#928374"})
 
 
-(defn highlight [group colset] 
+(defn highlight [group-arg colset] 
   (let [default { :fg "NONE" :bg "NONE" :gui "NONE"}
-        opts (a.merge default colset)]
-    (nvim.command (.. "hi! "group" guifg='"opts.fg"' guibg='"opts.bg"' gui='"opts.gui"'"))))
+        opts (a.merge default colset)
+        hl-groups (if (a.string? group-arg) [group-arg] group-arg)]
+    (each [_ group (ipairs hl-groups)]
+      (nvim.command (.. "hi! "group" guifg='"opts.fg"' guibg='"opts.bg"' gui='"opts.gui"'")))))
 
 
 (defn comp [f g]
