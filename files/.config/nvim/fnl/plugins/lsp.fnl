@@ -17,20 +17,24 @@
 (local colors (utils.colors))
 
 (symbols-outline.setup { :highlight_hovered_item true :show_guides true})
-(set vim.o.signcolumn "yes")
 
 (nvim-treesitter-configs.setup 
-  { :ensure_installed "maintained" 
+  { :ensure_installed "all" 
     :highlight { :enable true}
-    :indent { :enable true}
-    :incremental_selection 
-    { :enable true
-      :keymaps { :init_selection    "gss"
-                 :node_incremental  "gsl"
-                 :node_decremental  "gsh"
-                 :scope_incremental "gsj"
-                 :scope_decremental "gsk"}}})
+    :indent    { :enable true}
 
+    :incremental_selection 
+      { :enable true
+        :keymaps { :init_selection    "gss"
+                   :node_incremental  "gsl"
+                   :node_decremental  "gsh"
+                   :scope_incremental "gsj"
+                   :scope_decremental "gsk"}}
+
+    :rainbow { :enable true
+               :extended_mode true}
+
+    :context_commentstring { :enable true}})
 
 ; LSP config -------------------------------------------------------------------------------- {{{{{
 
@@ -151,5 +155,6 @@
 ; }}}}}
 
 
+(set vim.o.signcolumn "yes")
 
  ; vim:foldmarker={{{{{,}}}}}

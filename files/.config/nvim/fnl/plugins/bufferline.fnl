@@ -44,9 +44,9 @@
         :diagnostic_visible  { :gui "" :guibg colors.dark1        :guifg colors.neutral_red}
         :diagnostic_selected { :gui "" :guibg colors.neutral_aqua :guifg colors.faded_red}
 
-        :info_diagnostic          { :gui "" :guibg "blue" :guifg colors.neutral_yellow}
-        :info_diagnostic_visible  { :gui "" :guibg "blue" :guifg colors.neutral_yellow}
-        :info_diagnostic_selected { :gui "" :guibg "blue" :guifg colors.faded_yellow}
+        :info_diagnostic          { :gui "" :guibg colors.dark1        :guifg colors.neutral_blue}
+        :info_diagnostic_visible  { :gui "" :guibg colors.dark1        :guifg colors.neutral_blue}
+        :info_diagnostic_selected { :gui "" :guibg colors.neutral_aqua :guifg colors.faded_blue}
 
         :warning_diagnostic          { :gui "" :guibg colors.dark1        :guifg colors.neutral_yellow}
         :warning_diagnostic_visible  { :gui "" :guibg colors.dark1        :guifg colors.neutral_yellow}

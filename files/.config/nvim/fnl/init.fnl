@@ -15,8 +15,6 @@
 
 
 
-
-
 ; " :: and _ as space ------------------------------------------------------------------- {{{
 (var remapped-space nil)
 (fn _G.RebindShit [newKey]

@@ -15,6 +15,11 @@ require("packer").startup(function(use)
 
   use_rocks "rtsisyk/fun"
 
+  use "p00f/nvim-ts-rainbow"
+  use "romgrk/nvim-treesitter-context"
+
+  use 'JoosepAlviste/nvim-ts-context-commentstring'
+
   use {
     "nvim-treesitter/nvim-treesitter",
     run = ":TSUpdate"
