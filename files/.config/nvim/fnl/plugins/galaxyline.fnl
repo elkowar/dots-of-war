@@ -34,13 +34,13 @@
     "" { :text "VISUAL BLOCK" :colors { :bg colors.neutral_blue   :fg colors.dark0}}})
 
 
-(fn buf-empty? [] 
-  (= 1 (nvim.fn.empty (nvim.fn.expand "%:t"))))
+(fn buf-name-empty? [] 
+  (a.empty? (nvim.fn.expand "%:t")))
 
 (fn get-current-file-name []
   (let [file (nvim.fn.expand "%:t")]
     (if 
-      (= 1 (nvim.fn.empty file)) ""
+      (a.empty? file) ""
       nvim.bo.readonly (.. "RO " file)
       (and nvim.bo.modifiable nvim.bo.modified) (.. file " ")
       file)))

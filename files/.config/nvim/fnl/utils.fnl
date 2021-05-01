@@ -1,19 +1,25 @@
 (module utils
   {require {a aniseed.core
-            nvim aniseed.nvim
-            fun fun}
+            fennel aniseed.fennel
+            nvim aniseed.nvim}
    require-macros [macros]})
  
 
 (defn dbg [x]
-  (a.pr x)
+  (a.println (fennel.view x))
   x)
 
+
 (defn contains? [list elem]
-  (fun.any #(= elem $1) list))
+  (or (a.some #(= elem $1) list)) false)
+
+(defn filter-table [f t]
+  (collect [k v (pairs t)]
+    (when (f k v)
+      (values k v))))
 
 (defn without-keys [keys t]
-  (fun.filter #(not (contains? keys $1)) t))
+  (filter-table #(not (contains? keys $1)) t))
 
 (defn keymap [mode from to ?opts]
   "Set a mapping in the given mode, and some optional parameters, defaulting to {:noremap true :silent true}.
@@ -21,8 +27,7 @@
   (local full-opts 
     (->> (or ?opts {})
       (a.merge {:noremap true :silent true})
-      (without-keys [:buffer])
-      fun.tomap))
+      (without-keys [:buffer])))
   (if (and ?opts (?. ?opts :buffer))
     (nvim.buf_set_keymap 0 mode from to full-opts)
     (nvim.set_keymap mode from to full-opts)))

@@ -16,4 +16,11 @@
  
  :viml->fn
  (fn [name]
-   `(.. "lua require('" *module-name* "')['" ,(tostring name) "']()"))}
+   `(.. "lua require('" *module-name* "')['" ,(tostring name) "']()"))
+
+ :dbg-call
+ (fn [x ...]
+   `(do
+     (a.println ,...)
+     (,x ,...)))}
+

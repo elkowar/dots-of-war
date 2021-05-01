@@ -13,7 +13,7 @@ vim.cmd [[packadd packer.nvim]]
 
 require("packer").startup(function(use)
 
-  use_rocks "rtsisyk/fun"
+  --use_rocks "rtsisyk/fun"
 
   use 'pwntester/octo.nvim'
 
@@ -59,7 +59,7 @@ require("packer").startup(function(use)
     cmd = "Goyo",
   }
 
-  use "mhinz/vim-signify"
+  --use "mhinz/vim-signify"
   use "lewis6991/gitsigns.nvim"
 
   use "tpope/vim-fugitive"

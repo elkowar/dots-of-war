@@ -140,6 +140,29 @@ endfunction
 
 autocmd BufCreate * execute 'call CleanNoNameEmptyBuffers()'
 
+" this nearly works, and does the same 
+
+" ; autoclose empty unedited buffers
+" (fn _G.clean_no_name_empty_buffers []
+"   (local bufs
+"     (a.filter
+"       #(and 
+"         (vim.api.nvim_buf_get_option $1 "buflisted")
+"         (a.empty? (vim.fn.bufname $1))
+"         (< (vim.fn.bufwinnr $1) 0)
+"         (vim.api.nvim_buf_is_loaded $1))
+"         ;(do (utils.dbg (.. (fennel.view $1) " -> " (fennel.view (vim.api.nvim_buf_is_loaded $1))) true)))
+"         ;(a.empty? (vim.api.nvim_buf_get_lines $1 1 (vim.api.nvim_buf_line_count $1) false)))
+"       (vim.fn.range 1 (vim.fn.bufnr "$"))))
+"   (when (not (a.empty? bufs))
+"     (nvim.command (.. "bd " (str.join " " bufs)))))
+" 
+" (nvim.command "autocmd! BufCreate * :call v:lua.clean_no_name_empty_buffers()")
+" 
+" ; autocmd BufCreate * execute 'call CleanNoNameEmptyBuffers()'
+
+
+
 
 
 " ===============
@@ -174,7 +197,7 @@ let g:detectindent_preferred_indent = 2
 
 autocmd BufReadPost *.hs :set shiftwidth=2
 
-let g:vim_parinfer_filetypes = ['carp']
+let g:vim_parinfer_filetypes = ['carp', 'fennel']
 
 
 let g:sneak#label = 1

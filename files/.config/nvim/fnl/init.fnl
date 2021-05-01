@@ -1,13 +1,14 @@
 (module init 
   {require {a aniseed.core
-            fennel aniseed.fennel 
-            nvim aniseed.nvim 
-            kb keybinds 
+            fennel aniseed.fennel
+            nvim aniseed.nvim
+            str aniseed.string
+            kb keybinds
             utils utils
             nvim-treesitter-configs nvim-treesitter.configs
             gitsigns gitsigns}
-            ;nvim-biscuits nvim-biscuits}
-    require-macros [macros]})
+           ;nvim-biscuits nvim-biscuits}
+   require-macros [macros]})
 
 (require "plugins.telescope")
 (require "plugins.lsp")
@@ -16,9 +17,11 @@
 
 (local colors (utils.colors))
 
+
+
 ;(set nvim.g.conjure#client#fennel#aniseed#aniseed_module_prefix "aniseed.")
 
-
+; Treesitter  ------------------------------------------------------- <<<<<
 (nvim-treesitter-configs.setup 
   { :ensure_installed "all" 
     :highlight { :enable true
@@ -43,6 +46,7 @@
 ;(nvim-biscuits.setup {}
   ;{ :on_events ["InsertLeave" "CursorHoldI"]})
 
+; >>>>>
 
 ; gitsigns.nvim ------------------------------------------------------- <<<<<
 ; https://github.com/lewis6991/gitsigns.nvim
@@ -53,9 +57,9 @@
              :topdelete {:text "▍"}
              :changedelete {:text "▍"}}
     :keymaps { :noremap true 
-               :buffer (do (a.println "TESTTESTTEST")
-                           true)}
-    :current_line_blame false})
+               :buffer true}
+    :current_line_blame true
+    :update_debounce 100})
 
 (utils.highlight "GitSignsAdd"    {:bg "NONE" :fg colors.bright_aqua})
 (utils.highlight "GitSignsDelete" {:bg "NONE" :fg colors.neutral_red})
@@ -64,7 +68,8 @@
 ; >>>>>
 
 
-; " :: and _ as space ------------------------------------------------------------------- <<<<<})
+
+; " :: and _ as space ------------------------------------------------------------------- <<<<<
 (var remapped-space nil)
 (fn _G.RebindShit [newKey]
   (set remapped-space {:old (vim.fn.maparg :<Space> :i)
