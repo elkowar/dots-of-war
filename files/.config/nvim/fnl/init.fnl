@@ -4,8 +4,9 @@
             nvim aniseed.nvim 
             kb keybinds 
             utils utils
-            nvim-treesitter-configs nvim-treesitter.configs}
-            ;gitsigns gitsigns}
+            nvim-treesitter-configs nvim-treesitter.configs
+            gitsigns gitsigns}
+            ;nvim-biscuits nvim-biscuits}
     require-macros [macros]})
 
 (require "plugins.telescope")
@@ -33,26 +34,32 @@
                    :scope_incremental "gsj"
                    :scope_decremental "gsk"}}
 
-    :rainbow { :enable true
-               :extended_mode true}
+    ; disabled due to it fucking with gitsigns.nvim
+    ;:rainbow { :enable true
+               ;:extended_mode true}
 
     :context_commentstring { :enable true}})
 
+;(nvim-biscuits.setup {}
+  ;{ :on_events ["InsertLeave" "CursorHoldI"]})
 
-; gitsigns.nvim - inactive due to weird issue with keybinds not being removable <<<<<
+
+; gitsigns.nvim ------------------------------------------------------- <<<<<
 ; https://github.com/lewis6991/gitsigns.nvim
-;(gitsigns.setup
-  ;{ :signs { :add {:text "▍"}
-             ;:change {:text "▍"}
-             ;:delete {:text "▍"}
-             ;:topdelete {:text "▍"}
-             ;:changedelete {:text "▍"}}}
-  ;{ :keymaps {  :noremap true :buffer true}
-    ;:current_line_blame false})
+(gitsigns.setup
+  { :signs { :add {:text "▍"}
+             :change {:text "▍"}
+             :delete {:text "▍"}
+             :topdelete {:text "▍"}
+             :changedelete {:text "▍"}}
+    :keymaps { :noremap true 
+               :buffer (do (a.println "TESTTESTTEST")
+                           true)}
+    :current_line_blame false})
 
-;(utils.highlight "GitSignsAdd"    {:bg "NONE" :fg colors.bright_aqua})
-;(utils.highlight "GitSignsDelete" {:bg "NONE" :fg colors.neutral_red})
-;(utils.highlight "GitSignsChange" {:bg "NONE" :fg colors.bright_blue})
+(utils.highlight "GitSignsAdd"    {:bg "NONE" :fg colors.bright_aqua})
+(utils.highlight "GitSignsDelete" {:bg "NONE" :fg colors.neutral_red})
+(utils.highlight "GitSignsChange" {:bg "NONE" :fg colors.bright_blue})
 
 ; >>>>>
 

@@ -59,8 +59,8 @@ require("packer").startup(function(use)
     cmd = "Goyo",
   }
 
- use "mhinz/vim-signify"
-  --use "lewis6991/gitsigns.nvim"
+  use "mhinz/vim-signify"
+  use "lewis6991/gitsigns.nvim"
 
   use "tpope/vim-fugitive"
   use "preservim/nerdcommenter"

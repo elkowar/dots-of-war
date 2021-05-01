@@ -93,7 +93,6 @@ let
     #zstyle ':fzf-tab:complete:ls:*' extra-opts --preview=$extract'exa --icons -1 --color=always $realpath'
     #zstyle ':fzf-tab:complete:*:*' extra-opts --preview=$extract'if [ -f $realpath ]; then bat -p --color=always $realpath; else exa --icons -1 --color=always $realpath; fi'
 
-
   '';
 
 in
@@ -153,6 +152,7 @@ in
     '';
 
     initExtra = ''
+      eval $(opam env)
       export MANPAGER='nvim +Man! +"set nocul" +"set noshowcmd" +"set noruler" +"set noshowmode" +"set laststatus=2" +"set statusline=\ %t"'
       export MANPAGER='nvim +Man! +"set nocul" +"set noshowcmd" +"set noruler" +"set noshowmode" +"set laststatus=0"'
 

@@ -61,6 +61,7 @@
 (init-lsp :jsonls        { :commands { :Format [ #(vim.lsp.buf.range_formatting [] [0 0] [(vim.fn.line "$") 0])]}})
 (init-lsp :denols        { :root_dir (better_root_pattern [".git"] ["package.json"])})
 (init-lsp :hls           { :settings { :languageServerHaskell { :formattingProvider "stylish-haskell"}}})
+(init-lsp :ocamllsp)
 (init-lsp :vimls)
 (init-lsp :bashls)
 (init-lsp :erlangls)
@@ -157,12 +158,11 @@
 
 ; >>>>>
 
-
 ; Empty template -------------------------------------------------------------------------------- <<<<<
 
 ; >>>>>
 
-(rust-tools.setup { :inlay_hints { :show_parameter_hints false}})
+(rust-tools.setup { :tools { :inlay_hints { :show_parameter_hints false}}})
 
 (set vim.o.signcolumn "yes")
 
