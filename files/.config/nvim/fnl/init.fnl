@@ -17,17 +17,17 @@
 (local colors (utils.colors))
 
 
-
 (set vim.g.conjure#client#fennel#aniseed#aniseed_module_prefix "aniseed.")
+(set vim.g.sexp_filetypes "clojure,scheme,lisp,timl,fennel")
 
 ; Treesitter  ------------------------------------------------------- foldstart
 
 (nvim-treesitter-configs.setup 
-  { :ensure_installed "all" 
-    :highlight { :enable true
-                 :disable ["fennel"]}
-    :indent    { :enable true
-                 :disable ["lua"]}
+   {:ensure_installed "all" 
+    :highlight {:enable true
+                :disable ["fennel"]}
+    :indent    {:enable true
+                :disable ["lua"]}
 
     :incremental_selection 
       { :enable true
@@ -108,5 +108,7 @@
 (utils.keymap :n "ö" "a")
 
 ; foldend
+
+
 
  ; vim:foldmarker=foldstart,foldend

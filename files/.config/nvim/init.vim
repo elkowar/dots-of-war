@@ -16,6 +16,7 @@ if &shell =~# 'fish$'
 endif
 
 let mapleader ="\<Space>"
+let maplocalleader = "m"
 
 
 
