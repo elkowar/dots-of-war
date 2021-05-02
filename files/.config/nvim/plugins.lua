@@ -15,11 +15,15 @@ require("packer").startup(function(use)
 
   --use_rocks "rtsisyk/fun"
 
-  use 'pwntester/octo.nvim'
+  use "tami5/compe-conjure"
+
+  use "pwntester/octo.nvim"
+
+  use "Olical/conjure"
 
   use "p00f/nvim-ts-rainbow"
   use "romgrk/nvim-treesitter-context"
-  use 'JoosepAlviste/nvim-ts-context-commentstring'
+  use "JoosepAlviste/nvim-ts-context-commentstring"
   use {
     "nvim-treesitter/nvim-treesitter",
     run = ":TSUpdate"
@@ -33,7 +37,7 @@ require("packer").startup(function(use)
 
 
   -- better quickfix window
-  use "kevinhwang91/nvim-bqf"
+  --use "kevinhwang91/nvim-bqf"
 
   -- json query stuff
   use {

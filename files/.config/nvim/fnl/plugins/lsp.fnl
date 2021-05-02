@@ -92,7 +92,8 @@
               :calc true 
               :nvim_lsp true 
               :nvim_lua true 
-              :vsnip false}})
+              :vsnip false
+              :conjure true}})
 
 ; >>>>>
 
@@ -141,10 +142,16 @@
 
 ; LSP trouble -------------------------------------------------------------------------------- <<<<<
 (trouble.setup
-  {:icons false
-   :auto_preview true
-   :auto_close true
-   :auto_open false})
+  { :icons false
+    :auto_preview true
+    :auto_close true
+    :auto_open false
+    :action_keys
+      { :jump "o"
+        :jump_close "<CR>"
+        :close "<esc>"
+        :cancel "q"
+        :hover ["a" "K"]}})
   
 
 (utils.highlight "LspTroubleFoldIcon" {:bg "NONE" :fg colors.bright_orange})

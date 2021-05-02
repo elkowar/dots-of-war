@@ -23,6 +23,10 @@
 
           bruh &quot; &lt; fuck &gt;
         "
+
+
+
+
         <label text="&lt; &gt; bruh &quot;"/>
 
 
@@ -38,8 +42,8 @@
 
 
 
-        {{EWW_CORES}} {{EWW_RAM}} {{EWW_DISK}} {{EWW_BATTERY}} {{EWW_CPU]}} {{EWW_NET_UP}} {{EWW_NET_DOWN}}
-
+         {{EWW_RAM}} {{EWW_DISK}} {{EWW_BATTERY}} {{EWW_CPU]}} {{EWW_NET_UP}} {{EWW_NET_DOWN}}
+          {{EWW_CORES}}
 
         <scale value="50" orientation="v" min="0" max="100" flipped="true" />
 

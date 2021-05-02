@@ -8,7 +8,7 @@
    require-macros [macros]})
 
 
-(utils.keymap :i :<C-Space> "call compe#complete()" {:expr true})
+(utils.keymap :i :<C-Space> "compe#complete()" {:expr true})
 (utils.keymap :i :<esc> "compe#close('<esc>')" {:expr true})
 
 
