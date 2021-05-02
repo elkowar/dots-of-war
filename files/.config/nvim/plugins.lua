@@ -17,9 +17,6 @@ require("packer").startup(function(use)
 
   use "tami5/compe-conjure"
 
-  use "guns/vim-sexp"
-  use "tpope/vim-sexp-mappings-for-regular-people"
-
   use "pwntester/octo.nvim"
 
   use "Olical/conjure"
@@ -101,7 +98,7 @@ require("packer").startup(function(use)
   use "honza/vim-snippets"
   use "tommcdo/vim-exchange"
   use "kien/rainbow_parentheses.vim"
-  --use "bhurlow/vim-parinfer"
+  use "bhurlow/vim-parinfer"
 
 
   use "ray-x/lsp_signature.nvim"

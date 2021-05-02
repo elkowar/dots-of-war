@@ -78,13 +78,27 @@
     :faded_orange "#af3a03"
     :gray "#928374"})
 
+(defn surround-if-present [a mid b]
+  (if mid 
+    (.. a mid b)
+    ""))
 
-(defn highlight [group-arg colset] 
+(defn highlight [group-arg colset]
   (let [default { :fg "NONE" :bg "NONE" :gui "NONE"}
         opts (a.merge default colset)
         hl-groups (if (a.string? group-arg) [group-arg] group-arg)]
     (each [_ group (ipairs hl-groups)]
       (nvim.command (.. "hi! "group" guifg='"opts.fg"' guibg='"opts.bg"' gui='"opts.gui"'")))))
+
+(defn highlight-add [group-arg colset]
+  (let [hl-groups (if (a.string? group-arg) [group-arg] group-arg)]
+    (each [_ group (ipairs hl-groups)]
+      (nvim.command 
+        (.. "hi! "
+            group
+            (surround-if-present " guibg='"colset.bg"'")
+            (surround-if-present " guifg='"colset.fg"'")
+            (surround-if-present " gui='"colset.gui"'"))))))
 
 
 (defn comp [f g]

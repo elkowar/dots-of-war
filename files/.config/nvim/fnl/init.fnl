@@ -18,7 +18,18 @@
 
 
 (set vim.g.conjure#client#fennel#aniseed#aniseed_module_prefix "aniseed.")
-(set vim.g.sexp_filetypes "clojure,scheme,lisp,timl,fennel")
+
+
+
+; Colors  ------------------------------------------------------- foldstart
+
+(utils.highlight-add 
+  [ "GruvboxBlueSign" "GruvboxAquaSign" "GruvboxRedSign" "GruvboxYellowSign" "GruvboxGreenSign" "GruvboxOrangeSign" "GruvboxPurpleSign"] 
+  {:bg "NONE"})
+
+
+
+; foldend 
 
 ; Treesitter  ------------------------------------------------------- foldstart
 
