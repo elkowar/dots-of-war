@@ -7,7 +7,6 @@
             utils utils
             nvim-treesitter-configs nvim-treesitter.configs
             gitsigns gitsigns}
-           ;nvim-biscuits nvim-biscuits}
    require-macros [macros]})
 
 (require "plugins.telescope")
@@ -21,7 +20,8 @@
 
 (set vim.g.conjure#client#fennel#aniseed#aniseed_module_prefix "aniseed.")
 
-; Treesitter  ------------------------------------------------------- <<<<<
+; Treesitter  ------------------------------------------------------- foldstart
+
 (nvim-treesitter-configs.setup 
   { :ensure_installed "all" 
     :highlight { :enable true
@@ -46,30 +46,42 @@
 ;(nvim-biscuits.setup {}
   ;{ :on_events ["InsertLeave" "CursorHoldI"]})
 
-; >>>>>
+; foldend
 
-; gitsigns.nvim ------------------------------------------------------- <<<<<
+; gitsigns.nvim ------------------------------------------------------- foldstart
 ; https://github.com/lewis6991/gitsigns.nvim
 (gitsigns.setup
-  { :signs { :add {:text "▍"}
-             :change {:text "▍"}
-             :delete {:text "▍"}
-             :topdelete {:text "▍"}
-             :changedelete {:text "▍"}}
-    :keymaps { :noremap true 
-               :buffer true}
-    :current_line_blame true
-    :update_debounce 100})
+  {:signs {:add {:text "▍"}
+           :change {:text "▍"}
+           :delete {:text "▍"}
+           :topdelete {:text "▍"}
+           :changedelete {:text "▍"}}
+   :keymaps {:noremap true 
+             :buffer true}
+   :current_line_blame true
+   :update_debounce 100})
 
 (utils.highlight "GitSignsAdd"    {:bg "NONE" :fg colors.bright_aqua})
 (utils.highlight "GitSignsDelete" {:bg "NONE" :fg colors.neutral_red})
 (utils.highlight "GitSignsChange" {:bg "NONE" :fg colors.bright_blue})
 
-; >>>>>
+; foldend
 
+; :: diffview  ------------------------------------------------------------------- foldstart
 
+(let [diffview (require "diffview")
+      cb (. (require "diffview.config") :diffview_callback)]
+  (diffview.setup
+    {:diff_binaries false
+     :file_panel {:width 35 
+                  :use_icons false}
+     :key_bindings {:view {:<leader>dn (cb "select_next_entry")
+                           :<leader>dp (cb "select_prev_entry")
+                           :<leader>dd (cb "toggle_files")}}}))
 
-; " :: and _ as space ------------------------------------------------------------------- <<<<<
+; foldend
+
+; :: and _ as space ------------------------------------------------------------------- foldstart
 (var remapped-space nil)
 (fn _G.RebindShit [newKey]
   (set remapped-space {:old (vim.fn.maparg :<Space> :i)
@@ -95,6 +107,6 @@
 (utils.keymap :i "<Tab>k" "<space><C-o>:call v:lua.RebindShit('::')<CR>")
 (utils.keymap :n "ö" "a")
 
-; >>>>>
+; foldend
 
- ; vim:foldmarker=<<<<<,>>>>>
+ ; vim:foldmarker=foldstart,foldend

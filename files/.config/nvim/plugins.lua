@@ -35,6 +35,8 @@ require("packer").startup(function(use)
   use "folke/which-key.nvim"
   use "folke/lsp-trouble.nvim"
 
+  use "sindrets/diffview.nvim"
+
 
   -- better quickfix window
   --use "kevinhwang91/nvim-bqf"
