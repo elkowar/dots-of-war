@@ -25,6 +25,7 @@
         "
 
 
+          asd FUCK FUKC FCUK CUFLKJASDFLKJASDLKJASDLKj
 
 
         <label text="&lt; &gt; bruh &quot;"/>
@@ -173,10 +174,11 @@
         <pxbar/>
       </widget>
     </window>
-    <window screen="1" name="mw" stacking="fg" focusable="false">
+    <window screen="0" name="mw" stacking="fg" focusable="false">
     <!--<window screen="2" name="mw" stacking="fg" focusable="false">-->
       <!--<reserve side="l" distance="500px"/>-->
-      <geometry anchor="center" width="200px" height="200px" x="0px" y="0px"/>
+      <geometry anchor="center" width="20%" height="50%" x="50px" y="20px"/>
+      <reserve x="12px" y="20px" side="top" distance="4%" layer="top" exclusive="true"/>
       <widget>
         <test ree="test" />
       </widget>

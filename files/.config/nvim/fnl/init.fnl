@@ -14,18 +14,19 @@
 (require "plugins.galaxyline")
 (require "plugins.bufferline")
 
-(local colors (utils.colors))
+;(tset debug :traceback fennel.traceback)
 
+
+
+(def colors (utils.colors))
 
 (set vim.g.conjure#client#fennel#aniseed#aniseed_module_prefix "aniseed.")
-
-
 
 ; Colors  ------------------------------------------------------- foldstart
 
 (utils.highlight-add 
-  [ "GruvboxBlueSign" "GruvboxAquaSign" "GruvboxRedSign" "GruvboxYellowSign" "GruvboxGreenSign" "GruvboxOrangeSign" "GruvboxPurpleSign"] 
-  {:bg "NONE"})
+ ["GruvboxBlueSign" "GruvboxAquaSign" "GruvboxRedSign" "GruvboxYellowSign" "GruvboxGreenSign" "GruvboxOrangeSign" "GruvboxPurpleSign"] 
+ {:bg "NONE"})
 
 
 
@@ -34,25 +35,25 @@
 ; Treesitter  ------------------------------------------------------- foldstart
 
 (nvim-treesitter-configs.setup 
-   {:ensure_installed "all" 
-    :highlight {:enable true
-                :disable ["fennel"]}
-    :indent    {:enable true
-                :disable ["lua"]}
+  {:ensure_installed "all" 
+   :highlight {:enable true
+               :disable ["fennel"]}
+   :indent    {:enable true
+               :disable ["lua"]}
 
-    :incremental_selection 
-      { :enable true
-        :keymaps { :init_selection    "gss"
-                   :node_incremental  "gsl"
-                   :node_decremental  "gsh"
-                   :scope_incremental "gsj"
-                   :scope_decremental "gsk"}}
+   :incremental_selection 
+     {:enable true
+      :keymaps {:init_selection    "gss"
+                :node_incremental  "gsl"
+                :node_decremental  "gsh"
+                :scope_incremental "gsj"
+                :scope_decremental "gsk"}}
 
-    ; disabled due to it fucking with gitsigns.nvim
-    ;:rainbow { :enable true
-               ;:extended_mode true}
+   ; disabled due to it fucking with gitsigns.nvim
+   ;:rainbow { :enable true
+              ;:extended_mode true}
 
-    :context_commentstring { :enable true}})
+   :context_commentstring {:enable true}})
 
 ;(nvim-biscuits.setup {}
   ;{ :on_events ["InsertLeave" "CursorHoldI"]})
@@ -83,12 +84,12 @@
 (let [diffview (require "diffview")
       cb (. (require "diffview.config") :diffview_callback)]
   (diffview.setup
-    {:diff_binaries false
-     :file_panel {:width 35 
-                  :use_icons false}
-     :key_bindings {:view {:<leader>dn (cb "select_next_entry")
-                           :<leader>dp (cb "select_prev_entry")
-                           :<leader>dd (cb "toggle_files")}}}))
+   {:diff_binaries false
+    :file_panel {:width 35 
+                 :use_icons false}
+    :key_bindings {:view {:<leader>dn (cb "select_next_entry")
+                          :<leader>dp (cb "select_prev_entry")
+                          :<leader>dd (cb "toggle_files")}}}))
 
 ; foldend
 
@@ -100,15 +101,12 @@
   (utils.keymap :i :<Space> newKey {:buffer true}))
 
 (fn _G.UnbindSpaceStuff []
-  (if (and remapped-space (~= remapped-space {}))
-    (do 
-      (utils.del-keymap :i :<Space> true)
-      (if (~= remapped-space.old "")
-        (utils.keymap :i :<Space> remapped-space.old {:buffer true}))
-      (set remapped-space nil))))
+  (when (and remapped-space (~= remapped-space {}))
+   (utils.del-keymap :i :<Space> true)
+   (when (~= remapped-space.old "")
+    (utils.keymap :i :<Space> remapped-space.old {:buffer true}))
+   (set remapped-space nil)))
  
-
-
 
 
 (nvim.command "autocmd! InsertLeave * :call v:lua.UnbindSpaceStuff()")
@@ -119,7 +117,6 @@
 (utils.keymap :n "ö" "a")
 
 ; foldend
-
 
 
  ; vim:foldmarker=foldstart,foldend
