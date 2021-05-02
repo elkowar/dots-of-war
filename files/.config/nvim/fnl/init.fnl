@@ -14,11 +14,10 @@
 (require "plugins.galaxyline")
 (require "plugins.bufferline")
 
+(def- colors utils.colors)
+
 ;(tset debug :traceback fennel.traceback)
 
-
-
-(def colors (utils.colors))
 
 (set vim.g.conjure#client#fennel#aniseed#aniseed_module_prefix "aniseed.")
 

@@ -5,7 +5,7 @@
             utils utils
             bufferline bufferline}})
 
-(local colors (utils.colors))
+(def- colors utils.colors)
 
 ; :h bufferline-lua-highlights
 (let [selected {:guibg colors.neutral_aqua :guifg colors.dark0 :gui ""}

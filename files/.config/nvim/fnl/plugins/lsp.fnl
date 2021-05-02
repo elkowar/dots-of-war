@@ -14,7 +14,7 @@
     require-macros [macros]})
 
 
-(local colors (utils.colors))
+(def- colors utils.colors)
 
 (symbols-outline.setup { :highlight_hovered_item true :show_guides true})
 

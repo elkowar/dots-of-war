@@ -12,7 +12,7 @@
             
     require-macros [macros]})
 
-(local colors (utils.colors))
+(def- colors utils.colors)
 
 (local modes 
  {:n   {:text "NORMAL"        :colors {:bg colors.neutral_aqua   :fg colors.dark0}}
