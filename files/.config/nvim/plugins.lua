@@ -83,6 +83,7 @@ require("packer").startup(function(use)
   use "hauleth/sad.vim"          -- Use siw instead of ciw. when using . afterwards, will find the next occurrence of the changed word and change it too
   use "wellle/targets.vim"       -- more text objects. IE: cin) (change in next parens). generally better handling of surrounding objects.
   use "unblevable/quick-scope"   -- highlight targets when pressing f<character>
+
   use {
     "iamcco/markdown-preview.nvim", 
     run = vim.fn["mkdp#util#install"]

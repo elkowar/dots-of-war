@@ -24,8 +24,8 @@
           bruh &quot; &lt; fuck &gt;
         "
 
+        <literal content="{{lmao}}"/>
 
-          asd FUCK FUKC FCUK CUFLKJASDFLKJASDLKJASDLKj
 
 
         <label text="&lt; &gt; bruh &quot;"/>
@@ -147,6 +147,11 @@
     </script-var>
 
 
+    <script-var interval="100ms" name="lmao">
+      cat ~/fuck
+    </script-var>
+
+
     <var name="bruh">
       {"hi": "ho"}
     </var>
@@ -175,10 +180,9 @@
       </widget>
     </window>
     <window screen="0" name="mw" stacking="fg" focusable="false">
-    <!--<window screen="2" name="mw" stacking="fg" focusable="false">-->
-      <!--<reserve side="l" distance="500px"/>-->
-      <geometry anchor="center" width="20%" height="50%" x="50px" y="20px"/>
-      <reserve x="12px" y="20px" side="top" distance="4%" layer="top" exclusive="true"/>
+      <!--<window screen="2" name="mw" stacking="fg" focusable="false">-->
+      <geometry anchor="top center" width="20%" height="20%" x="50px" y="50px"/>
+      <reserve side="left" distance="80px"/>
       <widget>
         <test ree="test" />
       </widget>

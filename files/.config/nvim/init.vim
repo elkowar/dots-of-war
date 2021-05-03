@@ -38,6 +38,7 @@ set cursorline
 set incsearch
 set hlsearch
 set inccommand=nosplit
+set signcolumn=yes
 
 if (has("termguicolors"))
   set termguicolors

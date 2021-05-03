@@ -9,10 +9,14 @@
             gitsigns gitsigns}
    require-macros [macros]})
 
-(require "plugins.telescope")
-(require "plugins.lsp")
-(require "plugins.galaxyline")
-(require "plugins.bufferline")
+(macro make-errors-epic [f]
+  `(xpcall #,f #(a.println (fennel.traceback $1))))
+
+(make-errors-epic (require "plugins.telescope"))
+(make-errors-epic (require "plugins.lsp"))
+(make-errors-epic (require "plugins.galaxyline"))
+(make-errors-epic (require "plugins.bufferline"))
+
 
 (def- colors utils.colors)
 
@@ -37,8 +41,8 @@
   {:ensure_installed "all" 
    :highlight {:enable true
                :disable ["fennel"]}
-   :indent    {:enable true
-               :disable ["lua"]}
+   ;:indent    {:enable true}
+               ;:disable ["lua"]}
 
    :incremental_selection 
      {:enable true
