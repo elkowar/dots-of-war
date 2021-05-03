@@ -56,7 +56,6 @@ require("packer").startup(function(use)
   -- general purpose lua wrappers for nvim stuff
   use "norcalli/nvim.lua"
 
-
   use "akinsho/nvim-bufferline.lua"
   use "tweekmonster/startuptime.vim"
   use "tpope/vim-repeat"
@@ -148,8 +147,8 @@ require("packer").startup(function(use)
   use "nvim-lua/plenary.nvim"
   use "nvim-telescope/telescope.nvim"
 
-  use "RishabhRD/popfix"
-  use "RishabhRD/nvim-lsputils"
+  --use "RishabhRD/popfix"
+  --use "RishabhRD/nvim-lsputils"
 
   use "nvim-telescope/telescope-media-files.nvim"
 

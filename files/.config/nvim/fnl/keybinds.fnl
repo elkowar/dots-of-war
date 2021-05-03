@@ -4,7 +4,8 @@
             utils utils
             fennel aniseed.fennel
             wk which-key
-            treesitter-selection nvim-treesitter.incremental_selection}
+            treesitter-selection nvim-treesitter.incremental_selection
+            trouble trouble}
    require-macros [macros]})
 
 
@@ -41,13 +42,13 @@
        "v" (cmd "Lspsaga code_action"                     "Apply codeaction") 
        "a" (cmd "Lspsaga show_cursor_diagnostics"         "Cursor diagnostics") 
        "A" (cmd "Lspsaga show_line_diagnostics"           "Line diagnostics")
-       "E" (cmd "Telescope lsp_workspace_diagnostics"     "List diagnostics") 
-       "r" (cmd "Telescope lsp_references"                "Show references") 
-       "e" (cmd "LspTroubleOpen"                          "Show diagnostics") 
+       "h" (cmd "RustToggleInlayHints"                    "Toggle inlay hints")
+       "r" [#(trouble.open "lsp_references")              "Show references"] 
+       "E" [#(trouble.open "lsp_document_diagnostics")    "List diagnostics"] 
+       "e" [#(trouble.open "lsp_workspace_diagnostics")   "Show diagnostics"] 
        "g" [vim.lsp.buf.definition                        "Go to definition"] 
        "i" [vim.lsp.buf.implementation                    "Show implementation"] 
-       "f" [vim.lsp.buf.formatting                        "format file"]
-       "h" (cmd "RustToggleInlayHints"                    "Toggle inlay hints")}
+       "f" [vim.lsp.buf.formatting                        "format file"]}
 
   "f" {:name "+folds"
        "o" (cmd "foldopen"  "open fold") 
