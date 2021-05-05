@@ -4,26 +4,26 @@
             nvim aniseed.nvim
             str aniseed.string
             kb keybinds
-            utils utils
-            nvim-treesitter-configs nvim-treesitter.configs
-            gitsigns gitsigns}
+            utils utils}
    require-macros [macros]})
 
 (macro make-errors-epic [f]
   `(xpcall #,f #(a.println (fennel.traceback $1))))
 
-(make-errors-epic (require "plugins.telescope"))
 (make-errors-epic (require "plugins.lsp"))
-(make-errors-epic (require "plugins.galaxyline"))
-(make-errors-epic (require "plugins.bufferline"))
+
+(when (utils.plugin-installed? :telescope.nvim)
+  (make-errors-epic (require "plugins.telescope")))
+(when (utils.plugin-installed? :galaxyline.nvim)
+  (make-errors-epic (require "plugins.galaxyline")))
+(when (utils.plugin-installed? :nvim-bufferline.lua)
+  (make-errors-epic (require "plugins.bufferline")))
 
 
 (def- colors utils.colors)
 
-;(tset debug :traceback fennel.traceback)
-
-
-(set vim.g.conjure#client#fennel#aniseed#aniseed_module_prefix "aniseed.")
+(when (utils.plugin-installed? :conjure)
+  (set vim.g.conjure#client#fennel#aniseed#aniseed_module_prefix "aniseed."))
 
 ; Colors  ------------------------------------------------------- foldstart
 
@@ -37,26 +37,28 @@
 
 ; Treesitter  ------------------------------------------------------- foldstart
 
-(nvim-treesitter-configs.setup 
-  {:ensure_installed "all" 
-   :highlight {:enable true
-               :disable ["fennel"]}
-   ;:indent    {:enable true}
-               ;:disable ["lua"]}
 
-   :incremental_selection 
-     {:enable true
-      :keymaps {:init_selection    "gss"
-                :node_incremental  "gsl"
-                :node_decremental  "gsh"
-                :scope_incremental "gsj"
-                :scope_decremental "gsk"}}
+(pkg :nvim-treesitter [configs (require "nvim-treesitter.configs")]
+  (configs.setup 
+    {:ensure_installed "all" 
+     :highlight {:enable true
+                 :disable ["fennel"]}
+     ;:indent    {:enable true}
+                 ;:disable ["lua"]}
 
-   ; disabled due to it fucking with gitsigns.nvim
-   ;:rainbow { :enable true
-              ;:extended_mode true}
+     :incremental_selection 
+       {:enable true
+        :keymaps {:init_selection    "gss"
+                  :node_incremental  "gsl"
+                  :node_decremental  "gsh"
+                  :scope_incremental "gsj"
+                  :scope_decremental "gsk"}}
 
-   :context_commentstring {:enable true}})
+     ; disabled due to it fucking with gitsigns.nvim
+     ;:rainbow { :enable true
+                ;:extended_mode true}
+
+     :context_commentstring {:enable true}}))
 
 ;(nvim-biscuits.setup {}
   ;{ :on_events ["InsertLeave" "CursorHoldI"]})
@@ -65,27 +67,27 @@
 
 ; gitsigns.nvim ------------------------------------------------------- foldstart
 ; https://github.com/lewis6991/gitsigns.nvim
-(gitsigns.setup
-  {:signs {:add {:text "▍"}
-           :change {:text "▍"}
-           :delete {:text "▍"}
-           :topdelete {:text "▍"}
-           :changedelete {:text "▍"}}
-   :keymaps {:noremap true 
-             :buffer true}
-   :current_line_blame true
-   :update_debounce 100})
+(pkg :gitsigns.nvim [gitsigns (require "gitsigns")]
+  (gitsigns.setup
+    {:signs {:add {:text "▍"}
+             :change {:text "▍"}
+             :delete {:text "▍"}
+             :topdelete {:text "▍"}
+             :changedelete {:text "▍"}}
+     :keymaps {:noremap true 
+               :buffer true}
+     :current_line_blame true
+     :update_debounce 100})
 
-(utils.highlight "GitSignsAdd"    {:bg "NONE" :fg colors.bright_aqua})
-(utils.highlight "GitSignsDelete" {:bg "NONE" :fg colors.neutral_red})
-(utils.highlight "GitSignsChange" {:bg "NONE" :fg colors.bright_blue})
+  (utils.highlight "GitSignsAdd"    {:bg "NONE" :fg colors.bright_aqua})
+  (utils.highlight "GitSignsDelete" {:bg "NONE" :fg colors.neutral_red})
+  (utils.highlight "GitSignsChange" {:bg "NONE" :fg colors.bright_blue}))
 
 ; foldend
 
 ; :: diffview  ------------------------------------------------------------------- foldstart
-
-(let [diffview (require "diffview")
-      cb (. (require "diffview.config") :diffview_callback)]
+(pkg :diffview.nvim [diffview (require "diffview")
+                     cb (. (require "diffview.config") :diffview_callback)]
   (diffview.setup
    {:diff_binaries false
     :file_panel {:width 35 
@@ -120,6 +122,14 @@
 (utils.keymap :n "ö" "a")
 
 ; foldend
+
+
+
+
+
+
+
+
 
 
  ; vim:foldmarker=foldstart,foldend

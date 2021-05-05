@@ -4,6 +4,11 @@
             nvim aniseed.nvim}
    require-macros [macros]})
  
+(def req 
+  (setmetatable {} {:__index (fn [_ idx] (require idx))}))
+
+(defn plugin-installed? [name]
+  (~= nil (. packer_plugins name)))
 
 (defn dbg [x]
   (a.println (fennel.view x))

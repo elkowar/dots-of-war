@@ -16,7 +16,6 @@
 
 
 (fn cmd [s desc] [(.. "<cmd>" s "<cr>") desc])
-(fn le [s desc] (cmd (.. "call luaeval(\"" s "\")") desc))
 (fn rebind [s desc] [s desc])
 
 (wk.setup {})

@@ -22,5 +22,13 @@
  (fn [x ...]
    `(do
      (a.println ,...)
-     (,x ,...)))}
+     (,x ,...)))
+
+ :pkg
+ (fn [name mappings ...]
+   `(if (~= nil (. packer_plugins ,name))
+      (let ,mappings ,...)
+      (print (.. "plugin disabled " ,name))))}
+
+
 

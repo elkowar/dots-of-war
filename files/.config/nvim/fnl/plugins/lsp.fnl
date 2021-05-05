@@ -4,25 +4,22 @@
             nvim aniseed.nvim 
             lsp lspconfig 
             lsp-configs lspconfig.configs
-            saga lspsaga 
-            utils utils
-            compe compe
-            lsp_signature lsp_signature
-            symbols-outline symbols-outline
-            trouble trouble
-            rust-tools rust-tools}
+            utils utils}
     require-macros [macros]})
 
 
 (def- colors utils.colors)
 
-(symbols-outline.setup { :highlight_hovered_item true :show_guides true})
+(pkg :symbols-outline.nvim [symbols-outline (require "symbols-outline")]
+  (symbols-outline.setup { :highlight_hovered_item true :show_guides true}))
 
 
 ; LSP config -------------------------------------------------------------------------------- <<<<<
 
 (fn on_attach [client bufnr]
-  (lsp_signature.on_attach)
+  (pkg :lsp_signature.nvim [lsp_signature (require "lsp_signature")]
+    (lsp_signature.on_attach))
+
   (if client.resolved_capabilities.document_highlight
     (do
       (utils.highlight "LspReferenceRead"  {:gui "underline"})
@@ -74,8 +71,9 @@
 ; >>>>>
 
 ; compe -------------------------------------------------------------------------------- <<<<<
-(compe.setup 
-  { :enabled true
+(pkg :nvim-compe [compe (require "compe")]
+  (compe.setup 
+   {:enabled true
     :autocomplete false
     :debug false 
     :min_length 1 
@@ -87,81 +85,84 @@
     :max_kind_width 100 
     :max_menu_width 100 
     :documentation true 
-    :source { :path true
+    :source {:path true
               :buffer true 
               :calc true 
               :nvim_lsp true 
               :nvim_lua true 
               :vsnip false
-              :conjure true}})
+              :conjure true}}))
 
 ; >>>>>
 
 ; LSP saga  -------------------------------------------------------------------------------- <<<<<
-
-(saga.init_lsp_saga 
-  { :border_style "single" ; single double round plus
-    :code_action_prompt { :enable true
+(pkg :lspsaga.nvim [saga (require "lspsaga")]
+  (saga.init_lsp_saga 
+    {:border_style "single" ; single double round plus
+     :code_action_prompt {:enable true
                           :sign true
                           :virtual_text false}
-    :code_action_keys { :quit "<esc>" :exec "<CR>"} 
-    :rename_action_keys { :quit "<esc>" :exec "<CR>"} 
-    :finder_action_keys { :quit "<esc>"
+     :code_action_keys {:quit "<esc>" :exec "<CR>"} 
+     :rename_action_keys {:quit "<esc>" :exec "<CR>"} 
+     :finder_action_keys {:quit "<esc>"
                           :open "<CR>" 
                           :vsplit "v" 
                           :split "b" 
                           :scroll_up "<C-u>" 
                           :scroll_down "<C-d>"}})
- 
+   
 
-(utils.highlight [ "LspFloatWinNormal" ] {:bg colors.dark0_hard})
-(utils.highlight [ "LspFloatWinBorder"
-                   "LspSagaHoverBorder"
-                   "LspSagaRenameBorder"
-                   "LspSagaSignatureHelpBorder"
-                   "LspSagaCodeActionBorder"
-                   "LspSagaDefPreviewBorder"
-                   "LspSagaDiagnosticBorder"]
-                 { :bg colors.dark0_hard :fg colors.dark0_hard})
+  (utils.highlight ["LspFloatWinBorder"
+                    "LspSagaHoverBorder"
+                    "LspSagaRenameBorder"
+                    "LspSagaSignatureHelpBorder"
+                    "LspSagaCodeActionBorder"
+                    "LspSagaDefPreviewBorder"
+                    "LspSagaDiagnosticBorder"]
+                   {:bg colors.dark0_hard :fg colors.dark0_hard})
 
-(utils.highlight [ "LspSagaDiagnosticTruncateLine"
-                   "LspSagaDocTruncateLine"
-                   "LspSagaShTruncateLine"]
-                 { :bg "NONE" :fg colors.dark0})
+  (utils.highlight ["LspSagaDiagnosticTruncateLine"
+                    "LspSagaDocTruncateLine"
+                    "LspSagaShTruncateLine"]
+                   {:bg "NONE" :fg colors.dark0})
 
-(utils.highlight [ "TargetWord"
-                   "LspSagaCodeActionTitle"  
-                   "LspSagaBorderTitle"      
-                   "LspSagaCodeActionContent"
-                   "LspSagaFinderSelection"  
-                   "LspSagaDiagnosticHeader"] 
-                 { :fg colors.bright_aqua})
+  (utils.highlight ["TargetWord"
+                    "LspSagaCodeActionTitle"  
+                    "LspSagaBorderTitle"      
+                    "LspSagaCodeActionContent"
+                    "LspSagaFinderSelection"  
+                    "LspSagaDiagnosticHeader"] 
+                   {:fg colors.bright_aqua}))
 
 
+(utils.highlight "LspFloatWinNormal" {:bg colors.dark0_hard})
+(utils.highlight "LspFloatWinBorder" {:bg colors.dark0_hard 
+                                      :fg colors.dark0_hard})
+(utils.highlight "TargetWord" {:fg colors.bright_aqua})
 ; >>>>>
 
 ; LSP trouble -------------------------------------------------------------------------------- <<<<<
-(trouble.setup
-  { :icons false
+(pkg :lsp-trouble.nvim [trouble (require "trouble")]
+  (trouble.setup
+   {:icons false
     :auto_preview true
     :auto_close true
     :auto_open false
     :action_keys
-      { :jump "o"
-        :jump_close "<CR>"
-        :close "<esc>"
-        :cancel "q"
-        :hover ["a" "K"]}})
-  
+      {:jump "o"
+       :jump_close "<CR>"
+       :close "<esc>"
+       :cancel "q"
+       :hover ["a" "K"]}})
 
-(utils.highlight "LspTroubleFoldIcon" {:bg "NONE" :fg colors.bright_orange})
-(utils.highlight "LspTroubleCount"    {:bg "NONE" :fg colors.bright_green})
-(utils.highlight "LspTroubleText"     {:bg "NONE" :fg colors.light0})
+  (utils.highlight "LspTroubleFoldIcon" {:bg "NONE" :fg colors.bright_orange})
+  (utils.highlight "LspTroubleCount"    {:bg "NONE" :fg colors.bright_green})
+  (utils.highlight "LspTroubleText"     {:bg "NONE" :fg colors.light0})
 
-(utils.highlight "LspTroubleSignError"       {:bg "NONE" :fg colors.bright_red})
-(utils.highlight "LspTroubleSignWarning"     {:bg "NONE" :fg colors.bright_yellow})
-(utils.highlight "LspTroubleSignInformation" {:bg "NONE" :fg colors.bright_aqua})
-(utils.highlight "LspTroubleSignHint"        {:bg "NONE" :fg colors.bright_blue})
+  (utils.highlight "LspTroubleSignError"       {:bg "NONE" :fg colors.bright_red})
+  (utils.highlight "LspTroubleSignWarning"     {:bg "NONE" :fg colors.bright_yellow})
+  (utils.highlight "LspTroubleSignInformation" {:bg "NONE" :fg colors.bright_aqua})
+  (utils.highlight "LspTroubleSignHint"        {:bg "NONE" :fg colors.bright_blue}))
 
 ; >>>>>
 
@@ -169,7 +170,8 @@
 
 ; >>>>>
 
-(rust-tools.setup { :tools { :inlay_hints { :show_parameter_hints false}}})
+(pkg :rust-tools.nvim [rust-tools (require "rust-tools")]
+  (rust-tools.setup { :tools { :inlay_hints { :show_parameter_hints false}}}))
 
 (set vim.o.signcolumn "yes")
 
