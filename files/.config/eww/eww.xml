@@ -1,5 +1,6 @@
 <eww>
   <includes>
+
     <file path="./foo.xml"/>
   </includes>
   <definitions>
@@ -28,6 +29,7 @@
 
 
 
+
         <label text="&lt; &gt; bruh &quot;"/>
 
 
@@ -39,11 +41,12 @@
         <if-else cond="{{shit == 'yea'}}">
           <box>hi</box>
           <box>ho</box>
+
         </if-else>
 
 
 
-         {{EWW_RAM}} {{EWW_DISK}} {{EWW_BATTERY}} {{EWW_CPU]}} {{EWW_NET_UP}} {{EWW_NET_DOWN}}
+         {{EWW_RAM}} {{EWW_DISK}} {{EWW_BATTERY}} {{EWW_CPU]}} {{EWW_NET}}
           {{EWW_CORES}}
 
         <scale value="50" orientation="v" min="0" max="100" flipped="true" />
@@ -62,6 +65,7 @@
     <def name="multiple">
       <box orientation="v" space-evenly="false">
         <box>{{text}}test</box>
+
         <box class="whatever lol">{{text}}</box>
         <box style="color: blue;">{{text}}</box>
         <box>{{text}}</box>

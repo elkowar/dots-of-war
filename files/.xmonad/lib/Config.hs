@@ -276,6 +276,7 @@ myStartupHook = do
   spawnOnce "mailnag"
   spawnOnce "flameshot"
   spawn "flashfocus"
+  spawnOnce "dunst"
   for_ ["led1", "led2"] $ \led -> safeSpawn "sudo" ["liquidctl", "set", led, "color", "fixed", "00ffff"]
   withDisplay $ \dpy -> do
     r <- asks theRoot
