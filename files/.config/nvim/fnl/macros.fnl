@@ -26,9 +26,9 @@
 
  :pkg
  (fn [name mappings ...]
-   `(if (~= nil (. packer_plugins ,name))
-      (let ,mappings ,...)
-      (print (.. "plugin disabled " ,name))))}
+   (if (~= nil (. packer_plugins `,(tostring name)))
+       `(let ,mappings ,...)
+       (print (.. "plugin disabled " `,(tostring name)))))}
 
 
 

@@ -252,6 +252,7 @@ hi SignifySignAdd    cterm=NONE gui=NONE guifg='#8ec07c'
 "source $VIM_ROOT/whichkeyConfig.vim
 
 let g:aniseed#env = v:true
+"let g:aniseed#env = { "compile": v:false }
 
 "let g:lexima_no_default_rules = v:true
 "call lexima#set_default_rules()

@@ -1,28 +1,27 @@
 (module init 
-  {require {a aniseed.core
-            fennel aniseed.fennel
-            nvim aniseed.nvim
+  {require {utils utils
             str aniseed.string
-            kb keybinds
-            utils utils}
+            nvim aniseed.nvim
+            a aniseed.core
+            fennel aniseed.fennel}
    require-macros [macros]})
 
 (macro make-errors-epic [f]
   `(xpcall #,f #(a.println (fennel.traceback $1))))
 
 (make-errors-epic (require "plugins.lsp"))
+(make-errors-epic (require "keybinds"))
 
-(when (utils.plugin-installed? :telescope.nvim)
+(pkg telescope.nvim []
   (make-errors-epic (require "plugins.telescope")))
-(when (utils.plugin-installed? :galaxyline.nvim)
+(pkg galaxyline.nvim []
   (make-errors-epic (require "plugins.galaxyline")))
-(when (utils.plugin-installed? :nvim-bufferline.lua)
+(pkg nvim-bufferline.lua []
   (make-errors-epic (require "plugins.bufferline")))
-
 
 (def- colors utils.colors)
 
-(when (utils.plugin-installed? :conjure)
+(pkg conjure []
   (set vim.g.conjure#client#fennel#aniseed#aniseed_module_prefix "aniseed."))
 
 ; Colors  ------------------------------------------------------- foldstart
@@ -38,7 +37,7 @@
 ; Treesitter  ------------------------------------------------------- foldstart
 
 
-(pkg :nvim-treesitter [configs (require "nvim-treesitter.configs")]
+(pkg nvim-treesitter [configs (require "nvim-treesitter.configs")]
   (configs.setup 
     {:ensure_installed "all" 
      :highlight {:enable true
@@ -67,7 +66,7 @@
 
 ; gitsigns.nvim ------------------------------------------------------- foldstart
 ; https://github.com/lewis6991/gitsigns.nvim
-(pkg :gitsigns.nvim [gitsigns (require "gitsigns")]
+(pkg gitsigns.nvim [gitsigns (require "gitsigns")]
   (gitsigns.setup
     {:signs {:add {:text "▍"}
              :change {:text "▍"}
@@ -86,8 +85,8 @@
 ; foldend
 
 ; :: diffview  ------------------------------------------------------------------- foldstart
-(pkg :diffview.nvim [diffview (require "diffview")
-                     cb (. (require "diffview.config") :diffview_callback)]
+(pkg diffview.nvim [diffview (require "diffview")
+                    cb (. (require "diffview.config") :diffview_callback)]
   (diffview.setup
    {:diff_binaries false
     :file_panel {:width 35 

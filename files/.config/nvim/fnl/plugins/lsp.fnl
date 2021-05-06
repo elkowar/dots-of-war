@@ -10,14 +10,14 @@
 
 (def- colors utils.colors)
 
-(pkg :symbols-outline.nvim [symbols-outline (require "symbols-outline")]
+(pkg symbols-outline.nvim [symbols-outline (require "symbols-outline")]
   (symbols-outline.setup { :highlight_hovered_item true :show_guides true}))
 
 
 ; LSP config -------------------------------------------------------------------------------- <<<<<
 
 (fn on_attach [client bufnr]
-  (pkg :lsp_signature.nvim [lsp_signature (require "lsp_signature")]
+  (pkg lsp_signature.nvim [lsp_signature (require "lsp_signature")]
     (lsp_signature.on_attach))
 
   (if client.resolved_capabilities.document_highlight
@@ -71,7 +71,7 @@
 ; >>>>>
 
 ; compe -------------------------------------------------------------------------------- <<<<<
-(pkg :nvim-compe [compe (require "compe")]
+(pkg nvim-compe [compe (require "compe")]
   (compe.setup 
    {:enabled true
     :autocomplete false
@@ -96,7 +96,7 @@
 ; >>>>>
 
 ; LSP saga  -------------------------------------------------------------------------------- <<<<<
-(pkg :lspsaga.nvim [saga (require "lspsaga")]
+(pkg lspsaga.nvim [saga (require "lspsaga")]
   (saga.init_lsp_saga 
     {:border_style "single" ; single double round plus
      :code_action_prompt {:enable true
@@ -142,7 +142,7 @@
 ; >>>>>
 
 ; LSP trouble -------------------------------------------------------------------------------- <<<<<
-(pkg :lsp-trouble.nvim [trouble (require "trouble")]
+(pkg lsp-trouble.nvim [trouble (require "trouble")]
   (trouble.setup
    {:icons false
     :auto_preview true
@@ -170,7 +170,7 @@
 
 ; >>>>>
 
-(pkg :rust-tools.nvim [rust-tools (require "rust-tools")]
+(pkg rust-tools.nvim [rust-tools (require "rust-tools")]
   (rust-tools.setup { :tools { :inlay_hints { :show_parameter_hints false}}}))
 
 (set vim.o.signcolumn "yes")

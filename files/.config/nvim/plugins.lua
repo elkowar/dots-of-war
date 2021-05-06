@@ -98,6 +98,11 @@ require("packer").startup(function(use)
   use "honza/vim-snippets"
   use "tommcdo/vim-exchange"
   use "kien/rainbow_parentheses.vim"
+
+  --use {
+    --"eraserhd/parinfer-rust",
+    --run = "cargo build --release"
+  --}
   use "bhurlow/vim-parinfer"
 
 
