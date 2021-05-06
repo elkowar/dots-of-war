@@ -13,6 +13,8 @@
 (utils.keymap :i :<esc> "compe#close('<esc>')" {:expr true})
 
 
+(utils.keymap :n :<C-p> "<cmd>Telescope find_files<cr>")
+
 
 
 (fn cmd [s desc] [(.. "<cmd>" s "<cr>") desc])

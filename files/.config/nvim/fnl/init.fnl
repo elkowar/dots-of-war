@@ -9,11 +9,17 @@
 (macro make-errors-epic [f]
   `(xpcall #,f #(a.println (fennel.traceback $1))))
 
+
 (make-errors-epic (require "plugins.lsp"))
 (make-errors-epic (require "keybinds"))
 
-(pkg telescope.nvim []
-  (make-errors-epic (require "plugins.telescope")))
+
+; called from packer config
+(fn _G.load_telescope []
+  (require "plugins.telescope"))
+;(pkg telescope.nvim []
+  ;(make-errors-epic (require "plugins.telescope"))))
+
 (pkg galaxyline.nvim []
   (make-errors-epic (require "plugins.galaxyline")))
 (pkg nvim-bufferline.lua []

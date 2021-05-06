@@ -50,7 +50,7 @@ require("packer").startup(function(use)
 
   use {
     "Olical/aniseed", 
-    tag = "v3.16.0"
+    --tag = "v3.16.0"
   }
 
   -- general purpose lua wrappers for nvim stuff
@@ -151,7 +151,14 @@ require("packer").startup(function(use)
 
   use "nvim-lua/popup.nvim"
   use "nvim-lua/plenary.nvim"
-  use "nvim-telescope/telescope.nvim"
+
+  use {
+    "nvim-telescope/telescope.nvim",
+    cmd = { "Telescope" },
+    config = function()
+      _G.load_telescope()
+    end
+  }
 
   --use "RishabhRD/popfix"
   --use "RishabhRD/nvim-lsputils"

@@ -48,16 +48,23 @@
     ((. lsp lsp-name :setup) merged-opts)))
    
 
+
+
 (let [capabilities (vim.lsp.protocol.make_client_capabilities)]
   (set capabilities.textDocument.completion.completionItem.snippetSupport true)
   (set capabilities.textDocument.completion.completionItem.resolveSupport
-        { :properties ["documentation" "detail" "additionalTextEdits"]})
-  (init-lsp :rust_analyzer { :capabilities capabilities})) 
+        {:properties ["documentation" "detail" "additionalTextEdits"]})
+  (lsp.rust_analyzer.setup 
+    {:capabilities capabilities
+     :on_attach (fn [...]
+                  (on_attach ...)
+                  (pkg rust-tools.nvim [rust-tools (require "rust-tools")]
+                    (rust-tools.setup { :tools { :inlay_hints { :show_parameter_hints false}}})))}))
 
-(init-lsp :tsserver      { :root_dir (lsp.util.root_pattern "package.json")})
-(init-lsp :jsonls        { :commands { :Format [ #(vim.lsp.buf.range_formatting [] [0 0] [(vim.fn.line "$") 0])]}})
-(init-lsp :denols        { :root_dir (better_root_pattern [".git"] ["package.json"])})
-(init-lsp :hls           { :settings { :languageServerHaskell { :formattingProvider "stylish-haskell"}}})
+(init-lsp :tsserver      {:root_dir (lsp.util.root_pattern "package.json")})
+(init-lsp :jsonls        {:commands {:Format [ #(vim.lsp.buf.range_formatting [] [0 0] [(vim.fn.line "$") 0])]}})
+(init-lsp :denols        {:root_dir (better_root_pattern [".git"] ["package.json"])})
+(init-lsp :hls           {:settings {:languageServerHaskell {:formattingProvider "stylish-haskell"}}})
 (init-lsp :ocamllsp)
 (init-lsp :vimls)
 (init-lsp :bashls)
@@ -169,9 +176,6 @@
 ; Empty template -------------------------------------------------------------------------------- <<<<<
 
 ; >>>>>
-
-(pkg rust-tools.nvim [rust-tools (require "rust-tools")]
-  (rust-tools.setup { :tools { :inlay_hints { :show_parameter_hints false}}}))
 
 (set vim.o.signcolumn "yes")
 
