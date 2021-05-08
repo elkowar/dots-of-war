@@ -9,21 +9,10 @@
 (macro make-errors-epic [f]
   `(xpcall #,f #(a.println (fennel.traceback $1))))
 
+(make-errors-epic (require "plugins"))
 
 (make-errors-epic (require "plugins.lsp"))
 (make-errors-epic (require "keybinds"))
-
-
-; called from packer config
-(fn _G.load_telescope []
-  (require "plugins.telescope"))
-;(pkg telescope.nvim []
-  ;(make-errors-epic (require "plugins.telescope"))))
-
-(pkg galaxyline.nvim []
-  (make-errors-epic (require "plugins.galaxyline")))
-(pkg nvim-bufferline.lua []
-  (make-errors-epic (require "plugins.bufferline")))
 
 (def- colors utils.colors)
 
@@ -70,39 +59,6 @@
 
 ; foldend
 
-; gitsigns.nvim ------------------------------------------------------- foldstart
-; https://github.com/lewis6991/gitsigns.nvim
-(pkg gitsigns.nvim [gitsigns (require "gitsigns")]
-  (gitsigns.setup
-    {:signs {:add {:text "▍"}
-             :change {:text "▍"}
-             :delete {:text "▍"}
-             :topdelete {:text "▍"}
-             :changedelete {:text "▍"}}
-     :keymaps {:noremap true 
-               :buffer true}
-     :current_line_blame true
-     :update_debounce 100})
-
-  (utils.highlight "GitSignsAdd"    {:bg "NONE" :fg colors.bright_aqua})
-  (utils.highlight "GitSignsDelete" {:bg "NONE" :fg colors.neutral_red})
-  (utils.highlight "GitSignsChange" {:bg "NONE" :fg colors.bright_blue}))
-
-; foldend
-
-; :: diffview  ------------------------------------------------------------------- foldstart
-(pkg diffview.nvim [diffview (require "diffview")
-                    cb (. (require "diffview.config") :diffview_callback)]
-  (diffview.setup
-   {:diff_binaries false
-    :file_panel {:width 35 
-                 :use_icons false}
-    :key_bindings {:view {:<leader>dn (cb "select_next_entry")
-                          :<leader>dp (cb "select_prev_entry")
-                          :<leader>dd (cb "toggle_files")}}}))
-
-; foldend
-
 ; :: and _ as space ------------------------------------------------------------------- foldstart
 (var remapped-space nil)
 (fn _G.RebindShit [newKey]
@@ -127,14 +83,6 @@
 (utils.keymap :n "ö" "a")
 
 ; foldend
-
-
-
-
-
-
-
-
 
 
  ; vim:foldmarker=foldstart,foldend

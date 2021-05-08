@@ -20,7 +20,7 @@ in
       cool-retro-term
       gromit-mpx
       polybarFull
-      discord
+      #discord
       pinta
       espanso
       barrier

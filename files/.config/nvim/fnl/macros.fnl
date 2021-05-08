@@ -28,7 +28,21 @@
  (fn [name mappings ...]
    (if (~= nil (. packer_plugins `,(tostring name)))
        `(let ,mappings ,...)
-       (print (.. "plugin disabled " `,(tostring name)))))}
+       (print (.. "plugin disabled " `,(tostring name)))))
+
+ :each-pair
+ (fn [args ...]
+   (let [[l# r# d#] args]
+     `(let [data# ,d#]
+       (for [i# 1 (a.count data#) 2]
+         (let [,l# (. data# i#)
+               ,r# (. data# (+ i# 1))]
+           ,...)))))}
+ 
+  
+  
+ 
+ 
 
 
 

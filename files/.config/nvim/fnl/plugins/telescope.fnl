@@ -1,15 +1,11 @@
 (module plugins.telescope
-  {require {a aniseed.core
-            fennel aniseed.fennel 
-            nvim aniseed.nvim 
-            utils utils
-            
+  {require {utils utils
             telescope telescope
             actions telescope.actions}})
 
-(telescope.setup 
+(telescope.setup
   {:defaults
-    {:i { "<esc>" actions.close}}})
+   {:i { "<esc>" actions.close}}})
 
 (telescope.load_extension "media_files")
              

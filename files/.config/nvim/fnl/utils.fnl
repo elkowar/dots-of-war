@@ -1,7 +1,7 @@
 (module utils
-  {require {a aniseed.core
-            fennel aniseed.fennel
-            nvim aniseed.nvim}
+  {autoload {a aniseed.core
+             fennel aniseed.fennel
+             nvim aniseed.nvim}
    require-macros [macros]})
  
 (def req 
@@ -43,8 +43,16 @@
     (nvim.buf_del_keymap 0 mode from)
     (nvim.del_keymap mode from)))
 
-
-
+(defn- use [...]
+  "Iterates through the arguments as pairs and calls packer's  function for
+  each of them. Works around Fennel not liking mixed associative and sequential
+  tables as well."
+  (let [pkgs [...]]
+    (packer.startup
+      (fn [use]
+        (each-pair [name opts pkgs]
+          (-?> (. opts :mod) (safe-require-plugin-config))
+          (use (a.assoc opts 1 name)))))))
 
 (def colors
   { :dark0_hard "#1d2021"
