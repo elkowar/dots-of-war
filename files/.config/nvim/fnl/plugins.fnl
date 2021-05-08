@@ -1,27 +1,7 @@
 (module plugins
-  {require {utils utils
-            a aniseed.core
-            packer packer}
-   require-macros [macros]})
+  {require {utils utils}})
 
-(defn safe-require-plugin-config [name]
-  (xpcall 
-    #(require name) 
-    #(a.println (.. "Error sourcing " name ":\n" (fennel.traceback $1)))))
-
-(defn- use [...]
-  "Iterates through the arguments as pairs and calls packer's  function for
-  each of them. Works around Fennel not liking mixed associative and sequential
-  tables as well."
-  (let [pkgs [...]]
-    (packer.startup
-      (fn [use]
-        (each-pair [name opts pkgs]
-          (-?> (. opts :mod) (safe-require-plugin-config))
-          (use (a.assoc opts 1 name)))))))
-
-
-(use
+(utils.use
   :nvim-telescope/telescope.nvim {:mod "plugins.telescope"
                                   :requires [:nvim-lua/popup.nvim :nvim-lua/plenary.nvim]}
 

@@ -3,7 +3,8 @@
             str aniseed.string
             nvim aniseed.nvim
             a aniseed.core
-            fennel aniseed.fennel}
+            fennel aniseed.fennel
+            colors colors}
    require-macros [macros]})
 
 (macro make-errors-epic [f]
@@ -14,10 +15,8 @@
 (make-errors-epic (require "plugins.lsp"))
 (make-errors-epic (require "keybinds"))
 
-(def- colors utils.colors)
 
-(pkg conjure []
-  (set vim.g.conjure#client#fennel#aniseed#aniseed_module_prefix "aniseed."))
+(set vim.g.conjure#client#fennel#aniseed#aniseed_module_prefix "aniseed.")
 
 ; Colors  ------------------------------------------------------- foldstart
 

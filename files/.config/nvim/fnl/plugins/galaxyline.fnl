@@ -3,6 +3,7 @@
             fennel aniseed.fennel 
             nvim aniseed.nvim 
             utils utils
+            colors colors
             
             galaxyline galaxyline 
             gl-condition galaxyline.condition 
@@ -11,8 +12,6 @@
             gl-vcs galaxyline.provider_vcs} 
             
     require-macros [macros]})
-
-(def- colors utils.colors)
 
 (local modes 
  {:n   {:text "NORMAL"        :colors {:bg colors.neutral_aqua   :fg colors.dark0}}

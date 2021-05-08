@@ -7,6 +7,4 @@
   {:defaults
    {:i { "<esc>" actions.close}}})
 
-(telescope.load_extension "media_files")
-             
 (utils.keymap :n :<C-p> ":Telescope find_files<CR>")

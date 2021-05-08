@@ -3,9 +3,9 @@
             fennel aniseed.fennel 
             nvim aniseed.nvim 
             utils utils
-            bufferline bufferline}})
+            bufferline bufferline
+            colors colors}})
 
-(def- colors utils.colors)
 
 ; :h bufferline-lua-highlights
 (let [selected {:guibg colors.neutral_aqua :guifg colors.dark0 :gui ""}

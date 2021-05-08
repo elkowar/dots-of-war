@@ -4,11 +4,11 @@
             nvim aniseed.nvim 
             lsp lspconfig 
             lsp-configs lspconfig.configs
-            utils utils}
+            utils utils
+            colors colors}
     require-macros [macros]})
 
 
-(def- colors utils.colors)
 
 (pkg symbols-outline.nvim [symbols-outline (require "symbols-outline")]
   (symbols-outline.setup { :highlight_hovered_item true :show_guides true}))
