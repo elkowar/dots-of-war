@@ -137,17 +137,16 @@
 ; :: autoclose empty unnamed buffers ----------------------------------------------- foldstart
 
 (fn _G.clean_no_name_empty_buffers []
-  (let [bufs (a.filter #(and (vim.api.nvim_buf_get_option $1 "buflisted")
-                             (a.empty? (vim.fn.bufname $1))
+  (let [bufs (a.filter #(and (a.empty? (vim.fn.bufname $1))
                              (< (vim.fn.bufwinnr $1) 0)
-                             (if (vim.api.nvim_buf_is_loaded $1)
-                               (a.empty? (vim.api.nvim_buf_get_lines $1 0 -1 false))
-                               false))
+                             (vim.api.nvim_buf_is_loaded $1)
+                             (= "" (str.join (utils.buffer-content $1)))
+                             (vim.api.nvim_buf_get_option $1 "buflisted"))
                        (vim.fn.range 1 (vim.api.nvim_buf_get_number "$")))]
     (when (not (a.empty? bufs))
-      (nvim.command (.. "bd " (str.join " " bufs))))))
+      (vim.cmd (.. "bdelete " (str.join " " bufs))))))
 
-(nvim.command "autocmd! BufCreate * :call v:lua.clean_no_name_empty_buffers()")
+(vim.cmd "autocmd! BufCreate * :call v:lua.clean_no_name_empty_buffers()")
 
 ; foldend
 

@@ -10,9 +10,8 @@
 (defn plugin-installed? [name]
   (~= nil (. packer_plugins name)))
 
-(defn dbg [x]
-  (a.println (fennel.view x))
-  x)
+(defn all [f xs]
+  (not (a.some (not (f $1)))))
 
 (defn single-to-list [x]
   "Returns the list given to it. If given a single value, wraps it in a list"
@@ -28,7 +27,6 @@
 
 (defn without-keys [keys t]
   (filter-table #(not (contains? keys $1)) t))
-
 
 (defn keymap [modes from to ?opts]
   "Set a mapping in the given modes, and some optional parameters, defaulting to {:noremap true :silent true}.
@@ -67,6 +65,10 @@
           (-?> (. opts :mod) (safe-require-plugin-config))
           (use (a.assoc opts 1 name)))))))
 
+
+(defn buffer-content [bufnr]
+  "Returns a table of lines in the given buffer"
+  (vim.api.nvim_buf_get_lines bufnr 0 -1 false))
 
 (defn surround-if-present [a mid b]
   (if mid 
