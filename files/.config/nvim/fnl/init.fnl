@@ -25,7 +25,7 @@
 
 (set vim.o.showmode false)
 (set vim.o.foldmethod "marker")
-(set vim.o.undodir "~/.vim/undo-dir")
+(set vim.o.undodir (.. vim.env.HOME "/.vim/undo-dir"))
 (set vim.o.undofile true)
 (set vim.o.shortmess (.. vim.o.shortmess "c")) ; Don't give completion messages like 'match 1 of 2' or 'The only match'
 (set vim.o.hidden true)
