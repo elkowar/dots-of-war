@@ -4,9 +4,6 @@
              nvim aniseed.nvim}
    require-macros [macros]})
  
-(def req 
-  (setmetatable {} {:__index (fn [_ idx] (require idx))}))
-
 (defn plugin-installed? [name]
   (~= nil (. packer_plugins name)))
 
@@ -31,15 +28,13 @@
 (defn keymap [modes from to ?opts]
   "Set a mapping in the given modes, and some optional parameters, defaulting to {:noremap true :silent true}.
   If :buffer is set, uses buf_set_keymap rather than set_keymap"
-  (local full-opts 
-    (->> (or ?opts {})
-      (a.merge {:noremap true :silent true})
-      (without-keys [:buffer])))
-  (if (and ?opts (?. ?opts :buffer))
-    (a.println (fennel.view modes))
+  (let [full-opts (->> (or ?opts {})
+                       (a.merge {:noremap true :silent true})
+                       (without-keys [:buffer]))]
     (each [_ mode (ipairs (single-to-list modes))]
-      (nvim.buf_set_keymap 0 mode from to full-opts)
-      (nvim.set_keymap mode from to full-opts))))
+      (if (-?> ?opts (. :buffer))
+        (nvim.buf_set_keymap 0 mode from to full-opts)
+        (nvim.set_keymap mode from to full-opts)))))
 
 (defn del-keymap [mode from ?buf-local]
   "Remove a keymap. Arguments: mode, mapping, bool if mapping should be buffer-local."
@@ -62,7 +57,7 @@
     (packer.startup
       (fn [use]
         (each-pair [name opts pkgs]
-          (-?> (. opts :mod) (safe-require-plugin-config))
+          (-?> opts (. :mod) (safe-require-plugin-config))
           (use (a.assoc opts 1 name)))))))
 
 
