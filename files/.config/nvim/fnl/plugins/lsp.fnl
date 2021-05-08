@@ -1,23 +1,14 @@
 (module plugins.lsp
   {require {a aniseed.core
-            fennel aniseed.fennel 
-            nvim aniseed.nvim 
             lsp lspconfig 
             lsp-configs lspconfig.configs
-            utils utils
-            colors colors}
+            utils utils}
+
     require-macros [macros]})
 
 
-
-(pkg symbols-outline.nvim [symbols-outline (require "symbols-outline")]
-  (symbols-outline.setup { :highlight_hovered_item true :show_guides true}))
-
-
-; LSP config -------------------------------------------------------------------------------- <<<<<
-
 (fn on_attach [client bufnr]
-  (pkg lsp_signature.nvim [lsp_signature (require "lsp_signature")]
+  (pkg lsp-signature.nvim [lsp_signature (require "lsp_signature")]
     (lsp_signature.on_attach))
 
   (if client.resolved_capabilities.document_highlight
@@ -48,8 +39,6 @@
     ((. lsp lsp-name :setup) merged-opts)))
    
 
-
-
 (let [capabilities (vim.lsp.protocol.make_client_capabilities)]
   (set capabilities.textDocument.completion.completionItem.snippetSupport true)
   (set capabilities.textDocument.completion.completionItem.resolveSupport
@@ -75,107 +64,6 @@
 
 
 ;(lsp.vimls.setup { :on_attach on_attach})
-; >>>>>
-
-; compe -------------------------------------------------------------------------------- <<<<<
-(pkg nvim-compe [compe (require "compe")]
-  (compe.setup 
-   {:enabled true
-    :autocomplete false
-    :debug false 
-    :min_length 1 
-    :preselect "enable" 
-    :throttle_time 80 
-    :source_timeout 200 
-    :incomplete_delay 400 
-    :max_abbr_width 100 
-    :max_kind_width 100 
-    :max_menu_width 100 
-    :documentation true 
-    :source {:path true
-              :buffer true 
-              :calc true 
-              :nvim_lsp true 
-              :nvim_lua true 
-              :vsnip false
-              :conjure true}}))
-
-; >>>>>
-
-; LSP saga  -------------------------------------------------------------------------------- <<<<<
-(pkg lspsaga.nvim [saga (require "lspsaga")]
-  (saga.init_lsp_saga 
-    {:border_style "single" ; single double round plus
-     :code_action_prompt {:enable true
-                          :sign true
-                          :virtual_text false}
-     :code_action_keys {:quit "<esc>" :exec "<CR>"} 
-     :rename_action_keys {:quit "<esc>" :exec "<CR>"} 
-     :finder_action_keys {:quit "<esc>"
-                          :open "<CR>" 
-                          :vsplit "v" 
-                          :split "b" 
-                          :scroll_up "<C-u>" 
-                          :scroll_down "<C-d>"}})
-   
-
-  (utils.highlight ["LspFloatWinBorder"
-                    "LspSagaHoverBorder"
-                    "LspSagaRenameBorder"
-                    "LspSagaSignatureHelpBorder"
-                    "LspSagaCodeActionBorder"
-                    "LspSagaDefPreviewBorder"
-                    "LspSagaDiagnosticBorder"]
-                   {:bg colors.dark0_hard :fg colors.dark0_hard})
-
-  (utils.highlight ["LspSagaDiagnosticTruncateLine"
-                    "LspSagaDocTruncateLine"
-                    "LspSagaShTruncateLine"]
-                   {:bg "NONE" :fg colors.dark0})
-
-  (utils.highlight ["TargetWord"
-                    "LspSagaCodeActionTitle"  
-                    "LspSagaBorderTitle"      
-                    "LspSagaCodeActionContent"
-                    "LspSagaFinderSelection"  
-                    "LspSagaDiagnosticHeader"] 
-                   {:fg colors.bright_aqua}))
-
-
-(utils.highlight "LspFloatWinNormal" {:bg colors.dark0_hard})
-(utils.highlight "LspFloatWinBorder" {:bg colors.dark0_hard 
-                                      :fg colors.dark0_hard})
-(utils.highlight "TargetWord" {:fg colors.bright_aqua})
-; >>>>>
-
-; LSP trouble -------------------------------------------------------------------------------- <<<<<
-(pkg lsp-trouble.nvim [trouble (require "trouble")]
-  (trouble.setup
-   {:icons false
-    :auto_preview true
-    :auto_close true
-    :auto_open false
-    :action_keys
-      {:jump "o"
-       :jump_close "<CR>"
-       :close "<esc>"
-       :cancel "q"
-       :hover ["a" "K"]}})
-
-  (utils.highlight "LspTroubleFoldIcon" {:bg "NONE" :fg colors.bright_orange})
-  (utils.highlight "LspTroubleCount"    {:bg "NONE" :fg colors.bright_green})
-  (utils.highlight "LspTroubleText"     {:bg "NONE" :fg colors.light0})
-
-  (utils.highlight "LspTroubleSignError"       {:bg "NONE" :fg colors.bright_red})
-  (utils.highlight "LspTroubleSignWarning"     {:bg "NONE" :fg colors.bright_yellow})
-  (utils.highlight "LspTroubleSignInformation" {:bg "NONE" :fg colors.bright_aqua})
-  (utils.highlight "LspTroubleSignHint"        {:bg "NONE" :fg colors.bright_blue}))
-
-; >>>>>
-
-; Empty template -------------------------------------------------------------------------------- <<<<<
-
-; >>>>>
 
 (set vim.o.signcolumn "yes")
 

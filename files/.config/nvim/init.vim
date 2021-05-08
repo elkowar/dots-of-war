@@ -241,29 +241,6 @@ let g:user_emmet_settings = { 'javascript.jsx' : { 'extends' : 'jsx' }, 'typescr
 let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 let g:qs_lazy_highlight = 1
 
-
-
-" au VimEnter * RainbowParenthesesToggle
-" au Syntax * RainbowParenthesesLoadRound
-" au Syntax * RainbowParenthesesLoadSquare
-" au Syntax * RainbowParenthesesLoadBraces
-
-
-
-"map <Leader>f <Plug>(easymotion-bd-f)
-"map <Leader>s <Plug>(easymotion-overwin-f2)
-"let g:EasyMotion_smartcase = 1
-
-let g:signify_sign_add               = '▍'
-let g:signify_sign_delete            = '▍'
-let g:signify_sign_delete_first_line = '▍'
-let g:signify_sign_change            = '▍'
-"let g:signify_sign_show_text = 0
-
-hi SignifySignDelete cterm=NONE gui=NONE guifg='#fb4934'
-hi SignifySignChange cterm=NONE gui=NONE guifg='#83a598'
-hi SignifySignAdd    cterm=NONE gui=NONE guifg='#8ec07c'
-
 " }}}
 
 " }}}

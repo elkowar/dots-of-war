@@ -5,7 +5,7 @@
   :nvim-telescope/telescope.nvim {:mod "plugins.telescope"
                                   :requires [:nvim-lua/popup.nvim :nvim-lua/plenary.nvim]}
 
-  :p00f/nvim-ts-rainbow {}
+  :p00f/nvim-ts-rainbow {:mod "plugins.treesitter"}
   :romgrk/nvim-treesitter-context {}
   :JoosepAlviste/nvim-ts-context-commentstring {}
   :nvim-treesitter/nvim-treesitter {:run ":TSUpdate"}
@@ -56,11 +56,11 @@
 
   ; code-related ----------------------------------------- <<<
 
-  :folke/lsp-trouble.nvim {}
-  :simrat39/symbols-outline.nvim {}
+  :folke/lsp-trouble.nvim {:mod "plugins.trouble"}
+  :simrat39/symbols-outline.nvim {:mod "plugins.symbols-outline"}
   :neovim/nvim-lspconfig {}
-  :hrsh7th/nvim-compe {}
-  :glepnir/lspsaga.nvim {}
+  :hrsh7th/nvim-compe {:mod "plugins.compe"}
+  :glepnir/lspsaga.nvim {:mod "plugins.lspsaga"}
 
 
   :Olical/conjure {}
@@ -74,7 +74,7 @@
   :editorconfig/editorconfig-vim {}
   :honza/vim-snippets {}
   :tommcdo/vim-exchange {}
-  :kien/rainbow_parentheses.vim {}
+  ;:frazrepo/vim-rainbow {}
 
   :bhurlow/vim-parinfer {:ft ["fennel" "carp" "lisp" "elisp"]}
 

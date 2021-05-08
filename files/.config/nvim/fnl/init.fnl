@@ -1,10 +1,9 @@
 (module init 
-  {require {utils utils
-            str aniseed.string
-            nvim aniseed.nvim
-            a aniseed.core
-            fennel aniseed.fennel
-            colors colors}
+  {autoload {utils utils
+             nvim aniseed.nvim
+             a aniseed.core
+             fennel aniseed.fennel
+             colors colors}
    require-macros [macros]})
 
 (macro make-errors-epic [f]
@@ -28,35 +27,9 @@
 
 ; foldend 
 
-; Treesitter  ------------------------------------------------------- foldstart
-
-
-(pkg nvim-treesitter [configs (require "nvim-treesitter.configs")]
-  (configs.setup 
-    {:ensure_installed "all" 
-     :highlight {:enable true
-                 :disable ["fennel"]}
-     ;:indent    {:enable true}
-                 ;:disable ["lua"]}
-
-     :incremental_selection 
-       {:enable true
-        :keymaps {:init_selection    "gss"
-                  :node_incremental  "gsl"
-                  :node_decremental  "gsh"
-                  :scope_incremental "gsj"
-                  :scope_decremental "gsk"}}
-
-     ; disabled due to it fucking with gitsigns.nvim
-     ;:rainbow { :enable true
-                ;:extended_mode true}
-
-     :context_commentstring {:enable true}}))
 
 ;(nvim-biscuits.setup {}
   ;{ :on_events ["InsertLeave" "CursorHoldI"]})
-
-; foldend
 
 ; :: and _ as space ------------------------------------------------------------------- foldstart
 (var remapped-space nil)
