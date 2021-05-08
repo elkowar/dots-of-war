@@ -14,6 +14,9 @@
   (a.println (fennel.view x))
   x)
 
+(defn single-to-list [x]
+  "Returns the list given to it. If given a single value, wraps it in a list"
+  (if (a.table? x) x [x]))
 
 (defn contains? [list elem]
   (or (a.some #(= elem $1) list)) false)
@@ -26,23 +29,25 @@
 (defn without-keys [keys t]
   (filter-table #(not (contains? keys $1)) t))
 
-(defn keymap [mode from to ?opts]
-  "Set a mapping in the given mode, and some optional parameters, defaulting to {:noremap true :silent true}.
+
+(defn keymap [modes from to ?opts]
+  "Set a mapping in the given modes, and some optional parameters, defaulting to {:noremap true :silent true}.
   If :buffer is set, uses buf_set_keymap rather than set_keymap"
   (local full-opts 
     (->> (or ?opts {})
       (a.merge {:noremap true :silent true})
       (without-keys [:buffer])))
   (if (and ?opts (?. ?opts :buffer))
-    (nvim.buf_set_keymap 0 mode from to full-opts)
-    (nvim.set_keymap mode from to full-opts)))
+    (a.println (fennel.view modes))
+    (each [_ mode (ipairs (single-to-list modes))]
+      (nvim.buf_set_keymap 0 mode from to full-opts)
+      (nvim.set_keymap mode from to full-opts))))
 
 (defn del-keymap [mode from ?buf-local]
   "Remove a keymap. Arguments: mode, mapping, bool if mapping should be buffer-local."
   (if ?buf-local
     (nvim.buf_del_keymap 0 mode from)
     (nvim.del_keymap mode from)))
-
 
 (defn- safe-require-plugin-config [name]
   (xpcall 
@@ -70,20 +75,18 @@
 
 (defn highlight [group-arg colset]
   (let [default { :fg "NONE" :bg "NONE" :gui "NONE"}
-        opts (a.merge default colset)
-        hl-groups (if (a.string? group-arg) [group-arg] group-arg)]
-    (each [_ group (ipairs hl-groups)]
+        opts (a.merge default colset)]
+    (each [_ group (ipairs (single-to-list group-arg))]
       (nvim.command (.. "hi! "group" guifg='"opts.fg"' guibg='"opts.bg"' gui='"opts.gui"'")))))
 
 (defn highlight-add [group-arg colset]
-  (let [hl-groups (if (a.string? group-arg) [group-arg] group-arg)]
-    (each [_ group (ipairs hl-groups)]
-      (nvim.command 
-        (.. "hi! "
-            group
-            (surround-if-present " guibg='"colset.bg"'")
-            (surround-if-present " guifg='"colset.fg"'")
-            (surround-if-present " gui='"colset.gui"'"))))))
+  (each [_ group (ipairs (single-to-list group-arg))]
+    (nvim.command 
+      (.. "hi! "
+          group
+          (surround-if-present " guibg='"colset.bg"'")
+          (surround-if-present " guifg='"colset.fg"'")
+          (surround-if-present " gui='"colset.gui"'")))))
 
 
 (defn comp [f g]

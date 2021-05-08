@@ -13,8 +13,17 @@
 (utils.keymap :i :<esc> "compe#close('<esc>')" {:expr true})
 
 
-(utils.keymap :n :<C-p> "<cmd>Telescope find_files<cr>")
+(utils.keymap [:n] :<C-p> "<cmd>Telescope find_files<cr>")
+(utils.keymap :n :K "<Nop>")
+(utils.keymap :v :K "<Nop>")
 
+
+
+; TODO let's see if i want these
+; (utils.keymap :n :<C-h> "<C-w><C-h>")
+; (utils.keymap :n :<C-j> "<C-w><C-j>")
+; (utils.keymap :n :<C-k> "<C-w><C-k>")
+; (utils.keymap :n :<C-l> "<C-w><C-l>")
 
 
 (fn cmd [s desc] [(.. "<cmd>" s "<cr>") desc])

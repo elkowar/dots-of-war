@@ -30,6 +30,11 @@
        (let ,mappings ,...)
        (print (.. "plugin disabled " `,(tostring name)))))
 
+ :vim-let
+ (fn [field value]
+   (let [text (.. "let " `,(tostring field) "=\"" value "\"")]
+    `(vim.cmd ,text)))
+
  :each-pair
  (fn [args ...]
    (let [[l# r# d#] args]

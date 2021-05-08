@@ -5,10 +5,11 @@
   :nvim-telescope/telescope.nvim {:mod "plugins.telescope"
                                   :requires [:nvim-lua/popup.nvim :nvim-lua/plenary.nvim]}
 
-  :p00f/nvim-ts-rainbow {:mod "plugins.treesitter"}
+  :p00f/nvim-ts-rainbow {}
   :romgrk/nvim-treesitter-context {}
   :JoosepAlviste/nvim-ts-context-commentstring {}
-  :nvim-treesitter/nvim-treesitter {:run ":TSUpdate"}
+  :nvim-treesitter/nvim-treesitter {:mod "plugins.treesitter" 
+                                    :run ":TSUpdate"}
   
   ; :code-biscuits/nvim-biscuits {} ; show opening line after closing curly
 
@@ -50,7 +51,6 @@
   :mg979/vim-visual-multi {}
   :hauleth/sad.vim {}          ; Use siw instead of ciw. when using . afterwards, will find the next occurrence of the changed word and change it too
   :wellle/targets.vim {}       ; more text objects. IE: cin (change in next parens). generally better handling of surrounding objects.
-  :unblevable/quick-scope {}   ; highlight targets when pressing f<character>
 
   :iamcco/markdown-preview.nvim {:run vim.fn.mkdp#util#install}
 
@@ -67,9 +67,9 @@
   :tami5/compe-conjure {}
 
   :machakann/vim-highlightedyank {}
-  :ciaranm/detectindent {}
+  :ciaranm/detectindent {:mod "plugins.detect-indent"}
   :pechorin/any-jump.vim {}
-  :justinmk/vim-sneak {}
+  :justinmk/vim-sneak {:mod "plugins.sneak"}
   :psliwka/vim-smoothie {}
   :editorconfig/editorconfig-vim {}
   :honza/vim-snippets {}
@@ -90,7 +90,7 @@
   :sheerun/vim-polyglot {}    ; Syntax highlighting for most languages
   :HerringtonDarkholme/yats.vim {} ; typescript syntax highlighting
   :mxw/vim-jsx {}
-  ;:mattn/emmet-vim {}
+  :mattn/emmet-vim {:mod "plugins.emmet"}
 
   :purescript-contrib/purescript-vim {}
 

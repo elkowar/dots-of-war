@@ -6,9 +6,8 @@
 
     require-macros [macros]})
 
-
 (fn on_attach [client bufnr]
-  (pkg lsp-signature.nvim [lsp_signature (require "lsp_signature")]
+  (pkg lsp_signature.nvim [lsp_signature (require "lsp_signature")]
     (lsp_signature.on_attach))
 
   (if client.resolved_capabilities.document_highlight
