@@ -1,7 +1,7 @@
-let g:vim_config_root = expand('<sfile>:p:h')
-let $VIM_ROOT = g:vim_config_root
 
-lua << EOF
+-- not even used, but epic. stores the path to the root config directory.
+local vim_config_root = vim.fn.expand("<sfile>:p:h")
+
 local pack_path = vim.fn.stdpath("data") .. "/site/pack"
 
 function ensure(user, repo)
@@ -17,6 +17,6 @@ end
 ensure("wbthomason", "packer.nvim")
 ensure("Olical", "aniseed")
 
-vim.g["aniseed#env"] = { compile = true }
-EOF
-
+vim.g["aniseed#env"] = { 
+  compile = true 
+}
