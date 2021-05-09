@@ -42,13 +42,8 @@
   (set capabilities.textDocument.completion.completionItem.snippetSupport true)
   (set capabilities.textDocument.completion.completionItem.resolveSupport
         {:properties ["documentation" "detail" "additionalTextEdits"]})
-  (lsp.rust_analyzer.setup 
-    {:capabilities capabilities
-     :on_attach (fn [...]
-                  (on_attach ...)
-                  (pkg rust-tools.nvim [rust-tools (require "rust-tools")]
-                    (rust-tools.setup { :tools { :inlay_hints { :show_parameter_hints false}}})))}))
-
+  (init-lsp :rust_analyzer {:capabilities capabilities}))
+     
 (init-lsp :tsserver      {:root_dir (lsp.util.root_pattern "package.json")})
 (init-lsp :jsonls        {:commands {:Format [ #(vim.lsp.buf.range_formatting [] [0 0] [(vim.fn.line "$") 0])]}})
 (init-lsp :denols        {:root_dir (better_root_pattern [".git"] ["package.json"])})
@@ -65,6 +60,9 @@
 ;(lsp.vimls.setup { :on_attach on_attach})
 
 (set vim.o.signcolumn "yes")
+
+;(let [rust-tools (require "rust-tools")]
+  ;(rust-tools.setup {:tools {:inlay_hints {:show_parameter_hints false}}}))
 
 
  ; vim:foldmarker=<<<<<,>>>>>
