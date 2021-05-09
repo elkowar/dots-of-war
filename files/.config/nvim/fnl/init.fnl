@@ -10,6 +10,11 @@
 (macro make-errors-epic [f]
   `(xpcall #,f #(a.println (fennel.traceback $1))))
 
+
+(when (vim.fn.has "termguicolors")
+  (se termguicolors true))
+
+
 (make-errors-epic (require "plugins"))
 
 (make-errors-epic (require "plugins.lsp"))
@@ -54,8 +59,6 @@
 (se shell "bash")
 (se background "dark")
 
-(when (vim.fn.has "termguicolors")
-  (se termguicolors true))
 
 (vim.cmd "colorscheme gruvbox")
 (vim-let &t_ut "")
@@ -78,8 +81,8 @@
 
 ; hide empty line ~'s
 (utils.highlight :EndOfBuffer {:bg "NONE" :fg colors.dark0})
-
 (utils.highlight :LineNr {:bg "NONE"})
+
 (utils.highlight-add :Pmenu {:bg colors.dark0_hard})
 (utils.highlight-add :PmenuSel {:bg colors.bright_aqua})
 (utils.highlight-add :PmenuSbar {:bg colors.dark0_hard})

@@ -32,7 +32,7 @@ in
       vim = "nvim";
       cxmonad = "cd ~/.xmonad && nvim /home/leon/.xmonad/lib/Config.hs && cd -";
       cnix = "cd ~/nixpkgs/ && nvim home.nix && cd -";
-      cvim = "cd ~/.config/nvim/ && nvim init.vim && cd -";
+      cvim = "cd ~/.config/nvim/ && nvim fnl/init.fnl && cd -";
 
       ra = "ranger";
 

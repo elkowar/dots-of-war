@@ -1,5 +1,5 @@
 (module plugins
-  {require {utils utils}
+  {require {}
    require-macros [macros]})
 
 (use-macro
@@ -42,9 +42,8 @@
 
   :tpope/vim-fugitive {}
   :preservim/nerdcommenter {}
-  :godlygeek/tabular {}               ; :Tab /regex can align code on occurrences of the given regex. I.e. :Tab /= aligns all = signs in a block.
+  :godlygeek/tabular {:cmd ["Tabularize"]} ; :Tab /regex can align code on occurrences of the given regex. I.e. :Tab /= aligns all = signs in a block.
   :tpope/vim-surround {}
-  :christoomey/vim-tmux-navigator {}  ; good integration with tmux pane switching
   :nathanaelkane/vim-indent-guides {} ; Can be toggled using <leader>ig (intent-guides)
 
   ; <C-n> to select current word. <C-n> to select next occurrence.
@@ -66,7 +65,7 @@
 
 
   :Olical/conjure {}
-  :tami5/compe-conjure {}
+  :tami5/compe-conjure {:requires [:Olical/conjure]}
 
   :machakann/vim-highlightedyank {}
   :ciaranm/detectindent {:mod "plugins.detect-indent"}
@@ -85,7 +84,7 @@
 
   :kevinoid/vim-jsonc {}
 
-  :ap/vim-css-color {}
+  :norcalli/nvim-colorizer.lua {:mod "plugins.nvim-colorizer"}
   :pangloss/vim-javascript {} ; syntax highlighting JS
   :ianks/vim-tsx {}
   :leafgarland/typescript-vim {}
@@ -105,8 +104,7 @@
   :simrat39/rust-tools.nvim {:ft ["rust"]}
   :ray-x/lsp_signature.nvim {}
 
-  :bakpakin/fennel.vim {}
-  :tjdevries/nlua.nvim {})
+  :bakpakin/fennel.vim {})
 ; >>>
 
 
