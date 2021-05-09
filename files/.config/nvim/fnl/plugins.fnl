@@ -1,8 +1,10 @@
 (module plugins
-  {require {utils utils}})
+  {require {utils utils}
+   require-macros [macros]})
 
-(utils.use
+(use-macro
   :nvim-telescope/telescope.nvim {:mod "plugins.telescope"
+                                  :cmd ["Telescope"]
                                   :requires [:nvim-lua/popup.nvim :nvim-lua/plenary.nvim]}
 
   :p00f/nvim-ts-rainbow {}

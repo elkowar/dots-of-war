@@ -3,7 +3,7 @@
              fennel aniseed.fennel
              nvim aniseed.nvim}
    require-macros [macros]})
- 
+
 (defn plugin-installed? [name]
   (~= nil (. packer_plugins name)))
 
@@ -41,6 +41,12 @@
   (if ?buf-local
     (nvim.buf_del_keymap 0 mode from)
     (nvim.del_keymap mode from)))
+
+(defn pairs->tuples [xs]
+  (let [result []]
+    (each-pair [l r xs]
+      (table.insert result (values l r)))
+    result))
 
 (defn- safe-require-plugin-config [name]
   (xpcall 
