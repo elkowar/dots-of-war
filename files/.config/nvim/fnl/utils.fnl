@@ -48,7 +48,7 @@
       (table.insert result (values l r)))
     result))
 
-(defn- safe-require-plugin-config [name]
+(defn safe-require [name]
   (xpcall 
     #(require name) 
     #(a.println (.. "Error sourcing " name ":\n" (fennel.traceback $1)))))

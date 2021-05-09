@@ -6,7 +6,6 @@
             bufferline bufferline
             colors colors}})
 
-
 ; :h bufferline-lua-highlights
 (let [selected {:guibg colors.neutral_aqua :guifg colors.dark0 :gui ""}
       visible  {:guibg colors.dark1 :guifg colors.neutral_aqua :gui ""}]
