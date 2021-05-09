@@ -50,8 +50,8 @@
        "t" (cmd "Lspsaga signature_help"                  "Show signature help") 
        "n" (cmd "Lspsaga rename"                          "Rename") 
        "v" (cmd "Lspsaga code_action"                     "Apply codeaction") 
-       "a" (cmd "Lspsaga show_cursor_diagnostics"         "Cursor diagnostics") 
-       "A" (cmd "Lspsaga show_line_diagnostics"           "Line diagnostics")
+       "A" (cmd "Lspsaga show_cursor_diagnostics"         "Cursor diagnostics") 
+       "a" (cmd "Lspsaga show_line_diagnostics"           "Line diagnostics")
        "h" (cmd "RustToggleInlayHints"                    "Toggle inlay hints")
        "r" [#(trouble.open "lsp_references")              "Show references"] 
        "E" [#(trouble.open "lsp_document_diagnostics")    "List diagnostics"] 

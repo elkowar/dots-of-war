@@ -13,6 +13,8 @@
             
     require-macros [macros]})
 
+(def- bar-bg-col colors.dark1)
+
 (local modes 
  {:n   {:text "NORMAL"        :colors {:bg colors.neutral_aqua   :fg colors.dark0}}
   :i   {:text "INSERT"        :colors {:bg colors.neutral_yellow :fg colors.dark0}}
@@ -54,16 +56,16 @@
     (.. "  " modedata.text " "))) 
 
 
-(utils.highlight "StatusLine" {:bg colors.dark1 :fg colors.light0 })
+
 (set galaxyline.short_line_list ["dbui" "diff" "peekaboo" "undotree" "vista" "vista_markdown"])
 
 
 (set galaxyline.section.left
   [{:ViMode {:provider vim-mode-provider}}
    {:FileName {:provider get-current-file-name
-               :highlight [colors.light4 colors.dark1]}}
+               :highlight [colors.light4 bar-bg-col]}}
    {:Space {:provider (fn [] "")
-            :highlight [colors.light0 colors.dark1]}}])
+            :highlight [colors.light0 bar-bg-col]}}])
       
 (fn make-lsp-diagnostic-provider [kind]
   (fn []
@@ -76,9 +78,9 @@
   
 (set galaxyline.section.right
   [{:GitBranch {:provider git-branch-provider
-                :highlight [colors.light4 colors.dark1]}} 
+                :highlight [colors.light4 bar-bg-col]}} 
    {:FileType {:provider (fn [] nvim.bo.filetype)
-               :highlight [colors.neutral_aqua colors.dark1]}}
+               :highlight [colors.neutral_aqua bar-bg-col]}}
 
    {:DiagnosticInfo {:provider (make-lsp-diagnostic-provider "Info")
                      :highlight [colors.dark1 colors.neutral_blue]}}
@@ -94,7 +96,7 @@
 
 (do
   (fn add-segment-defaults [data] 
-    (a.merge {:highlight [colors.light0 colors.dark1] 
+    (a.merge {:highlight [colors.light0 bar-bg-col]
               :separator " " 
               :separator_highlight "StatusLine"} 
              data))
@@ -106,3 +108,5 @@
  
   (set galaxyline.section.left (map-gl-section add-segment-defaults galaxyline.section.left))
   (set galaxyline.section.right (map-gl-section add-segment-defaults galaxyline.section.right)))
+
+

@@ -4,58 +4,65 @@
     <file path="./foo.xml"/>
   </includes>
   <definitions>
-  
+
     <def name="pxbar">
       <progress value="{{volume}}" orientation="v" halign="start" flipped="true"/>
     </def>
 
-   <def name="test">
+    <def name="test">
       <box class="{{some_var}}"  space-evenly="false" spacing="10">
-        testing {{shit}} bruh
+        <box space-evenly="false" orientation="v">
+          testing {{shit}} bruh
 
-        is shit true? {{shit == true}}
-        is shit "shit"? {{shit == "shit"}}
+          is shit true? {{shit == true}}
+          is shit "shit"? {{shit == "shit"}}
 
-        true and false 🤔 
-        {{ true && false }}
-        
-        fancy ass math {{ 12 + 5 * 12 * 4 }}
+          true and false 🤔 
+          {{ true && false }}
 
-
-          bruh &quot; &lt; fuck &gt;
-        "
-
-        <literal content="{{lmao}}"/>
+          fancy ass math {{ 12 + 5 * 12 * 4 }}
 
 
+            bruh &quot; &lt; fuck &gt;
+          "
 
-
-        <label text="&lt; &gt; bruh &quot;"/>
-
-
-        {{bruh.hi}} HEHE {{bruh.ho}}
-        Watch this:
-        {{bruh.list[bruh.myIndex]}}
-
-
-        <if-else cond="{{shit == 'yea'}}">
-          <box>hi</box>
-          <box>ho</box>
-
-        </if-else>
+          <literal content="{{lmao}}"/>
 
 
 
-         {{EWW_RAM}} {{EWW_DISK}} {{EWW_BATTERY}} {{EWW_CPU]}} {{EWW_NET}}
-          {{EWW_CORES}}
+
+          <label text="&lt; &gt; bruh &quot;"/>
+
+
+          {{bruh.hi}} HEHE {{bruh.ho}}
+          Watch this:
+          {{bruh.list[bruh.myIndex]}}
+
+
+          <if-else cond="{{shit == 'yea'}}">
+            <box>hi</box>
+            <box>ho</box>
+          </if-else>
+
+          thingy: {{"lmao" =~ ".ma."}}
+          thingy: {{"lmao" =~ "^ma.$"}}
+
+
+        </box>
 
         <scale value="50" orientation="v" min="0" max="100" flipped="true" />
 
-        <button onclick="pgrep 'eww' &amp;&amp; echo '' || echo ''">Test bug</button>
-        <button onclick="notify-send 'ree' 'this is {{shit}}'">click me</button>
-        <calendar show-heading="false" show-day-names="false" day="2" onclick="notify-send 'asdf' '{}'" />
+        <button onclick="pgrep 'eww' &amp;&amp; echo '' || echo ''" cursor="wait">Test bug</button>
+        <button 
+          onclick="notify-send 'ree' 'this is {{shit}}'"
+          onmiddleclick="notify-send 'ree' 'MITTE'"
+          onrightclick="notify-send 'ree' 'RECHTS'"
+          >
+          click me
+      </button>
+      <calendar show-heading="false" show-day-names="false" day="2" onclick="notify-send 'asdf' '{}'" />
         notify-send 'ree' 'this is {{shit}}'
-        <multiple text="{{shit}}" />
+      <multiple text="{{shit}}" />
 
         <!--<literal content="{{code}}"/>-->
 
@@ -72,142 +79,142 @@
         <box>{{text}}</box>
 
         <label onscroll="notify-send '{{shit}}' {}" text="reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" limit-width="5" wrap="true" />
-        <!--<input onchange="eww update code='{}'" />-->
-        {{date}}
-        {{date-tail}}
-      </box>
-    </def>
+          <!--<input onchange="eww update code='{}'" />-->
+            {{date}}
+            {{date-tail}}
+        </box>
+      </def>
 
-    <def name="volume_popup">
-      <box orientation="v" space-evenly="true">
-        <scale flipped="true" orientation="v" value="{{volume}}" min="0" max="100" onchange="amixer sset 'Master' {}%" />
-      </box>
-    </def>
+      <def name="volume_popup">
+        <box orientation="v" space-evenly="true">
+          <scale flipped="true" orientation="v" value="{{volume}}" min="0" max="100" onchange="amixer sset 'Master' {}%" />
+        </box>
+      </def>
 
-    <def name="music">
-      <box class="hi ho" orientation="h" valign="start" space-evenly="false" hexpand="true">
-        <image visible="{{song-image-visible}}" path="{{song-image}}" width="150" height="150" />
-        <box orientation="v" halign="fill" space-evenly="false" vexpand="true" hexpand="true">
-          <box class="data" vexpand="true">
-            <box orientation="v" halign="start">
-              <label class="songname" halign="start" limit-width="30" text="{{song-name}}" />
-              <box space-evenly="false" halign="start">
-                <label class="key" text="Album: " />
-                <label halign="start" limit-width="30" text="{{song-album}}" />
-              </box>
-              <box space-evenly="false" halign="start">
-                <label class="key" text="By:    " />
-                <label halign="start" limit-width="30" text="{{song-artist}}" />
+      <def name="music">
+        <box class="hi ho" orientation="h" valign="start" space-evenly="false" hexpand="true">
+          <image visible="{{song-image-visible}}" path="{{song-image}}" width="150" height="150" />
+          <box orientation="v" halign="fill" space-evenly="false" vexpand="true" hexpand="true">
+            <box class="data" vexpand="true">
+              <box orientation="v" halign="start">
+                <label class="songname" halign="start" limit-width="30" text="{{song-name}}" />
+                <box space-evenly="false" halign="start">
+                  <label class="key" text="Album: " />
+                  <label halign="start" limit-width="30" text="{{song-album}}" />
+                </box>
+                <box space-evenly="false" halign="start">
+                  <label class="key" text="By:    " />
+                  <label halign="start" limit-width="30" text="{{song-artist}}" />
+                </box>
               </box>
             </box>
-          </box>
-          <box class="buttons" hexpand="true">
-            <button onclick="playerctl previous"></button>
-            <button onclick="playerctl play-pause">{{song-playpause}}</button>
-            <button onclick="playerctl next"></button>
+            <box class="buttons" hexpand="true">
+              <button onclick="playerctl previous"></button>
+              <button onclick="playerctl play-pause">{{song-playpause}}</button>
+              <button onclick="playerctl next"></button>
+            </box>
           </box>
         </box>
-      </box>
-    </def>
+      </def>
 
-  </definitions>
-
-
-  <variables>
-    <script-var name="volume">
-    amixer sget 'Master' | grep 'Front Left:' | sed 's/.*\[\(.*\)%\].*/\1/g';
-    LANG=C pactl subscribe | grep --line-buffered sink | while read -r _; do
-      amixer sget 'Master' | grep 'Front Left:' | sed 's/.*\[\(.*\)%\].*/\1/g'
-    done
-    </script-var>
-
-    <var name="shit">
-      true
-    </var>
-    <var name="some_var"></var>
-    <var name="code"></var>
+    </definitions>
 
 
-    <var name="song-image"></var>
-    <var name="song-image-visible">true</var>
-    <var name="song-name"></var>
-    <var name="song-album"></var>
-    <var name="song-artist"></var>
-    <var name="song-show-progress">false</var>
-    <var name="song-playpause"></var>
-    <!--<script-var name="date" interval="1s">-->
-      <!--date-->
-      <!--</script-var>-->
-    <script-var name="date-tail">
-      while true; do
-      sleep 1;
-      notify-send 'hi' 'ho'
-      date
-      done
-    </script-var>
+    <variables>
+      <script-var name="volume">
+        amixer sget 'Master' | grep 'Front Left:' | sed 's/.*\[\(.*\)%\].*/\1/g';
+        LANG=C pactl subscribe | grep --line-buffered sink | while read -r _; do
+        amixer sget 'Master' | grep 'Front Left:' | sed 's/.*\[\(.*\)%\].*/\1/g'
+        done
+      </script-var>
 
-    <script-var name="date" interval="1s">
-      date
-    </script-var>
+      <var name="shit">
+        true
+      </var>
+      <var name="some_var"></var>
+      <var name="code"></var>
 
 
-    <script-var interval="100ms" name="lmao">
-      cat ~/fuck
-    </script-var>
+      <var name="song-image"></var>
+      <var name="song-image-visible">true</var>
+      <var name="song-name"></var>
+      <var name="song-album"></var>
+      <var name="song-artist"></var>
+      <var name="song-show-progress">false</var>
+      <var name="song-playpause"></var>
+        <!--<script-var name="date" interval="1s">-->
+          <!--date-->
+          <!--</script-var>-->
+        <script-var name="date-tail">
+          while true; do
+          sleep 1;
+          notify-send 'hi' 'ho'
+          date
+          done
+        </script-var>
+
+        <script-var name="date" interval="1s">
+          date
+        </script-var>
 
 
-    <var name="bruh">
-      {"hi": "ho"}
-    </var>
+        <script-var interval="100ms" name="lmao">
+          cat ~/fuck
+        </script-var>
 
 
-
-    
+        <var name="bruh">
+          {"hi": "ho"}
+        </var>
 
 
 
-    <!--<script-var name="xyz">-->
-    <!--tail -F /home/leon/test | while read -r _; do notify-send "Hi"; done-->
-    <!--</script-var>-->
-
-    <!--<script-var name="foo">-->
-    <!--tail -F /home/leon/test-->
-    <!--</script-var>-->
-  </variables>
 
 
-  <windows>
-    <window screen="0" name="px" stacking="fg" focusable="false">
-      <geometry anchor="center left" width="10px" height="100%" x="1px" y="0px"/>
-      <widget>
-        <pxbar/>
-      </widget>
-    </window>
-    <window screen="0" name="mw" stacking="fg" focusable="false">
-      <!--<window screen="2" name="mw" stacking="fg" focusable="false">-->
-      <geometry anchor="top center" width="20%" height="20%" x="50px" y="50px"/>
-      <reserve side="left" distance="80px"/>
-      <widget>
-        <test ree="test" />
-      </widget>
-    </window>
-    <window screen="0" name="mw2" stacking="fg">
-      <geometry anchor="bottom right"/>
-      <widget>
-        <foo/>
-        <!--<test ree="test" />-->
-      </widget>
-    </window>
-    <window screen="0" name="volume_popup">
-      <geometry />
-      <widget>
-        <volume_popup />
-      </widget>
-    </window>
-    <window screen="0" name="music">
-      <widget>
-        <music />
-      </widget>
-    </window>
-  </windows>
-</eww>
+
+
+        <!--<script-var name="xyz">-->
+          <!--tail -F /home/leon/test | while read -r _; do notify-send "Hi"; done-->
+          <!--</script-var>-->
+
+          <!--<script-var name="foo">-->
+            <!--tail -F /home/leon/test-->
+            <!--</script-var>-->
+        </variables>
+
+
+        <windows>
+          <window screen="0" name="px" stacking="fg" focusable="false">
+            <geometry anchor="center" width="10px" height="100%" x="1px" y="0px"/>
+            <widget>
+              <pxbar/>
+            </widget>
+          </window>
+          <window screen="0" name="mw" stacking="fg" focusable="false">
+            <!--<window screen="2" name="mw" stacking="fg" focusable="false">-->
+              <geometry anchor="center" width="20%" height="20%" x="50px" y="50px"/>
+              <reserve side="left" distance="80px"/>
+              <widget>
+                <test ree="test" />
+              </widget>
+            </window>
+            <window screen="0" name="mw2" stacking="fg">
+              <geometry anchor="bottom right"/>
+              <widget>
+                <foo/>
+                  <!--<test ree="test" />-->
+                </widget>
+              </window>
+              <window screen="0" name="volume_popup">
+                <geometry />
+                <widget>
+                  <volume_popup />
+                </widget>
+              </window>
+              <window screen="0" name="music">
+                <widget>
+                  <music />
+                </widget>
+              </window>
+            </windows>
+          </eww>

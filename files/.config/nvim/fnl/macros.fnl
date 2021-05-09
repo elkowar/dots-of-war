@@ -44,13 +44,14 @@
   :each-pair
   (fn [args ...]
     (let [[l# r# d#] args]
-      `(let [data# ,d#]
-        (for [i# 1 (a.count data#) 2]
+      `(let [a# (require "aniseed.core")
+             data# ,d#]
+        (for [i# 1 (a#.count data#) 2]
           (let [,l# (. data# i#)
                 ,r# (. data# (+ i# 1))]
             ,...)))))
  
-  :use-macro
+  :packer-use
   (fn [...]
     (let [a (require "aniseed.core")
           fennel (require "aniseed.fennel")
@@ -62,7 +63,7 @@
           (a.assoc block 1 name)
           (when (. block :mod)
             (a.assoc block :config `#((. (require "utils") :safe-require) ,(. block :mod))))
-          (a.assoc block :mod nil)
+          (a.assoc block :mod)
           (table.insert use-statements block)))
   
       (let [use-sym (gensym)]

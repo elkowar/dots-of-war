@@ -16,8 +16,8 @@
                                      :scope_decremental "gsk"}}
 
    ; Might fuck with gitsigns
-   :rainbow {:enable true
-             :extended_mode true}
+   ;:rainbow {:enable true
+             ;:extended_mode true}
    :context_commentstring {:enable true}})
 
    ;:indent    {:enable true}

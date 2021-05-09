@@ -59,8 +59,6 @@
 (se shell "bash")
 (se background "dark")
 
-
-(vim.cmd "colorscheme gruvbox")
 (vim-let &t_ut "")
 
 (vim.cmd "autocmd! BufReadPost *.hs :set shiftwidth=2")
@@ -89,6 +87,9 @@
 (utils.highlight-add :PmenuThumb {:bg colors.dark1})
 (utils.highlight-add :NormalFloat {:bg colors.dark0_hard})
 (utils.highlight-add :SignColumn {:bg colors.dark0})
+
+
+(utils.highlight ["StatusLine" "GalaxyLineInfo" "GalaxySpace" ] {:bg colors.dark1 :fg colors.light0})
 
 (vim.cmd "highlight link Function GruvboxGreen")
 

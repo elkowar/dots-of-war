@@ -2,7 +2,10 @@
   {require {}
    require-macros [macros]})
 
-(use-macro
+(packer-use
+  :gruvbox-community/gruvbox {:opt false
+                              :config #(vim.cmd "colorscheme gruvbox")}
+
   :nvim-telescope/telescope.nvim {:mod "plugins.telescope"
                                   :cmd ["Telescope"]
                                   :requires [:nvim-lua/popup.nvim :nvim-lua/plenary.nvim]}
@@ -27,7 +30,8 @@
   ; general purpose lua wrappers for nvim stuff
   :norcalli/nvim.lua {}
 
-  :glepnir/galaxyline.nvim {:mod "plugins.galaxyline"}
+  :glepnir/galaxyline.nvim {:mod "plugins.galaxyline"
+                            :after "gruvbox"}
   :akinsho/nvim-bufferline.lua {:mod "plugins.bufferline"}
 
   :sindrets/diffview.nvim {:mod "plugins.diffview"}
@@ -38,7 +42,6 @@
   
   :lewis6991/gitsigns.nvim {:mod "plugins.gitsigns"}
 
-  :gruvbox-community/gruvbox {}
 
   :tpope/vim-fugitive {}
   :preservim/nerdcommenter {}
