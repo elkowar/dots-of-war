@@ -10,6 +10,8 @@
                                   :cmd ["Telescope"]
                                   :requires [:nvim-lua/popup.nvim :nvim-lua/plenary.nvim]}
 
+  :kyazdani42/nvim-web-devicons {}
+
   :p00f/nvim-ts-rainbow {}
   :romgrk/nvim-treesitter-context {}
   :JoosepAlviste/nvim-ts-context-commentstring {}
@@ -106,6 +108,8 @@
                        :requires ["mattn/webapi-vim"]}
   :simrat39/rust-tools.nvim {:ft ["rust"]}
   :ray-x/lsp_signature.nvim {}
+
+  :vmchale/ats-vim {:ft ["ats"]}
 
   :bakpakin/fennel.vim {})
 ; >>>

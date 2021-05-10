@@ -7,13 +7,14 @@
             colors colors}})
 
 ; :h bufferline-lua-highlights
-(let [selected {:guibg colors.neutral_aqua :guifg colors.dark0 :gui ""}
-      visible  {:guibg colors.dark1 :guifg colors.neutral_aqua :gui ""}]
+(let [selected {:gui "" :guibg colors.neutral_aqua :guifg colors.dark0}
+      visible  {:gui "" :guibg colors.dark1        :guifg colors.neutral_aqua}]
  (bufferline.setup 
    {:options
     {:diagnostics "nvim_lsp"
      :diagnostics_indicator (fn [cnt lvl diagnostics-dict] (.. " (" cnt ")"))
      :show_buffer_close_icons false
+     :show_buffer_icons false
      :show_close_icon false
      :show_tab_indicators false
      :enforce_regular_tabs false
@@ -39,17 +40,21 @@
      :duplicate_visible visible
      :duplicate_selected selected
 
-     :diagnostic          {:gui "" :guibg colors.dark1        :guifg colors.neutral_red}
-     :diagnostic_visible  {:gui "" :guibg colors.dark1        :guifg colors.neutral_red}
-     :diagnostic_selected {:gui "" :guibg colors.neutral_aqua :guifg colors.faded_red}
+     :diagnostic                  {:gui "" :guibg colors.dark1        :guifg colors.neutral_red}
+     :diagnostic_visible          {:gui "" :guibg colors.dark1        :guifg colors.neutral_red}
+     :diagnostic_selected         {:gui "" :guibg colors.neutral_aqua :guifg colors.faded_red}
 
-     :info_diagnostic          {:gui "" :guibg colors.dark1        :guifg colors.neutral_blue}
-     :info_diagnostic_visible  {:gui "" :guibg colors.dark1        :guifg colors.neutral_blue}
-     :info_diagnostic_selected {:gui "" :guibg colors.neutral_aqua :guifg colors.faded_blue}
+     :info_diagnostic             {:gui "" :guibg colors.dark1        :guifg colors.neutral_blue}
+     :info_diagnostic_visible     {:gui "" :guibg colors.dark1        :guifg colors.neutral_blue}
+     :info_diagnostic_selected    {:gui "" :guibg colors.neutral_aqua :guifg colors.faded_blue}
 
      :warning_diagnostic          {:gui "" :guibg colors.dark1        :guifg colors.neutral_yellow}
      :warning_diagnostic_visible  {:gui "" :guibg colors.dark1        :guifg colors.neutral_yellow}
      :warning_diagnostic_selected {:gui "" :guibg colors.neutral_aqua :guifg colors.faded_yellow}
+
+     :error_diagnostic            {:gui "" :guibg colors.dark1        :guifg colors.neutral_red}
+     :error_diagnostic_visible    {:gui "" :guibg colors.dark1        :guifg colors.neutral_red}
+     :error_diagnostic_selected   {:gui "" :guibg colors.neutral_aqua :guifg colors.red}
 
      :separator visible
      :indicator_selected {:guibg colors.neutral_aqua :guifg colors.neutral_aqua}

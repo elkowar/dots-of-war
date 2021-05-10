@@ -1,5 +1,6 @@
 (module plugins.galaxyline
   {require {a aniseed.core
+            str aniseed.string
             fennel aniseed.fennel 
             nvim aniseed.nvim 
             utils utils
@@ -18,7 +19,7 @@
 (local modes 
  {:n   {:text "NORMAL"        :colors {:bg colors.neutral_aqua   :fg colors.dark0}}
   :i   {:text "INSERT"        :colors {:bg colors.neutral_yellow :fg colors.dark0}}
-  :c   {:text "CMD"           :colors {:bg colors.neutral_aqua   :fg colors.dark0}}
+  :c   {:text "CMMAND"        :colors {:bg colors.neutral_aqua   :fg colors.dark0}}
   :ce  {:text "NORMEX"        :colors {:bg colors.neutral_aqua   :fg colors.dark0}}
   :cv  {:text "EX"            :colors {:bg colors.neutral_aqua   :fg colors.dark0}}
   :ic  {:text "INSCOMP"       :colors {:bg colors.neutral_aqua   :fg colors.dark0}}
@@ -34,52 +35,46 @@
   :V   {:text "VISUAL LINE"   :colors {:bg colors.neutral_blue   :fg colors.dark0}}
   "" {:text "VISUAL BLOCK"  :colors {:bg colors.neutral_blue   :fg colors.dark0}}})
 
+(fn get-current-filename []
+  (nvim.fn.expand "%:t"))
 
-(fn buf-name-empty? [] 
-  (a.empty? (nvim.fn.expand "%:t")))
-
-(fn get-current-file-name []
-  (let [file (nvim.fn.expand "%:t")]
+(fn get-current-filepath []
+  (let [file (utils.shorten-path (vim.fn.bufname) 5 50)]
     (if (a.empty? file) ""
         nvim.bo.readonly (.. "RO " file)
         (and nvim.bo.modifiable nvim.bo.modified) (.. file " ")
         file)))
  
-(fn get-mode-data []
-  (or (. modes (nvim.fn.mode))
-      {:text (nvim.fn.mode) 
-       :colors {:bg colors.neutral_orange :fg colors.dark0}})) 
-
-(fn vim-mode-provider []
-  (let [modedata (get-mode-data)] 
-    (utils.highlight "GalaxyViMode" modedata.colors)
-    (.. "  " modedata.text " "))) 
-
-
-
 (set galaxyline.short_line_list ["dbui" "diff" "peekaboo" "undotree" "vista" "vista_markdown"])
 
-
-(set galaxyline.section.left
-  [{:ViMode {:provider vim-mode-provider}}
-   {:FileName {:provider get-current-file-name
-               :highlight [colors.light4 bar-bg-col]}}
-   {:Space {:provider (fn [] "")
-            :highlight [colors.light0 bar-bg-col]}}])
-      
 (fn make-lsp-diagnostic-provider [kind]
   (fn []
     (let [n (vim.lsp.diagnostic.get_count 0 kind)]
       (if (= n 0) "" (.. " " n " ")))))
 
-(fn git-branch-provider []
-  (let [branch (gl-vcs.get_git_branch)]
-    (if (= "master" branch) "" branch)))
-  
+
+(set galaxyline.section.left
+  [{:ViMode {:provider 
+             #(let [vim-mode (nvim.fn.mode)
+                    modedata (or (. modes vim-mode)
+                                 {:text vim-mode 
+                                  :colors {:bg colors.neutral_orange :fg colors.dark0}})] 
+                (utils.highlight "GalaxyViMode" modedata.colors)
+                (.. "  " modedata.text " "))}} 
+
+   {:FileName {:provider get-current-filepath
+               :highlight [colors.light4 bar-bg-col]}}
+
+   {:Space {:provider #"" 
+            :highlight [colors.light0 bar-bg-col]}}])
+
 (set galaxyline.section.right
-  [{:GitBranch {:provider git-branch-provider
-                :highlight [colors.light4 bar-bg-col]}} 
-   {:FileType {:provider (fn [] nvim.bo.filetype)
+  [{:GitBranch {:highlight [colors.light4 bar-bg-col] 
+                :provider 
+                #(let [branch (gl-vcs.get_git_branch)]
+                   (if (= "master" branch) "" branch))}}
+
+   {:FileType {:provider #nvim.bo.filetype
                :highlight [colors.neutral_aqua bar-bg-col]}}
 
    {:DiagnosticInfo {:provider (make-lsp-diagnostic-provider "Info")
@@ -90,7 +85,7 @@
    {:DiagnosticError {:provider (make-lsp-diagnostic-provider "Error")
                       :highlight [colors.dark1 colors.bright_red]
                       :separator ""}}
-   {:LineInfo {:provider (fn [] (.. " " (gl-fileinfo.line_column) " "))
+   {:LineInfo {:provider #(.. " " (gl-fileinfo.line_column) " ")
                :highlight "GalaxyViMode"
                :separator ""}}])
 
@@ -108,5 +103,7 @@
  
   (set galaxyline.section.left (map-gl-section add-segment-defaults galaxyline.section.left))
   (set galaxyline.section.right (map-gl-section add-segment-defaults galaxyline.section.right)))
+
+
 
 

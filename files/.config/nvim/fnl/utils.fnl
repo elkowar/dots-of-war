@@ -1,7 +1,8 @@
 (module utils
   {autoload {a aniseed.core
              fennel aniseed.fennel
-             nvim aniseed.nvim}
+             nvim aniseed.nvim
+             str aniseed.string}
    require-macros [macros]})
 
 (defn plugin-installed? [name]
@@ -91,6 +92,17 @@
           (surround-if-present " guifg='"colset.fg"'")
           (surround-if-present " gui='"colset.gui"'")))))
 
+
+(defn shorten-path [path seg-length shorten-after]
+  "shorten a filepath by truncating the segments to n characters, if the path exceeds a given length"
+  (let [segments (str.split path "/")]
+    (if (or (> shorten-after (length path))
+            (> 2 (length segments)))
+      path
+      (let [init (a.butlast segments)
+            filename (a.last segments)
+            shortened-segs (a.map #(string.sub $1 1 seg-length) init)]
+        (.. (str.join "/" shortened-segs) "/" filename))))) 
 
 (defn comp [f g]
   (fn [...]
