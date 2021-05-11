@@ -27,7 +27,8 @@
   :dbg-call
   (fn [x ...]
     `(do
-      (a.println ,...)
+      (let [a# (require "aniseed.core")]
+        (a#.println ,...))
       (,x ,...)))
  
   :pkg

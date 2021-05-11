@@ -20,6 +20,8 @@
 (make-errors-epic (require "plugins.lsp"))
 (make-errors-epic (require "keybinds"))
 
+(make-errors-epic (require "smart-compe-conjure"))
+
 ; Basic setup --------------------------------------- foldstart
 
 (vim-let mapleader "\\<Space>")

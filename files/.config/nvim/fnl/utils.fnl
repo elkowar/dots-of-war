@@ -43,29 +43,10 @@
     (nvim.buf_del_keymap 0 mode from)
     (nvim.del_keymap mode from)))
 
-(defn pairs->tuples [xs]
-  (let [result []]
-    (each-pair [l r xs]
-      (table.insert result (values l r)))
-    result))
-
 (defn safe-require [name]
   (xpcall 
     #(require name) 
     #(a.println (.. "Error sourcing " name ":\n" (fennel.traceback $1)))))
-
-(defn use [...]
-  "Iterates through the arguments as pairs and calls packer's function for
-  each of them. Works around Fennel not liking mixed associative and sequential
-  tables as well.
-  Additionally sources the file set in the :mod field of the plugin options"
-  (let [pkgs [...]
-        packer (require "packer")]
-    (packer.startup
-      (fn [use]
-        (each-pair [name opts pkgs]
-          (-?> opts (. :mod) (safe-require-plugin-config))
-          (use (a.assoc opts 1 name)))))))
 
 
 (defn buffer-content [bufnr]
