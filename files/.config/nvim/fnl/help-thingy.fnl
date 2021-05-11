@@ -37,13 +37,11 @@
     (each [id node metadata (query-module-header:iter_captures tsnode bufnr 0 -1)]
       (let [name          (. query-module-header.captures id)
             (r1 c1 r2 c2) (node:range)
-            file-content  (vim.api.nvim_buf_get_lines 0 0 -1 false)
-            node-text     (str.join "\n" (in-range file-content r1 c1 r2 (- c2 1)))]
+            node-text     (vim.treesitter.get_node_text node 0)]
         (match name
           :key   (set last-module node-text)
           :value (tset modules last-module node-text))))
     modules))
-
 
 (defn get-current-word []
   (let [col  (. (vim.api.nvim_win_get_cursor 0) 2)
@@ -146,42 +144,71 @@
           result (icollect [line _ (io.lines path)] line)]
       (values result ft))))
 
+;(defn make-def-query [symbol])
+  ;(vim.treesitter.parse_query 
+    ;"fennel"
+    ;(.. "(function_call
+          ;name: (identifier) @fn-name (#eq? @fn-name \"defn\")
+          ;(identifier) @symbol-name (#contains? @symbol-name \"" symbol "\"))")))
+(defn make-def-query [symbol]
+  (vim.treesitter.parse_query 
+    "fennel"
+    (.. "(function_call
+          name: (identifier)
+          (identifier) @symbol-name (#contains? @symbol-name \"" symbol "\"))")))
+;(defn make-def-query [symbol]
+  ;(vim.treesitter.parse_query 
+    ;"fennel" 
+    ;(.. "((identifier) @symbol-name (#contains? @symbol-name \"" symbol "\"))")))
 
-(defn find-definition-fnl [lines symbol]
-  (let [query (vim.treesitter.parse_query 
-                "fennel"
-                (.. "((identifier) @symbol-name (#contains? @symbol-name \"" symbol "\"))"))
-        bufnr (vim.api.nvim_create_buf false true)]
+
+(defn create-buf-with [lines]
+  "create a buffer and fill it with the given lines"
+  (let [bufnr (vim.api.nvim_create_buf false true)]
     (vim.api.nvim_buf_set_lines bufnr 0 -1 true lines)
-    (let [parser (vim.treesitter.get_parser bufnr "fennel")
-          [tstree] (parser:parse)
-          tsnode (tstree:root)
-          code-lines []]
-      (each [id node metadata (query:iter_captures tsnode bufnr 0 -1)]
-        (let [parent (node:parent)
-              (r1 c1 r2 c2) (parent:range)]
-          (for [i (+ r1 1) r2]
-            (table.insert code-lines (. lines i)))))
+    bufnr))
+
+(defn find-definition-node-fnl [lines symbol]
+  (let [query      (make-def-query symbol)
+        bufnr      (create-buf-with lines)
+        parser     (vim.treesitter.get_parser bufnr "fennel")
+        [tstree]   (parser:parse)
+        tsnode     (tstree:root)]
+    (each [id node metadata (query:iter_captures tsnode bufnr 0 -1)]
+      (let [name          (. query.captures id)]
+        (when (= name "symbol-name")
+          (lua "return node"))))))
+
+(defn find-definition-str-fnl [lines symbol]
+  (if-let [node          (find-definition-node-fnl lines symbol)]
+    (let [parent        (node:parent)
+          (r1 c1 r2 c2) (parent:range)]
+      (var code-lines [])
+      (for [i (+ r1 1) r2]
+        (table.insert code-lines (. lines i)))
       code-lines)))
+
 
 (defn gib-definition [mod word]
   (let [imports                  (read-module-imports-fnl 0)
         actual-mod               (or (. imports mod) mod)
-        (module-lines module-ft) (read-module-file actual-mod)
-        definition-lines         (find-definition-fnl module-lines word)]
-    (pop definition-lines module-ft)))
+        (module-lines module-ft) (read-module-file actual-mod)]
+    (if-let [definition-lines (find-definition-str-fnl module-lines word)]
+      (pop definition-lines module-ft))))
 
 (fn _G.gib_def []
-  (let [word (get-current-word)
-        segs (utils.split-last word ".")]
-    (match segs
-      [mod ident] 
-      (gib-definition mod ident)
+  (xpcall
+    (fn []
+      (let [word (get-current-word)
+            segs (utils.split-last word ".")]
+        (match segs
+          [mod ident] 
+          (gib-definition mod ident)
 
-      [ident] 
-      (let [[current-file] (utils.split-last (vim.fn.expand "%:t") ".")]
-        (gib-definition current-file ident)))))
-
+          [ident] 
+          (let [[current-file] (utils.split-last (vim.fn.expand "%:t") ".")]
+            (gib-definition current-file ident)))))
+    #(print (fennel.traceback $1))))
 
 
   ;(gib-definition "help-thingy" (ident)))
