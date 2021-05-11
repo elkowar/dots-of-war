@@ -9,7 +9,7 @@
   (~= nil (. packer_plugins name)))
 
 (defn all [f xs]
-  (not (a.some (not (f $1)))))
+  (not (a.some #(not (f $1)))))
 
 (defn single-to-list [x]
   "Returns the list given to it. If given a single value, wraps it in a list"
@@ -22,6 +22,22 @@
   (collect [k v (pairs t)]
     (when (f k v)
       (values k v))))
+
+
+(defn find-where [pred xs]
+  (each [_ x (ipairs xs)]
+    (when (pred x)
+      (lua "return x"))))
+
+(defn find-map [f xs]
+  (each [_ x (ipairs xs)]
+    (let [res (f x)]
+      (when (~= nil res)
+        (lua "return res")))))
+
+(defn keep-if [f x]
+  (when (f x) x))
+
 
 (defn without-keys [keys t]
   (filter-table #(not (contains? keys $1)) t))
