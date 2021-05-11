@@ -7,25 +7,61 @@
             ts nvim-treesitter}
    require-macros [macros]})
 
+(defn in-range [lines r1 c1 r2 c2]
+  (var res [])
+  (for [i r1 r2]
+    (let [line         (. lines (+ i 1))
+          trimmed-line (line:sub (if (= r1 i) (+ c1 1) 1) 
+                                 (if (= r2 i) (+ c2 1) -1))]
+      (table.insert res trimmed-line)))
+  res)
+
+(def- query-module-header
+  (vim.treesitter.parse_query
+    "fennel"
+    "(function_call 
+      name: (identifier) @module-header-name (#eq? @module-header-name \"module\")
+      (identifier) @module-name
+      (table ((identifier) @import-type
+              (table ((identifier) @key (_) @value)*)
+             )*
+      )
+     )"))
+
+(defn read-module-imports-fnl [bufnr]
+  (let [parser   (vim.treesitter.get_parser bufnr "fennel")
+        [tstree] (parser:parse)
+        tsnode   (tstree:root)]
+    (var last-module nil)
+    (var modules {})
+    (each [id node metadata (query-module-header:iter_captures tsnode bufnr 0 -1)]
+      (let [name          (. query-module-header.captures id)
+            (r1 c1 r2 c2) (node:range)
+            file-content  (vim.api.nvim_buf_get_lines 0 0 -1 false)
+            node-text     (str.join "\n" (in-range file-content r1 c1 r2 (- c2 1)))]
+        (match name
+          :key   (set last-module node-text)
+          :value (tset modules last-module node-text))))
+    modules))
+
+
 (defn get-current-word []
-  (let [col (. (vim.api.nvim_win_get_cursor 0) 2)
+  (let [col  (. (vim.api.nvim_win_get_cursor 0) 2)
         line (vim.api.nvim_get_current_line)]
-    (.. (vim.fn.matchstr (string.sub line 1 (+ col 1)) 
+    (.. (vim.fn.matchstr (line:sub 1 (+ col 1)) 
                          "\\k*$")
-        (string.sub ( vim.fn.matchstr (string.sub line (+ col 1))
-                                      "^\\k*")
+        (string.sub (vim.fn.matchstr (line:sub (+ col 1))
+                                     "^\\k*")
                     2))))
-
-
 
 (def helpfiles-path (str.join "/" (a.butlast (str.split vim.o.helpfile "/"))))
 
 (def tags
-  (let [entries {}]
-    (each [line _ (io.lines (.. helpfiles-path "/tags"))]
-      (let [[key file address] (str.split line "\t")]
-        (tset entries key {:file (.. helpfiles-path "/" file) :address address})))
-    entries))
+  (var entries {})
+  (each [line _ (io.lines (.. helpfiles-path "/tags"))]
+    (let [[key file address] (str.split line "\t")]
+      (tset entries key {:file (.. helpfiles-path "/" file) :address address})))
+  entries)
 
 (defn find-help-tag-for [topic]
   (or (. tags topic)
@@ -53,10 +89,10 @@
         (lua "return data")))))
 
 (defn pop [text ft]
-  (var width 0)
+  "Open a popup with the given text and filetype"
+  (var width 20)
   (each [_ line (ipairs text)]
-    (when (> (length line) width)
-      (set width (length line))))
+    (set width (math.max width (length line))))
   (let [bufnr (vim.api.nvim_create_buf false true)]
     (vim.api.nvim_buf_set_option bufnr :bufhidden "wipe")
     (vim.api.nvim_buf_set_option bufnr :filetype ft)
@@ -65,15 +101,15 @@
 
 
 (fn _G.get_help []
-  (let [help-tag (find-help-tag-for (get-current-word))]
-    (when help-tag
-      (pop (help-for-tag help-tag) :help))))
+  (if-let [help-tag (find-help-tag-for (get-current-word))]
+    (pop (help-for-tag help-tag) :help)))
 
 
 
 
 (def all-module-paths
-  (let [paths (str.split package.path ";")]
+  (do
+    (var paths (str.split package.path ";"))
     (each [_ path (ipairs (str.split vim.o.runtimepath ","))]
       (table.insert paths (.. path "/fnl/?.fnl"))
       (table.insert paths (.. path "/fnl/?/init.fnl"))
@@ -95,25 +131,29 @@
                     all-module-paths)))
 
 
+(defn get-filetype [filename]
+  "Return the filetype given a files name"
+  (match (utils.split-last filename ".")
+    [_ :fnl] "fennel"
+    [_ :lua] "lua"))
+
 (defn read-module-file [module-name]
-  (let [path (find-module-path module-name)]
-    (when path
-      (let [ft (match (string.gsub path ".+%.(%w+)" "%1")
-                 :fnl "fennel"
-                 :lua "lua")
-            result (icollect [line _ (io.lines path)]
-                     line)]
-        (values result ft)))))
+  "Given the name of a module, returns two values: 
+   the lines of the file that matched a given module
+   and the filetype of that module"
+  (if-let [path (find-module-path module-name)]
+    (let [ft     (get-filetype path)
+          result (icollect [line _ (io.lines path)] line)]
+      (values result ft))))
 
 
-(defn gib-definition [mod word]
-  (let [(file-lines filetype) (read-module-file mod)
-        query (vim.treesitter.parse_query 
-                filetype
-                (.. "((identifier) @fuck (#contains? @fuck \"" word "\"))"))
+(defn find-definition-fnl [lines symbol]
+  (let [query (vim.treesitter.parse_query 
+                "fennel"
+                (.. "((identifier) @symbol-name (#contains? @symbol-name \"" symbol "\"))"))
         bufnr (vim.api.nvim_create_buf false true)]
-    (vim.api.nvim_buf_set_lines bufnr 0 -1 true file-lines)
-    (let [parser (vim.treesitter.get_parser bufnr filetype)
+    (vim.api.nvim_buf_set_lines bufnr 0 -1 true lines)
+    (let [parser (vim.treesitter.get_parser bufnr "fennel")
           [tstree] (parser:parse)
           tsnode (tstree:root)
           code-lines []]
@@ -121,21 +161,25 @@
         (let [parent (node:parent)
               (r1 c1 r2 c2) (parent:range)]
           (for [i (+ r1 1) r2]
-            (table.insert code-lines (. file-lines i)))))
-      (pop code-lines filetype))))
+            (table.insert code-lines (. lines i)))))
+      code-lines)))
 
-
-
+(defn gib-definition [mod word]
+  (let [imports                  (read-module-imports-fnl 0)
+        actual-mod               (or (. imports mod) mod)
+        (module-lines module-ft) (read-module-file actual-mod)
+        definition-lines         (find-definition-fnl module-lines word)]
+    (pop definition-lines module-ft)))
 
 (fn _G.gib_def []
   (let [word (get-current-word)
-        segs (str.split word "%.")]
+        segs (utils.split-last word ".")]
     (match segs
       [mod ident] 
       (gib-definition mod ident)
 
       [ident] 
-      (let [[current-file] (str.split (vim.fn.expand "%:t") "%.")]
+      (let [[current-file] (utils.split-last (vim.fn.expand "%:t") ".")]
         (gib-definition current-file ident)))))
 
 

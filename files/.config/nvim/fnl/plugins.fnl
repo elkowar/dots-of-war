@@ -17,6 +17,7 @@
   :JoosepAlviste/nvim-ts-context-commentstring {}
   :nvim-treesitter/nvim-treesitter {:mod "plugins.treesitter" 
                                     :run ":TSUpdate"}
+  :nvim-treesitter/playground {}
   
   ; :code-biscuits/nvim-biscuits {} ; show opening line after closing curly
 

@@ -51,6 +51,11 @@
           (let [,l# (. data# i#)
                 ,r# (. data# (+ i# 1))]
             ,...)))))
+
+  :if-let
+  (fn [[name value] ...]
+    `(let [,name ,value]
+       (when ,name ,...)))
  
   :packer-use
   (fn [...]
