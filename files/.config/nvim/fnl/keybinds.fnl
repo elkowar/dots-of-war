@@ -18,6 +18,9 @@
 (utils.keymap :v :K "<Nop>")
 
 
+(utils.keymap :n :MM "<cmd>lua require('nvim-gehzu').go_to_definition()<CR>" {})
+(utils.keymap :n :MN "<cmd>lua require('nvim-gehzu').show_definition()<CR>" {})
+
 
 ; TODO let's see if i want these
 ; (utils.keymap :n :<C-h> "<C-w><C-h>")

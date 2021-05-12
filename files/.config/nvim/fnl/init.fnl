@@ -4,7 +4,8 @@
              a aniseed.core
              str aniseed.string
              fennel aniseed.fennel
-             colors colors}
+             colors colors
+             gehzu nvim-gehzu}
    require-macros [macros]})
 
 (macro make-errors-epic [f]
@@ -70,6 +71,8 @@
 (vim.cmd "autocmd! FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o") 
 ; Auto-close quickfix list when element is selected)
 (vim.cmd "autocmd! FileType qf nnoremap <buffer> <CR> <CR>:cclose<CR>")
+
+(vim.cmd "autocmd! TextYankPost * silent! lua vim.highlight.on_yank {higroup=\"IncSearch\", timeout=300}")
 
 ; foldend
 
@@ -139,6 +142,7 @@
 
 ; :: autoclose empty unnamed buffers ----------------------------------------------- foldstart
 
+
 (fn _G.clean_no_name_empty_buffers []
   (let [bufs (a.filter #(and (a.empty? (vim.fn.bufname $1))
                              (< (vim.fn.bufwinnr $1) 0)
@@ -152,5 +156,10 @@
 (vim.cmd "autocmd! BufCreate * :call v:lua.clean_no_name_empty_buffers()")
 
 ; foldend
+
+
+
+(vim.cmd
+  "command! -nargs=1 L :lua print(vim.inspect(<args>))")
 
 ; vim:foldmarker=foldstart,foldend

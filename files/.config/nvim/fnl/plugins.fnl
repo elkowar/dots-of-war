@@ -3,6 +3,8 @@
    require-macros [macros]})
 
 (packer-use
+  "/home/leon/coding/projects/nvim-gehzu" {}
+
   :gruvbox-community/gruvbox {:opt false
                               :config #(vim.cmd "colorscheme gruvbox")}
 
@@ -73,7 +75,6 @@
   :Olical/conjure {}
   :tami5/compe-conjure {:requires [:Olical/conjure]}
 
-  :machakann/vim-highlightedyank {}
   :ciaranm/detectindent {:mod "plugins.detect-indent"}
   :pechorin/any-jump.vim {}
   :justinmk/vim-sneak {:mod "plugins.sneak"}
