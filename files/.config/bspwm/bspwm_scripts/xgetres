@@ -1,2 +1,0 @@
-#!/bin/dash
-appres "$1" | grep "$2" | cut -f 2-
