@@ -59,7 +59,7 @@
 
 ;(lsp.vimls.setup { :on_attach on_attach})
 
-(set vim.o.signcolumn "yes")
+(set vim.wo.signcolumn "yes")
 
 ;(let [rust-tools (require "rust-tools")]
   ;(rust-tools.setup {:tools {:inlay_hints {:show_parameter_hints false}}}))
