@@ -15,7 +15,7 @@
   :kyazdani42/nvim-web-devicons {}
 
   :p00f/nvim-ts-rainbow {}
-  :romgrk/nvim-treesitter-context {}
+  ;:romgrk/nvim-treesitter-context {}
   :JoosepAlviste/nvim-ts-context-commentstring {}
   :nvim-treesitter/nvim-treesitter {:mod "plugins.treesitter" 
                                     :run ":TSUpdate"}
@@ -109,7 +109,9 @@
   :rust-lang/rust.vim {:ft ["rust"]
                        :requires ["mattn/webapi-vim"]}
   :simrat39/rust-tools.nvim {:ft ["rust"]}
-  :ray-x/lsp_signature.nvim {}
+   :qnighy/lalrpop.vim {}
+
+  ;:ray-x/lsp_signature.nvim {}
 
   :vmchale/ats-vim {:ft ["ats"]}
 

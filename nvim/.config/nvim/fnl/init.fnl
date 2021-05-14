@@ -111,7 +111,7 @@
 (set vim.g.rustfmt_autosave 1)
 
 (set vim.g.conjure#client#fennel#aniseed#aniseed_module_prefix "aniseed.")
-(set vim.g.vim_parinfer_filetypes ["carp" "fennel"])
+(set vim.g.vim_parinfer_filetypes ["carp" "fennel" "clojure"])
 
 ; foldend
 

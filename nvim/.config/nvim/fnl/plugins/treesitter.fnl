@@ -6,9 +6,9 @@
 (configs.setup 
   {:ensure_installed "all" 
    :highlight {:enable true
-               :disable ["fennel"]}
+               :disable ["fennel" "rust"]}
 
-   :incremental_selection {:enable true
+   :incremental_selection {:enable false
                            :keymaps {:init_selection    "gss"
                                      :node_incremental  "gsl"
                                      :node_decremental  "gsh"
@@ -18,7 +18,7 @@
    ; Might fuck with gitsigns
    ;:rainbow {:enable true
              ;:extended_mode true}
-   :context_commentstring {:enable true}
+   :context_commentstring {:enable true :disable ["rust"]}
 
    :playground
    {:enable true
