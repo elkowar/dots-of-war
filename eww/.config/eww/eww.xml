@@ -12,42 +12,11 @@
     <def name="test">
       <box class="{{some_var}}"  space-evenly="false" spacing="10">
         <box space-evenly="false" orientation="v">
-          testing {{shit}} bruh
+          asdasdfflmao 
 
-          is shit true? {{shit == true}}
-          is shit "shit"? {{shit == "shit"}}
+          {{(EWW_NET[kek].NET_UP) * 10}}
 
-          true and false 🤔 
-          {{ true && false }}
-
-          fancy ass math {{ 12 + 5 * 12 * 4 }}
-
-
-            bruh &quot; &lt; fuck &gt;
-          "
-
-          <literal content="{{lmao}}"/>
-
-
-
-
-          <label text="&lt; &gt; bruh &quot;"/>
-
-
-          {{bruh.hi}} HEHE {{bruh.ho}}
-          Watch this:
-          {{bruh.list[bruh.myIndex]}}
-
-
-          <if-else cond="{{shit == 'yea'}}">
-            <box>hi</box>
-            <box>ho</box>
-          </if-else>
-
-          thingy: {{"lmao" =~ ".ma."}}
-          thingy: {{"lmao" =~ "^ma.$"}}
-
-
+          asdf {{ round(0.1234, 2) }}
         </box>
 
         <scale value="50" orientation="v" min="0" max="100" flipped="true" />
@@ -129,7 +98,7 @@
       </script-var>
 
       <var name="shit">
-        true
+        enp34s0
       </var>
       <var name="some_var"></var>
       <var name="code"></var>
@@ -164,12 +133,15 @@
 
 
         <var name="bruh">
-          {"hi": "ho"}
+          {"hi": "ho", "hey": "fuck", "lol": "test" }
         </var>
 
 
 
 
+        <script-var name="kek" interval="1s">
+          /home/leon/reee.sh
+        </script-var>
 
 
 

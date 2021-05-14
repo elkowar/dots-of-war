@@ -31,7 +31,7 @@ in
     elkowar.generalConfig.shellAbbrs = {
       vim = "nvim";
       cxmonad = "cd ~/.xmonad && nvim /home/leon/.xmonad/lib/Config.hs && cd -";
-      cnix = "cd ~/nixpkgs/ && nvim home.nix && cd -";
+      cnix = "cd ~/.config/nixpkgs/ && nvim home.nix && cd -";
       cvim = "cd ~/.config/nvim/ && nvim fnl/init.fnl && cd -";
 
       ra = "ranger";
