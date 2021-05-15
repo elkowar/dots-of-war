@@ -2,7 +2,6 @@
   {require {a aniseed.core
             nvim aniseed.nvim
             utils utils
-            fennel aniseed.fennel
             wk which-key
             treesitter-selection nvim-treesitter.incremental_selection
             trouble trouble}

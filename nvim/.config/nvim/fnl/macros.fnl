@@ -60,7 +60,6 @@
   :packer-use
   (fn [...]
     (let [a (require "aniseed.core")
-          fennel (require "aniseed.fennel")
           args [...]
           use-statements []]
       (for [i 1 (a.count args) 2]

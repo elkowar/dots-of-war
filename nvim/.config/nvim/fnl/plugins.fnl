@@ -26,8 +26,6 @@
 
   :folke/which-key.nvim {}
 
-  :pwntester/octo.nvim {}
-
   ; json query stuff
   :gennaro-tedesco/nvim-jqx {:ft ["json"]}
 

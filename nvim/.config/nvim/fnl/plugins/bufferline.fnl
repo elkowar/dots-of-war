@@ -1,10 +1,9 @@
 (module plugins.bufferline
-  {require {a aniseed.core
-            fennel aniseed.fennel 
-            nvim aniseed.nvim 
-            utils utils
-            bufferline bufferline
-            colors colors}})
+  {autoload {a aniseed.core
+             nvim aniseed.nvim 
+             utils utils
+             bufferline bufferline
+             colors colors}})
 
 ; :h bufferline-lua-highlights
 (let [selected {:gui "" :guibg colors.neutral_aqua :guifg colors.dark0}

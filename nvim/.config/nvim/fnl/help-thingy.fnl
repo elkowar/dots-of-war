@@ -2,7 +2,6 @@
   {require {utils utils
             a aniseed.core
             str aniseed.string
-            fennel aniseed.fennel
             popup popup
             ts nvim-treesitter}
    require-macros [macros]})

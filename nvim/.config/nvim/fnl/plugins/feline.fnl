@@ -61,6 +61,15 @@
    (or-empty (utils.keep-if #(~= "master" $1) 
                             (?. vim.b :gitsigns_status_dict :head))))
 
+
+(defn lsp-progress-provider []
+   (let [msgs (vim.lsp.util.get_progress_messages)
+         s (icollect [_ msg (ipairs msgs)]
+              (when msg.message
+                 (.. msg.title " " msg.message)))]
+      (or-empty (str.join " | " s))))
+
+
 (def components
    {:left  {:active {} :inactive {}}
     :mid   {:active {} :inactive {}}
@@ -72,17 +81,10 @@
       {:provider get-current-filepath :left_sep " "}
       {:provider git-status-provider :left_sep " " :hl #(vim-mode-hl true)}]) 
 
-
-
-(defn get-lsp-progress []
-   (let [msgs (vim.lsp.util.get_progress_messages)
-         s (icollect [_ msg (ipairs msgs)]
-              (when msg.message
-                 (.. msg.title " " msg.message)))]
-      (or-empty (str.join " | " s))))
-
 (set components.mid.active
-     [{:provider get-lsp-progress}])
+     [{:provider lsp-progress-provider
+       :enabled #(< 0 (length (vim.lsp.buf_get_clients)))}])
+
 
 (set components.right.active
      [{:provider vim.bo.filetype 

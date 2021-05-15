@@ -1,7 +1,6 @@
 (module plugins.galaxyline
   {require {a aniseed.core
             str aniseed.string
-            fennel aniseed.fennel 
             nvim aniseed.nvim 
             utils utils
             colors colors

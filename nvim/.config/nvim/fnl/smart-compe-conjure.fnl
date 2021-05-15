@@ -2,7 +2,7 @@
   {require {utils utils
             a aniseed.core
             str aniseed.string
-            fennel aniseed.fennel
+            view aniseed.view
             popup popup
             compe compe
             help help-thingy}
@@ -23,7 +23,7 @@
 (set my_source.abort fuck.abort)
 (set my_source.documentation 
   (fn [self args]
-    (a.println (fennel.view args))
+    (a.println (view.serialise args))
     (args.callback 
       (let [help-tag (help.find-help-tag-for args.completed_item.word)]
         (when help-tag 
@@ -59,5 +59,3 @@
 
 
 
-
-;(print (fennel.view compe))
