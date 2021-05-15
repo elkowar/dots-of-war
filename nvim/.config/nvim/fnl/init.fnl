@@ -12,6 +12,7 @@
   `(xpcall #,f #(a.println (fennel.traceback $1))))
 
 
+
 (when (vim.fn.has "termguicolors")
   (se termguicolors true))
 
@@ -21,7 +22,11 @@
 (make-errors-epic (require "plugins.lsp"))
 (make-errors-epic (require "keybinds"))
 
-(make-errors-epic (require "smart-compe-conjure"))
+
+;(se runtimepath (.. vim.o.runtimepath ",/home/leon/coding/projects/kbd-vim"))
+
+; TODO
+;(make-errors-epic (require "smart-compe-conjure"))
 
 ; Basic setup --------------------------------------- foldstart
 
@@ -53,7 +58,7 @@
 (se smartindent true)
 (se expandtab true)
 (se wrap false)
-(se completeopt "longest,menuone,noselect")
+(se completeopt "menuone,noselect")
 (se laststatus 2)
 (se showmode true)
 (se splitbelow true)
@@ -61,6 +66,7 @@
 (se mouse "a")
 (se shell "bash")
 (se background "dark")
+;(se completeopt "longest,menuone,noselect")
 
 (vim-let &t_ut "")
 

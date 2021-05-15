@@ -4,6 +4,7 @@
 
 (packer-use
   "/home/leon/coding/projects/nvim-gehzu" {}
+  :elkowar/kmonad.vim {}
 
   :gruvbox-community/gruvbox {:opt false
                               :config #(vim.cmd "colorscheme gruvbox")}
@@ -37,6 +38,9 @@
 
   :glepnir/galaxyline.nvim {:mod "plugins.galaxyline"
                             :after "gruvbox"}
+
+  ;:gwimm/lililine.nvim {:after "gruvbox"}
+
   :akinsho/nvim-bufferline.lua {:mod "plugins.bufferline"}
 
   :sindrets/diffview.nvim {:mod "plugins.diffview"}
