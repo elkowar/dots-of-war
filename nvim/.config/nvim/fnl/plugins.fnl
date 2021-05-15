@@ -36,12 +36,17 @@
   ; general purpose lua wrappers for nvim stuff
   :norcalli/nvim.lua {}
 
-  :glepnir/galaxyline.nvim {:mod "plugins.galaxyline"
-                            :after "gruvbox"}
+  ;:glepnir/galaxyline.nvim {:mod "plugins.galaxyline"
+                            ;:after "gruvbox"}
 
-  ;:gwimm/lililine.nvim {:after "gruvbox"}
+  :Famiu/feline.nvim {:mod "plugins.feline"
+                      :after "gruvbox"}
+
+  ;:gwimm/lililine.nvim {:after "gruvbox"
+                        ;:mod "plugins.lililine"}
 
   :akinsho/nvim-bufferline.lua {:mod "plugins.bufferline"}
+  ;:romgrk/barbar.nvim {:mod "plugins.barbar"}
 
   :sindrets/diffview.nvim {:mod "plugins.diffview"}
   :tweekmonster/startuptime.vim {:cmd ["StartupTime"]}
@@ -88,7 +93,9 @@
   :tommcdo/vim-exchange {}
   ;:frazrepo/vim-rainbow {}
 
-  :bhurlow/vim-parinfer {:ft ["fennel" "carp" "lisp" "elisp"]}
+  ;:bhurlow/vim-parinfer {:ft ["fennel" "carp" "lisp" "elisp"]}
+
+  :eraserhd/parinfer-rust {:run "cargo build --release"}
 
   :bduggan/vim-raku {:ft ["raku"]}
   :LnL7/vim-nix {:ft ["nix"]}

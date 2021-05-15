@@ -46,7 +46,8 @@ in
           #normal.family = "Iosevka";
           normal.family = "Terminus (TTF)";
           offset.x = 0;
-          offset.y = -2;
+          #offset.y = -2;
+          offset.y = 0;
         };
         colors = config.elkowar.desktop.colors;
       };

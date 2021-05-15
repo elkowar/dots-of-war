@@ -20,8 +20,8 @@
  
   :dbg
   (fn [x]
-    `(let [view# (. (require "aniseed.fennel") :view)]
-      (print (.. `,(tostring x) " => " (view# ,x)))
+    `(let [view# (require "aniseed.view")]
+      (print (.. `,(tostring x) " => " (view#.serialise ,x)))
       ,x))
  
   :dbg-call

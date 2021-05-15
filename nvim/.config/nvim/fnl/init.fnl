@@ -60,7 +60,6 @@
 (se wrap false)
 (se completeopt "menuone,noselect")
 (se laststatus 2)
-(se showmode true)
 (se splitbelow true)
 (se splitright true)
 (se mouse "a")
