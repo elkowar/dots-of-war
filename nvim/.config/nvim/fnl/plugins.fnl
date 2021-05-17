@@ -15,7 +15,7 @@
 
   :kyazdani42/nvim-web-devicons {}
 
-  :p00f/nvim-ts-rainbow {}
+  ;:p00f/nvim-ts-rainbow {}
   ;:romgrk/nvim-treesitter-context {}
   :JoosepAlviste/nvim-ts-context-commentstring {}
   :nvim-treesitter/nvim-treesitter {:mod "plugins.treesitter" 
@@ -72,6 +72,12 @@
   :wellle/targets.vim {}       ; more text objects. IE: cin (change in next parens). generally better handling of surrounding objects.
 
   :iamcco/markdown-preview.nvim {:run vim.fn.mkdp#util#install}
+
+  ;:mfussenegger/nvim-dap {:opt true
+                          ;:mod "plugins.nvim-dap"}
+  ;:nvim-telescope/telescope-dap.nvim {:opt true
+                                      ;:requires [:mfussenegger/nvim-dap
+                                                 ;:nvim-telescope/telescope.nvim]}
 
   ; code-related ----------------------------------------- <<<
 

@@ -19,5 +19,5 @@ ensure("wbthomason", "packer.nvim")
 ensure("Olical", "aniseed")
 
 vim.g["aniseed#env"] = { 
-  compile = true 
+  compile = true
 }

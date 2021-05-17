@@ -75,7 +75,7 @@
       ;do
        ;(print name)
        ;(time 
-         (require name)) 
+        (require name)) 
     #(a.println (.. "Error sourcing " name ":\n" (fennel.traceback $1)))))
 
 

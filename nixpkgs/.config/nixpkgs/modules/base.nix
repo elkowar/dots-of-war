@@ -82,7 +82,7 @@ in
           cargo-watch
           cargo-expand
           gdbgui
-          lldb
+          #lldb
           zola
           python38Packages.pylint
           gitAndTools.gitflow
