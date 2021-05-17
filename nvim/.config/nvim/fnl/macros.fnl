@@ -67,7 +67,8 @@
               block (. args (+ i 1))]
           (a.assoc block 1 name)
           (when (. block :mod)
-            (a.assoc block :config `#((. (require "utils") :safe-require) ,(. block :mod))))
+            ;(a.assoc block :config `#((. (require "utils") :safe-require) ,(. block :mod)))
+            (a.assoc block :config `#(require ,(. block :mod))))
           (a.assoc block :mod)
           (table.insert use-statements block)))
   

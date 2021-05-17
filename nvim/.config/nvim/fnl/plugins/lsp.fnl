@@ -1,10 +1,10 @@
 (module plugins.lsp
-        {autoload {a aniseed.core
-                   lsp lspconfig 
-                   lsp-configs lspconfig.configs
-                   utils utils}
+  {autoload {a aniseed.core
+             lsp lspconfig 
+             lsp-configs lspconfig.configs
+             utils utils}
 
-         require-macros [macros]})
+   require-macros [macros]})
 
 (fn on_attach [client bufnr]
   (pkg lsp_signature.nvim [lsp_signature (require "lsp_signature")]

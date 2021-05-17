@@ -3,13 +3,13 @@
              nvim aniseed.nvim
              a aniseed.core
              str aniseed.string
-             fennel aniseed.fennel
              colors colors
              gehzu nvim-gehzu}
    require-macros [macros]})
 
 (macro make-errors-epic [f]
-  `(xpcall #,f #(a.println (fennel.traceback $1))))
+  `(xpcall #,f #(let [fennel# (require :aniseed.fennel)]
+                  (a.println (fennel#.traceback $1)))))
 
 (when (vim.fn.has "termguicolors")
   (se termguicolors true))

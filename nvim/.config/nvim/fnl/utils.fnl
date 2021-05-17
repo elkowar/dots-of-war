@@ -1,6 +1,5 @@
 (module utils
   {autoload {a aniseed.core
-             fennel aniseed.fennel
              nvim aniseed.nvim
              str aniseed.string}
    require-macros [macros]})
@@ -76,7 +75,8 @@
        ;(print name)
        ;(time 
         (require name)) 
-    #(a.println (.. "Error sourcing " name ":\n" (fennel.traceback $1)))))
+    #(let [fennel (require :aniseed.fennel)]
+      (a.println (.. "Error sourcing " name ":\n" (fennel.traceback $1))))))
 
 
 (defn buffer-content [bufnr]
