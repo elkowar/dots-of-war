@@ -1,4 +1,7 @@
 
+
+
+
 -- not even used, but epic. stores the path to the root config directory.
 local vim_config_root = vim.fn.expand("<sfile>:p:h")
 

@@ -38,6 +38,7 @@
 (se showmode false)
 (se undodir (.. vim.env.HOME "/.vim/undo-dir"))
 (se undofile true)
+(set vim.bo.undofile true)
 (se shortmess (.. vim.o.shortmess "c")) ; Don't give completion messages like 'match 1 of 2' or 'The only match'
 (se hidden true)
 (se encoding "utf-8")
@@ -63,7 +64,8 @@
 (se mouse "a")
 (se shell "bash")
 (se background "dark")
-;(se completeopt "longest,menuone,noselect")
+(se swapfile false)
+(se undolevels 10000)
 
 (vim-let &t_ut "")
 

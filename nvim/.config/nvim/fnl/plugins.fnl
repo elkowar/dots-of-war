@@ -5,9 +5,13 @@
 (packer-use
   "/home/leon/coding/projects/nvim-gehzu" {}
   :elkowar/kmonad.vim {}
-
-  :gruvbox-community/gruvbox {:opt false
-                              :config #(vim.cmd "colorscheme gruvbox")}
+  :lifepillar/vim-gruvbox8 {:opt false
+                            :config #((do (vim.cmd "colorscheme gruvbox8")
+                                          (set vim.g.gruvbox_italics 0)
+                                          (set vim.g.gruvbox_ifiletype_hi_groups 1)
+                                          (set vim.g.gruvbox_plugins_hi_groups 1)))}
+  ;:gruvbox-community/gruvbox {:opt false
+                              ;:config #(vim.cmd "colorscheme gruvbox")}
 
   :nvim-telescope/telescope.nvim {:mod "plugins.telescope"
                                   :cmd ["Telescope"]
@@ -15,12 +19,15 @@
 
   :kyazdani42/nvim-web-devicons {}
 
+  :nvim-treesitter/nvim-treesitter {:mod "plugins.treesitter" 
+                                    :event ["BufEnter"]
+                                    :run ":TSUpdate"}
+  :JoosepAlviste/nvim-ts-context-commentstring {:event ["BufEnter"]
+                                                :requires [:nvim-treesitter/nvim-treesitter]}
+  :nvim-treesitter/playground {:event ["BufEnter"]
+                               :requires [:nvim-treesitter/nvim-treesitter]}
   ;:p00f/nvim-ts-rainbow {}
   ;:romgrk/nvim-treesitter-context {}
-  :JoosepAlviste/nvim-ts-context-commentstring {}
-  :nvim-treesitter/nvim-treesitter {:mod "plugins.treesitter" 
-                                    :run ":TSUpdate"}
-  :nvim-treesitter/playground {}
 
 
   :jiangmiao/auto-pairs {}
@@ -32,7 +39,7 @@
   ; json query stuff
   :gennaro-tedesco/nvim-jqx {:ft ["json"]}
 
-  :Olical/aniseed {}; :tag "v3.16.0"}
+  :Olical/aniseed {:branch "develop"}; :tag "v3.16.0"}
   
   ; general purpose lua wrappers for nvim stuff
   :norcalli/nvim.lua {}
@@ -40,8 +47,8 @@
   ;:glepnir/galaxyline.nvim {:mod "plugins.galaxyline"
                             ;:after "gruvbox"}
 
-  :Famiu/feline.nvim {:mod "plugins.feline"
-                      :after "gruvbox"}
+  :Famiu/feline.nvim {:mod "plugins.feline"}
+                      ;:after "gruvbox"}
 
   ;:gwimm/lililine.nvim {:after "gruvbox"
                         ;:mod "plugins.lililine"}
@@ -49,13 +56,14 @@
   :akinsho/nvim-bufferline.lua {:mod "plugins.bufferline"}
   ;:romgrk/barbar.nvim {:mod "plugins.barbar"}
 
-  :sindrets/diffview.nvim {:mod "plugins.diffview"}
+  :sindrets/diffview.nvim {:cmd ["DiffviewOpen" "DiffviewToggleFiles"]
+                           :mod "plugins.diffview"}
   :tweekmonster/startuptime.vim {:cmd ["StartupTime"]}
   :tpope/vim-repeat {}
 
   :junegunn/goyo.vim {:cmd "Goyo"}
   
-  ;:lewis6991/gitsigns.nvim {:mod "plugins.gitsigns"}
+  :lewis6991/gitsigns.nvim {:mod "plugins.gitsigns"}
 
 
   :tpope/vim-fugitive {}
@@ -81,15 +89,19 @@
 
   ; code-related ----------------------------------------- <<<
 
-  :folke/lsp-trouble.nvim {:mod "plugins.trouble"}
+  :ray-x/lsp_signature.nvim {:events [:BufEnter]}
+  :folke/lsp-trouble.nvim {:mod "plugins.trouble"
+                           :cmd ["Trouble" "TroubleClose" "TroubleRefresh" "TroubleToggle"]}
   :simrat39/symbols-outline.nvim {:mod "plugins.symbols-outline"}
   :neovim/nvim-lspconfig {}
 
   ;:hrsh7th/nvim-compe {:mod "plugins.compe"}
-  :/home/leon/coding/prs/nvim-compe {:mod "plugins.compe"}
+  :/home/leon/coding/prs/nvim-compe {:event [:BufEnter]
+                                     :mod "plugins.compe"}
 
 
-  :glepnir/lspsaga.nvim {:mod "plugins.lspsaga"}
+  :glepnir/lspsaga.nvim {:mod "plugins.lspsaga"
+                         :event [:BufEnter]}
 
 
   :Olical/conjure {}
@@ -117,7 +129,7 @@
   :pangloss/vim-javascript {} ; syntax highlighting JS
   :ianks/vim-tsx {}
   :leafgarland/typescript-vim {}
-  :sheerun/vim-polyglot {}    ; Syntax highlighting for most languages
+  ;:sheerun/vim-polyglot {:event [:BufEnter]}    ; Syntax highlighting for most languages
   :HerringtonDarkholme/yats.vim {} ; typescript syntax highlighting
   :mxw/vim-jsx {}
   :mattn/emmet-vim {:mod "plugins.emmet"}
@@ -133,7 +145,6 @@
   :simrat39/rust-tools.nvim {:ft ["rust"]}
    :qnighy/lalrpop.vim {}
 
-  :ray-x/lsp_signature.nvim {}
 
   :vmchale/ats-vim {:ft ["ats"]}
 

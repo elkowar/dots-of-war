@@ -3,8 +3,7 @@
              nvim aniseed.nvim
              utils utils
              wk which-key
-             treesitter-selection nvim-treesitter.incremental_selection
-             trouble trouble}
+             treesitter-selection nvim-treesitter.incremental_selection}
    require-macros [macros]})
 
 ; undo autopairs fuckup    
@@ -46,9 +45,9 @@
        "A" (cmd "Lspsaga show_cursor_diagnostics"         "Cursor diagnostics") 
        "a" (cmd "Lspsaga show_line_diagnostics"           "Line diagnostics")
        "h" (cmd "RustToggleInlayHints"                    "Toggle inlay hints")
-       "r" [#(trouble.open "lsp_references")              "Show references"] 
-       "E" [#(trouble.open "lsp_document_diagnostics")    "List diagnostics"] 
-       "e" [#(trouble.open "lsp_workspace_diagnostics")   "Show diagnostics"] 
+       "r" (cmd "Trouble lsp_references"                  "Show references") 
+       "E" (cmd "Trouble lsp_document_diagnostics"        "List diagnostics")
+       "e" (cmd "Trouble lsp_workspace_diagnostics"       "Show diagnostics")
        "g" [vim.lsp.buf.definition                        "Go to definition"] 
        "i" [vim.lsp.buf.implementation                    "Show implementation"] 
        "f" [vim.lsp.buf.formatting                        "format file"]}
