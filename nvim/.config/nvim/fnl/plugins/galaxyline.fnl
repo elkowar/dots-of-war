@@ -1,15 +1,15 @@
 (module plugins.galaxyline
-  {require {a aniseed.core
-            str aniseed.string
-            nvim aniseed.nvim 
-            utils utils
-            colors colors
+  {autoload {a aniseed.core
+             str aniseed.string
+             nvim aniseed.nvim 
+             utils utils
+             colors colors
             
-            galaxyline galaxyline 
-            gl-condition galaxyline.condition 
-            gl-fileinfo galaxyline.provider_fileinfo 
-            gl-diagnostic galaxyline.provider_diagnostic 
-            gl-vcs galaxyline.provider_vcs} 
+             galaxyline galaxyline 
+             gl-condition galaxyline.condition 
+             gl-fileinfo galaxyline.provider_fileinfo 
+             gl-diagnostic galaxyline.provider_diagnostic 
+             gl-vcs galaxyline.provider_vcs} 
             
     require-macros [macros]})
 

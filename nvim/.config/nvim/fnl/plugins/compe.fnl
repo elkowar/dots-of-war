@@ -1,6 +1,6 @@
 (module plugins.compe
-  {require {utils utils
-            compe compe}})
+  {autoload {utils utils
+             compe compe}})
             
 
 (utils.keymap :i :<C-Space> "compe#complete()" {:expr true})

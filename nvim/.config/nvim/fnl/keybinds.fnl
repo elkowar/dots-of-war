@@ -1,10 +1,10 @@
 (module keybinds
-  {require {a aniseed.core
-            nvim aniseed.nvim
-            utils utils
-            wk which-key
-            treesitter-selection nvim-treesitter.incremental_selection
-            trouble trouble}
+  {autoload {a aniseed.core
+             nvim aniseed.nvim
+             utils utils
+             wk which-key
+             treesitter-selection nvim-treesitter.incremental_selection
+             trouble trouble}
    require-macros [macros]})
 
 ; undo autopairs fuckup    

@@ -1,6 +1,5 @@
 (module plugins
-  {require {}
-   require-macros [macros]})
+  {require-macros [macros]})
 
 (packer-use
   "/home/leon/coding/projects/nvim-gehzu" {}
@@ -55,7 +54,7 @@
 
   :junegunn/goyo.vim {:cmd "Goyo"}
   
-  :lewis6991/gitsigns.nvim {:mod "plugins.gitsigns"}
+  ;:lewis6991/gitsigns.nvim {:mod "plugins.gitsigns"}
 
 
   :tpope/vim-fugitive {}

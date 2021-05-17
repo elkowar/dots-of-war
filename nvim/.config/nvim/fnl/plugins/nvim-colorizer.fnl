@@ -1,5 +1,5 @@
 (module plugins.nvim-colorizer
-  {require {colorizer colorizer}})
+  {autoload {colorizer colorizer}})
 
 
 ; this really shouldn't be necessary,.. but it is

@@ -1,9 +1,9 @@
 (module help-thingy
-  {require {utils utils
-            a aniseed.core
-            str aniseed.string
-            popup popup
-            ts nvim-treesitter}
+  {autoload {utils utils
+             a aniseed.core
+             str aniseed.string
+             popup popup
+             ts nvim-treesitter}
    require-macros [macros]})
 
 (defn pop [text ft]
