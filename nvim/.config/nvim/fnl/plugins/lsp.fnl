@@ -8,7 +8,12 @@
 
 (fn on_attach [client bufnr]
   (pkg lsp_signature.nvim [lsp_signature (require "lsp_signature")]
-       (lsp_signature.on_attach))
+       (lsp_signature.on_attach {:bind true
+                                 :hint_scheme "String" 
+                                 :hint_prefix "ƒ "
+                                 :handler_opts {:border "single"}
+                                 :use_lspsaga false
+                                 :decorator ["`" "`"]}))
 
   (if client.resolved_capabilities.document_highlight
     (do
@@ -30,11 +35,15 @@
     (when (not ((lsp.util.root_pattern except-patterns) path))
       ((lsp.util.root_pattern patterns) path))))
 
-
+; advertise snippet support
+(def default-capabilities
+  (let [capabilities (vim.lsp.protocol.make_client_capabilities)]
+    (set capabilities.textDocument.completion.completionItem.snippetSupport true)
+    capabilities))
 
 (fn init-lsp [lsp-name ?opts]
   "initialize a language server with defaults"
-  (let [merged-opts (a.merge {:on_attach on_attach} (or ?opts {}))]
+  (let [merged-opts (a.merge {:on_attach on_attach :capabilities default-capabilities} (or ?opts {}))]
     ((. lsp lsp-name :setup) merged-opts)))
 
 ; Added capabilities for rust-analyzer with nvim-compe

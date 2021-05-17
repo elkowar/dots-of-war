@@ -99,6 +99,8 @@
 (utils.highlight-add :NormalFloat {:bg colors.dark0_hard})
 (utils.highlight-add :SignColumn {:bg colors.dark0})
 
+(utils.highlight-add :FloatBorder {:bg colors.dark0_hard})
+
 
 (utils.highlight ["StatusLine" "GalaxyLineInfo" "GalaxySpace" ] {:bg colors.dark1 :fg colors.light0})
 

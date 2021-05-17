@@ -21,6 +21,9 @@
   :nvim-treesitter/nvim-treesitter {:mod "plugins.treesitter" 
                                     :run ":TSUpdate"}
   :nvim-treesitter/playground {}
+
+
+  :jiangmiao/auto-pairs {}
   
   ; :code-biscuits/nvim-biscuits {} ; show opening line after closing curly
 
@@ -91,8 +94,8 @@
   :justinmk/vim-sneak {:mod "plugins.sneak"}
   :psliwka/vim-smoothie {}
   :editorconfig/editorconfig-vim {}
-  :honza/vim-snippets {}
   :tommcdo/vim-exchange {}
+
   ;:frazrepo/vim-rainbow {}
 
   ;:bhurlow/vim-parinfer {:ft ["fennel" "carp" "lisp" "elisp"]}
@@ -124,7 +127,7 @@
   :simrat39/rust-tools.nvim {:ft ["rust"]}
    :qnighy/lalrpop.vim {}
 
-  ;:ray-x/lsp_signature.nvim {}
+  :ray-x/lsp_signature.nvim {}
 
   :vmchale/ats-vim {:ft ["ats"]}
 

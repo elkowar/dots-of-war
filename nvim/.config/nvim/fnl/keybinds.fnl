@@ -7,11 +7,8 @@
             trouble trouble}
    require-macros [macros]})
 
-
-(utils.keymap :i :<C-Space> "compe#complete()" {:expr true})
-;(utils.keymap :i :<esc> "compe#close('<esc>')" {:expr true})
-(utils.keymap :i :kj "compe#close('<esc>')" {:expr true})
-
+; undo autopairs fuckup    
+(set vim.g.AutoPairsShortcutBackInsert "<M-b>")
 
 (utils.keymap [:n] :<C-p> "<cmd>Telescope find_files<cr>")
 (utils.keymap :n :K "<Nop>")
@@ -20,13 +17,6 @@
 
 (utils.keymap :n :MM "<cmd>lua require('nvim-gehzu').go_to_definition()<CR>" {})
 (utils.keymap :n :MN "<cmd>lua require('nvim-gehzu').show_definition()<CR>" {})
-
-
-; TODO let's see if i want these
-; (utils.keymap :n :<C-h> "<C-w><C-h>")
-; (utils.keymap :n :<C-j> "<C-w><C-j>")
-; (utils.keymap :n :<C-k> "<C-w><C-k>")
-; (utils.keymap :n :<C-l> "<C-w><C-l>")
 
 
 (fn cmd [s desc] [(.. "<cmd>" s "<cr>") desc])
