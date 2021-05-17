@@ -75,7 +75,11 @@
   :folke/lsp-trouble.nvim {:mod "plugins.trouble"}
   :simrat39/symbols-outline.nvim {:mod "plugins.symbols-outline"}
   :neovim/nvim-lspconfig {}
-  :hrsh7th/nvim-compe {:mod "plugins.compe"}
+
+  ;:hrsh7th/nvim-compe {:mod "plugins.compe"}
+  :/home/leon/coding/prs/nvim-compe {:mod "plugins.compe"}
+
+
   :glepnir/lspsaga.nvim {:mod "plugins.lspsaga"}
 
 

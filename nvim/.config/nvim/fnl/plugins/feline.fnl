@@ -11,8 +11,6 @@
          require-macros [macros]})
 
 
-
-
 (local modes 
    {:n   {:text "NORMAL"        :color colors.neutral_aqua}
     :i   {:text "INSERT"        :color colors.neutral_yellow}
@@ -65,8 +63,8 @@
 (defn lsp-progress-provider []
    (let [msgs (vim.lsp.util.get_progress_messages)
          s (icollect [_ msg (ipairs msgs)]
-              (when msg.message
-                 (.. msg.title " " msg.message)))]
+                     (when msg.message
+                        (.. msg.title " " msg.message)))]
       (or-empty (str.join " | " s))))
 
 

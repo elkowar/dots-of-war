@@ -1,5 +1,20 @@
 (module plugins.compe
-  {autoload {compe compe}})
+  {require {compe compe}})
+
+
+(defn result-formatter [items]
+  (var max-width 0)
+  (each [_ item (ipairs items)]
+    (set item.abbr (-> item.abbr
+                       (string.gsub "~$" "")
+                       (string.gsub " %(.*%)$" "")))
+    (set max-width (math.max max-width (vim.fn.strwidth item.abbr))))
+  (each [_ item (ipairs items)]
+    (let [padding (string.rep " " (- max-width (vim.fn.strwidth item.abbr)))
+          details (?. item :user_data :compe :completion_item :detail)]
+      (when details
+        (set item.abbr (.. item.abbr padding " " details)))))
+  items)
 
 (compe.setup 
  {:enabled true
@@ -14,6 +29,7 @@
   :max_kind_width 100 
   :max_menu_width 100 
   :documentation true 
+  :formatting_functions {:nvim_lsp {:results result-formatter}}
   :source {:path true
            :buffer true 
            :calc true 

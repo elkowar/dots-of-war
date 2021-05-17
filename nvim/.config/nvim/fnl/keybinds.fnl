@@ -9,7 +9,8 @@
 
 
 (utils.keymap :i :<C-Space> "compe#complete()" {:expr true})
-(utils.keymap :i :<esc> "compe#close('<esc>')" {:expr true})
+;(utils.keymap :i :<esc> "compe#close('<esc>')" {:expr true})
+(utils.keymap :i :kj "compe#close('<esc>')" {:expr true})
 
 
 (utils.keymap [:n] :<C-p> "<cmd>Telescope find_files<cr>")

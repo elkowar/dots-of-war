@@ -6,6 +6,25 @@
             ts nvim-treesitter}
    require-macros [macros]})
 
+(defn pop [text ft]
+  "Open a popup with the given text and filetype"
+  (var width 20)
+  (each [_ line (ipairs text)]
+    (set width (math.max width (length line))))
+  (let [bufnr (vim.api.nvim_create_buf false true)]
+    (vim.api.nvim_buf_set_option bufnr :bufhidden "wipe")
+    (vim.api.nvim_buf_set_option bufnr :filetype ft)
+    (vim.api.nvim_buf_set_lines bufnr 0 -1 true text)
+    (popup.create bufnr {:padding [1 1 1 1] :width width})))
+
+
+(defn get-current-word []
+  "Return the word the cursor is currently hovering over"
+  (let [col  (. (vim.api.nvim_win_get_cursor 0) 2)
+        line (vim.api.nvim_get_current_line)]
+    (.. (vim.fn.matchstr (line:sub 1 (+ col 1)) "\\k*$")
+        (string.sub (vim.fn.matchstr (line:sub (+ col 1)) "^\\k*")
+                    2))))
 (def helpfiles-path (str.join "/" (a.butlast (str.split vim.o.helpfile "/"))))
 
 (def tags

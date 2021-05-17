@@ -11,8 +11,6 @@
 (macro make-errors-epic [f]
   `(xpcall #,f #(a.println (fennel.traceback $1))))
 
-
-
 (when (vim.fn.has "termguicolors")
   (se termguicolors true))
 
@@ -78,6 +76,9 @@
 (vim.cmd "autocmd! FileType qf nnoremap <buffer> <CR> <CR>:cclose<CR>")
 
 (vim.cmd "autocmd! TextYankPost * silent! lua vim.highlight.on_yank {higroup=\"IncSearch\", timeout=300}")
+
+
+
 
 ; foldend
 
