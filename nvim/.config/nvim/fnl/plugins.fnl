@@ -6,10 +6,11 @@
   "/home/leon/coding/projects/nvim-gehzu" {}
   :elkowar/kmonad.vim {}
   :lifepillar/vim-gruvbox8 {:opt false
-                            :config #((do (vim.cmd "colorscheme gruvbox8")
-                                          (set vim.g.gruvbox_italics 0)
-                                          (set vim.g.gruvbox_ifiletype_hi_groups 1)
-                                          (set vim.g.gruvbox_plugins_hi_groups 1)))}
+                            :config #(do (set vim.g.gruvbox_italics 0)
+                                         (set vim.g.gruvbox_italicise_strings 0)
+                                         (set vim.g.gruvbox_filetype_hi_groups 1)
+                                         (set vim.g.gruvbox_plugins_hi_groups 1)
+                                         (vim.cmd "colorscheme gruvbox8"))}
   ;:gruvbox-community/gruvbox {:opt false
                               ;:config #(vim.cmd "colorscheme gruvbox")}
 
