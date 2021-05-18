@@ -85,9 +85,9 @@
 
 
 (set components.right.active
-     [{:provider vim.bo.filetype 
-       :right_sep " "
-       :hl #(vim-mode-hl true)} 
+     [{:provider #vim.bo.filetype 
+       :hl #(vim-mode-hl true) 
+       :right_sep " "}
       (lsp-diagnostic-component "Information" colors.neutral_purple)
       (lsp-diagnostic-component "Hint" colors.neutral_blue)
       (lsp-diagnostic-component "Warn" colors.neutal_yellow)

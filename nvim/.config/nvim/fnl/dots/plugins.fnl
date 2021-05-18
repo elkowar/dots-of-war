@@ -139,7 +139,7 @@
    :qnighy/lalrpop.vim {}
 
 
-  :vmchale/ats-vim {:ft ["ats"]}
+  :vmchale/ats-vim {:ft ["ats" "dats" "sats"]}
 
   :bakpakin/fennel.vim {})
 ; >>>
