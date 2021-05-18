@@ -94,6 +94,7 @@
         (match scope
           :global `(tset vim.o ,str-name ,value)
           :win `(tset vim.wo ,str-name ,value)
-          :buf `(tset vim.bo ,str-name ,value)
+          :buf `(do (tset vim.bo ,str-name ,value)
+                    (tset vim.o ,str-name ,value))
           _ (print (.. "option " str-name " has unhandled scope " scope)))
         (print (.. "Unknown vim-option: " str-name)))))}

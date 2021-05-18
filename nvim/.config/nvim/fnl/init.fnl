@@ -1,10 +1,9 @@
 (module init 
-  {autoload {utils utils
+  {require  {utils utils
              nvim aniseed.nvim
              a aniseed.core
              str aniseed.string
-             colors colors
-             gehzu nvim-gehzu}
+             colors colors}
    require-macros [macros]})
 
 (macro make-errors-epic [f]
@@ -38,7 +37,6 @@
 (se showmode false)
 (se undodir (.. vim.env.HOME "/.vim/undo-dir"))
 (se undofile true)
-(set vim.bo.undofile true)
 (se shortmess (.. vim.o.shortmess "c")) ; Don't give completion messages like 'match 1 of 2' or 'The only match'
 (se hidden true)
 (se encoding "utf-8")

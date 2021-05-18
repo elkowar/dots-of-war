@@ -1,7 +1,7 @@
 (module utils
-  {autoload {a aniseed.core
-             nvim aniseed.nvim
-             str aniseed.string}
+  {require {a aniseed.core
+            nvim aniseed.nvim
+            str aniseed.string}
    require-macros [macros]})
 
 (defn plugin-installed? [name]

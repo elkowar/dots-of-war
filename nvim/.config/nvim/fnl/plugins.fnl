@@ -5,12 +5,14 @@
 (packer-use
   "/home/leon/coding/projects/nvim-gehzu" {}
   :elkowar/kmonad.vim {}
+
   :lifepillar/vim-gruvbox8 {:opt false
                             :config #(do (set vim.g.gruvbox_italics 0)
                                          (set vim.g.gruvbox_italicise_strings 0)
                                          (set vim.g.gruvbox_filetype_hi_groups 1)
-                                         (set vim.g.gruvbox_plugins_hi_groups 1)
+                                         (set vim.g.gruvbox_plugin_hi_groups 1)
                                          (vim.cmd "colorscheme gruvbox8"))}
+
   ;:gruvbox-community/gruvbox {:opt false
                               ;:config #(vim.cmd "colorscheme gruvbox")}
 
@@ -38,7 +40,7 @@
   :folke/which-key.nvim {}
 
   ; json query stuff
-  :gennaro-tedesco/nvim-jqx {:ft ["json"]}
+  ;:gennaro-tedesco/nvim-jqx {:ft ["json"]}
 
   :Olical/aniseed {:branch "develop"}; :tag "v3.16.0"}
   
@@ -64,7 +66,8 @@
 
   :junegunn/goyo.vim {:cmd "Goyo"}
   
-  :lewis6991/gitsigns.nvim {:mod "plugins.gitsigns"}
+  :lewis6991/gitsigns.nvim {:after ["vim-gruvbox8"]
+                            :mod "plugins.gitsigns"}
 
 
   :tpope/vim-fugitive {}
@@ -101,8 +104,7 @@
                                      :mod "plugins.compe"}
 
 
-  :glepnir/lspsaga.nvim {:mod "plugins.lspsaga"
-                         :event [:BufEnter]}
+  :glepnir/lspsaga.nvim {:mod "plugins.lspsaga"}
 
 
   :Olical/conjure {}
