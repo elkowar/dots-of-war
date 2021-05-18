@@ -1,7 +1,7 @@
-(module utils
-  {require {a aniseed.core
-            nvim aniseed.nvim
-            str aniseed.string}
+(module dots.utils
+  {autoload {a aniseed.core
+             nvim aniseed.nvim
+             str aniseed.string}
    require-macros [macros]})
 
 (defn plugin-installed? [name]
@@ -102,6 +102,10 @@
           (surround-if-present " guibg='"colset.bg"'")
           (surround-if-present " guifg='"colset.fg"'")
           (surround-if-present " gui='"colset.gui"'")))))
+
+
+
+
 
 
 (defn shorten-path [path seg-length shorten-after]

@@ -1,5 +1,5 @@
-(module plugins.compe
-  {autoload {utils utils
+(module dots.plugins.compe
+  {autoload {utils dots.utils
              compe compe}})
             
 

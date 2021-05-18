@@ -1,9 +1,9 @@
 (module init 
-  {require  {utils utils
+  {autoload {utils dots.utils
              nvim aniseed.nvim
              a aniseed.core
              str aniseed.string
-             colors colors}
+             colors dots.colors}
    require-macros [macros]})
 
 (macro make-errors-epic [f]
@@ -13,11 +13,10 @@
 (when (vim.fn.has "termguicolors")
   (se termguicolors true))
 
+(make-errors-epic (require "dots.plugins"))
 
-(make-errors-epic (require "plugins"))
-
-(make-errors-epic (require "plugins.lsp"))
-(make-errors-epic (require "keybinds"))
+(make-errors-epic (require "dots.plugins.lsp"))
+(make-errors-epic (require "dots.keybinds"))
 
 
 ;(se runtimepath (.. vim.o.runtimepath ",/home/leon/coding/projects/kbd-vim"))
@@ -164,8 +163,6 @@
 (vim.cmd "autocmd! BufCreate * :call v:lua.clean_no_name_empty_buffers()")
 
 ; foldend
-
-
 
 (vim.cmd
   "command! -nargs=1 L :lua print(vim.inspect(<args>))")

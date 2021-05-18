@@ -1,5 +1,5 @@
-(module plugins.telescope
-  {autoload {utils utils
+(module dots.plugins.telescope
+  {autoload {utils dots.utils
              telescope telescope
              actions telescope.actions}})
 

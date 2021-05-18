@@ -1,4 +1,4 @@
-(module plugins.diffview
+(module dots.plugins.diffview
   {autoload {diffview diffview
              cb diffview.config}})
 

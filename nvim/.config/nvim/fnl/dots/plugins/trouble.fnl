@@ -1,6 +1,6 @@
-(module plugins.trouble
-  {autoload {utils utils
-             colors colors}
+(module dots.plugins.trouble
+  {autoload {utils dots.utils
+             colors dots.colors}
    require {trouble trouble}})
 
 (trouble.setup

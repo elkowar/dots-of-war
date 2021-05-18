@@ -1,5 +1,5 @@
-(module help-thingy
-  {autoload {utils utils
+(module dots.help-thingy
+  {autoload {utils dots.utils
              a aniseed.core
              str aniseed.string
              popup popup

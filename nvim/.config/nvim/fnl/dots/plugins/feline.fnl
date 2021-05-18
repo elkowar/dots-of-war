@@ -1,14 +1,14 @@
-(module utils
-        {autoload {a aniseed.core
-                   nvim aniseed.nvim
-                   utils utils
-                   str aniseed.string
-                   colors colors
-                   view aniseed.view
-                   feline feline
-                   feline-git feline.providers.git
-                   feline-lsp feline.providers.lsp}
-         require-macros [macros]})
+(module dots.plugins.feline
+  {autoload {a aniseed.core
+             nvim aniseed.nvim
+             utils dots.utils
+             str aniseed.string
+             colors dots.colors
+             view aniseed.view
+             feline feline
+             feline-git feline.providers.git
+             feline-lsp feline.providers.lsp}
+   require-macros [macros]})
 
 
 (local modes 

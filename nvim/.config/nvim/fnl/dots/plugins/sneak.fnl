@@ -1,5 +1,5 @@
-(module plugins.sneak
-  {require {utils utils}})
+(module dots.plugins.sneak
+  {autoload {utils dots.utils}})
 
 
 (set vim.g.sneak#label 1)

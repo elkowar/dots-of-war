@@ -1,5 +1,6 @@
-(module plugins.treesitter
-  {autoload {a aniseed.core}
+(module dots.plugins.treesitter
+  {autoload {utils dots.utils
+             a aniseed.core}
    require {configs nvim-treesitter.configs}
    require-macros [macros]})
 

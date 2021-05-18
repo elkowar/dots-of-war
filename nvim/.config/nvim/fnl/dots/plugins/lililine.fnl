@@ -1,9 +1,9 @@
-(module plugins.lililine
+(module dots.plugins.lililine
         {autoload {a aniseed.core
                    str aniseed.string
                    nvim aniseed.nvim 
-                   utils utils
-                   colors colors
+                   utils dots.utils
+                   colors dots.colors
                    line lililine}
 
          require-macros [macros]})

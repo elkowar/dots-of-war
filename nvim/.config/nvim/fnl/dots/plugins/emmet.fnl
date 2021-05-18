@@ -1,4 +1,4 @@
-(module plugins.emmet)
+(module dots.plugins.emmet {})
 
 (set vim.g.user_emmet_mode "n")
 (set vim.g.user_emmet_leader_key "<leader>e")

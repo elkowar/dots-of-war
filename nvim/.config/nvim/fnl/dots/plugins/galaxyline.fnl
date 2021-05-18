@@ -1,9 +1,9 @@
-(module plugins.galaxyline
+(module dots.plugins.galaxyline
   {autoload {a aniseed.core
              str aniseed.string
              nvim aniseed.nvim 
-             utils utils
-             colors colors
+             utils dots.utils
+             colors dots.colors
             
              galaxyline galaxyline 
              gl-condition galaxyline.condition 

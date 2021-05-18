@@ -1,6 +1,5 @@
-(module plugins
+(module dots.plugins
   {require-macros [macros]})
-
 
 (packer-use
   "/home/leon/coding/projects/nvim-gehzu" {}
@@ -13,16 +12,13 @@
                                          (set vim.g.gruvbox_plugin_hi_groups 1)
                                          (vim.cmd "colorscheme gruvbox8"))}
 
-  ;:gruvbox-community/gruvbox {:opt false
-                              ;:config #(vim.cmd "colorscheme gruvbox")}
-
-  :nvim-telescope/telescope.nvim {:mod "plugins.telescope"
+  :nvim-telescope/telescope.nvim {:mod "dots.plugins.telescope"
                                   :cmd ["Telescope"]
                                   :requires [:nvim-lua/popup.nvim :nvim-lua/plenary.nvim]}
 
   :kyazdani42/nvim-web-devicons {}
 
-  :nvim-treesitter/nvim-treesitter {:mod "plugins.treesitter" 
+  :nvim-treesitter/nvim-treesitter {:mod "dots.plugins.treesitter" 
                                     :event ["BufEnter"]
                                     :run ":TSUpdate"}
   :JoosepAlviste/nvim-ts-context-commentstring {:event ["BufEnter"]
@@ -34,8 +30,6 @@
 
 
   :jiangmiao/auto-pairs {}
-  
-  ; :code-biscuits/nvim-biscuits {} ; show opening line after closing curly
 
   :folke/which-key.nvim {}
 
@@ -43,31 +37,25 @@
   ;:gennaro-tedesco/nvim-jqx {:ft ["json"]}
 
   :Olical/aniseed {:branch "develop"}; :tag "v3.16.0"}
+  ;:Olical/aniseed {}; :tag "v3.16.0"}
   
   ; general purpose lua wrappers for nvim stuff
   :norcalli/nvim.lua {}
 
-  ;:glepnir/galaxyline.nvim {:mod "plugins.galaxyline"
-                            ;:after "gruvbox"}
+  :Famiu/feline.nvim {:mod "dots.plugins.feline"}
 
-  :Famiu/feline.nvim {:mod "plugins.feline"}
-                      ;:after "gruvbox"}
-
-  ;:gwimm/lililine.nvim {:after "gruvbox"
-                        ;:mod "plugins.lililine"}
-
-  :akinsho/nvim-bufferline.lua {:mod "plugins.bufferline"}
-  ;:romgrk/barbar.nvim {:mod "plugins.barbar"}
+  :akinsho/nvim-bufferline.lua {:mod "dots.plugins.bufferline"}
+  ;:romgrk/barbar.nvim {:mod "dots.plugins.barbar"}
 
   :sindrets/diffview.nvim {:cmd ["DiffviewOpen" "DiffviewToggleFiles"]
-                           :mod "plugins.diffview"}
+                           :mod "dots.plugins.diffview"}
   :tweekmonster/startuptime.vim {:cmd ["StartupTime"]}
   :tpope/vim-repeat {}
 
   :junegunn/goyo.vim {:cmd "Goyo"}
   
   :lewis6991/gitsigns.nvim {:after ["vim-gruvbox8"]
-                            :mod "plugins.gitsigns"}
+                            :mod "dots.plugins.gitsigns"}
 
 
   :tpope/vim-fugitive {}
@@ -86,7 +74,7 @@
   :iamcco/markdown-preview.nvim {:run vim.fn.mkdp#util#install}
 
   ;:mfussenegger/nvim-dap {:opt true
-                          ;:mod "plugins.nvim-dap"}
+                          ;:mod "dots.plugins.nvim-dap"}
   ;:nvim-telescope/telescope-dap.nvim {:opt true
                                       ;:requires [:mfussenegger/nvim-dap
                                                  ;:nvim-telescope/telescope.nvim]}
@@ -94,25 +82,27 @@
   ; code-related ----------------------------------------- <<<
 
   :ray-x/lsp_signature.nvim {:events [:BufEnter]}
-  :folke/lsp-trouble.nvim {:mod "plugins.trouble"
+  :folke/lsp-trouble.nvim {:mod "dots.plugins.trouble"
                            :cmd ["Trouble" "TroubleClose" "TroubleRefresh" "TroubleToggle"]}
-  :simrat39/symbols-outline.nvim {:mod "plugins.symbols-outline"}
+  :simrat39/symbols-outline.nvim {:mod "dots.plugins.symbols-outline"}
   :neovim/nvim-lspconfig {}
 
-  ;:hrsh7th/nvim-compe {:mod "plugins.compe"}
+  ;:hrsh7th/nvim-compe {:mod "dots.plugins.compe"}
   :/home/leon/coding/prs/nvim-compe {:event [:BufEnter]
-                                     :mod "plugins.compe"}
+                                     :mod "dots.plugins.compe"}
 
 
-  :glepnir/lspsaga.nvim {:mod "plugins.lspsaga"}
+
+  :glepnir/lspsaga.nvim {:after "vim-gruvbox8"
+                         :mod "dots.plugins.lspsaga"}
 
 
   :Olical/conjure {}
   :tami5/compe-conjure {:requires [:Olical/conjure]}
 
-  :ciaranm/detectindent {:mod "plugins.detect-indent"}
+  :ciaranm/detectindent {:mod "dots.plugins.detect-indent"}
   :pechorin/any-jump.vim {}
-  :justinmk/vim-sneak {:mod "plugins.sneak"}
+  :justinmk/vim-sneak {:mod "dots.plugins.sneak"}
   :psliwka/vim-smoothie {}
   :editorconfig/editorconfig-vim {}
   :tommcdo/vim-exchange {}
@@ -128,14 +118,14 @@
 
   :kevinoid/vim-jsonc {}
 
-  :norcalli/nvim-colorizer.lua {:mod "plugins.nvim-colorizer"}
+  :norcalli/nvim-colorizer.lua {:mod "dots.plugins.nvim-colorizer"}
   :pangloss/vim-javascript {} ; syntax highlighting JS
   :ianks/vim-tsx {}
   :leafgarland/typescript-vim {}
   ;:sheerun/vim-polyglot {:event [:BufEnter]}    ; Syntax highlighting for most languages
   :HerringtonDarkholme/yats.vim {} ; typescript syntax highlighting
   :mxw/vim-jsx {}
-  :mattn/emmet-vim {:mod "plugins.emmet"}
+  :mattn/emmet-vim {:mod "dots.plugins.emmet"}
 
   :purescript-contrib/purescript-vim {}
 

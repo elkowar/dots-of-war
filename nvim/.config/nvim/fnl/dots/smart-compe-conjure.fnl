@@ -1,11 +1,11 @@
-(module smart-compe-conjure
-  {autoload {utils utils
+(module dots.smart-compe-conjure
+  {autoload {utils dots.utils
              a aniseed.core
              str aniseed.string
              view aniseed.view
              popup popup
              compe compe
-             help help-thingy}
+             help dots.help-thingy}
    require-macros [macros]})
 
 

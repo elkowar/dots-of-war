@@ -1,7 +1,7 @@
-(module plugins.nvim-dap
-   {:require {a aniseed.core
-              utils utils
-              dap dap}})
+(module dots.plugins.nvim-dap
+  {autoload {a aniseed.core
+             utils dots.utils
+             dap dap}})
               
 
 (set dap.adapters.cpp

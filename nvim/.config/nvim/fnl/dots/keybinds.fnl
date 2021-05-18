@@ -1,7 +1,7 @@
-(module keybinds
+(module dots.keybinds
   {autoload {a aniseed.core
              nvim aniseed.nvim
-             utils utils
+             utils dots.utils
              wk which-key
              treesitter-selection nvim-treesitter.incremental_selection}
    require-macros [macros]})

@@ -1,8 +1,8 @@
-(module plugins.lspsaga
-  {autoload {utils utils
-             colors colors
+(module dots.plugins.lspsaga
+  {autoload {utils dots.utils
+             colors dots.colors}
 
-             saga lspsaga}})
+   require {saga lspsaga}})
 
 
 (saga.init_lsp_saga 

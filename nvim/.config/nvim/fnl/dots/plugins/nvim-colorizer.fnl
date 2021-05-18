@@ -1,4 +1,4 @@
-(module plugins.nvim-colorizer
+(module dots.plugins.nvim-colorizer
   {autoload {colorizer colorizer}})
 
 

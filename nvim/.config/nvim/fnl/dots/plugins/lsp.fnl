@@ -1,8 +1,8 @@
-(module plugins.lsp
+(module dots.plugins.lsp
   {autoload {a aniseed.core
              lsp lspconfig 
              lsp-configs lspconfig.configs
-             utils utils}
+             utils dots.utils}
 
    require-macros [macros]})
 
