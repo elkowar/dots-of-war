@@ -5,6 +5,7 @@
   "/home/leon/coding/projects/nvim-gehzu" {}
   :elkowar/kmonad.vim {}
 
+
   :lifepillar/vim-gruvbox8 {:opt false
                             :config #(do (set vim.g.gruvbox_italics 0)
                                          (set vim.g.gruvbox_italicise_strings 0)
@@ -27,6 +28,12 @@
                                :requires [:nvim-treesitter/nvim-treesitter]}
   ;:p00f/nvim-ts-rainbow {}
   ;:romgrk/nvim-treesitter-context {}
+
+
+  ;:code-biscuits/nvim-biscuits {:requires [:nvim-treesitter/nvim-treesitter]
+                                ;:event ["BufReadPost"]
+                                ;:config #((. (require "nvim-biscuits") :setup) {})}
+                                
 
 
   :jiangmiao/auto-pairs {}
@@ -96,6 +103,7 @@
   :glepnir/lspsaga.nvim {:after "vim-gruvbox8"
                          :mod "dots.plugins.lspsaga"}
 
+  ;; --------------------
 
   :Olical/conjure {}
   :tami5/compe-conjure {:requires [:Olical/conjure]}
@@ -135,13 +143,15 @@
 
   :rust-lang/rust.vim {:ft ["rust"]
                        :requires ["mattn/webapi-vim"]}
-  :simrat39/rust-tools.nvim {:ft ["rust"]}
+  :simrat39/rust-tools.nvim {}
    :qnighy/lalrpop.vim {}
 
-
+  :edwinb/idris2-vim {:ft ["idris2"]}
   :vmchale/ats-vim {:ft ["ats" "dats" "sats"]}
 
   :bakpakin/fennel.vim {})
+
+
 ; >>>
 
 

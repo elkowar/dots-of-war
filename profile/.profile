@@ -35,3 +35,4 @@ export LOCALE_ARCHIVE=$(nix-build '<nixpkgs>' --no-out-link -A glibcLocales)/lib
 
 export _JAVA_AWT_WM_NONREPARENTING=1
 
+

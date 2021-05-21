@@ -265,6 +265,8 @@ myStartupHook = do
   spawnOnce "xfce4-clipman &"
   --spawnOnce "redshift -P -O 5000 &"
   spawn "xset r rate 300 50 &" -- make key repeat quicker
+  spawn "setxkbmap de nodeadkeys"
+  spawn "arbtt-capture"
   --spawn "/home/leon/.screenlayout/dualscreen-stacked.sh"
   spawn "/home/leon/.screenlayout/tripplescreen-fixed.sh"
   spawnOnce "xsetroot -cursor_name left_ptr"

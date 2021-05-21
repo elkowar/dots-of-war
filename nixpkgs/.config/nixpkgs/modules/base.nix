@@ -125,7 +125,8 @@ in
         enable = true;
         enableFishIntegration = cfg.enableFish;
         enableZshIntegration = cfg.enableZsh;
-        enableNixDirenvIntegration = true;
+        # enableNixDirenvIntegration = true;
+        stdlib = (builtins.readFile ./direnvrc);
       };
     };
 

@@ -27,6 +27,7 @@ in
       #hyper-haskell
       font-manager
 
+      haskellPackages.arbtt
       sqlite-web
 
       #flameshot
