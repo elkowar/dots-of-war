@@ -50,11 +50,11 @@
     ((. lsp lsp-name :setup) merged-opts)))
 
 ; Added capabilities for rust-analyzer with nvim-compe
-(let [capabilities (vim.lsp.protocol.make_client_capabilities)]
-  (set capabilities.textDocument.completion.completionItem.snippetSupport true)
-  (set capabilities.textDocument.completion.completionItem.resolveSupport
-       {:properties ["documentation" "detail" "additionalTextEdits"]})
-  (init-lsp :rust_analyzer {:capabilities capabilities}))
+;(let [capabilities (vim.lsp.protocol.make_client_capabilities)]
+  ;(set capabilities.textDocument.completion.completionItem.snippetSupport true)
+  ;(set capabilities.textDocument.completion.completionItem.resolveSupport
+       ;{:properties ["documentation" "detail" "additionalTextEdits"]})
+  ;(init-lsp :rust_analyzer {:capabilities capabilities}))
 
 (init-lsp :tsserver {:root_dir (lsp.util.root_pattern "package.json")})
 (init-lsp :jsonls   {:commands {:Format [ #(vim.lsp.buf.range_formatting [] [0 0] [(vim.fn.line "$") 0])]}})

@@ -142,9 +142,11 @@
   :neovimhaskell/haskell-vim { :ft ["haskell"]}
 
   :rust-lang/rust.vim {:ft ["rust"]
-                       :requires ["mattn/webapi-vim"]}
+                       :requires ["mattn/webapi-vim"]
+                       :config #(do (set vim.g.rustfmt_fail_silently 1))}
+                                  
   :simrat39/rust-tools.nvim {}
-   :qnighy/lalrpop.vim {}
+  :qnighy/lalrpop.vim {}
 
   :edwinb/idris2-vim {:ft ["idris2"]}
   :vmchale/ats-vim {:ft ["ats" "dats" "sats"]}

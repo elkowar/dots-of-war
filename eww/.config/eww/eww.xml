@@ -1,4 +1,5 @@
 <eww>
+
   <includes>
 
     <file path="./foo.xml"/>
@@ -20,6 +21,7 @@
             |  {{ round((EWW_DISK["/"].free) / (1024 * 1024 * 1024), 2)}} 
         </box>
 
+
             {{(EWW_NET[kek].NET_UP) * 10}}
 
             asdf {{ round(0.1234, 2) }}
@@ -39,7 +41,7 @@
         notify-send 'ree' 'this is {{shit}}'
       <multiple text="{{shit}}" />
 
-        [><literal content="{{code}}"/><]
+        <!--<literal content="{{code}}"/>-->
 
       </box>
     </def>
@@ -54,7 +56,7 @@
         <box>{{text}}</box>
 
         <label onscroll="notify-send '{{shit}}' {}" text="reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee" limit-width="5" wrap="true" />
-          [><input onchange="eww update code='{}'" /><]
+          <!--<input onchange="eww update code='{}'" />-->
             {{date}}
             {{date-tail}}
         </box>
@@ -117,9 +119,9 @@
       <var name="song-artist"></var>
       <var name="song-show-progress">false</var>
       <var name="song-playpause"></var>
-        [><script-var name="date" interval="1s"><]
-          [>date<]
-          [></script-var><]
+        <!--<script-var name="date" interval="1s">-->
+          <!--date-->
+          <!--</script-var>-->
         <script-var name="date-tail">
           while true; do
           sleep 1;
@@ -143,10 +145,6 @@
         </var>
 
 
-        <script-var name="asdf" interval="1s">
-          echo "foobar" | sed 's/o/X/g' | rev
-        </script-var>
-
 
 
         <script-var name="kek" interval="1s">
@@ -155,13 +153,13 @@
 
 
 
-        [><script-var name="xyz"><]
-          [>tail -F /home/leon/test | while read -r _; do notify-send "Hi"; done<]
-          [></script-var><]
+        <!--<script-var name="xyz">-->
+          <!--tail -F /home/leon/test | while read -r _; do notify-send "Hi"; done-->
+          <!--</script-var>-->
 
-          [><script-var name="foo"><]
-            [>tail -F /home/leon/test<]
-            [></script-var><]
+          <!--<script-var name="foo">-->
+            <!--tail -F /home/leon/test-->
+            <!--</script-var>-->
         </variables>
 
 
@@ -173,7 +171,7 @@
             </widget>
           </window>
           <window screen="0" name="mw" stacking="fg" focusable="false">
-            [><window screen="2" name="mw" stacking="fg" focusable="false"><]
+            <!--<window screen="2" name="mw" stacking="fg" focusable="false">-->
               <geometry anchor="center" width="20%" height="20%" x="50px" y="50px"/>
               <reserve side="left" distance="80px"/>
               <widget>
@@ -184,7 +182,7 @@
               <geometry anchor="bottom right"/>
               <widget>
                 <foo/>
-                  [><test ree="test" /><]
+                  <!--<test ree="test" />-->
                 </widget>
               </window>
               <window screen="0" name="volume_popup">
