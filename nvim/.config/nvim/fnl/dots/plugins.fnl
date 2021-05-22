@@ -3,6 +3,7 @@
 
 (packer-use
   "/home/leon/coding/projects/nvim-gehzu" {}
+  :elkowar/antifennel-nvim {:config #(set vim.g.antifennel_executable "/home/leon/tmp/antifennel/antifennel")}
   :elkowar/kmonad.vim {}
 
 
