@@ -261,7 +261,7 @@ myStartupHook :: X ()
 myStartupHook = do
   setWMName "LG3D" -- Java stuff hack
   --spawnOnce "nm-applet &"
-  --spawnOnce "udiskie -s &" -- Mount USB sticks automatically. -s is smart systray mode: systray icon if something is mounted
+  spawnOnce "udiskie -s &" -- Mount USB sticks automatically. -s is smart systray mode: systray icon if something is mounted
   spawnOnce "xfce4-clipman &"
   --spawnOnce "redshift -P -O 5000 &"
   spawn "xset r rate 300 50 &" -- make key repeat quicker

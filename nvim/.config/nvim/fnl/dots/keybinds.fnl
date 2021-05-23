@@ -31,6 +31,7 @@
   "o" (cmd "Telescope live_grep"    "Grep files")
   "p" (cmd "Telescope file_browser" "Open file-browser")
   ":" (cmd "Telescope commands"     "Search command with fzf")
+  "s" (cmd "w"                      "Save file")
 
   "m" {:name "+Code actions"
        "d" (cmd "Lspsaga hover_doc"                       "Show documentation") 

@@ -150,6 +150,7 @@
   :qnighy/lalrpop.vim {}
 
   :edwinb/idris2-vim {:ft ["idris2"]}
+  ;:ShinKage/nvim-idris2 {}
   :vmchale/ats-vim {:ft ["ats" "dats" "sats"]}
 
   :bakpakin/fennel.vim {})

@@ -66,7 +66,12 @@
 (init-lsp :erlangls)
 (init-lsp :yamlls)
 (init-lsp :html)
-(init-lsp :cssls)
+(init-lsp :cssls {:filestypes ["css" "scss" "less" "stylus"]
+                  :settings {:css  {:validate true} 
+                             :less {:validate true}
+                             :scss {:validate true}}})
+
+
 
 (let [rust-tools (require "rust-tools")]
   (rust-tools.setup {:tools {:inlay_hints {:show_parameter_hints false}}}))
