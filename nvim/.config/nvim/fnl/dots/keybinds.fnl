@@ -13,6 +13,9 @@
 (utils.keymap :n :K "<Nop>")
 (utils.keymap :v :K "<Nop>")
 
+(utils.keymap :i "" "<C-w>")
+(utils.keymap :i :<C-h> "<C-w>")
+(utils.keymap :i :<C-BS> "<C-w>")
 
 (utils.keymap :n :MM "<cmd>lua require('nvim-gehzu').go_to_definition()<CR>" {})
 (utils.keymap :n :MN "<cmd>lua require('nvim-gehzu').show_definition()<CR>" {})
@@ -20,6 +23,12 @@
 
 (fn cmd [s desc] [(.. "<cmd>" s "<cr>") desc])
 (fn rebind [s desc] [s desc])
+
+
+(defn format []
+  (if (a.some #$1.resolved_capabilities.document_formatting (vim.lsp.get_active_clients))
+    (vim.lsp.buf.formatting)
+    (vim.cmd "Neoformat")))
 
 (wk.setup {})
 (wk.register 
@@ -51,7 +60,8 @@
        "e" (cmd "Trouble lsp_workspace_diagnostics"       "Show diagnostics")
        "g" [vim.lsp.buf.definition                        "Go to definition"] 
        "i" [vim.lsp.buf.implementation                    "Show implementation"] 
-       "f" [vim.lsp.buf.formatting                        "format file"]}
+       "f" [format                        "format file"]
+       "," (cmd "RustRunnables"                           "Run rust stuff")}
 
   "f" {:name "+folds"
        "o" (cmd "foldopen"  "open fold") 

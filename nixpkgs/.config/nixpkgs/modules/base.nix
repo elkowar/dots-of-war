@@ -37,11 +37,13 @@ in
       ra = "ranger";
 
       gaa = "git add --all";
+      lg = "lazygit";
       gc = "git commit -m ";
       gp = "git push";
       gst = "git status";
       g = "git fuzzy";
       cr = "cargo run --";
+      y = "z";
     };
 
     home.packages = with pkgs; lib.mkMerge [
@@ -77,7 +79,6 @@ in
           gtop
           nix-prefetch
           cargo-bloat
-          sccache
           bpytop
           cargo-watch
           cargo-expand

@@ -104,6 +104,8 @@
   :glepnir/lspsaga.nvim {:after "vim-gruvbox8"
                          :mod "dots.plugins.lspsaga"}
 
+  :sbdchd/neoformat {}
+
   ;; --------------------
 
   :Olical/conjure {}
@@ -152,6 +154,7 @@
   :edwinb/idris2-vim {:ft ["idris2"]}
   ;:ShinKage/nvim-idris2 {}
   :vmchale/ats-vim {:ft ["ats" "dats" "sats"]}
+  :google/vim-jsonnet {}
 
   :bakpakin/fennel.vim {})
 

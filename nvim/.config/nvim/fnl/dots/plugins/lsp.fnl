@@ -56,7 +56,6 @@
        ;{:properties ["documentation" "detail" "additionalTextEdits"]})
   ;(init-lsp :rust_analyzer {:capabilities capabilities}))
 
-(init-lsp :tsserver {:root_dir (lsp.util.root_pattern "package.json")})
 (init-lsp :jsonls   {:commands {:Format [ #(vim.lsp.buf.range_formatting [] [0 0] [(vim.fn.line "$") 0])]}})
 (init-lsp :denols   {:root_dir (better_root_pattern [".git"] ["package.json"])})
 (init-lsp :hls      {:settings {:languageServerHaskell {:formattingProvider "stylish-haskell"}}})
@@ -66,11 +65,17 @@
 (init-lsp :erlangls)
 (init-lsp :yamlls)
 (init-lsp :html)
+;(init-lsp :clangd)
+;(init-lsp :ccls)
 (init-lsp :cssls {:filestypes ["css" "scss" "less" "stylus"]
                   :settings {:css  {:validate true} 
                              :less {:validate true}
                              :scss {:validate true}}})
 
+(lsp.tsserver.setup {:root_dir (lsp.util.root_pattern "package.json")
+                     :on_attach (fn [client bufnr] 
+                                  (set client.resolved_capabilities.document_formatting false)
+                                  (on_attach client bufnr))})
 
 
 (let [rust-tools (require "rust-tools")]
@@ -107,7 +112,8 @@
     (vim.lsp.buf_request 0
                          :textDocument/semanticTokens/full
                          {:textDocument (vim.lsp.util.make_text_document_params)}
-                         nil)))
+                         nil)
+    vim.NIL))
 
 (when (not lsp.idris2_lsp)
   (set lsp-configs.idris2_lsp

@@ -12,8 +12,10 @@
 
     <def name="test">
       <box class="{{some_var}}"  space-evenly="false" spacing="10">
+        <scale value="{{scaleval}}" orientation="v" min="0" max="100" flipped="true" />
         <box space-evenly="false" orientation="v">
           asdasdfflmao 
+
 
           <box> |  {{ round((EWW_NET["enp34s0"].NET_UP) * 8 / (1024 * 1024), 2)}} 
              {{ round((EWW_NET["enp34s0"].NET_DOWN) * 8 / (1024 * 1024), 2)}} 
@@ -27,7 +29,6 @@
             asdf {{ round(0.1234, 2) }}
         </box>
 
-        <scale value="50" orientation="v" min="0" max="100" flipped="true" />
 
         <button onclick="pgrep 'eww' &amp;&amp; echo '' || echo ''" cursor="wait">Test bug</button>
         <button 
@@ -110,6 +111,10 @@
       </var>
       <var name="some_var"></var>
       <var name="code"></var>
+      
+      <script-var name="scaleval" interval="50ms">
+        echo 25
+      </script-var>
 
 
       <var name="song-image"></var>

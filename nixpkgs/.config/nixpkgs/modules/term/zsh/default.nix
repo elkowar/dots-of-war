@@ -154,6 +154,7 @@ in
     initExtra = ''
       eval $(opam env)
       eval $(luarocks path --lua-version=5.4)
+      eval "$(zoxide init zsh)"
 
       export MANPAGER='nvim +Man! +"set nocul" +"set noshowcmd" +"set noruler" +"set noshowmode" +"set laststatus=2" +"set statusline=\ %t"'
       export MANPAGER='nvim +Man! +"set nocul" +"set noshowcmd" +"set noruler" +"set noshowmode" +"set laststatus=0"'
