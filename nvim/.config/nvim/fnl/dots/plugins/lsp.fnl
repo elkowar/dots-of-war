@@ -174,7 +174,7 @@
 
 ; --------------------------------- >>>>>
 
-(se signcolumn "yes")
+(set vim.opt.signcolumn "yes")
 
 
 

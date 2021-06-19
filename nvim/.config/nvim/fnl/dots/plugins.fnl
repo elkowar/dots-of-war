@@ -96,7 +96,7 @@
   :neovim/nvim-lspconfig {}
 
   ;:hrsh7th/nvim-compe {:mod "dots.plugins.compe"}
-  :/home/leon/coding/prs/nvim-compe {:event [:BufEnter]
+  :/home/leon/coding/prs/nvim-compe {:event [:InsertEnter]
                                      :mod "dots.plugins.compe"}
 
 

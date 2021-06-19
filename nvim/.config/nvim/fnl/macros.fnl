@@ -83,18 +83,6 @@
              (fn [,use-sym]
                ,(unpack
                  (icollect [_# v# (ipairs use-statements)]
-                  `(,use-sym ,v#)))))))))
+                  `(,use-sym ,v#)))))))))}
 
 
-  :se
-  (fn [name value]
-    (let [str-name (tostring name)
-          (info-ok scope) (pcall #(. (vim.api.nvim_get_option_info str-name) :scope))]
-      (if info-ok
-        (match scope
-          :global `(tset vim.o ,str-name ,value)
-          :win `(tset vim.wo ,str-name ,value)
-          :buf `(do (tset vim.bo ,str-name ,value)
-                    (tset vim.o ,str-name ,value))
-          _ (print (.. "option " str-name " has unhandled scope " scope)))
-        (print (.. "Unknown vim-option: " str-name)))))}
