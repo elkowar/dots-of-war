@@ -79,7 +79,8 @@
 
 
 (let [rust-tools (require "rust-tools")]
-  (rust-tools.setup {:tools {:inlay_hints {:show_parameter_hints false}}}))
+  (rust-tools.setup {:tools {:inlay_hints {:show_parameter_hints false}
+                             :autoSetHints false}}))
 
 (let [sumneko_root_path (.. vim.env.HOME "/.local/share/lua-language-server")
       sumneko_binary (.. sumneko_root_path "/bin/Linux/lua-language-server")]

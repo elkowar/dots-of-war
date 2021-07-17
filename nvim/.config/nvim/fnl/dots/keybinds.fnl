@@ -9,7 +9,7 @@
 ; undo autopairs fuckup    
 (set vim.g.AutoPairsShortcutBackInsert "<M-b>")
 
-(utils.keymap [:n] :<C-p> "<cmd>Telescope find_files<cr>")
+(utils.keymap [:n] :<C-p> "<cmd>Telescope file_browser<cr>")
 (utils.keymap :n :K "<Nop>")
 (utils.keymap :v :K "<Nop>")
 
@@ -38,7 +38,8 @@
   "h" (cmd "bprevious"              "previous buffer")
   "l" (cmd "bnext"                  "next buffer")
   "o" (cmd "Telescope live_grep"    "Grep files")
-  "p" (cmd "Telescope file_browser" "Open file-browser")
+  "p" (cmd "Telescope frecency"     "Open file-browser")
+  ;"p" (cmd "Telescope find_files"   "Open file-browser")
   ":" (cmd "Telescope commands"     "Search command with fzf")
   "s" (cmd "w"                      "Save file")
 

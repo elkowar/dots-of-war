@@ -16,7 +16,15 @@
 
   :nvim-telescope/telescope.nvim {:mod "dots.plugins.telescope"
                                   :cmd ["Telescope"]
-                                  :requires [:nvim-lua/popup.nvim :nvim-lua/plenary.nvim]}
+                                  :requires [:nvim-lua/popup.nvim 
+                                             :nvim-lua/plenary.nvim
+                                             :nvim-telescope/telescope.nvim]}
+
+  :nvim-telescope/telescope-frecency.nvim {:requires [:tami5/sql.nvim]
+                                           :opt false}
+                                           ;:config #((. (require :telescope) :load_extension) "frecency")}
+                                             
+  
 
   :kyazdani42/nvim-web-devicons {}
 
@@ -107,6 +115,8 @@
   :sbdchd/neoformat {}
 
   ;; --------------------
+
+  :AndrewRadev/splitjoin.vim {}
 
   :Olical/conjure {}
   :tami5/compe-conjure {:requires [:Olical/conjure]}
