@@ -65,6 +65,7 @@
 (init-lsp :erlangls)
 (init-lsp :yamlls)
 (init-lsp :html)
+(init-lsp :svelte)
 ;(init-lsp :clangd)
 ;(init-lsp :ccls)
 (init-lsp :cssls {:filestypes ["css" "scss" "less" "stylus"]

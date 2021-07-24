@@ -114,6 +114,7 @@
 
   :sbdchd/neoformat {}
 
+
   ;; --------------------
 
   :AndrewRadev/splitjoin.vim {}
@@ -166,7 +167,9 @@
   :vmchale/ats-vim {:ft ["ats" "dats" "sats"]}
   :google/vim-jsonnet {}
 
-  :bakpakin/fennel.vim {})
+  :bakpakin/fennel.vim {}
+
+  :evanleck/vim-svelte {})
 
 
 ; >>>

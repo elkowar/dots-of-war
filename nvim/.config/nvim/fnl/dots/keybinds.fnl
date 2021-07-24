@@ -38,8 +38,8 @@
   "h" (cmd "bprevious"              "previous buffer")
   "l" (cmd "bnext"                  "next buffer")
   "o" (cmd "Telescope live_grep"    "Grep files")
-  "p" (cmd "Telescope frecency"     "Open file-browser")
-  ;"p" (cmd "Telescope find_files"   "Open file-browser")
+  "P" (cmd "Telescope frecency frecency default_text=:CWD:"     "Open file-browser")
+  "p" (cmd "Telescope find_files"   "Open file-browser")
   ":" (cmd "Telescope commands"     "Search command with fzf")
   "s" (cmd "w"                      "Save file")
 
@@ -50,7 +50,7 @@
        "o" (cmd "SymbolsOutline"                          "Outline") 
        "S" (cmd "Telescope lsp_document_symbols"          "Symbols in document") 
        "s" (cmd "Telescope lsp_dynamic_workspace_symbols" "Symbols in workspace") 
-       "t" (cmd "Lspsaga signature_help"                  "Show signature help") 
+       "T" (cmd "Lspsaga signature_help"                  "Show signature help") 
        "n" (cmd "Lspsaga rename"                          "Rename") 
        "v" (cmd "Lspsaga code_action"                     "Apply codeaction") 
        "A" (cmd "Lspsaga show_cursor_diagnostics"         "Cursor diagnostics") 
@@ -59,6 +59,7 @@
        "r" (cmd "Trouble lsp_references"                  "Show references") 
        "E" (cmd "Trouble lsp_document_diagnostics"        "List diagnostics")
        "e" (cmd "Trouble lsp_workspace_diagnostics"       "Show diagnostics")
+       "t" [vim.lsp.buf.declaration                       "Go to declaration"] 
        "g" [vim.lsp.buf.definition                        "Go to definition"] 
        "i" [vim.lsp.buf.implementation                    "Show implementation"] 
        "f" [format                        "format file"]
