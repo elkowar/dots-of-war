@@ -42,6 +42,7 @@
   "p" (cmd "Telescope find_files"   "Open file-browser")
   ":" (cmd "Telescope commands"     "Search command with fzf")
   "s" (cmd "w"                      "Save file")
+  "g" (cmd "Neogit"                 "Git")
 
   "m" {:name "+Code actions"
        "d" (cmd "Lspsaga hover_doc"                       "Show documentation") 
@@ -75,12 +76,14 @@
        "n" (cmd "set relativenumber!"             "toggle relative numbers") 
        "m" (cmd "set nonumber! norelativenumber"  "toggle numbers") 
        "g" (cmd "Goyo | set linebreak"            "toggle focus mode") 
-       "i" (cmd "IndentGuidesToggle"              "toggle indent guides")}
+       "i" (cmd "IndentGuidesToggle"              "toggle indent guides")
+       "s" (cmd "VSSplit"                         "keep selection visible in split")}
 
   "b" {:name "+buffers"
        "b" (cmd "Buffers"   "select open buffer")
        "c" (cmd "bdelete!"  "close open buffer")
        "w" (cmd "bwipeout!" "wipeout open buffer")}}
+
 
  {:prefix "<leader>"})
 

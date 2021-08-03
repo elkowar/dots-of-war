@@ -68,7 +68,20 @@
 (init-lsp :svelte)
 ;(init-lsp :clangd)
 ;(init-lsp :ccls)
+
+
+(when (not lsp.ewwls)
+  (set lsp-configs.ewwls
+    {:default_config {:cmd [ "/home/leon/coding/projects/ls-eww/crates/ewwls/target/debug/ewwls"]
+                      :filetypes ["yuck"]
+                      :root_dir (fn [fname] (or (lsp.util.find_git_ancestor fname) (vim.loop.os_homedir)))
+                      :settings {}}}))
+
+(init-lsp :ewwls)
+
+                                              
 (init-lsp :cssls {:filestypes ["css" "scss" "less" "stylus"]
+                  :root_dir (lsp.util.root_pattern ["package.json" ".git"])
                   :settings {:css  {:validate true} 
                              :less {:validate true}
                              :scss {:validate true}}})

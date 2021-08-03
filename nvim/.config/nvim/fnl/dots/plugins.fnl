@@ -3,9 +3,15 @@
 
 (packer-use
   "/home/leon/coding/projects/nvim-gehzu" {}
+  "/home/leon/coding/projects/yuck.vim" {}
   :elkowar/antifennel-nvim {:config #(set vim.g.antifennel_executable "/home/leon/tmp/antifennel/antifennel")}
   :elkowar/kmonad.vim {}
 
+  :rhysd/conflict-marker.vim {}
+  :wellle/visual-split.vim {}
+  :sindrets/diffview.nvim {}
+  :TimUntersberger/neogit {:mod "dots.plugins.neogit"
+                           :cmd ["Neogit"]}
 
   :lifepillar/vim-gruvbox8 {:opt false
                             :config #(do (set vim.g.gruvbox_italics 0)
@@ -89,11 +95,14 @@
 
   :iamcco/markdown-preview.nvim {:run vim.fn.mkdp#util#install}
 
-  ;:mfussenegger/nvim-dap {:opt true
+  :rcarriga/nvim-dap-ui {:opt false 
+                         :config #((. (require :dapui) :setup))
+                         :requires [:mfussenegger/nvim-dap]}
+  :mfussenegger/nvim-dap {:opt false}
                           ;:mod "dots.plugins.nvim-dap"}
-  ;:nvim-telescope/telescope-dap.nvim {:opt true
-                                      ;:requires [:mfussenegger/nvim-dap
-                                                 ;:nvim-telescope/telescope.nvim]}
+  :nvim-telescope/telescope-dap.nvim {:opt false
+                                      :requires [:mfussenegger/nvim-dap
+                                                 :nvim-telescope/telescope.nvim]}
 
   ; code-related ----------------------------------------- <<<
 
@@ -159,7 +168,8 @@
                        :requires ["mattn/webapi-vim"]
                        :config #(do (set vim.g.rustfmt_fail_silently 1))}
                                   
-  :simrat39/rust-tools.nvim {}
+  :simrat39/rust-tools.nvim {:requires ["nvim-lua/popup.nvim" "nvim-lua/plenary.nvim"]}
+
   :qnighy/lalrpop.vim {}
 
   :edwinb/idris2-vim {:ft ["idris2"]}
