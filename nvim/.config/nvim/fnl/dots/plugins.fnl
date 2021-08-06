@@ -23,9 +23,9 @@
   :nvim-telescope/telescope.nvim {:mod "dots.plugins.telescope"
                                   :cmd ["Telescope"]
                                   :requires [:nvim-lua/popup.nvim 
-                                             :nvim-lua/plenary.nvim
-                                             :nvim-telescope/telescope.nvim]}
+                                             :nvim-lua/plenary.nvim]}
 
+  :nvim-telescope/telescope-packer.nvim {}
   :nvim-telescope/telescope-frecency.nvim {:requires [:tami5/sql.nvim]
                                            :opt false}
                                            ;:config #((. (require :telescope) :load_extension) "frecency")}

@@ -10,5 +10,6 @@
                   
 (telescope.load_extension "frecency")
 (telescope.load_extension "dap")
+(telescope.load_extension "packer")
 
 (utils.keymap :n :<C-p> ":Telescope find_files<CR>")

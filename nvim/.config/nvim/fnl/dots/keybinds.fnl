@@ -22,6 +22,7 @@
 
 
 (fn cmd [s desc] [(.. "<cmd>" s "<cr>") desc])
+(fn sel-cmd [s desc] [(.. "<cmd>'<,'>" s "<cr>") desc])
 (fn rebind [s desc] [s desc])
 
 
@@ -76,8 +77,7 @@
        "n" (cmd "set relativenumber!"             "toggle relative numbers") 
        "m" (cmd "set nonumber! norelativenumber"  "toggle numbers") 
        "g" (cmd "Goyo | set linebreak"            "toggle focus mode") 
-       "i" (cmd "IndentGuidesToggle"              "toggle indent guides")
-       "s" (cmd "VSSplit"                         "keep selection visible in split")}
+       "i" (cmd "IndentGuidesToggle"              "toggle indent guides")}
 
   "b" {:name "+buffers"
        "b" (cmd "Buffers"   "select open buffer")
@@ -97,6 +97,11 @@
 (wk.register
  {"<tab>" "which_key_ignore"}
  {:mode "i"})
+
+(wk.register
+ {"s" (sel-cmd "VSSplit" "keep selection visible in split")}
+ {:prefix "<leader>"
+  :mode "v"})
            
 (wk.register
  {:name "+Selection"
