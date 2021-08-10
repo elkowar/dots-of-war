@@ -10,6 +10,7 @@ gib_workspace_names() {
 }
 
 gib_workspace_yuck() {
+  buffered=""
   gib_workspace_names | while read -r id active name; do
     name="${name#*_}"
     if [ "$active" == '*' ]; then
@@ -25,10 +26,14 @@ gib_workspace_yuck() {
       button_class="empty"
       button_name="◇"
     fi
-    echo -n '(button :class "'$button_class' '$active_class'"  :onclick "wmctrl -s '$id'" "'$button_name'")'
+    buffered+="(button :class \"$button_class $active_class\"  :onclick \"wmctrl -s $id\" \"$button_name\")"
+    if [ $button_class = "occupied" -o $active_class = "active" ]; then
+      echo -n "$buffered"
+      buffered=""
+    fi
   done
 }
 
 xprop -spy -root _NET_CURRENT_DESKTOP | while read -r; do
-  echo '(box :orientation "v" :class "workspaces" :space-evenly true :halign "start" :valign "center" :vexpand true '"$(gib_workspace_yuck)"')'
+  echo '(box :orientation "v" :class "workspaces" :space-evenly true :halign "center" :valign "center" :vexpand true '"$(gib_workspace_yuck)"')'
 done

@@ -14,8 +14,6 @@
            :class "segment-bottom" 
         (bottom)))))
 
-
-
 (defwidget top []
   (workspaces :wsp_yuck {screen == 0 ? workspaces_0_yuck : screen == 1 ? workspaces_1_yuck : workspaces_2_yuck}))
 
@@ -57,8 +55,10 @@
     (box :orientation "v"
          :valign "fill"
          :vexpand true
-      (large-sym :sym "🎧")
-      "${volume}%")))
+      (button :onclick "./audio.sh toggle"
+        (large-sym :sym audio_sink))
+      (button :onclick "pavucontrol &"
+        "${volume}%"))))
 
 
 (defwidget large-sym [sym]
@@ -69,18 +69,14 @@
        :halign "center" 
     day_word day month year))
 
-(deflisten volume 
-  `
-  pamixer --get-volume; 
-  pactl subscribe | grep --line-buffered "Event 'change' on sink " | while read -r evt; 
-                                                                 do pamixer --get-volume; 
-                                                                 done`)
+(deflisten audio_sink "./audio.sh symbol")
+(deflisten volume :initial "0" "./audio.sh volume")
 
 (defpoll hour :interval "1s" "date +%H")
 (defpoll min  :interval "1s" "date +%M")
 (defpoll sec  :interval "1s" "date +%S")
 
-(defpoll day_word :interval "10m" "date +%a")
+(defpoll day_word :interval "10m" "date +%a | tr [:upper:] [:lower:]")
 (defpoll day      :interval "10m" "date +%d")
 (defpoll month    :interval "1h"  "date +%m")
 (defpoll year     :interval "1h"  "date +%y")
