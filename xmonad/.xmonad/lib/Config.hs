@@ -659,8 +659,7 @@ fullscreenFixEventHook (ClientMessageEvent _ _ _ dpy win typ (_:dats)) = do
   return $ All True
 fullscreenFixEventHook _ = return $ All True
 
-  
-
+ 
 
 -- POLYBAR Kram -------------------------------------- {{{
 

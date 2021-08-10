@@ -35,9 +35,11 @@
     (box :class "metric" :orientation "v" 
       (large-sym :sym "" ) "${round((1 - (EWW_DISK["/"].free / EWW_DISK["/"].total)) * 100, 0)}%")
     (box :class "metric" :orientation "v" 
-      "" "${round(EWW_RAM, 0)}%")
+      (label :class "metric-icon":text "") 
+      "${round(EWW_RAM, 0)}%")
     (box :class "metric" :orientation "v" 
-      "" "${round(EWW_CPU_USAGE.avg, 0)}%")
+      (label :class "metric-icon":text "") 
+      "${round(EWW_CPU_USAGE.avg, 0)}%")
     (box :class "metric" 
       (date))))
 
@@ -62,7 +64,7 @@
 
 
 (defwidget large-sym [sym]
-  (label :class "large-symbol" :text sym))
+  (label :class "metric-icon large-symbol" :text sym))
 
 (defwidget date []
   (box :orientation "v" 

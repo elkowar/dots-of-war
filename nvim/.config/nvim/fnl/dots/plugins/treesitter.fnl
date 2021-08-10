@@ -7,7 +7,7 @@
 (configs.setup 
   {:ensure_installed "all" 
    :highlight {:enable true
-               :disable ["fennel" "rust"]}
+               :disable ["fennel" "rust" "haskell"]}
 
    :incremental_selection {:enable false
                            :keymaps {:init_selection    "gss"
