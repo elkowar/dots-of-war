@@ -1,0 +1,103 @@
+(defwidget bar [screen]
+  (box :orientation "v"
+    (box 
+      (box :valign "start" 
+           :halign "center" 
+           :class "segment-top"
+        (top :screen screen)))
+    (box 
+      (box :valign "center"
+           :class "middle" 
+        (middle)))
+    (box 
+      (box :valign "end"
+           :class "segment-bottom" 
+        (bottom)))))
+
+
+
+(defwidget top []
+  (workspaces :wsp_yuck {screen == 0 ? workspaces_0_yuck : screen == 1 ? workspaces_1_yuck : workspaces_2_yuck}))
+
+(defwidget workspaces [wsp_yuck]
+  (literal :content wsp_yuck))
+
+(defwidget middle [] (time))
+(defwidget time []
+  (box :orientation "v" 
+       :class "metric time"
+    hour min sec))
+
+(defwidget bottom [] 
+  (box :orientation "v"
+       :valign "end"
+       :space-evenly true
+       :spacing "5"
+    (volume)
+    (box :class "metric" :orientation "v" 
+      (large-sym :sym "" ) "${round((1 - (EWW_DISK["/"].free / EWW_DISK["/"].total)) * 100, 0)}%")
+    (box :class "metric" :orientation "v" 
+      "" "${round(EWW_RAM, 0)}%")
+    (box :class "metric" :orientation "v" 
+      "" "${round(EWW_CPU_USAGE.avg, 0)}%")
+    (box :class "metric" 
+      (date))))
+
+(defwidget volume []
+  (box :class "volume-metric"
+       :orientation "v"
+       :space-evenly false
+       :valign "fill"
+       :vexpand false
+    (scale :orientation "h" 
+           :min 0
+           :max 100 
+           :onchange "pamixer --set-volume $(echo {} | sed 's/\\..*//g')"
+           :value volume)
+    (box :orientation "v"
+         :valign "fill"
+         :vexpand true
+      (large-sym :sym "🎧")
+      "${volume}%")))
+
+
+(defwidget large-sym [sym]
+  (label :class "large-symbol" :text sym))
+
+(defwidget date []
+  (box :orientation "v" 
+       :halign "center" 
+    day_word day month year))
+
+(deflisten volume 
+  `
+  pamixer --get-volume; 
+  pactl subscribe | grep --line-buffered "Event 'change' on sink " | while read -r evt; 
+                                                                 do pamixer --get-volume; 
+                                                                 done`)
+
+(defpoll hour :interval "1s" "date +%H")
+(defpoll min  :interval "1s" "date +%M")
+(defpoll sec  :interval "1s" "date +%S")
+
+(defpoll day_word :interval "10m" "date +%a")
+(defpoll day      :interval "10m" "date +%d")
+(defpoll month    :interval "1h"  "date +%m")
+(defpoll year     :interval "1h"  "date +%y")
+
+(deflisten workspaces_0_yuck "./workspaces.sh 0")
+(deflisten workspaces_1_yuck "./workspaces.sh 1")
+(deflisten workspaces_2_yuck "./workspaces.sh 2")
+
+(defwindow bar_1
+  :monitor 1
+  :geometry (geometry :x 0 :y 0 :width "40px" :height "100%")
+  :anchor "top left"
+  :reserve (struts :distance "40px" :side "left")
+  (bar :screen 1))
+(defwindow bar_2
+  :monitor 2
+  :geometry (geometry :x 0 :y 0 :width "40px" :height "100%")
+  :anchor "top left"
+  :reserve (struts :distance "40px" :side "left")
+  (bar :screen 2))

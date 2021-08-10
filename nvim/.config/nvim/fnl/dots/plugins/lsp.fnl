@@ -61,6 +61,7 @@
 (init-lsp :hls      {:settings {:languageServerHaskell {:formattingProvider "stylish-haskell"}}})
 (init-lsp :ocamllsp)
 (init-lsp :vimls)
+(init-lsp :gopls)
 (init-lsp :bashls)
 (init-lsp :erlangls)
 (init-lsp :yamlls)
