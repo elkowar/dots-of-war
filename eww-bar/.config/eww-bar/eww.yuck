@@ -2,7 +2,7 @@
   (box :orientation "v"
     (box 
       (box :valign "start" 
-           :halign "center" 
+           :halign "fill" 
            :class "segment-top"
         (top :screen screen)))
     (box 
@@ -23,7 +23,7 @@
 (defwidget middle [] (time))
 (defwidget time []
   (box :orientation "v" 
-       :class "metric time"
+       :class "time"
     hour min sec))
 
 (defwidget bottom [] 
@@ -31,17 +31,25 @@
        :valign "end"
        :space-evenly true
        :spacing "5"
+    (box :class "metric" :orientation "v"
+      (button :onclick "eww -c /home/leon/.config/eww-bar open --toggle music-popup" "")
+      (music-button))
     (volume)
     (box :class "metric" :orientation "v" 
-      (large-sym :sym "" ) "${round((1 - (EWW_DISK["/"].free / EWW_DISK["/"].total)) * 100, 0)}%")
+      (label :class "metric-icon" :style "font-size: 0.8rem;" :text "")
+      "${round((1 - (EWW_DISK["/"].free / EWW_DISK["/"].total)) * 100, 0)}%")
     (box :class "metric" :orientation "v" 
       (label :class "metric-icon":text "") 
       "${round(EWW_RAM, 0)}%")
     (box :class "metric" :orientation "v" 
-      (label :class "metric-icon":text "") 
+      (label :class "metric-icon" :text "") 
       "${round(EWW_CPU_USAGE.avg, 0)}%")
-    (box :class "metric" 
+    (box :class "metric"
       (date))))
+
+(defwidget music-button []
+  (button :onclick "playerctl play-pause"
+  "${music_data.status == "Playing" ? "⏸" : "▶"}"))
 
 (defwidget volume []
   (box :class "volume-metric"
@@ -58,9 +66,12 @@
          :valign "fill"
          :vexpand true
       (button :onclick "./audio.sh toggle"
-        (large-sym :sym audio_sink))
+        (label :style "font-size: 1.2em; font-family: DejaVuSansMono Nerd Font Mono"
+               :text audio_sink))
       (button :onclick "pavucontrol &"
         "${volume}%"))))
+
+
 
 
 (defwidget large-sym [sym]
@@ -73,6 +84,10 @@
 
 (deflisten audio_sink "./audio.sh symbol")
 (deflisten volume :initial "0" "./audio.sh volume")
+
+(deflisten music_data 
+  :initial `{"status": ""}`
+  `playerctl --follow metadata --format '{ "status": "{{status}}", "artist": "{{artist}}", "title": "{{title}}"}'`)
 
 (defpoll hour :interval "1s" "date +%H")
 (defpoll min  :interval "1s" "date +%M")
@@ -99,3 +114,18 @@
   :anchor "top left"
   :reserve (struts :distance "40px" :side "left")
   (bar :screen 2))
+
+
+
+
+(defwidget music-popup []
+  (box :class "music-popup" :orientation "h" :space-evenly false :spacing 10
+    (button :onclick "playerctl previous" "⏮")
+    "${music_data.artist} - ${music_data.title}"
+    (button :onclick "playerctl next" "⏭"))
+    )
+
+(defwindow music-popup
+  :monitor 1
+  :geometry (geometry :x "30px" :y "70%" :height "65px")
+  (music-popup))

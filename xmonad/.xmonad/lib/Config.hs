@@ -276,6 +276,7 @@ myStartupHook = do
   --spawnOnce "/home/leon/Downloads/picom --config /home/leon/.config/picom.conf --experimental-backends --backend xrender"  --no-fading-openclose"
   spawnOnce "picom --config /home/leon/.config/picom.conf --experimental-backends --backend glx"  --no-fading-openclose"
   spawn "/home/leon/.config/polybar/launch.sh"
+  spawn "xsetroot -cursor_name left_ptr"
   spawnOnce "nitrogen --restore"
   spawnOnce "mailnag"
   spawnOnce "flameshot"

@@ -15,6 +15,7 @@ window {
   button {
     background: none;
     margin: 3px;
+    padding-left: 1px;
     &.inactive {
       color: #888974;
     }
@@ -53,7 +54,8 @@ window {
 
   scale trough highlight {
     all: unset;
-    background-color: #8ec07c;
+    //background-color: #8ec07c;
+    background-color: #665c54;
     border-bottom-right-radius: 5px;
   }
   scale trough {
@@ -80,4 +82,16 @@ window {
 .time {
   padding-top: 7px;
   padding-bottom: 7px;
+  color: #a89984;
+}
+
+
+
+
+
+.music-popup {
+  all: unset;
+  background-color: #1d2021;
+  padding: 0px 20px;
+  margin: 0;
 }

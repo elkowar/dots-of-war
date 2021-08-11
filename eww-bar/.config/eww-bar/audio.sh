@@ -5,8 +5,9 @@ case "$1" in
   "symbol")
     pactl subscribe | grep --line-buffered "Event 'change' on client" | while read -r; do
       case "$(pactl get-default-sink)" in
-        *Arctis_9*) echo "🎧";;
-        *)          echo "📢";;
+        *Arctis_9*) echo "";;
+        #*Arctis_9*) echo "";;
+        *)          echo "";;
       esac
     done
     ;;
