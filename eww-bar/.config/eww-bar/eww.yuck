@@ -119,7 +119,10 @@
 
 
 (defwidget music-popup []
-  (box :class "music-popup" :orientation "h" :space-evenly false :spacing 10
+  (box :class "music-popup" 
+       :orientation "h" 
+       :space-evenly false 
+       :spacing 10
     (button :onclick "playerctl previous" "⏮")
     "${music_data.artist} - ${music_data.title}"
     (button :onclick "playerctl next" "⏭"))

@@ -112,6 +112,10 @@ in
       "Xft.lcdfilter" = "lcddefault";
 
       "st.font" = "Terminus (TTF):pixelsize=16";
+      "st.boxdraw" = 1;
+      "st.boxdraw_bold" = 1;
+      "st.boxdraw_braille" = 1;
+      "st.scrollrate" = 1;
 
       "*.background" = primary.background;
       "*.foreground" = primary.foreground;
@@ -131,6 +135,31 @@ in
       "*.color13" = bright.magenta;
       "*.color14" = bright.cyan;
       "*.color15" = bright.white;
+
+
+#"st.termname" = "st-256color";
+#"st.borderless" = 1;
+#"st.font" = "Terminus (TTF):size=16:antialias=true:autohint=true";
+#"st.borderpx" = 10;
+#"st.cursorshape" = 3;
+#"st.cursorthickness" = 1;
+#"st.cursorblinkstyle" = 0;
+#"st.cursorblinkontype" = 0;
+#"st.disablebold" = 0;
+#"st.disableitalics" = 0;
+#"st.disableroman" = 0;
+#"st.scrollrate" = 1;
+#"st.blinktimeout" = 100;
+#"st.bellvolume" = 5;
+#"st.actionfps" = 60;
+#"st.mouseScrollLines" = 3;
+#"st.boxdraw" = 1;
+#"st.boxdraw_bold" = 1;
+#"st.boxdraw_braille" = 1;
+#"st.opacity" = 255;
+#"st.disable_alpha_correction" = 0;
+#"st.prompt_char" = "λ  !`printf '\033[z'`";
+#"st.shell" = "/usr/bin/bash";
     };
   };
 }

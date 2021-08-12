@@ -98,6 +98,7 @@ import GHC.IO.Unsafe (unsafePerformIO)
 import XMonad.Layout.LayoutModifier
 import qualified IndependentScreens as IS
 import Data.List (find)
+import System.Process (readProcess)
 --import XMonad.Layout.MultiColumns (multiCol)
 {-# ANN module "HLint: ignore Redundant $" #-}
 {-# ANN module "HLint: ignore Redundant bracket" #-}
@@ -108,6 +109,7 @@ import Data.List (find)
 
 -- Values -------------------- {{{
 
+verticalMonitorIndex = 0 :: Int
 myModMask  = mod4Mask
 myLauncher = Rofi.asCommand def ["-show run"]
 --myTerminal = "alacritty"
@@ -275,7 +277,9 @@ myStartupHook = do
   io $ threadDelay $ 1000 * 100
   --spawnOnce "/home/leon/Downloads/picom --config /home/leon/.config/picom.conf --experimental-backends --backend xrender"  --no-fading-openclose"
   spawnOnce "picom --config /home/leon/.config/picom.conf --experimental-backends --backend glx"  --no-fading-openclose"
-  spawn "/home/leon/.config/polybar/launch.sh"
+  --spawn "/home/leon/.config/polybar/launch.sh"
+  setupPolybarOn "DisplayPort-0"
+  spawnOnce "eww -c /home/leon/.config/eww-bar open-many bar_2 bar_1 &"
   spawn "xsetroot -cursor_name left_ptr"
   spawnOnce "nitrogen --restore"
   spawnOnce "mailnag"
@@ -561,18 +565,15 @@ myManageHook = composeAll
 -- }}}
 
 -- Main ------------------------------------ {{{
+  
+
+
 main :: IO ()
 main = do
   currentScreenCount :: Int <- IS.countScreens
-  let monitorIndices = [0..currentScreenCount - 1]
 
-
-
-  -- create a fifo named pipe for every monitor (called /tmp/xmonad-state-bar0, etc)
-  for_ monitorIndices (\idx -> safeSpawn "mkfifo" ["/tmp/xmonad-state-bar" ++ show idx])
-
-  -- create polybarLogHooks for every monitor and combine them using the <+> monoid instance
-  let polybarLogHooks = composeAll $ map polybarLogHook monitorIndices
+  -- set up the fifo for polybar
+  safeSpawn "mkfifo" ["/tmp/xmonad-state-bar" ++ show verticalMonitorIndex]
 
   let myConfig = flip additionalKeysP myKeys
                $ flip removeKeysP removedKeys
@@ -584,7 +585,8 @@ main = do
         , modMask            = myModMask
         , borderWidth        = 0
         , layoutHook         = myLayout
-        , logHook            = mconcat [ polybarLogHooks
+        , logHook            = mconcat [ polybarLogHook verticalMonitorIndex
+                                       , ewwLogHook
                                        , Ewmh.ewmhDesktopsLogHook
                                        , logHook Desktop.desktopConfig
                                        --, fadeInactiveLogHook 0.95
@@ -662,7 +664,17 @@ fullscreenFixEventHook _ = return $ All True
 
  
 
--- POLYBAR Kram -------------------------------------- {{{
+-- Bar Kram -------------------------------------- {{{
+
+-- | Loghook for eww on all monitors. Runs the eww-bar 
+ewwLogHook :: X ()
+ewwLogHook = spawn "/home/leon/.config/eww-bar/update-workspaces.sh"
+
+-- | Launch a polybar on the given monitor name
+setupPolybarOn :: String -> X ()
+setupPolybarOn name =
+    spawnOnce $ "MONITOR=" ++ name ++ " TRAY_POSITION=right polybar -r --config=/home/leon/.config/polybar/config.ini main &"
+
 
 -- | Loghook for polybar on a given monitor.
 -- Will write the polybar formatted string to /tmp/xmonad-state-bar${monitor}
@@ -771,7 +783,7 @@ getXrdbValue key = fromMaybe "" . findValue key <$> runProcessWithInput "xrdb" [
     splitAtColon str = splitAtTrimming str <$> (Data.List.elemIndex ':' str)
 
     splitAtTrimming :: String -> Int -> (String, String)
-    splitAtTrimming str idx = bimap trim trim . (second tail) $ splitAt idx str
+    splitAtTrimming str idx = bimap trim (trim . tail) $ splitAt idx str
 
 
 
@@ -788,3 +800,16 @@ lastLayout = lastLayout' 123
     lastLayout' :: Int -> X ()
     lastLayout' 0 = pure ()
     lastLayout' n = sendMessage NextLayout >> lastLayout' (n - 1)
+
+
+
+
+
+
+
+(!?) :: [a] -> Int -> Maybe a
+(!?) [] _     = Nothing
+(!?) (x:_) 0  = Just x
+(!?) (_:xs) n 
+  | n > 0     = xs !? (n - 1)
+  | otherwise = Nothing

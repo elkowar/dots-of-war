@@ -169,3 +169,32 @@
   "command! -nargs=1 L :lua print(vim.inspect(<args>))")
 
 ; vim:foldmarker=foldstart,foldend
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

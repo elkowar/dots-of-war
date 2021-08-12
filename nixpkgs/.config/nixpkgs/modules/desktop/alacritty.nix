@@ -44,7 +44,8 @@ in
         font = {
           size = 12;
           #normal.family = "Iosevka";
-          normal.family = "Terminus (TTF)";
+          normal.family = "xos4 Terminus";
+          #normal.family = "Terminus (TTF)";
           offset.x = 0;
           #offset.y = -2;
           offset.y = 0;
