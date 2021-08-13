@@ -5,10 +5,10 @@
       (top :screen screen))
     (box :valign "center"
          :class "middle" 
-      (middle))
+      (middle :screen screen))
     (box :valign "end"
          :class "segment-bottom" 
-      (bottom))))
+      (bottom :screen screen))))
 
 (defwidget top []
   (workspaces :wsp_yuck {screen == 0 ? workspaces_0_yuck : screen == 1 ? workspaces_1_yuck : workspaces_2_yuck}))
@@ -22,13 +22,14 @@
        :class "time"
     hour min sec))
 
-(defwidget bottom [] 
+(defwidget bottom [screen ] 
   (box :orientation "v"
        :valign "end"
        :space-evenly true
        :spacing "5"
-    (box :class "metric" :orientation "v"
-      (button :onclick "eww -c /home/leon/.config/eww-bar open --toggle music-popup" "")
+    (box :class "metric" :orientation "v" 
+      ;(button :onclick "eww -c /home/leon/.config/eww-bar open --toggle music_popup --screen ${screen}" )
+      ""
       (music-button))
     (volume)
     (box :class "metric" :orientation "v" 
@@ -52,6 +53,7 @@
        :orientation "v"
        :space-evenly false
        :valign "fill"
+
        :vexpand false
     (scale :orientation "h" 
            :min 0
@@ -62,9 +64,11 @@
          :valign "fill"
          :vexpand true
       (button :onclick "./audio.sh toggle"
+              :onscroll "notify-send test {}; if [ '{}' == 'up' ]; then pamixer -i 5; else pamixer -d 5; fi"
         (label :style "font-size: 1.2em; font-family: DejaVuSansMono Nerd Font Mono"
                :text audio_sink))
       (button :onclick "pavucontrol &"
+              :onscroll "if [ '{}' == 'up' ]; then pamixer -i 5; else pamixer -d 5; fi"
         "${volume}%"))))
 
 
@@ -79,7 +83,6 @@
     day_word day month year))
 
 ; TODO make this not hacky
-
 (defvar audio_sink "")
 
 (deflisten volume :initial "0" "./audio.sh volume")
@@ -117,17 +120,19 @@
 
 
 
-(defwidget music-popup []
-  (box :class "music-popup" 
-       :orientation "h" 
-       :space-evenly false 
-       :spacing 10
-    (button :onclick "playerctl previous" "⏮")
-    "${music_data.artist} - ${music_data.title}"
-    (button :onclick "playerctl next" "⏭"))
-    )
+;(defwidget music-popup []
+  ;(if-else :cond {music_data.status == "Stopped" || music_data.status == ""}
+    ;"No music playing"
+    ;(box :orientation "h" 
+         ;:valign "fill"
+         ;:space-evenly false 
+         ;:spacing 10
+      ;(button :onclick "playerctl previous" "⏮")
+      ;"${music_data.artist} - ${music_data.title}"
+      ;(button :onclick "playerctl next" "⏭"))))
 
-(defwindow music-popup
-  :monitor 1
-  :geometry (geometry :x "30px" :y "70%" :height "65px")
-  (music-popup))
+;(defwindow music_popup
+  ;:monitor 1
+  ;:anchor "bottom left"
+  ;:geometry (geometry :x "30px" :y "10px" :height "65px")
+  ;(music-popup))
