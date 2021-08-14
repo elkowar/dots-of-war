@@ -100,9 +100,13 @@
 (defpoll month    :interval "1h"  "date +%m")
 (defpoll year     :interval "1h"  "date +%y")
 
-(deflisten workspaces_0_yuck "./workspaces.sh 0")
-(deflisten workspaces_1_yuck "./workspaces.sh 1")
-(deflisten workspaces_2_yuck "./workspaces.sh 2")
+(defvar workspaces_1_yuck "")
+(defvar workspaces_2_yuck "")
+
+; these are not needed because updates are done via update-workspaces.sh triggered from xmonad
+;(deflisten workspaces_0_yuck "./workspaces.sh 0")
+;(deflisten workspaces_1_yuck "./workspaces.sh 1")
+;(deflisten workspaces_2_yuck "./workspaces.sh 2")
 
 (defwindow bar_1
   :monitor 1

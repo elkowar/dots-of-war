@@ -7,6 +7,7 @@
   :elkowar/antifennel-nvim {:config #(set vim.g.antifennel_executable "/home/leon/tmp/antifennel/antifennel")}
   :elkowar/kmonad.vim {}
 
+  :ruanyl/vim-gh-line {}
   :rhysd/conflict-marker.vim {}
   :wellle/visual-split.vim {}
   :sindrets/diffview.nvim {}

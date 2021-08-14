@@ -51,9 +51,9 @@ promptRunCommand config = XCommands.runCommandConfig (Rofi.promptSimple config)
 -- |prompt a single rofi mode. ex: `showNormal def "run"`
 showNormal :: RofiConfig -> String -> X ()
 showNormal config mode =
-  spawn $ asCommand config ["-sort -modi " ++ mode, "-show " ++ mode]
+  spawn $ asCommand config ["-modi " ++ mode, "-show " ++ mode]
 
 -- |Show a rofi combi prompt, combining all given modes
 showCombi :: RofiConfig -> [String] -> X ()
 showCombi config modi = spawn
-  $ asCommand config ["-sort -show combi", "-combi-modi " ++ intercalate "," modi]
+  $ asCommand config ["-show combi", "-combi-modi " ++ intercalate "," modi]

@@ -1,17 +1,15 @@
 #!/usr/bin/env bash
 
-monitor="$1"
-
 gib_workspace_names() {
   wmctrl -d \
     | awk '{ print $1 " " $2 " " $9 }' \
     | grep -v NSP \
-    | grep "${monitor}_"
+    | grep "${1}_"
 }
 
 gib_workspace_yuck() {
   buffered=""
-  gib_workspace_names | while read -r id active name; do
+  gib_workspace_names $1 | while read -r id active name; do
     name="${name#*_}"
     if [ "$active" == '*' ]; then
       active_class="active"
@@ -34,4 +32,8 @@ gib_workspace_yuck() {
   done
 }
 
-echo '(box :orientation "v" :class "workspaces" :space-evenly true :halign "center" :valign "center" :vexpand true '"$(gib_workspace_yuck)"')'
+
+box_attrs=':orientation "v" :class "workspaces" :space-evenly true :halign "center" :valign "center" :vexpand true '
+
+eww -c ~/.config/eww-bar update workspaces_1_yuck='(box '"$box_attrs"' '"$(gib_workspace_yuck 1)"')'
+eww -c ~/.config/eww-bar update workspaces_2_yuck='(box '"$box_attrs"' '"$(gib_workspace_yuck 2)"')'

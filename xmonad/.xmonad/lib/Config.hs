@@ -402,8 +402,8 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
     , ("M-M1-<Delete>", sendMessage Rotate)
 
     -- Media
-    , ("<XF86AudioRaiseVolume>", spawn "~/.config/eww/popup.sh 3 volume_popup && amixer sset Master 5%+")
-    , ("<XF86AudioLowerVolume>", spawn "~/.config/eww/popup.sh 3 volume_popup && amixer sset Master 5%-")
+    , ("<XF86AudioRaiseVolume>", spawn "amixer sset Master 5%+")
+    , ("<XF86AudioLowerVolume>", spawn "amixer sset Master 5%-")
     , ("M-S-C-,", (notify "hi" (show $ map (\(a, _) -> show a) workspaceBindings)) >> (notify "ho" (show removedKeys)))
     , ("M-<Backspace>", spawn "flash_window")
     , ("M-g", incScreenWindowSpacing 5)
