@@ -35,5 +35,5 @@ gib_workspace_yuck() {
 
 box_attrs=':orientation "v" :class "workspaces" :space-evenly true :halign "center" :valign "center" :vexpand true '
 
-eww -c ~/.config/eww-bar update workspaces_1_yuck='(box '"$box_attrs"' '"$(gib_workspace_yuck 1)"')'
-eww -c ~/.config/eww-bar update workspaces_2_yuck='(box '"$box_attrs"' '"$(gib_workspace_yuck 2)"')'
+eww -c ~/.config/eww-bar update workspaces_1_yuck="(box $box_attrs $(gib_workspace_yuck 1))"
+eww -c ~/.config/eww-bar update workspaces_2_yuck="(box $box_attrs $(gib_workspace_yuck 2))"

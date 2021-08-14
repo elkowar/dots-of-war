@@ -276,7 +276,7 @@ myStartupHook = do
   spawnOnce "xrdb -merge ~/.Xresources"
   io $ threadDelay $ 1000 * 100
   --spawnOnce "/home/leon/Downloads/picom --config /home/leon/.config/picom.conf --experimental-backends --backend xrender"  --no-fading-openclose"
-  spawnOnce "picom --config /home/leon/.config/picom.conf --experimental-backends --backend glx"  --no-fading-openclose"
+  spawnOnce "/home/leon/Downloads/picom-epic-animations --config /home/leon/.config/picom.conf --experimental-backends --animations --anomation-stiffness 200 --animation-dampening 20" --backend glx"  --no-fading-openclose"
   --spawn "/home/leon/.config/polybar/launch.sh"
   setupPolybarOn "DisplayPort-0"
   spawnOnce "eww -c /home/leon/.config/eww-bar open-many bar_2 bar_1 &"
