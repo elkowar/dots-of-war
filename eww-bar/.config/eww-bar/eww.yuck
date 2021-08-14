@@ -10,8 +10,8 @@
          :class "segment-bottom" 
       (bottom :screen screen))))
 
-(defwidget top []
-  (workspaces :wsp_yuck {screen == 0 ? workspaces_0_yuck : screen == 1 ? workspaces_1_yuck : workspaces_2_yuck}))
+(defwidget top [screen]
+  (workspaces :wsp_yuck {screen == 1 ? workspaces_1_yuck : workspaces_2_yuck}))
 
 (defwidget workspaces [wsp_yuck]
   (literal :content wsp_yuck))
@@ -89,7 +89,10 @@
 
 (deflisten music_data 
   :initial `{"status": ""}`
-  `playerctl --follow metadata --format '{ "status": "{{status}}", "artist": "{{artist}}", "title": "{{title}}"}'`)
+  `
+  playerctl metadata || echo '{"status": ""}';
+  playerctl --follow metadata --format '{ "status": "{{status}}", "artist": "{{artist}}", "title": "{{title}}"}'
+  `)
 
 (defpoll hour :interval "1s" "date +%H")
 (defpoll min  :interval "1s" "date +%M")
