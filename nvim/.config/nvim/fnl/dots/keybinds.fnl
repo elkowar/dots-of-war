@@ -63,8 +63,8 @@
        "e" (cmd "Trouble lsp_workspace_diagnostics"       "Show diagnostics")
        "t" [vim.lsp.buf.declaration                       "Go to declaration"] 
        "g" [vim.lsp.buf.definition                        "Go to definition"] 
-       "i" [vim.lsp.buf.implementation                    "Show implementation"] 
-       "f" [format                        "format file"]
+       "i" (cmd "Trouble lsp_implementations"             "Show implementation") 
+       "f" [format                                        "format file"]
        "," (cmd "RustRunnables"                           "Run rust stuff")}
 
   "f" {:name "+folds"

@@ -120,6 +120,7 @@
 
 (set vim.g.conjure#client#fennel#aniseed#aniseed_module_prefix "aniseed.")
 (set vim.g.vim_parinfer_filetypes ["carp" "fennel" "clojure"])
+(set vim.g.parinfer_additional_filetypes ["yuck"])
 
 ; foldend
 

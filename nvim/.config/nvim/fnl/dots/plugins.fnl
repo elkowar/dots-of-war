@@ -108,14 +108,21 @@
   ; code-related ----------------------------------------- <<<
 
   :ray-x/lsp_signature.nvim {:events [:BufEnter]}
-  :folke/lsp-trouble.nvim {:mod "dots.plugins.trouble"
-                           :cmd ["Trouble" "TroubleClose" "TroubleRefresh" "TroubleToggle"]}
+  "/home/leon/coding/prs/trouble.nvim" {:mod "dots.plugins.trouble"
+                                        :cmd ["Trouble" "TroubleClose" "TroubleRefresh" "TroubleToggle"]}
+  ;:folke/lsp-trouble.nvim {:mod "dots.plugins.trouble"
+                           ;:cmd ["Trouble" "TroubleClose" "TroubleRefresh" "TroubleToggle"]}
   :simrat39/symbols-outline.nvim {:mod "dots.plugins.symbols-outline"}
   :neovim/nvim-lspconfig {}
 
   ;:hrsh7th/nvim-compe {:mod "dots.plugins.compe"}
-  :/home/leon/coding/prs/nvim-compe {:event [:InsertEnter]
-                                     :mod "dots.plugins.compe"}
+  ;:/home/leon/coding/prs/nvim-compe {:event [:InsertEnter]
+                                     ;:mod "dots.plugins.compe"}
+  :ms-jpq/coq_nvim {:mod "dots.plugins.coq-nvim" 
+                    :branch "coq"}
+
+  :ms-jpq/coq.artifacts {:branch "artifacts"}
+
 
 
 
@@ -143,7 +150,9 @@
 
   ;:bhurlow/vim-parinfer {:ft ["fennel" "carp" "lisp" "elisp"]}
 
-  :eraserhd/parinfer-rust {:run "cargo build --release"}
+  ;:eraserhd/parinfer-rust {:run "cargo build --release"}
+  "elkowar/parinfer-rust" {:run "cargo build --release"
+                           :branch "configure-filetypes"}
 
   :bduggan/vim-raku {:ft ["raku"]}
   :LnL7/vim-nix {:ft ["nix"]}

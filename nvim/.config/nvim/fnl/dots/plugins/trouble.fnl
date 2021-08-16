@@ -8,6 +8,7 @@
   :auto_preview true
   :auto_close true
   :auto_open false
+  :auto_jump ["lsp_definitions" "lsp_workspace_diagnostics"]
   :action_keys
     {:jump "o"
      :jump_close "<CR>"

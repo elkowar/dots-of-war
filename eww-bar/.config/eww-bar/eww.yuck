@@ -22,7 +22,7 @@
        :class "time"
     hour min sec))
 
-(defwidget bottom [screen ] 
+(defwidget bottom [screen] 
   (box :orientation "v"
        :valign "end"
        :space-evenly true
@@ -46,7 +46,7 @@
 
 (defwidget music-button []
   (button :onclick "playerctl play-pause"
-  "${music_data.status == "Playing" ? "⏸" : "▶"}"))
+   "${music_data.status == "Playing" ? "⏸" : "▶"}"))
 
 (defwidget volume []
   (box :class "volume-metric"
@@ -90,7 +90,7 @@
 (deflisten music_data 
   :initial `{"status": ""}`
   `
-  playerctl metadata || echo '{"status": ""}';
+  playerctl          metadata --format '{ "status": "{{status}}", "artist": "{{artist}}", "title": "{{title}}"}' || echo '{"status": ""}';
   playerctl --follow metadata --format '{ "status": "{{status}}", "artist": "{{artist}}", "title": "{{title}}"}'
   `)
 
