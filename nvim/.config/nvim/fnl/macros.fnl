@@ -5,6 +5,15 @@
        (nvim.ex.autocmd_)
        ,...
        (nvim.ex.augroup :END)))
+  
+  :req
+  (fn [name ...]
+    (let [str  (require :aniseed.string) 
+          a    (require :aniseed.core)
+          segs (str.split (tostring name) "%.")
+          mod  (str.join "." (a.butlast segs))
+          func (a.last segs)]
+      `((. (require (tostring ,mod)) (tostring ,func)) ,...)))
  
   :autocmd
   (fn [...]

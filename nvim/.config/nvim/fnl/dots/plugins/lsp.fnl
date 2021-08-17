@@ -18,6 +18,7 @@
                                  :use_lspsaga false
                                  :decorator ["`" "`"]}))
 
+  ;(req dots.utils.highlight :LspDiagnosticsUnderlineError {:gui "underline"})
   (if client.resolved_capabilities.document_highlight
     (do
       (utils.highlight "LspReferenceRead"  {:gui "underline"})
@@ -95,8 +96,8 @@
 
 (let [rust-tools (require "rust-tools")]
   (rust-tools.setup {:tools {:inlay_hints {:show_parameter_hints false}
-                             :autoSetHints false}}))
-                     ;:server {:cmd ["/home/leon/coding/prs/rust-analyzer/target/release/rust-analyzer"]}}))
+                             :autoSetHints false}
+                     :server {:on_attach on_attach}}))
 
 (let [sumneko_root_path (.. vim.env.HOME "/.local/share/lua-language-server")
       sumneko_binary (.. sumneko_root_path "/bin/Linux/lua-language-server")]

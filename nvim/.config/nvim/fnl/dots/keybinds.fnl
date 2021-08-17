@@ -45,6 +45,8 @@
   "s" (cmd "w"                      "Save file")
   "g" (cmd "Neogit"                 "Git")
 
+  "n" [(. (require :persistence) :load) "Load last session"]
+
   "m" {:name "+Code actions"
        "d" (cmd "Lspsaga hover_doc"                       "Show documentation") 
        "b" (cmd "Lspsaga lsp_finder"                      "Find stuff") 
@@ -76,7 +78,7 @@
   "v" {:name "+view-and-layout"
        "n" (cmd "set relativenumber!"             "toggle relative numbers") 
        "m" (cmd "set nonumber! norelativenumber"  "toggle numbers") 
-       "g" (cmd "Goyo | set linebreak"            "toggle focus mode") 
+       "g" (cmd "ZenMode"                         "toggle zen mode") 
        "i" (cmd "IndentGuidesToggle"              "toggle indent guides")}
 
   "b" {:name "+buffers"

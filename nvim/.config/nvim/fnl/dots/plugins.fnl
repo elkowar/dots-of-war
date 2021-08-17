@@ -11,15 +11,22 @@
   :rhysd/conflict-marker.vim {}
   :wellle/visual-split.vim {}
   :sindrets/diffview.nvim {}
+  :folke/persistence.nvim {:mod "dots.plugins.persistence"}
+  :folke/zen-mode.nvim {:cmd ["ZenMode"]
+                        :mod "dots.plugins.zen-mode"}
+  :folke/twilight.nvim {:mod "dots.plugins.twilight"}
   :TimUntersberger/neogit {:mod "dots.plugins.neogit"
                            :cmd ["Neogit"]}
 
   :lifepillar/vim-gruvbox8 {:opt false
-                            :config #(do (set vim.g.gruvbox_italics 0)
-                                         (set vim.g.gruvbox_italicise_strings 0)
-                                         (set vim.g.gruvbox_filetype_hi_groups 1)
-                                         (set vim.g.gruvbox_plugin_hi_groups 1)
-                                         (vim.cmd "colorscheme gruvbox8"))}
+                            :config 
+                            #(do (set vim.g.gruvbox_italics 0)
+                                 (set vim.g.gruvbox_italicise_strings 0)
+                                 (set vim.g.gruvbox_filetype_hi_groups 1)
+                                 (set vim.g.gruvbox_plugin_hi_groups 1)
+                                 (vim.cmd "colorscheme gruvbox8")
+                                 (req dots.utils.highlight :SignColumn {:bg (. (require :dots.colors) :dark0)}))}
+                                 ;(req dots.utils.highlight :LspDiagnosticsUnderlineError {:gui "underline"}))}
 
   :nvim-telescope/telescope.nvim {:mod "dots.plugins.telescope"
                                   :cmd ["Telescope"]
@@ -75,8 +82,6 @@
   :tweekmonster/startuptime.vim {:cmd ["StartupTime"]}
   :tpope/vim-repeat {}
 
-  :junegunn/goyo.vim {:cmd "Goyo"}
-  
   :lewis6991/gitsigns.nvim {:after ["vim-gruvbox8"]
                             :mod "dots.plugins.gitsigns"}
 
@@ -97,7 +102,7 @@
   :iamcco/markdown-preview.nvim {:run vim.fn.mkdp#util#install}
 
   :rcarriga/nvim-dap-ui {:opt false 
-                         :config #((. (require :dapui) :setup))
+                         :config #(req dapui.setup)
                          :requires [:mfussenegger/nvim-dap]}
   :mfussenegger/nvim-dap {:opt false}
                           ;:mod "dots.plugins.nvim-dap"}
@@ -151,8 +156,9 @@
   ;:bhurlow/vim-parinfer {:ft ["fennel" "carp" "lisp" "elisp"]}
 
   ;:eraserhd/parinfer-rust {:run "cargo build --release"}
-  "elkowar/parinfer-rust" {:run "cargo build --release"
-                           :branch "configure-filetypes"}
+  :/home/leon/coding/prs/parinfer-rust {}
+  ;"elkowar/parinfer-rust" {:run "cargo build --release"
+                           ;:branch "yuck"}
 
   :bduggan/vim-raku {:ft ["raku"]}
   :LnL7/vim-nix {:ft ["nix"]}

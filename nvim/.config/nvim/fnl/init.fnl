@@ -101,10 +101,24 @@
 (utils.highlight-add :FloatBorder {:bg colors.dark0_hard})
 (utils.highlight-add :SpecialComment {:fg colors.dark4})
 
+(utils.highlight-add 
+  [:LspDiagnosticsSignError :LspDiagnosticsSignWarning :LspDiagnosticsSignInformation :LspDiagnosticsSignHint] 
+  {:bg "NONE"})
+(utils.highlight :LspDiagnosticsUnderlineError {:gui "undercurl"})
+
 
 (utils.highlight ["StatusLine" "GalaxyLineInfo" "GalaxySpace" ] {:bg colors.dark1 :fg colors.light0})
 
 (vim.cmd "highlight link Function GruvboxGreen")
+(utils.highlight-add :Function {:gui "NONE"})
+
+
+
+(vim.fn.sign_define :LspDiagnosticsSignError {:text "◆"})
+(vim.fn.sign_define :LspDiagnosticsSignWarning {:text "◆"})
+(vim.fn.sign_define :LspDiagnosticsSignHint {:text "◆"})
+(vim.fn.sign_define :LspDiagnosticsSignInformation {:text "◆"})
+
 
 
 ; foldend 
@@ -116,7 +130,7 @@
 
 ; rust.vim
 (set vim.g.rust_clip_command "xclip -selection clipboard")
-(set vim.g.rustfmt_autosave 1)
+;(set vim.g.rustfmt_autosave 1)
 
 (set vim.g.conjure#client#fennel#aniseed#aniseed_module_prefix "aniseed.")
 (set vim.g.vim_parinfer_filetypes ["carp" "fennel" "clojure"])

@@ -9,6 +9,7 @@
   :auto_close true
   :auto_open false
   :auto_jump ["lsp_definitions" "lsp_workspace_diagnostics"]
+  :indent_lines false
   :action_keys
     {:jump "o"
      :jump_close "<CR>"
@@ -16,11 +17,11 @@
      :cancel "q"
      :hover ["a" "K"]}})
 
-(utils.highlight "LspTroubleFoldIcon" {:bg "NONE" :fg colors.bright_orange})
-(utils.highlight "LspTroubleCount"    {:bg "NONE" :fg colors.bright_green})
-(utils.highlight "LspTroubleText"     {:bg "NONE" :fg colors.light0})
+(utils.highlight "TroubleFoldIcon" {:bg "NONE" :fg colors.bright_orange})
+(utils.highlight "TroubleCount"    {:bg "NONE" :fg colors.bright_green})
+(utils.highlight "TroubleText"     {:bg "NONE" :fg colors.light0})
 
-(utils.highlight "LspTroubleSignError"       {:bg "NONE" :fg colors.bright_red})
-(utils.highlight "LspTroubleSignWarning"     {:bg "NONE" :fg colors.bright_yellow})
-(utils.highlight "LspTroubleSignInformation" {:bg "NONE" :fg colors.bright_aqua})
-(utils.highlight "LspTroubleSignHint"        {:bg "NONE" :fg colors.bright_blue})
+(utils.highlight "TroubleSignError"       {:bg "NONE" :fg colors.bright_red})
+(utils.highlight "TroubleSignWarning"     {:bg "NONE" :fg colors.bright_yellow})
+(utils.highlight "TroubleSignInformation" {:bg "NONE" :fg colors.bright_aqua})
+(utils.highlight "TroubleSignHint"        {:bg "NONE" :fg colors.bright_blue})
