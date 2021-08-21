@@ -64,6 +64,8 @@
 (set vim.opt.swapfile false)
 (set vim.opt.undolevels 10000)
 
+(set vim.g.AutoPairsMultilineClose 0)
+
 (vim-let &t_ut "")
 
 (vim.cmd "autocmd! BufReadPost *.hs :set shiftwidth=2")
@@ -104,6 +106,14 @@
 (utils.highlight-add 
   [:LspDiagnosticsSignError :LspDiagnosticsSignWarning :LspDiagnosticsSignInformation :LspDiagnosticsSignHint] 
   {:bg "NONE"})
+
+(utils.highlight-add :LspDiagnosticsDefaultError {:bg "#342828"})
+(utils.highlight-add :LspDiagnosticsDefaultWarning {:bg "#473027"})
+(utils.highlight-add :LspDiagnosticsDefaultWarning {:bg "#3b2c28"})
+(utils.highlight-add :LspDiagnosticsDefaultInformation {:bg "#272d2f"})
+
+(utils.highlight-add :LspDiagnosticsDefaultHint {:bg "#272d2f"}) 
+
 (utils.highlight :LspDiagnosticsUnderlineError {:gui "undercurl"})
 
 

@@ -9,6 +9,14 @@
 
 ; TODO check https://github.com/neovim/nvim-lspconfig/blob/master/ADVANCED_README.md for default config for all of them
 
+(tset vim.lsp.handlers :textDocument/publishDiagnostics
+  (vim.lsp.with vim.lsp.diagnostic.on_publish_diagnostics 
+                {:update_in_insert false
+                 :virtual_text {:prefix "◆"}
+                 :signs false}))
+
+
+
 (fn on_attach [client bufnr]
   (pkg lsp_signature.nvim [lsp_signature (require "lsp_signature")]
        (lsp_signature.on_attach {:bind true
@@ -97,7 +105,8 @@
 (let [rust-tools (require "rust-tools")]
   (rust-tools.setup {:tools {:inlay_hints {:show_parameter_hints false}
                              :autoSetHints false}
-                     :server {:on_attach on_attach}}))
+                     :server {:on_attach on_attach
+                              :cmd ["/home/leon/coding/prs/rust-analyzer/target/release/rust-analyzer"]}}))
 
 (let [sumneko_root_path (.. vim.env.HOME "/.local/share/lua-language-server")
       sumneko_binary (.. sumneko_root_path "/bin/Linux/lua-language-server")]

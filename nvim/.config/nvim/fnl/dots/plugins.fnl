@@ -155,8 +155,8 @@
 
   ;:bhurlow/vim-parinfer {:ft ["fennel" "carp" "lisp" "elisp"]}
 
-  ;:eraserhd/parinfer-rust {:run "cargo build --release"}
-  :/home/leon/coding/prs/parinfer-rust {}
+  :eraserhd/parinfer-rust {:run "cargo build --release"}
+  ;:/home/leon/coding/prs/parinfer-rust {}
   ;"elkowar/parinfer-rust" {:run "cargo build --release"
                            ;:branch "yuck"}
 
