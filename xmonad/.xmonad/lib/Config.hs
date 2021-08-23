@@ -9,11 +9,10 @@ import Control.Concurrent
 import           Control.Exception              ( catch , SomeException)
 import           Control.Monad                  (join,  filterM , when)
 import           Control.Arrow                  ( (>>>) )
-import Data.List ( isPrefixOf, isSuffixOf, isInfixOf, find )
+import Data.List ( isPrefixOf, isInfixOf, find )
 import qualified Data.List
 import System.Exit (exitSuccess)
 import qualified Rofi
-import qualified DescribedSubmap
 import qualified TiledDragging
 --import qualified WindowSwallowing
 
@@ -21,7 +20,7 @@ import XMonad.Hooks.WindowSwallowing as WindowSwallowing
 
 
 
---import XMonad.Hooks.WindowedFullscreenFix
+import qualified XMonad.Util.Hacks as Hacks
 --import XMonad.Util.ActionCycle
 import Data.Foldable                  ( for_ )
 
@@ -30,25 +29,19 @@ import Data.Function ((&))
 
 import XMonad hiding ((|||))
 import XMonad.Actions.CopyWindow
-import XMonad.Actions.PhysicalScreens ( horizontalScreenOrderer )
 import XMonad.Actions.SpawnOn
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.SetWMName (setWMName)
-import XMonad.Layout.BinarySpacePartition
-import XMonad.Layout.BorderResize
-import XMonad.Layout.Gaps
---import qualified XMonad.Layout.IndependentScreens as IS
 import XMonad.Layout.LayoutCombinators ((|||))
 import XMonad.Layout.LayoutHints
 import XMonad.Layout.MouseResizableTile
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Renamed (renamed, Rename(Replace))
---import qualified XMonad.Layout.MultiColumns as MultiCol
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.Simplest
 import XMonad.Layout.Reflect
-import XMonad.Layout.Spacing (spacingRaw, Border(..), toggleWindowSpacingEnabled, incScreenWindowSpacing, decScreenWindowSpacing)
+import XMonad.Layout.Spacing (spacingRaw, Border(..), incScreenWindowSpacing, decScreenWindowSpacing)
 import XMonad.Layout.SubLayouts
 import XMonad.Layout.Tabbed
 import XMonad.Layout.WindowNavigation ( windowNavigation )
@@ -57,7 +50,6 @@ import XMonad.Layout.ThreeColumns
 import XMonad.Layout.ResizableThreeColumns
 import XMonad.Layout.WindowSwitcherDecoration
 import XMonad.Layout.DraggingVisualizer
---import XMonad.Layout.Hidden as Hidden
 
 import           XMonad.Util.EZConfig           ( additionalKeysP
                                                 , removeKeysP
@@ -65,10 +57,9 @@ import           XMonad.Util.EZConfig           ( additionalKeysP
                                                 )
 
 
-import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run
 import XMonad.Util.SpawnOnce (spawnOnce)
-import XMonad.Util.WorkspaceCompare   ( getSortByXineramaPhysicalRule , getSortByIndex)
+import XMonad.Util.WorkspaceCompare   ( getSortByIndex)
 
 import           Data.Monoid                    ( Endo )
 import           Data.Semigroup                 ( All(..) )
@@ -91,7 +82,8 @@ import Data.Bifunctor
 import GHC.IO.Unsafe (unsafePerformIO)
 import XMonad.Layout.LayoutModifier
 import qualified IndependentScreens as IS
---import XMonad.Layout.MultiColumns (multiCol)
+import qualified XMonad.Actions.Sift as Sift
+
 {-# ANN module "HLint: ignore Redundant $" #-}
 {-# ANN module "HLint: ignore Redundant bracket" #-}
 {-# ANN module "HLint: ignore Move brackets to avoid $" #-}
@@ -104,29 +96,12 @@ import qualified IndependentScreens as IS
 verticalMonitorIndex = 0 :: Int
 myModMask  = mod4Mask
 myLauncher = Rofi.asCommand def ["-show run"]
---myTerminal = "alacritty"
---myTerminal = "wezterm"
 myTerminal = "alacritty"
-useSharedWorkspaces = False
 
 {-| adds the scripts-directory path to the filename of a script |-}
 scriptFile :: String -> String
 scriptFile script = "/home/leon/scripts/" ++ script
 
-
-scratchpads :: [NamedScratchpad]
-scratchpads =
-  [ NS "terminal" "termite --class sp_term" (className =? "sp_term")              (customFloating $ W.RationalRect 0.66 0.7 0.34 0.3)
-  , NS "spotify"  "spotify"                 (appName   =? "spotify")              defaultFloating
-  , NS "whatsapp" launchWhatsapp            (("WhatsApp" `isSuffixOf`) <$> title) defaultFloating
-  , NS "slack"    "slack"                   (("Slack | " `isPrefixOf`) <$> title) defaultFloating
-  , NS "discord"  launchDiscord             (appName   =? "discord")              defaultFloating
-  ]
-  where
---launchWhatsapp = "gtk-launch chrome-hnpfjngllnobngcgfapefoaidbinmjnm-Default.desktop"
-  launchWhatsapp = "google-chrome-stable --start-fullscreen -kiosk --app='https://web.whatsapp.com'"
-  launchDiscord = "discocss"
-  --launchDiscord = "beautifuldiscord --css /home/leon/.config/beautifuldiscord/custom_discord.css"
 
 -- }}}
 
@@ -141,13 +116,13 @@ aqua      = "#8ec07c"
 -- Layout ---------------------------------------- {{{
 myTabTheme :: Theme
 myTabTheme = def -- defaultThemeWithButtons
-    { activeColor         = "#1d2021" --activeColor         = "#1d2021"
+    { activeColor         = "#282828"
     , inactiveColor       = "#1d2021" --inactiveColor       = "#282828"
     , activeBorderColor   = "#1d2021"
     , inactiveBorderColor = "#282828"
     , activeTextColor     = "#fbf1c7"
     , inactiveTextColor   = "#fbf1c7"
-    , decoHeight          = 40
+    , decoHeight          = 20
     , activeBorderWidth   = 0
     , inactiveBorderWidth = 0
     , urgentBorderWidth   = 0
@@ -173,12 +148,12 @@ myLayout = noBorders
     -- if it's not, it's vertical, so use layouts for vertical screens.
     layouts = PerScreen.ifWider 1900 (PerScreen.ifWider 3000 chonkyScreenLayouts horizScreenLayouts) vertScreenLayouts
 
-    chonkyScreenLayouts = (rn "UltraTall" $ withGaps $ centeredIfSingle 0.6 resizableThreeCol) ||| horizScreenLayouts
+    chonkyScreenLayouts = (rn "UltraTall" $ withGaps $ centeredIfSingle 0.6 resizableThreeCol)
+      ||| horizScreenLayouts
 
     horizScreenLayouts =
          (rn "Tall"      $            withGaps $ centeredIfSingle 0.7 mouseResizableTile {draggerType = BordersDragger})
      ||| (rn "Horizon"   $            withGaps $ mouseResizableTileMirrored {draggerType = BordersDragger})
-     ||| (rn "BSP"       $            withGaps $ borderResize $ emptyBSP)
      ||| (rn "ThreeCol"  $ mkTabbed $ withGaps $ resizableThreeCol)
      ||| (rn "TabbedRow" $ mkTabbed $ withGaps $ zoomRow)
      --  ||| (rn "Colm"      $ mkTabbed $ withGaps $ centeredIfSingle 0.7 (multiCol [1] 2 0.05))
@@ -278,15 +253,19 @@ myStartupHook = do
   spawn "flashfocus"
   spawnOnce "dunst"
   for_ ["led1", "led2"] $ \led -> safeSpawn "sudo" ["liquidctl", "set", led, "color", "fixed", "00ffff"]
-  withDisplay $ \dpy -> do
-    r <- asks theRoot
-    a <- getAtom "_NET_SUPPORTED"
-    c <- getAtom "ATOM"
-    f <- getAtom "_GTK_FRAME_EXTENTS"
-    io $ do
-      sup <- (join . maybeToList) <$> getWindowProperty32 dpy a r
-      when (fromIntegral f `notElem` sup) $ do
-        changeProperty32 dpy r a c propModeAppend [fromIntegral f]
+  setGtkFrameExtents
+
+
+setGtkFrameExtents :: X ()
+setGtkFrameExtents = withDisplay $ \dpy -> do
+  r <- asks theRoot
+  a <- getAtom "_NET_SUPPORTED"
+  c <- getAtom "ATOM"
+  f <- getAtom "_GTK_FRAME_EXTENTS"
+  io $ do
+    sup <- (join . maybeToList) <$> getWindowProperty32 dpy a r
+    when (fromIntegral f `notElem` sup) $ do
+      changeProperty32 dpy r a c propModeAppend [fromIntegral f]
 -- }}}
 
 -- Keymap --------------------------------------- {{{
@@ -298,8 +277,8 @@ myMouseBindings (XConfig {XMonad.modMask = modMask'}) = M.fromList
 
 -- Default mappings that need to be removed
 removedKeys :: [String]
-removedKeys = ["M-<Tab>", "M-S-c", "M-S-q", "M-h", "M-l", "M-j", "M-k", "M-S-<Return>"]
-  ++ if useSharedWorkspaces then [] else [key ++ show n | key <- ["M-", "M-S-", "M-C-"], n <- [1..9 :: Int]]
+removedKeys = ["M-<Tab>", "M-S-c", "M-S-q", "M-h", "M-l", "M-j", "M-k", "M-S-<Return>", "M-S-j", "M-S-k"]
+  ++ [key ++ show n | key <- ["M-", "M-S-", "M-C-"], n <- [1..9 :: Int]]
 
 
 myKeys :: [(String, X ())]
@@ -318,6 +297,8 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
   tabbedBindings =
     [ ("M-j",                ifLayoutName ("Tabbed" `isPrefixOf`) (BoringWindows.focusDown) (windows W.focusDown))
     , ("M-k",                ifLayoutName ("Tabbed" `isPrefixOf`) (BoringWindows.focusUp)   (windows W.focusUp))
+    , ("M-S-j",              windows Sift.siftDown)
+    , ("M-S-k",              windows Sift.siftUp)
     , ("M-C-S-h",            sendMessage $ pullGroup L)
     , ("M-C-S-j",            sendMessage $ pullGroup D)
     , ("M-C-S-k",            sendMessage $ pullGroup U)
@@ -329,41 +310,32 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
     , ("M-S-t",              toggleTabbedLayout)
 
     -- In tabbed mode, while focussing master pane, cycle tabs on the first slave
-    , ("M-S-<Tab>", do windows W.focusMaster
-                       BoringWindows.focusDown
-                       onGroup W.focusDown'
-                       windows W.focusMaster)
-
-
+    , ("M-S-<Tab>",          windows W.focusMaster >> BoringWindows.focusDown >> onGroup W.focusDown' >> windows W.focusMaster)
     ]
 
   multiMonitorBindings :: [(String, X ())]
   multiMonitorBindings =
-    [ ("M-s",   windows $ IS.focusScreen 2)
-    , ("M-a",   windows $ IS.focusScreen 0)
+    [ ("M-a",   windows $ IS.focusScreen 0)
+    , ("M-s",   windows $ IS.focusScreen 2)
     , ("M-d",   windows $ IS.focusScreen 1)
-    , ("M-S-s", windows $ IS.withWspOnScreen 2 (\wsp -> W.view wsp . W.shift wsp))
     , ("M-S-a", windows $ IS.withWspOnScreen 0 (\wsp -> W.view wsp . W.shift wsp))
+    , ("M-S-s", windows $ IS.withWspOnScreen 2 (\wsp -> W.view wsp . W.shift wsp))
     , ("M-S-d", windows $ IS.withWspOnScreen 1 (\wsp -> W.view wsp . W.shift wsp))
     , ("M-C-s", windows swapScreenContents)
     ]
 
   programLaunchBindings :: [(String, X ())]
   programLaunchBindings =
-    [ ("M-p",      spawn myLauncher)
-    , ("M-S-p",    Rofi.showNormal def "drun")
-    , ("M-S-e",    Rofi.showNormal (def { Rofi.fuzzy = False }) "emoji")
-    --, ("M-s",      spawn $ scriptFile "rofi-search.sh")
-    , ("M-S-o",    spawn $ scriptFile "rofi-open.sh")
-    , ("M-n",      scratchpadSubmap)
-    , ("M-e",      Rofi.promptRunCommand def specialCommands)
-    , ("M-o",      Rofi.promptRunCommand def withSelectionCommands)
-    , ("M-S-C-g",  spawn "giph --stop" >> spawn "scr -s") -- stop gif and video recording
+    [ ("M-p",          spawn myLauncher)
+    , ("M-S-p",        Rofi.showNormal def "drun")
+    , ("M-S-e",        Rofi.showNormal (def { Rofi.fuzzy = False }) "emoji")
+    , ("M-S-o",        spawn $ scriptFile "rofi-open.sh")
+    , ("M-e",          Rofi.promptRunCommand def specialCommands)
+    , ("M-o",          Rofi.promptRunCommand def withSelectionCommands)
     , ("M-b",          safeSpawnProg "google-chrome-stable")
     , ("M-S-<Return>", spawn myTerminal)
-    --, ("M-S-<Return>", launchWithBackgroundInstance (className =? "Alacritty") "alacritty")
-    , ("M-C-S-s",  spawn "flameshot gui")
-    , ("M-z",      spawn $ scriptFile "copy-pasta.sh")
+    , ("M-C-S-s",      spawn "flameshot gui")
+    , ("M-z",          spawn $ scriptFile "copy-pasta.sh")
 
 
     , ("M-S-h", fuckshit)
@@ -383,11 +355,6 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
     -- useless binding simply to not accidentally quit firefox
     , ("C-q", pure ())
 
-
-    -- Binary space partitioning
-    , ("M-<Delete>",    sendMessage Swap)
-    , ("M-M1-<Delete>", sendMessage Rotate)
-
     -- Media
     , ("<XF86AudioRaiseVolume>", spawn "amixer sset Master 5%+")
     , ("<XF86AudioLowerVolume>", spawn "amixer sset Master 5%-")
@@ -398,16 +365,13 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
     ]
 
   workspaceBindings :: [(String, X ())]
-  workspaceBindings =
-    if useSharedWorkspaces
-      then []
-      else concat $
-        [ [ ("M-"   ++ show wspNum, runActionOnWorkspace W.view  wspNum)
-          , ("M-S-" ++ show wspNum, runActionOnWorkspace W.shift wspNum)
-          , ("M-C-" ++ show wspNum, runActionOnWorkspace copy    wspNum)
-          ]
-        | wspNum <- [1..9 :: Int]
-        ]
+  workspaceBindings = concat $
+    [ [ ("M-"   ++ show wspNum, runActionOnWorkspace W.view  wspNum)
+      , ("M-S-" ++ show wspNum, runActionOnWorkspace W.shift wspNum)
+      , ("M-C-" ++ show wspNum, runActionOnWorkspace copy    wspNum)
+      ]
+    | wspNum <- [1..9 :: Int]
+    ]
     where
     runActionOnWorkspace :: (IS.VirtualWorkspace -> WindowSet -> WindowSet) -> Int -> X ()
     runActionOnWorkspace action wspNum = do
@@ -416,18 +380,16 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
         Just wsp -> windows $ IS.onCurrentScreen action wsp
         Nothing -> pure ()
 
-
-
   windowControlBindings :: [(String, X ())]
   windowControlBindings = windowGoMappings ++ windowSwapMappings ++ resizeMappings
     where
     windowGoMappings   = [ ("M-M1-"   ++ key, Nav2d.windowGo   dir False) | (key, dir) <- keyDirPairs ]
     windowSwapMappings = [ ("M-S-M1-" ++ key, Nav2d.windowSwap dir False) | (key, dir) <- keyDirPairs ]
     resizeMappings =
-      [ ("M-C-h", ifLayoutIs "BSP" (sendMessage $ ExpandTowards L) (ifLayoutIs "Horizon" (sendMessage ShrinkSlave) (sendMessage Shrink)))
-      , ("M-C-j", ifLayoutIs "BSP" (sendMessage $ ExpandTowards D) (ifLayoutIs "Horizon" (sendMessage Expand)      (sendMessage MirrorShrink >> sendMessage ExpandSlave)))
-      , ("M-C-k", ifLayoutIs "BSP" (sendMessage $ ExpandTowards U) (ifLayoutIs "Horizon" (sendMessage Shrink)      (sendMessage MirrorExpand >> sendMessage ShrinkSlave)))
-      , ("M-C-l", ifLayoutIs "BSP" (sendMessage $ ExpandTowards R) (ifLayoutIs "Horizon" (sendMessage ExpandSlave) (sendMessage Expand)))
+      [ ("M-C-h", ifLayoutIs "Horizon" (sendMessage ShrinkSlave) (sendMessage Shrink))
+      , ("M-C-j", ifLayoutIs "Horizon" (sendMessage Expand)      (sendMessage MirrorShrink >> sendMessage ExpandSlave))
+      , ("M-C-k", ifLayoutIs "Horizon" (sendMessage Shrink)      (sendMessage MirrorExpand >> sendMessage ShrinkSlave))
+      , ("M-C-l", ifLayoutIs "Horizon" (sendMessage ExpandSlave) (sendMessage Expand))
       ]
 
 
@@ -488,8 +450,8 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
 
   withSelectionCommands :: [(String, X ())]
   withSelectionCommands =
-    [ ("Google",    XSel.transformPromptSelection  ("https://google.com/search?q=" ++) "qutebrowser")
-    , ("Hoogle",    XSel.transformPromptSelection  ("https://hoogle.haskell.org/?hoogle=" ++) "qutebrowser")
+    [ ("Google",    XSel.transformPromptSelection  ("https://google.com/search?q=" ++) "google-chrome-stable")
+    , ("Hoogle",    XSel.transformPromptSelection  ("https://hoogle.haskell.org/?hoogle=" ++) "google-chrome-stable")
     , ("Translate", XSel.getSelection >>= translateMenu)
     ]
 
@@ -507,27 +469,12 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
     , ("screenshot full to file", spawn $ scriptFile "screenshot.sh --tofile --fullscreen")
     , ("screenvideo to file",     spawn (scriptFile "screenvideo.sh") >> notify "video" "stop video-recording with M-S-C-g")
     , ("screengif to file",       spawn (scriptFile "screengif.sh") >> notify "gif" "stop gif-recording with M-S-C-g")
-    , ("toggleOptimal",           sendMessage ToggleGaps >> toggleWindowSpacingEnabled)
-    , ("toggleSpacing",           toggleWindowSpacingEnabled)
-    , ("toggleGaps",              sendMessage ToggleGaps)
     , ("Copy to all workspaces",  windows copyToAll)
     , ("Kill all other copies",   killAllOtherCopies)
-    , ("toggle polybar",          sendMessage ToggleStruts >> safeSpawn "polybar-msg" ["cmd", "toggle"])
     , ("get debug data",          debugStackFullString >>= (\str -> safeSpawn "xmessage" [str]))
     , ("get full stackset",       withWindowSet (\ws -> spawn $ "echo '" ++ show (W.floating ws) ++ "\n" ++ show (W.current ws) ++ "' | xclip -in -selection clipboard"))
     , ("asdf", windows (\ws -> ws {W.floating = M.empty }))
     ]
-
-
-  scratchpadSubmap :: X ()
-  scratchpadSubmap = DescribedSubmap.describedSubmap "Scratchpads"
-    [ ("M-n", "terminal", namedScratchpadAction scratchpads "terminal")
-    , ("M-w", "whatsapp", namedScratchpadAction scratchpads "whatsapp")
-    , ("M-s", "slack",    namedScratchpadAction scratchpads "slack")
-    , ("M-m", "spotify",  namedScratchpadAction scratchpads "spotify")
-    , ("M-d", "discord",  namedScratchpadAction scratchpads "discord")
-    ]
-
 
 
 
@@ -546,7 +493,6 @@ myManageHook = composeAll
   , className =? "bar_system_status_indicator" --> ManageHelpers.doRectFloat (W.RationalRect 0.7 0.05 0.29 0.26)
   , title     =? "discord.com hat Ihren Bildschirm freigegeben" --> doShift "NSP"
   , manageDocks
-  , namedScratchpadManageHook scratchpads
   ]
 
 -- }}}
@@ -566,9 +512,7 @@ main = do
                $ flip removeKeysP removedKeys
                $ Desktop.desktopConfig
         { terminal           = myTerminal
-        , workspaces         = if useSharedWorkspaces
-                                  then (map show [1..9 :: Int]) ++ ["NSP"]
-                                  else (IS.withScreens (fromIntegral currentScreenCount) (map show [1..6 :: Int])) ++ ["NSP"]
+        , workspaces         = (IS.withScreens (fromIntegral currentScreenCount) (map show [1..6 :: Int])) ++ ["NSP"]
         , modMask            = myModMask
         , borderWidth        = 0
         , layoutHook         = myLayout
@@ -578,14 +522,14 @@ main = do
                                        , logHook Desktop.desktopConfig
                                        --, fadeInactiveLogHook 0.95
                                        , logHook def]
-        , startupHook        = mconcat [ Ewmh.ewmhDesktopsStartup, myStartupHook, return () >> checkKeymap myConfig myKeys]
+        , startupHook        = mconcat [ Ewmh.ewmhDesktopsStartup, myStartupHook, checkKeymap myConfig myKeys]
         , manageHook         = mconcat [ manageSpawn, myManageHook, manageHook def]
         , focusedBorderColor = "#427b58"
         , normalBorderColor  = "#282828"
         , handleEventHook    = mconcat [ mySwallowEventHook
                                        , activateWindowEventHook
                                        , handleEventHook Desktop.desktopConfig
-                                       , fullscreenFixEventHook
+                                       , Hacks.windowedFullscreenFixEventHook
                                        , Ewmh.ewmhDesktopsEventHook
                                        ]
         --, handleEventHook  = minimizeEventHook <+> handleEventHook def <+> hintsEventHook -- <+> Ewmh.fullscreenEventHook
@@ -634,23 +578,6 @@ focusWindow' window ws
 
 
 
--- | Fixes fullscreen behaviour of chromium based apps by quickly applying and undoing a resize.
--- This causes chromium to recalculate the fullscreen window
--- dimensions to match the actual "windowed fullscreen" dimensions.
-fullscreenFixEventHook :: Event -> X All
-fullscreenFixEventHook (ClientMessageEvent _ _ _ dpy win typ (_:dats)) = do
-  wmstate <- getAtom "_NET_WM_STATE"
-  fullscreen <- getAtom "_NET_WM_STATE_FULLSCREEN"
-  when (typ == wmstate && fromIntegral fullscreen `elem` dats) $ do
-    withWindowAttributes dpy win $ \attrs ->
-      liftIO $ do
-        resizeWindow dpy win (fromIntegral $ wa_width attrs - 1) (fromIntegral $ wa_height attrs)
-        resizeWindow dpy win (fromIntegral $ wa_width attrs) (fromIntegral $ wa_height attrs)
-  return $ All True
-fullscreenFixEventHook _ = return $ All True
-
-
-
 -- Bar Kram -------------------------------------- {{{
 
 -- | Loghook for eww on all monitors. Runs the eww-bar 
@@ -674,7 +601,7 @@ polybarLogHook monitor = do
 -- swapping namedScratchpadFilterOutWorkspacePP and marshallPP  will throw "Prelude.read no Parse" errors..... wtf
 -- | create a polybar Pretty printer, marshalled for given monitor.
 polybarPP :: ScreenId -> PP
-polybarPP monitor = filterOutWsPP ["NSP"] . (if useSharedWorkspaces then id else IS.marshallPP $ fromIntegral monitor) $ def
+polybarPP monitor = filterOutWsPP ["NSP"] . (IS.marshallPP $ fromIntegral monitor) $ def
   { ppCurrent          = withFG aqua . withMargin . withFont 5 . const "__active__"
   , ppVisible          = withFG aqua . withMargin . withFont 5 . const "__active__"
   , ppUrgent           = withFG red  . withMargin . withFont 5 . const "__urgent__"
@@ -687,8 +614,7 @@ polybarPP monitor = filterOutWsPP ["NSP"] . (if useSharedWorkspaces then id else
                                     else (withFG gray " | ") ++ (withFG purple $ withMargin l)
   , ppExtras           = []
   , ppTitle            = const "" -- withFG aqua . (shorten 40)
-  , ppSort = if useSharedWorkspaces then getSortByXineramaPhysicalRule horizontalScreenOrderer
-                                    else onlyRelevantWspsSorter
+  , ppSort             = onlyRelevantWspsSorter
   }
     where
       withMargin                 = wrap " " " "
