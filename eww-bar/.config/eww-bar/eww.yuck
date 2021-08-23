@@ -113,6 +113,7 @@
 
 (defwindow bar_1
   :monitor 1
+  :stacking "bg"
   :geometry (geometry :x 0 :y 0 :width "40px" :height "100%")
   :anchor "top left"
   :reserve (struts :distance "40px" :side "left")

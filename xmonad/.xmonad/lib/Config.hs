@@ -7,15 +7,9 @@ module Config (main) where
 import qualified Data.Map.Strict as M
 import Control.Concurrent
 import           Control.Exception              ( catch , SomeException)
-import           Control.Monad                  (join,  filterM
-                                                , when
-                                                
-                                                )
+import           Control.Monad                  (join,  filterM , when)
 import           Control.Arrow                  ( (>>>) )
-import           Data.List                      ( isPrefixOf
-                                                , isSuffixOf
-                                                , isInfixOf
-                                                )
+import Data.List ( isPrefixOf, isSuffixOf, isInfixOf, find )
 import qualified Data.List
 import System.Exit (exitSuccess)
 import qualified Rofi
@@ -97,8 +91,6 @@ import Data.Bifunctor
 import GHC.IO.Unsafe (unsafePerformIO)
 import XMonad.Layout.LayoutModifier
 import qualified IndependentScreens as IS
-import Data.List (find)
-import System.Process (readProcess)
 --import XMonad.Layout.MultiColumns (multiCol)
 {-# ANN module "HLint: ignore Redundant $" #-}
 {-# ANN module "HLint: ignore Redundant bracket" #-}
@@ -167,7 +159,7 @@ instance Shrinker EmptyShrinker where
   shrinkIt _ _ = [] :: [String]
 
 
-myLayout = noBorders 
+myLayout = noBorders
          . avoidStruts
          . smartBorders
          . MTog.mkToggle1 MTog.FULL
@@ -183,7 +175,7 @@ myLayout = noBorders
 
     chonkyScreenLayouts = (rn "UltraTall" $ withGaps $ centeredIfSingle 0.6 resizableThreeCol) ||| horizScreenLayouts
 
-    horizScreenLayouts = 
+    horizScreenLayouts =
          (rn "Tall"      $            withGaps $ centeredIfSingle 0.7 mouseResizableTile {draggerType = BordersDragger})
      ||| (rn "Horizon"   $            withGaps $ mouseResizableTileMirrored {draggerType = BordersDragger})
      ||| (rn "BSP"       $            withGaps $ borderResize $ emptyBSP)
@@ -244,7 +236,7 @@ centeredIfSingle ratio = ModifiedLayout (CenteredIfSingle ratio)
 -- of the rectangle and taking that in the middle.
 rectangleCenterPiece :: Double -> Rectangle -> Rectangle
 rectangleCenterPiece ratio (Rectangle rx ry rw rh) = Rectangle start ry width rh
-  where 
+  where
     sides = floor $ ((fi rw) * (1.0 - ratio)) / 2
     start = (fi rx) + sides
     width = fi $ (fi rw) - (sides * 2)
@@ -283,7 +275,6 @@ myStartupHook = do
   spawn "xsetroot -cursor_name left_ptr"
   spawnOnce "nitrogen --restore"
   spawnOnce "mailnag"
-  spawnOnce "flameshot"
   spawn "flashfocus"
   spawnOnce "dunst"
   for_ ["led1", "led2"] $ \led -> safeSpawn "sudo" ["liquidctl", "set", led, "color", "fixed", "00ffff"]
@@ -360,7 +351,6 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
   programLaunchBindings :: [(String, X ())]
   programLaunchBindings =
     [ ("M-p",      spawn myLauncher)
-    --, ("M-S-p",    Rofi.showCombi  def [ "drun", "ssh" ])
     , ("M-S-p",    Rofi.showNormal def "drun")
     , ("M-S-e",    Rofi.showNormal (def { Rofi.fuzzy = False }) "emoji")
     --, ("M-s",      spawn $ scriptFile "rofi-search.sh")
@@ -369,13 +359,10 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
     , ("M-e",      Rofi.promptRunCommand def specialCommands)
     , ("M-o",      Rofi.promptRunCommand def withSelectionCommands)
     , ("M-S-C-g",  spawn "giph --stop" >> spawn "scr -s") -- stop gif and video recording
-
-    --, ("M-b",          launchWithBackgroundInstance (className =? "qutebrowser") "bwrap --bind / / --dev-bind /dev /dev --tmpfs /tmp --tmpfs /run qutebrowser")
-    --, ("M-b",          safeSpawnProg "qutebrowser")
     , ("M-b",          safeSpawnProg "google-chrome-stable")
     , ("M-S-<Return>", spawn myTerminal)
     --, ("M-S-<Return>", launchWithBackgroundInstance (className =? "Alacritty") "alacritty")
-    , ("M-S-<",    spawn "flameshot gui")
+    , ("M-C-S-s",  spawn "flameshot gui")
     , ("M-z",      spawn $ scriptFile "copy-pasta.sh")
 
 
@@ -428,7 +415,7 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
       case desiredWsp of
         Just wsp -> windows $ IS.onCurrentScreen action wsp
         Nothing -> pure ()
-      
+
 
 
   windowControlBindings :: [(String, X ())]
@@ -486,13 +473,13 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
         }
 
   swapCurrentWspContentsWith :: Eq i => i -> W.StackSet i l a sid sd -> W.StackSet i l a sid sd
-  swapCurrentWspContentsWith other ws = 
+  swapCurrentWspContentsWith other ws =
     case find ((other ==) . W.tag) $ W.workspaces ws of
       Just otherWsp -> W.mapWorkspace (swapWith otherWsp) ws
       Nothing -> ws
-    where 
+    where
       currentWsp = W.workspace $ W.current ws
-      swapWith otherWsp w 
+      swapWith otherWsp w
         | W.tag w == other            = currentWsp { W.tag = W.tag otherWsp }
         | W.tag w == W.tag currentWsp = otherWsp   { W.tag = W.tag currentWsp }
         | otherwise                   = w
@@ -565,7 +552,7 @@ myManageHook = composeAll
 -- }}}
 
 -- Main ------------------------------------ {{{
-  
+
 
 
 main :: IO ()
@@ -662,7 +649,7 @@ fullscreenFixEventHook (ClientMessageEvent _ _ _ dpy win typ (_:dats)) = do
   return $ All True
 fullscreenFixEventHook _ = return $ All True
 
- 
+
 
 -- Bar Kram -------------------------------------- {{{
 
@@ -796,7 +783,7 @@ debugShit x = spawn $ "notify-send 'Debug' '" ++ x ++ "'"
 
 lastLayout :: X ()
 lastLayout = lastLayout' 123
-  where 
+  where
     lastLayout' :: Int -> X ()
     lastLayout' 0 = pure ()
     lastLayout' n = sendMessage NextLayout >> lastLayout' (n - 1)
@@ -810,6 +797,6 @@ lastLayout = lastLayout' 123
 (!?) :: [a] -> Int -> Maybe a
 (!?) [] _     = Nothing
 (!?) (x:_) 0  = Just x
-(!?) (_:xs) n 
+(!?) (_:xs) n
   | n > 0     = xs !? (n - 1)
   | otherwise = Nothing
