@@ -19,11 +19,11 @@
    ; Might fuck with gitsigns
    ;:rainbow {:enable true
              ;:extended_mode true}
-   :context_commentstring {:enable true :disable ["rust"]}
+   :context_commentstring {:enable true :disable ["rust" "fennel"]}
 
    :playground
    {:enable true
-    :disable {}
+    :disable ["fennel"]
     :updatetime 25 ; Debounced time for highlighting nodes in the playground from source code
     :persist_queries false ; Whether the query persists across vim sessions
     :keybindings

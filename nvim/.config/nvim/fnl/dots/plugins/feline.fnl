@@ -68,23 +68,20 @@
       (or-empty (str.join " | " s))))
 
 
-(def components
-   {:left  {:active {} :inactive {}}
-    :mid   {:active {} :inactive {}}
-    :right {:active {} :inactive {}}})
+(def components {:active {} :inactive {}})
 
-(set components.left.active
+(tset components.active 1
      [{:provider #(.. " " (or (. modes (vim.fn.mode) :text) vim.fn.mode) " ")
        :hl #(vim-mode-hl false)} 
       {:provider get-current-filepath :left_sep " "}
       {:provider git-status-provider :left_sep " " :hl #(vim-mode-hl true)}]) 
 
-(set components.mid.active
+(tset components.active 2
      [{:provider lsp-progress-provider
        :enabled #(< 0 (length (vim.lsp.buf_get_clients)))}])
 
 
-(set components.right.active
+(tset components.active 3
      [{:provider #vim.bo.filetype 
        :hl #(vim-mode-hl true) 
        :right_sep " "}
@@ -97,7 +94,7 @@
 
 
 (feline.setup
-   {:default_bg bar-bg
-    :default_fg colors.dark4
+   {:colors {:bg bar-bg
+             :fg colors.dark4}
     :components components})
 

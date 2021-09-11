@@ -66,7 +66,7 @@
   ; json query stuff
   ;:gennaro-tedesco/nvim-jqx {:ft ["json"]}
 
-  :Olical/aniseed {:branch "develop"}; :tag "v3.16.0"}
+  :Olical/aniseed {:branch "master"}; :tag "v3.16.0"}
   ;:Olical/aniseed {}; :tag "v3.16.0"}
   
   ; general purpose lua wrappers for nvim stuff

@@ -4,8 +4,8 @@
              str aniseed.string
              view aniseed.view
              popup popup
-             compe compe
-             help dots.help-thingy}
+             compe compe}
+             ;help dots.help-thingy}
    require-macros [macros]})
 
 
