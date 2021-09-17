@@ -31,43 +31,31 @@ output * bg /home/leon/Pictures/wallpapers/0126.jpg fill
 #
 # You can get the names of your outputs by running: swaymsg -t get_outputs
 
-### Idle configuration
-#
-# Example configuration:
-#
+# autostart
 exec swayidle -w \
          timeout 300 'swaylock -f -c 000000' \
          timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
          before-sleep 'swaylock -f -c 000000'
-#
-# This will lock your screen after 300 seconds of inactivity, then turn off
-# your displays after another 300 seconds, and turn your screens back on when
-# resumed. It will also lock your screen before your computer goes to sleep.
-#
+
+exec mako
 
 
 
 
-
+# visuals 
 gaps inner 10
 default_border pixel 1
 
 
 
 client.focused "#ebdbb2" "#ebdbb2" "#1d2021"
-client.unfocused "#28282800" "#28282800" "#1d2021"
+client.unfocused "#1d2021" "#1d2021" "#1d2021"
 
 
 
 
 
 
-
-
-
-
-
-exec mako
 
 
 
@@ -102,9 +90,6 @@ input "type:keyboard" {
     # Kill focused window
     bindsym $mod+Shift+q kill
 
-    # Start your launcher
-    bindsym $mod+d exec $menu
-
     # Drag floating windows by holding down $mod and left mouse button.
     # Resize them with right mouse button + $mod.
     # Despite the name, also works for non-floating windows.
@@ -118,7 +103,7 @@ input "type:keyboard" {
     # Exit sway (logs you out of your Wayland session)
     bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
 
-    bindsym $mod+Shift+p exec rofi -show drun -modi drun
+    bindsym $mod+Shift+p exec ~/.config/rofi/bin/launcher_ribbon
 #
 # Moving around:
 #
@@ -223,20 +208,10 @@ bindsym $mod+Shift+b exec google-chrome-stable
 # Resizing containers:
 #
 mode "resize" {
-    # left will shrink the containers width
-    # right will grow the containers width
-    # up will shrink the containers height
-    # down will grow the containers height
     bindsym $left resize shrink width 10px
     bindsym $down resize grow height 10px
     bindsym $up resize shrink height 10px
     bindsym $right resize grow width 10px
-
-    # Ditto, with arrow keys
-    bindsym Left resize shrink width 10px
-    bindsym Down resize grow height 10px
-    bindsym Up resize shrink height 10px
-    bindsym Right resize grow width 10px
 
     # Return to default mode
     bindsym Return mode "default"
@@ -254,11 +229,16 @@ bar {
     # When the status_command prints a new line to stdout, swaybar updates.
     # The default just shows the current date and time.
     status_command while echo "$(/home/leon/scripts/battery_indicator.sh) // $(date +'%Y-%m-%d %l:%M:%S %p')"; do sleep 1; done
+    font "cozette 8"
+    #font "Terminus (TTF)"
+    height 20
 
     colors {
         statusline #ebdbb2
-        background #1d2021
-        inactive_workspace #32323200 #32323200 #ebdbb2
+        background #1d202100
+        inactive_workspace #1d202100 #1d202100 #ebdbb2
+        focused_workspace  #282828   #83c07c   #282828
+        active_workspace   #28282800 #83c07c   #282828
     }
 }
 
