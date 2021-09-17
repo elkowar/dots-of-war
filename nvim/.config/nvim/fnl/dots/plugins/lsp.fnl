@@ -108,11 +108,10 @@
                      :server {:on_attach on_attach
                               :cmd ["/home/leon/coding/prs/rust-analyzer/target/release/rust-analyzer"]}}))
 
-(let [sumneko_root_path (.. vim.env.HOME "/.local/share/lua-language-server")
-      sumneko_binary (.. sumneko_root_path "/bin/Linux/lua-language-server")]
+(let [sumneko_binary "/usr/bin/lua-language-server"]
   (init-lsp 
     :sumneko_lua
-    {:cmd [sumneko_binary "-E" (.. sumneko_root_path "/main.lua")]
+    {:cmd [sumneko_binary]
      :settings {:Lua {:runtime {:version "LuaJIT"
                                 :path (vim.split package.path ";")}
                       :diagnostics {:globals ["vim"]}

@@ -3,7 +3,8 @@
 
 (packer-use
   "/home/leon/coding/projects/nvim-gehzu" {}
-  "/home/leon/coding/projects/yuck.vim" {}
+  ;"/home/leon/coding/projects/yuck.vim" {}
+  :elkowar/yuck.vim {}
   :elkowar/antifennel-nvim {:config #(set vim.g.antifennel_executable "/home/leon/tmp/antifennel/antifennel")}
   :elkowar/kmonad.vim {}
 
@@ -24,7 +25,7 @@
                                  (set vim.g.gruvbox_italicise_strings 0)
                                  (set vim.g.gruvbox_filetype_hi_groups 1)
                                  (set vim.g.gruvbox_plugin_hi_groups 1)
-                                 (vim.cmd "colorscheme gruvbox8")
+                                 (vim.cmd "colorscheme gruvbox8_hard")
                                  (req dots.utils.highlight :SignColumn {:bg (. (require :dots.colors) :dark0)}))}
                                  ;(req dots.utils.highlight :LspDiagnosticsUnderlineError {:gui "underline"}))}
 
@@ -113,10 +114,10 @@
   ; code-related ----------------------------------------- <<<
 
   :ray-x/lsp_signature.nvim {:events [:BufEnter]}
-  "/home/leon/coding/prs/trouble.nvim" {:mod "dots.plugins.trouble"
-                                        :cmd ["Trouble" "TroubleClose" "TroubleRefresh" "TroubleToggle"]}
-  ;:folke/lsp-trouble.nvim {:mod "dots.plugins.trouble"
-                           ;:cmd ["Trouble" "TroubleClose" "TroubleRefresh" "TroubleToggle"]}
+  ;"/home/leon/coding/prs/trouble.nvim" {:mod "dots.plugins.trouble"
+                                        ;:cmd ["Trouble" "TroubleClose" "TroubleRefresh" "TroubleToggle"]}
+  :folke/lsp-trouble.nvim {:mod "dots.plugins.trouble"
+                           :cmd ["Trouble" "TroubleClose" "TroubleRefresh" "TroubleToggle"]}
   :simrat39/symbols-outline.nvim {:mod "dots.plugins.symbols-outline"}
   :neovim/nvim-lspconfig {}
 
