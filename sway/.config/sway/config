@@ -38,6 +38,7 @@ exec swayidle -w \
          before-sleep 'swaylock -f -c 000000'
 
 exec mako
+exec libinput-gestures-setup start
 
 
 
