@@ -10,10 +10,9 @@
              :<C-space> (cmp.mapping.complete)
              :<esc> #(do (cmp.mapping.close) (vim.cmd "stopinsert"))
              :<CR>  (cmp.mapping.confirm {:select true})}
-   :sources [{:name "nvim_lsp" 
-              :priority 5}
-             {:name "vsnip"
-              :priority 3}]
+   :sources [{:name "nvim_lsp" :priority 5}
+             {:name "vsnip" :priority 3}
+             {:name "crates"}]
              ;{:name "buffer"}]
    :sorting {:comparators [#(do 
                               ;(print ($1:get_kind) $1.completion_item.label "--" ($2:get_kind) $2.completion_item.label) 
