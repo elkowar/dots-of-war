@@ -7,7 +7,6 @@
 
    require-macros [macros]})
 
-
 ; TODO check https://github.com/neovim/nvim-lspconfig/blob/master/ADVANCED_README.md for default config for all of them
 
 (tset vim.lsp.handlers :textDocument/publishDiagnostics
@@ -52,22 +51,12 @@
 (def default-capabilities
   (let [capabilities (vim.lsp.protocol.make_client_capabilities)]
     (set capabilities.textDocument.completion.completionItem.snippetSupport true)
-    (cmp_nvim_lsp.update_capabilities capabilities)
-    capabilities))
-
-(print cmp_nvim_lsp)
+    (cmp_nvim_lsp.update_capabilities capabilities)))
 
 (fn init-lsp [lsp-name ?opts]
   "initialize a language server with defaults"
   (let [merged-opts (a.merge {:on_attach on_attach :capabilities default-capabilities} (or ?opts {}))]
     ((. lsp lsp-name :setup) merged-opts)))
-
-; Added capabilities for rust-analyzer with nvim-compe
-;(let [capabilities (vim.lsp.protocol.make_client_capabilities)]
-  ;(set capabilities.textDocument.completion.completionItem.snippetSupport true)
-  ;(set capabilities.textDocument.completion.completionItem.resolveSupport
-       ;{:properties ["documentation" "detail" "additionalTextEdits"]})
-  ;(init-lsp :rust_analyzer {:capabilities capabilities}))
 
 (init-lsp :jsonls   {:commands {:Format [ #(vim.lsp.buf.range_formatting [] [0 0] [(vim.fn.line "$") 0])]}})
 (init-lsp :denols   {:root_dir (better_root_pattern [".git"] ["package.json"])})
@@ -85,14 +74,15 @@
 ;(init-lsp :ccls)
 
 
-;(when (not lsp.ewwls)
-  ;(set lsp-configs.ewwls
-    ;{:default_config {:cmd [ "/home/leon/coding/projects/ls-eww/crates/ewwls/target/debug/ewwls"]
-                      ;:filetypes ["yuck"]
-                      ;:root_dir (fn [fname] (or (lsp.util.find_git_ancestor fname) (vim.loop.os_homedir)))
-                      ;:settings {}}}))
-
-(init-lsp :ewwls)
+(let [ewwls-path "/home/leon/coding/projects/ls-eww/crates/ewwls/target/debug/ewwls"]
+  (when (vim.fn.filereadable ewwls-path)
+    (when (not lsp.ewwls)
+      (set lsp-configs.ewwls
+        {:default_config {:cmd [ewwls-path]
+                          :filetypes ["yuck"]
+                          :root_dir (fn [fname] (or (lsp.util.find_git_ancestor fname) (vim.loop.os_homedir)))
+                          :settings {}}}))
+    (init-lsp :ewwls)))
 
                                               
 (init-lsp :cssls {:filestypes ["css" "scss" "less" "stylus"]
@@ -110,8 +100,8 @@
 (let [rust-tools (require "rust-tools")]
   (rust-tools.setup {:tools {:inlay_hints {:show_parameter_hints false}
                              :autoSetHints false}
-                     :server {:on_attach on_attach}}))
-                              ;:capabilities default-capabilities}}))
+                     :server {:on_attach on_attach
+                              :capabilities default-capabilities}}))
                               ;:cmd ["/home/leon/coding/prs/rust-analyzer/target/release/rust-analyzer"]}}))
 
 (let [sumneko_root_path (.. vim.env.HOME "/.local/share/lua-language-server")

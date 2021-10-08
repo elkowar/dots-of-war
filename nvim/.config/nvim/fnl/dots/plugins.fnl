@@ -207,13 +207,18 @@
 
   ;:ms-jpq/coq.artifacts {:branch "artifacts"}
 
+  (abuse use :hrsh7th/vim-vsnip {})
+
+  (abuse use :hrsh7th/cmp-vsnip {})
   (abuse use :hrsh7th/cmp-nvim-lsp {})
   (abuse use :hrsh7th/cmp-buffer {})
   (abuse
     use
     :hrsh7th/nvim-cmp
     {:opt false 
-     :requires [:hrsh7th/cmp-nvim-lsp :hrsh7th/cmp-buffer]
+     :requires [:hrsh7th/cmp-nvim-lsp 
+                :hrsh7th/cmp-buffer
+                :hrsh7th/cmp-vsnip]
      :config #(require "dots.plugins.cmp")})
 
 
@@ -222,6 +227,7 @@
     use
     :tami5/lspsaga.nvim {:after "vim-gruvbox8"
                          :opt false 
+                         :commit "373bc031b39730cbfe492533c3acfac36007899a"
                          :config #(require "dots.plugins.lspsaga")})
 
   (abuse
@@ -303,9 +309,7 @@
                          :requires ["mattn/webapi-vim"]
                          :opt false :config #(do (set vim.g.rustfmt_fail_silently 1))})
                                   
-  (abuse 
-    use
-    :simrat39/rust-tools.nvim {:requires ["nvim-lua/popup.nvim" "nvim-lua/plenary.nvim"]})
+  (abuse use :simrat39/rust-tools.nvim {:requires ["nvim-lua/popup.nvim" "nvim-lua/plenary.nvim"]})
 
   ; (use
   ;   :Saecki/crates.nvim {:requires ["nvim-lua/plenary.nvim"]
