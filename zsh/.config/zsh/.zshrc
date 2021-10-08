@@ -22,6 +22,8 @@ zplug "zsh-users/zsh-history-substring-search", defer:2
 zplug "zdharma/fast-syntax-highlighting", defer:2
 zplug "zsh-users/zsh-autosuggestions"
 zplug "olets/zsh-abbr"
+zplug "sudosubin/zsh-github-cli"
+zplug "pkulev/zsh-rustup-completion"
 
 if ! zplug check --verbose; then
     printf "Install? [y/N]: "
@@ -63,6 +65,7 @@ bindkey '^W' my-backward-delete-word
 bindkey '^H' backward-delete-word
 bindkey "^[[H" beginning-of-line
 bindkey "^[[F" end-of-line
+bindkey "^[." insert-last-word
 
 bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
