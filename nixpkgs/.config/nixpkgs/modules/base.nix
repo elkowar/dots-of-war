@@ -115,7 +115,7 @@ in
 
 
       fzf = {
-        enable = true;
+        enable = false;
         enableFishIntegration = cfg.enableFish;
         enableZshIntegration = cfg.enableZsh;
         defaultCommand = "rg --files";

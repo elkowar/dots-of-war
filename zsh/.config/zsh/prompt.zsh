@@ -4,6 +4,21 @@ local __bright_cyan="#8ec07c"
 local __bright_white="#ebdbb2"
 local __bright_green="#b8bb26"
 
+
+# black magic that reruns prompt whenever the vi mode changes {{{
+function zle-line-init zle-keymap-select {
+    case $KEYMAP in
+      vicmd)      VI_INDICATOR="N";;
+      main|viins) VI_INDICATOR="─";;
+    esac
+    zle reset-prompt
+}
+zle -N zle-line-init
+zle -N zle-keymap-select 
+# }}}
+
+
+
 dir() {
   local CUTOFF=3
   local IFS=/
@@ -29,7 +44,8 @@ git_status() {
 
 function _my_prompt() {
   local exit_code="$?"
-  echo -n "%F{$__bright_white}╭───"
+  echo -n "%F{$__bright_white}╭─$VI_INDICATOR─"
+  #echo -n "%F{$__bright_white}╭───"
   echo -n "%F{$__bright_cyan}$USER"
   echo -n "%F{$__bright_white} in"
   echo -n "%F{$__bright_green} $(dir)"

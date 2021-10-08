@@ -31,7 +31,7 @@
     base = {
       enable = true;
       enableFish = true;
-      enableZsh = true;
+      enableZsh = false;
       includeNiceToHaves = true;
       includeHaskellDev = true;
     };

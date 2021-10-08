@@ -1,0 +1,6 @@
+abbr cvim="cd ~/.config/nvim && nvim && cd -"
+abbr cnix="cd ~/.config/nixpkgs && nvim && cd -"
+abbr cxmonad="cd ~/.xmonad && nvim lib/Config.hs && cd -"
+abbr ra="ranger"
+abbr cr="cargo run -- "
+
