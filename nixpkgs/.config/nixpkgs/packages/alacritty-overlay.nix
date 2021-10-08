@@ -2,7 +2,6 @@
 let
   wrapped =
     writeScriptBin "alacritty" ''
-      writeScriptBin "alacritty"
         #!/bin/sh
         exec ${nixGL.nixGLIntel}/bin/nixGLIntel ${alacritty}/bin/alacritty "$@"
     '';
