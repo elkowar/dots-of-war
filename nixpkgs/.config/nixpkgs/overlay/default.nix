@@ -12,6 +12,7 @@ self: super: {
   git-fuzzy = super.callPackage ../packages/git-fuzzy.nix { };
   nixGL = import sources.nixGL { };
   scr = super.callPackage ../packages/scr.nix { };
+  codelldb = super.callPackage ../packages/codelldb.nix { };
   my-st = super.callPackage ../packages/st/st-tanish2002 { };
   kmonad = import "${sources.kmonad}/nix";
 }

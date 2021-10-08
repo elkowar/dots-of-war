@@ -10,7 +10,6 @@
              feline-lsp feline.providers.lsp}
    require-macros [macros]})
 
-
 (local modes 
    {:n   {:text "NORMAL"        :color colors.neutral_aqua}
     :i   {:text "INSERT"        :color colors.neutral_yellow}

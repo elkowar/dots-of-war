@@ -2,7 +2,8 @@
   {autoload {a aniseed.core
              lsp lspconfig 
              lsp-configs lspconfig/configs
-             utils dots.utils}
+             utils dots.utils
+             cmp_nvim_lsp cmp_nvim_lsp}
 
    require-macros [macros]})
 
@@ -51,7 +52,10 @@
 (def default-capabilities
   (let [capabilities (vim.lsp.protocol.make_client_capabilities)]
     (set capabilities.textDocument.completion.completionItem.snippetSupport true)
+    (cmp_nvim_lsp.update_capabilities capabilities)
     capabilities))
+
+(print cmp_nvim_lsp)
 
 (fn init-lsp [lsp-name ?opts]
   "initialize a language server with defaults"
@@ -76,16 +80,17 @@
 (init-lsp :yamlls)
 (init-lsp :html)
 (init-lsp :svelte)
+(init-lsp :elmls)
 ;(init-lsp :clangd)
 ;(init-lsp :ccls)
 
 
-(when (not lsp.ewwls)
-  (set lsp-configs.ewwls
-    {:default_config {:cmd [ "/home/leon/coding/projects/ls-eww/crates/ewwls/target/debug/ewwls"]
-                      :filetypes ["yuck"]
-                      :root_dir (fn [fname] (or (lsp.util.find_git_ancestor fname) (vim.loop.os_homedir)))
-                      :settings {}}}))
+;(when (not lsp.ewwls)
+  ;(set lsp-configs.ewwls
+    ;{:default_config {:cmd [ "/home/leon/coding/projects/ls-eww/crates/ewwls/target/debug/ewwls"]
+                      ;:filetypes ["yuck"]
+                      ;:root_dir (fn [fname] (or (lsp.util.find_git_ancestor fname) (vim.loop.os_homedir)))
+                      ;:settings {}}}))
 
 (init-lsp :ewwls)
 
@@ -105,8 +110,9 @@
 (let [rust-tools (require "rust-tools")]
   (rust-tools.setup {:tools {:inlay_hints {:show_parameter_hints false}
                              :autoSetHints false}
-                     :server {:on_attach on_attach
-                              :cmd ["/home/leon/coding/prs/rust-analyzer/target/release/rust-analyzer"]}}))
+                     :server {:on_attach on_attach}}))
+                              ;:capabilities default-capabilities}}))
+                              ;:cmd ["/home/leon/coding/prs/rust-analyzer/target/release/rust-analyzer"]}}))
 
 (let [sumneko_root_path (.. vim.env.HOME "/.local/share/lua-language-server")
       sumneko_binary (.. sumneko_root_path "/bin/Linux/lua-language-server")]

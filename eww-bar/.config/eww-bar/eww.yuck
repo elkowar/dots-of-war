@@ -37,10 +37,10 @@
       "${round((1 - (EWW_DISK["/"].free / EWW_DISK["/"].total)) * 100, 0)}%")
     (box :class "metric" :orientation "v" 
       (label :class "metric-icon":text "") 
-      "${round(EWW_RAM, 0)}%")
+      "${round(EWW_RAM.used_mem_perc, 0)}%")
     (box :class "metric" :orientation "v" 
       (label :class "metric-icon" :text "") 
-      "${round(EWW_CPU_USAGE.avg, 0)}%")
+      "${round(EWW_CPU.avg, 0)}%")
     (box :class "metric"
       (date))))
 

@@ -97,6 +97,7 @@ in
           kmonad
           gitAndTools.delta
           git-fuzzy
+          codelldb
         ]
       )
       (

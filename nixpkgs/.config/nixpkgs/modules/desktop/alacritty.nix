@@ -29,7 +29,7 @@ in
           double_click.threshold = 300;
           triple_click.threshold = 300;
           hide_when_typing = true;
-          url.launcher.program = "xdg-open";
+          #hints.launcher.program = "xdg-open";
         };
 
         key_bindings = [

@@ -65,4 +65,4 @@
 
 
 (utils.highlight :BufferLineInfoSelected {:bg colors.neutral_aqua :fg colors.dark0 :gui "NONE"})
-
+(defn foo [] (print "hi"))

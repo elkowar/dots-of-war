@@ -5,7 +5,8 @@
    require-macros [macros]})
 
 (configs.setup 
-  {:ensure_installed "all" 
+  {:ensure_installed []
+  ; :ensure_installed "maintained" 
    :highlight {:enable true
                :disable ["fennel" "rust" "haskell"]}
 
