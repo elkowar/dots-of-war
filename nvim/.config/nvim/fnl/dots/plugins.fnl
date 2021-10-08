@@ -5,11 +5,8 @@
 
 
 
-(defn  [use stuff rest]
-  (use (a.assoc rest 1 stuff)))
-
-
-(defn- safe-require-plugin-config [name]
+(defn- safe-req-conf [name]
+  "safely require a plugins configuration module, prepending 'dots.plugins.' to the given module name"
   (let [(ok? val-or-err) (pcall require (.. "dots.plugins." name))]
     (when (not ok?)
       (print (.. "Plugin config error: " val-or-err)))))
@@ -21,7 +18,7 @@
         (for [i 1 (a.count pkgs) 2]
           (let [name (. pkgs i)
                 opts (. pkgs (+ i 1))]
-            (-?> (. opts :mod) (safe-require-plugin-config))
+            (-?> (. opts :mod) (safe-req-conf))
             (use (a.assoc opts 1 name))))))))
 
 
@@ -38,37 +35,34 @@
   :folke/persistence.nvim {:opt false :config #(require "dots.plugins.persistence")}
   
   :folke/zen-mode.nvim {:cmd ["ZenMode"]
-                        :opt false :config #(require "dots.plugins.zen-mode")}
+                        :config #(require "dots.plugins.zen-mode")}
   
-  :folke/twilight.nvim {:opt false :config #(require "dots.plugins.twilight")}
+  :folke/twilight.nvim {:config #(require "dots.plugins.twilight")}
 
-  :TimUntersberger/neogit {:opt false :config #(require "dots.plugins.neogit")
+  :TimUntersberger/neogit {:config #(require "dots.plugins.neogit")
                            :cmd ["Neogit"]}
 
   
   :lifepillar/vim-gruvbox8 {:opt false
                             :config
-                            #(do (set vim.g.gruvbox_italics 0)
-                                 (set vim.g.gruvbox_italicise_strings 0)
-                                 (set vim.g.gruvbox_filetype_hi_groups 1)
-                                 (set vim.g.gruvbox_plugin_hi_groups 1)
-                                 (vim.cmd "colorscheme gruvbox8")
-                                 ((. (require :dots.utils) :highlight) :SignColumn {:bg (. (require :dots.colors) :dark0)}))}
+                            (fn []
+                              (set vim.g.gruvbox_italics 0)
+                              (set vim.g.gruvbox_italicise_strings 0)
+                              (set vim.g.gruvbox_filetype_hi_groups 1)
+                              (set vim.g.gruvbox_plugin_hi_groups 1)
+                              (vim.cmd "colorscheme gruvbox8")
+                              ((. (require :dots.utils) :highlight) :SignColumn {:bg (. (require :dots.colors) :dark0)}))}
                                        ;(req dots.utils.highlight :SignColumn {:bg (. (require :dots.colors) :dark0)}))}
                                        ;(req dots.utils.highlight :LspDiagnosticsUnderlineError {:gui "underline"}))}
 
   
-  :nvim-telescope/telescope.nvim {:opt false :config #(require "dots.plugins.telescope")
+  :nvim-telescope/telescope.nvim {:config #(require "dots.plugins.telescope")
                                   :cmd ["Telescope"]
                                    :requires [:nvim-lua/popup.nvim 
                                               :nvim-lua/plenary.nvim]}
 
   
   :nvim-telescope/telescope-packer.nvim {}
-  
-  :nvim-telescope/telescope-frecency.nvim {:requires [:tami5/sql.nvim]
-                                           :opt false}
-                                           ;:opt false :config #((. (require :telescope) :load_extension) "frecency")}
                                              
   
 
@@ -76,7 +70,7 @@
   :kyazdani42/nvim-web-devicons {}
 
   
-  :nvim-treesitter/nvim-treesitter {:opt false :config #(require "dots.plugins.treesitter") 
+  :nvim-treesitter/nvim-treesitter {:config #(require "dots.plugins.treesitter") 
                                     :event ["BufEnter"]
                                     :run ":TSUpdate"}
 
@@ -98,7 +92,7 @@
   :akinsho/nvim-bufferline.lua {:opt false :config #(require "dots.plugins.bufferline")}
 
   :sindrets/diffview.nvim {:cmd ["DiffviewOpen" "DiffviewToggleFiles"]
-                           :opt false :config #(require "dots.plugins.diffview")}
+                           :config #(require "dots.plugins.diffview")}
   
   :tweekmonster/startuptime.vim {:cmd ["StartupTime"]}
   
@@ -106,7 +100,8 @@
 
   
   :lewis6991/gitsigns.nvim {:after ["vim-gruvbox8"]
-                            :opt false :config #(require "dots.plugins.gitsigns")}
+                            :opt false
+                            :config #(require "dots.plugins.gitsigns")}
 
 
   
@@ -133,16 +128,13 @@
 
   
   :rcarriga/nvim-dap-ui {:opt false 
-                         :opt false :config #((. (require :dapui) :setup))
-                         ;:opt false :config #(req dapui.setup)
+                         :config #((. (require :dapui) :setup))
                          :requires [:mfussenegger/nvim-dap]}
 
   
-  :mfussenegger/nvim-dap {:opt false}
-                          ;:opt false :config #(require "dots.plugins.nvim-dap")}
+  :mfussenegger/nvim-dap {:opt false :config #(require "dots.plugins.nvim-dap")}
   
-  :nvim-telescope/telescope-dap.nvim {:opt false
-                                      :requires [:mfussenegger/nvim-dap
+  :nvim-telescope/telescope-dap.nvim {:requires [:mfussenegger/nvim-dap
                                                  :nvim-telescope/telescope.nvim]}
 
   ; code-related ----------------------------------------- <<<
