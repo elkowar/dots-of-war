@@ -7,6 +7,7 @@
              colors dots.colors}
    require-macros [macros]})
 
+
 (macro make-errors-epic [f]
   `(xpcall #,f #(let [fennel# (require :aniseed.fennel)]
                   (a.println (fennel#.traceback $1)))))
@@ -15,6 +16,8 @@
   (set vim.opt.termguicolors true))
 
 (make-errors-epic (require "dots.plugins"))
+
+(require "impatient")
 
 (make-errors-epic (require "dots.plugins.lsp"))
 (make-errors-epic (require "dots.keybinds"))

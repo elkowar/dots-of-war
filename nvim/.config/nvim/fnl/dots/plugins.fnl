@@ -14,15 +14,16 @@
 (defn use [...]
   (let [pkgs [...]]
     (packer.startup
-      (fn [use]
-        (for [i 1 (a.count pkgs) 2]
-          (let [name (. pkgs i)
-                opts (. pkgs (+ i 1))]
-            (-?> (. opts :mod) (safe-req-conf))
-            (use (a.assoc opts 1 name))))))))
-
-
+      {1 (fn [use]
+           (for [i 1 (a.count pkgs) 2]
+             (let [name (. pkgs i)
+                   opts (. pkgs (+ i 1))]
+               (-?> (. opts :mod) (safe-req-conf))
+               (use (a.assoc opts 1 name)))))
+       :config {:compile_path (.. (vim.fn.stdpath "config") "/lua/packer_compiled.lua")}})))
+      
 (use
+  :lewis6991/impatient.nvim {}
   :elkowar/yuck.vim {}
   :nvim-lua/plenary.nvim {}
   :elkowar/antifennel-nvim {:opt false :config #(set vim.g.antifennel_executable "/home/leon/tmp/antifennel/antifennel")}
@@ -161,11 +162,19 @@
   :hrsh7th/cmp-vsnip {}
   :hrsh7th/cmp-nvim-lsp {}
   :hrsh7th/cmp-buffer {}
+  :hrsh7th/cmp-path {}
+  :hrsh7th/cmp-nvim-lua {}
+  :hrsh7th/cmp-calc {}
   
   :hrsh7th/nvim-cmp {:opt false 
                      :requires [:hrsh7th/cmp-nvim-lsp 
                                 :hrsh7th/cmp-buffer
-                                :hrsh7th/cmp-vsnip]
+                                :hrsh7th/cmp-vsnip
+                                :hrsh7th/cmp-nvim-lua
+                                :hrsh7th/cmp-calc
+                                :hrsh7th/cmp-path]
+                                
+
                      :config #(require "dots.plugins.cmp")}
 
 
@@ -222,6 +231,8 @@
   :google/vim-jsonnet {}
   :bakpakin/fennel.vim {}
   :evanleck/vim-svelte {})
+
+(require "packer_compiled")
 
 ; >>>
 

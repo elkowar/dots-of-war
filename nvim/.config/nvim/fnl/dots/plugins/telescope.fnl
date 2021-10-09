@@ -5,10 +5,8 @@
 
 (telescope.setup 
   {:defaults {:mappings {:i {:<esc> actions.close}}
-              :file_ignore_patterns ["Cargo.lock" ".*.snap" "docs/theme/.*"]}
-   :extensions {:frecency {:persistent_filter false}}})
+              :file_ignore_patterns ["Cargo.lock" ".*.snap" "docs/theme/.*"]}})
                   
-(telescope.load_extension "frecency")
 (telescope.load_extension "dap")
 (telescope.load_extension "packer")
 
