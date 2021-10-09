@@ -10,32 +10,41 @@ setopt EXTENDED_HISTORY
 setopt SHARE_HISTORY
 
 
-
-# plugins
-source ~/.zplug/init.zsh
-
-zplug 'zplug/zplug', hook-build:'zplug --self-manage'
-zplug "plugins/git", from:oh-my-zsh
-zplug "zsh-users/zsh-completions"
-zplug "Aloxaf/fzf-tab", defer:2
-zplug "zsh-users/zsh-history-substring-search", defer:2
-zplug "zdharma/fast-syntax-highlighting", defer:2
-zplug "zsh-users/zsh-autosuggestions"
-zplug "olets/zsh-abbr"
-zplug "sudosubin/zsh-github-cli"
-zplug "pkulev/zsh-rustup-completion"
-
-if ! zplug check --verbose; then
-    printf "Install? [y/N]: "
-    if read -q; then
-        echo; zplug install
-    fi
+if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
+    print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}zdharma/zinit%F{220})…%f"
+    command mkdir -p "$HOME/.zinit" && command chmod g-rwX "$HOME/.zinit"
+    command git clone https://github.com/zdharma/zinit "$HOME/.zinit/bin" && \
+        print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
+        print -P "%F{160}▓▒░ The clone has failed.%f%b"
 fi
-zplug load
+
+source "$HOME/.zinit/bin/zinit.zsh"
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
+
+zinit snippet OMZP::git
+zinit wait lucid for "zsh-users/zsh-completions"
+
+# compinit must be ran before fzf-tab, but fzf-tab must be before syntax highlighting etc
+autoload -Uz compinit
+compinit
+
+zinit light "Aloxaf/fzf-tab"
+
+zinit wait lucid for \
+    "zsh-users/zsh-history-substring-search" \
+    "zdharma/fast-syntax-highlighting" \
+    "zsh-users/zsh-autosuggestions" \
+    "olets/zsh-abbr" \
+    "sudosubin/zsh-github-cli" \
+    "pkulev/zsh-rustup-completion"
 
 
 # load more stuff
 source "$ZDOTDIR/fzf-tab.zsh"
+
+
+eval "$(zoxide init zsh)"
 
 
 # fzf keybindings
@@ -76,3 +85,4 @@ alias ls="exa --icons"
 
 # load prompt
 source "$ZDOTDIR/prompt.zsh"
+
