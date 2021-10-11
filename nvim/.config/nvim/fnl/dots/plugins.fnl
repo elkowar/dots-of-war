@@ -200,6 +200,7 @@
   :tommcdo/vim-exchange {}
   :eraserhd/parinfer-rust {:run "cargo build --release"}
 
+  :cespare/vim-toml {}
   :bduggan/vim-raku {:ft ["raku"]}
   :LnL7/vim-nix {:ft ["nix"]}
   :kevinoid/vim-jsonc {}

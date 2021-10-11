@@ -47,6 +47,16 @@
 
   "n" [(. (require :persistence) :load) "Load last session"]
 
+  "d" {:name "+Debugging"
+       "b" [#(req dap.toggle_breakpoint)    "toggle breakpoint"]
+       "u" [#(req dapui.toggle)             "toggle dapui"]
+       "c" [#(req dap.step_into)            "continue"]
+       "r" [(. (require "dap") :repl :open) "open repl"]
+       "s" {:name "+Step"
+            "o" [#(req dap.step_over)       "over"]
+            "u" [#(req dap.step_out)        "out"]
+            "i" [#(req dap.step_into)       "into"]}}
+
   "m" {:name "+Code actions"
        "d" (cmd "Lspsaga hover_doc"                       "Show documentation") 
        "b" (cmd "Lspsaga lsp_finder"                      "Find stuff") 
