@@ -101,7 +101,7 @@
       rust-tools-dap (require "rust-tools.dap")
       extension-path "/home/leon/.vscode/extensions/vadimcn.vscode-lldb-1.6.8/"
       codelldb-path  (.. extension-path "adapter/codelldb")
-      liblldb-path   (.. extension-path "lldb/lib/libllb.so")] 
+      liblldb-path   (.. extension-path "lldb/lib/liblldb.so")] 
   (rust-tools.setup {:tools {:inlay_hints {:show_parameter_hints false}
                              :autoSetHints false}
                      :dap {:adapter (rust-tools-dap.get_codelldb_adapter codelldb-path liblldb-path)}
