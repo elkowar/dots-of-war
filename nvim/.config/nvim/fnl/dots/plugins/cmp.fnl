@@ -23,7 +23,7 @@
              :<esc> #(do (cmp.mapping.close) (vim.cmd "stopinsert"))
              :<CR>  (cmp.mapping.confirm {:select true})}
 
-   ;:experimental {:custom_menu true}
+   :experimental {:custom_menu true}
 
    :sources [{:name "nvim_lsp" :priority 5}
              {:name "vsnip" :priority 3}
@@ -35,9 +35,10 @@
 
    :formatting {:format item-formatter}
 
-   :sorting {:comparators [#(do 
-                              ;(print ($1:get_kind) $1.completion_item.label "--" ($2:get_kind) $2.completion_item.label) 
-                              (if (= 15 ($1:get_kind)) false nil)) ; 15 means "SNIPPET", see https://github.com/hrsh7th/nvim-cmp/blob/main/lua/cmp/types/lsp.lua
+   :sorting {:comparators [#(do (if (and (= 15 ($1:get_kind)) (= 15 ($2:get_kind))) nil
+                                    (= 15 ($1:get_kind)) false 
+                                    (= 15 ($2:get_kind)) true
+                                    nil)) ; 15 means "SNIPPET", see https://github.com/hrsh7th/nvim-cmp/blob/main/lua/cmp/types/lsp.lua
                            cmp.config.compare.offset
                            cmp.config.compare.exact
                            cmp.config.compare.score
