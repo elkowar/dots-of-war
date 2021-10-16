@@ -233,10 +233,10 @@
   :bakpakin/fennel.vim {}
   :evanleck/vim-svelte {})
 
-(require "packer_compiled")
 
 ; >>>
 
+(require "packer_compiled")
 
 ; vim:foldmarker=<<<,>>>
 

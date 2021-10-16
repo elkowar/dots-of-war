@@ -23,9 +23,9 @@ end
 -- Bootstrap essential plugins required for installing and loading the rest.
 ensure("wbthomason", "packer.nvim", "master")
 ensure("Olical", "aniseed", "develop")
--- ensure("Olical", "aniseed", "v3.22.0")
---ensure("wbthomason", "packer.nvim", "master", "daec6c759f95cd8528e5dd7c214b18b4cec2658c")
---ensure("Olical", "aniseed", "v3.21.0")
+ensure("lewis6991", "impatient.nvim")
+
+require("impatient")
 
 
 vim.g["aniseed#env"] = {
