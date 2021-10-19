@@ -23,6 +23,7 @@
        :config {:compile_path (.. (vim.fn.stdpath "config") "/lua/packer_compiled.lua")}})))
       
 (use
+  :jbyuki/instant.nvim {:config #(set vim.g.instant_username "ElKowar")}
   :lewis6991/impatient.nvim {}
   :elkowar/yuck.vim {}
   :nvim-lua/plenary.nvim {}
@@ -144,8 +145,11 @@
   
   :ray-x/lsp_signature.nvim {:events [:BufEnter]}
   
-  "/home/leon/coding/prs/trouble.nvim" {:opt false :config #(require "dots.plugins.trouble")
-                                        :cmd ["Trouble" "TroubleClose" "TroubleRefresh" "TroubleToggle"]}
+  :elkowar/trouble.nvim {:config #(require "dots.plugins.trouble")
+                         :cmd ["Trouble" "TroubleClose" "TroubleRefresh" "TroubleToggle"]}
+
+  ;"/home/leon/coding/prs/trouble.nvim" {:opt false :config #(require "dots.plugins.trouble")
+                                        ;:cmd ["Trouble" "TroubleClose" "TroubleRefresh" "TroubleToggle"]}
   ;:folke/lsp-trouble.nvim {:opt false :config #(require "dots.plugins.trouble")
                            ;:cmd ["Trouble" "TroubleClose" "TroubleRefresh" "TroubleToggle"]}
   
@@ -173,8 +177,6 @@
                                 :hrsh7th/cmp-nvim-lua
                                 :hrsh7th/cmp-calc
                                 :hrsh7th/cmp-path]
-                                
-
                      :config #(require "dots.plugins.cmp")}
 
 
