@@ -41,6 +41,22 @@ exec swayidle -w \
 exec mako
 exec libinput-gestures-setup start
 
+set $WOBSOCK $XDG_RUNTIME_DIR/wob.sock
+exec mkfifo $WOBSOCK && tail -f $WOBSOCK | wob
+
+
+
+exec_always import-gsettings
+
+
+# brightness and volume popup
+bindsym XF86AudioRaiseVolume exec pamixer -ui 2 && pamixer --get-volume > $WOBSOCK
+bindsym XF86AudioLowerVolume exec pamixer -ud 2 && pamixer --get-volume > $WOBSOCK
+bindsym XF86AudioMute exec pamixer --toggle-mute && ( pamixer --get-mute && echo 0 > $WOBSOCK ) || pamixer --get-volume > $WOBSOCK
+
+bindsym XF86MonBrightnessDown exec brightnessctl set 5%- | sed -En 's/.*\(([0-9]+)%\).*/\1/p' | tee /tmp/brightness > $WOBSOCK
+bindsym XF86MonBrightnessUp exec brightnessctl set +5% | sed -En 's/.*\(([0-9]+)%\).*/\1/p' | tee /tmp/brightness > $WOBSOCK
+exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK
 
 
 
@@ -49,10 +65,11 @@ gaps inner 10
 default_border pixel 1
 
 
+client.focused "#ebdbb2" "#282828" "#8ec07c" "#8ec07c" "#ebdbb2"
+client.unfocused "#1d2021" "#1d2021" "#ebdbb2" "#00000000"
+client.focused_inactive "#282828" "#282828" "#8ec07c" "#00000000"
 
-client.focused "#ebdbb2" "#ebdbb2" "#1d2021"
-client.unfocused "#1d2021" "#1d2021" "#1d2021"
-
+hide_edge_borders smart
 
 
 
@@ -185,10 +202,11 @@ input "type:keyboard" {
 
 
 
-bindsym --locked XF86MonBrightnessUp   exec brightnessctl -e set 50+
-bindsym --locked XF86MonBrightnessDown exec brightnessctl -e set 50-
-bindsym --locked XF86AudioRaiseVolume  exec pamixer -i 5
-bindsym --locked XF86AudioLowerVolume  exec pamixer -d 5
+#bindsym --locked XF86MonBrightnessUp   exec brightnessctl -e set 50+
+#bindsym --locked XF86MonBrightnessDown exec brightnessctl -e set 50-
+
+#bindsym --locked XF86AudioRaiseVolume  exec pamixer -i 5
+#bindsym --locked XF86AudioLowerVolume  exec pamixer -d 5
 
 bindsym $mod+Shift+S exec grimshot copy area
 bindsym $mod+Shift+b exec google-chrome-stable
