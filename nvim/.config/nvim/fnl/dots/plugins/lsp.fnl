@@ -105,8 +105,8 @@
 (let [rust-tools (require "rust-tools")]
   (rust-tools.setup {:tools {:inlay_hints {:show_parameter_hints false}
                              :autoSetHints false}
-                     :server {:on_attach on_attach
-                              :cmd ["/home/leon/coding/prs/rust-analyzer/target/release/rust-analyzer"]}}))
+                     :server {:on_attach on_attach}}))
+                              ;:cmd ["/home/leon/coding/prs/rust-analyzer/target/release/rust-analyzer"]}}))
 
 (let [sumneko_binary "/usr/bin/lua-language-server"]
   (init-lsp 
