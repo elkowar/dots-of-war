@@ -109,9 +109,6 @@
                               :capabilities default-capabilities}}))
                               ;:cmd ["/home/leon/coding/prs/rust-analyzer/target/release/rust-analyzer"]}}))
 
-
-
-
 (let [sumneko_root_path (.. vim.env.HOME "/.local/share/lua-language-server")
       sumneko_binary (.. sumneko_root_path "/bin/Linux/lua-language-server")]
   (init-lsp 
