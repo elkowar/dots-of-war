@@ -518,11 +518,13 @@ main = do
         , layoutHook         = myLayout
         , logHook            = mconcat [ polybarLogHook verticalMonitorIndex
                                        , ewwLogHook
-                                       , Ewmh.ewmhDesktopsLogHook
+                                       --, Ewmh.ewmhDesktopsLogHook
                                        , logHook Desktop.desktopConfig
                                        --, fadeInactiveLogHook 0.95
                                        , logHook def]
-        , startupHook        = mconcat [ Ewmh.ewmhDesktopsStartup, myStartupHook, checkKeymap myConfig myKeys]
+        , startupHook        = mconcat [ --Ewmh.ewmhDesktopsStartup
+                                       --, 
+                                         myStartupHook, checkKeymap myConfig myKeys]
         , manageHook         = mconcat [ manageSpawn, myManageHook, manageHook def]
         , focusedBorderColor = "#427b58"
         , normalBorderColor  = "#282828"
@@ -530,7 +532,7 @@ main = do
                                        , activateWindowEventHook
                                        , handleEventHook Desktop.desktopConfig
                                        , Hacks.windowedFullscreenFixEventHook
-                                       , Ewmh.ewmhDesktopsEventHook
+                                       --, Ewmh.ewmhDesktopsEventHook
                                        ]
         --, handleEventHook  = minimizeEventHook <+> handleEventHook def <+> hintsEventHook -- <+> Ewmh.fullscreenEventHook
         , mouseBindings = myMouseBindings <+> mouseBindings def
@@ -538,12 +540,17 @@ main = do
 
   xmonad
     $ Nav2d.withNavigation2DConfig def { Nav2d.defaultTiledNavigation = Nav2d.sideNavigation }
+    $ Ewmh.setEwmhActivateHook myActivateManageHook
+    $ Ewmh.ewmh
     $ docks
     $ myConfig
+
 
 -- }}}
 
 
+myActivateManageHook :: ManageHook
+myActivateManageHook = pure mempty
 
 mySwallowEventHook = WindowSwallowing.swallowEventHook
   (className =? "Alacritty" <||> className =? "Termite" <||> className =? "NOPE Thunar")
@@ -564,17 +571,17 @@ activateWindowEventHook (ClientMessageEvent { ev_message_type = messageType, ev_
         shouldRaise <- runQuery (className =? "discord" <||> className =? "web.whatsapp.com") window
         if shouldRaise
            then windows (W.shiftWin (W.currentTag ws) window)
-           else windows (focusWindow' window)
+           else windows (IS.focusWindow' window)
   return $ All True
 activateWindowEventHook _ = return $ All True
 
 -- | Focus a window, switching workspace on the correct Xinerama screen if neccessary.
-focusWindow' :: Window -> WindowSet -> WindowSet
-focusWindow' window ws
-  | Just window == W.peek ws = ws
-  | otherwise = case W.findTag window ws of
-      Just tag ->  IS.focusScreen (IS.unmarshallS tag) ws
-      Nothing -> ws
+-- focusWindow' :: Window -> WindowSet -> WindowSet
+-- focusWindow' window ws
+--   | Just window == W.peek ws = ws
+--   | otherwise = case W.findTag window ws of
+--       Just tag ->  IS.focusScreen (IS.unmarshallS tag) ws
+--       Nothing -> ws
 
 
 

@@ -25,7 +25,7 @@
 (use
   :jbyuki/instant.nvim {:config #(set vim.g.instant_username "ElKowar")}
   :lewis6991/impatient.nvim {}
-  :elkowar/yuck.vim {}
+  :rhysd/conflict-marker.vim {}
   :nvim-lua/plenary.nvim {}
   :elkowar/antifennel-nvim {:opt false :config #(set vim.g.antifennel_executable "/home/leon/tmp/antifennel/antifennel")}
   :elkowar/kmonad.vim {}
@@ -202,6 +202,7 @@
   :tommcdo/vim-exchange {}
   :eraserhd/parinfer-rust {:run "cargo build --release"}
 
+  :elkowar/yuck.vim {}
   :cespare/vim-toml {}
   :bduggan/vim-raku {:ft ["raku"]}
   :LnL7/vim-nix {:ft ["nix"]}
