@@ -22,7 +22,7 @@ executable my-xmonad
     ghc-options:      -Wall -threaded -fno-warn-missing-signatures
     build-depends:
         base -any,
-        xmonad >=0.15,
+        xmonad >=0.16.99999 && < 0.18,
         xmonad-contrib >=0.16,
         dbus >=1.2.12,
         iwlib >=0.1.0,
@@ -30,7 +30,7 @@ executable my-xmonad
         containers >=0.6.2.1,
         utf8-string >=1.0.1.1,
         text >=1.2.4.0,
-        process >= 0.0.10,
+        process,
         -- todo remove this again
-        X11>=1.6.1 && < 1.10
+        X11>=1.10 && < 1.11
 

@@ -5,36 +5,40 @@
 
 packages:
 - completed:
+    hackage: X11-1.10.1@sha256:962d3bedba2d3463f24c278cf04e0694d7d231e7f3cec856bc7c9205e7068524,3705
+    pantry-tree:
+      size: 2860
+      sha256: 0f5b3e653b46d3fd592886b294600da4d2eb09982ad63fb8bbc300f0c6fb5b9a
+  original:
+    hackage: X11-1.10.1@sha256:962d3bedba2d3463f24c278cf04e0694d7d231e7f3cec856bc7c9205e7068524,3705
+- completed:
     hackage: iwlib-0.1.0@sha256:226e4582d6878166a172ff98c868e25c4ed478ab28ab493498e464b1fe19d39a,921
     pantry-tree:
       size: 259
       sha256: f867a93991b791adf4c65bb91f385effee7e18bd78d8e0a61fd03f42f6073705
   original:
-    hackage: iwlib-0.1.0
+    hackage: iwlib-0.1.0@sha256:226e4582d6878166a172ff98c868e25c4ed478ab28ab493498e464b1fe19d39a,921
 - completed:
     hackage: netlink-1.1.1.0@sha256:d83424b5ba9921191449e4b1f53c7cba7f4375f2c55a9b737c77e982e1f40d00,3689
     pantry-tree:
       size: 1598
       sha256: 42a57a2db0d8b44e04a04905ed56994b7293d2f244595bf3e65480c36d114ac3
   original:
-    hackage: netlink-1.1.1.0
+    hackage: netlink-1.1.1.0@sha256:d83424b5ba9921191449e4b1f53c7cba7f4375f2c55a9b737c77e982e1f40d00,3689
 - completed:
-    hackage: dbus-1.2.12@sha256:6bcf6603762287a73941242b4b45827035672442ffc54ac7c8d381d49e2175e0,4829
+    size: 103005
+    url: https://github.com/xmonad/xmonad/archive/master@{today}.tar.gz
+    name: xmonad
+    version: 0.16.99999
+    sha256: 33f90e929b6bafa9753ce2769c8ff27da9ad3cd6c47d63dcb28d35a6c64aa2ec
     pantry-tree:
-      size: 2795
-      sha256: 4dabb3bf0b86adc529116f22cb552ebc68e05f41017bd266797694129716192f
+      size: 3621
+      sha256: 25f78618e4bb82f549e19de71fea31aa78baad2bf7ede3b17c417f5579b6f54f
   original:
-    hackage: dbus-1.2.12
-- completed:
-    hackage: text-1.2.4.0@sha256:8c24450feb8e3bbb7ea3e17af24ef57e85db077c4bf53e5bcc345b283d1b1d5b,10081
-    pantry-tree:
-      size: 7457
-      sha256: 3437b0a73ce2ae1a81aa8b3438d41a85981c00894cdbee0d6d6d6873046a5d5d
-  original:
-    hackage: text-1.2.4.0
+    url: https://github.com/xmonad/xmonad/archive/master@{today}.tar.gz
 snapshots:
 - completed:
-    size: 491373
-    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/15/3.yaml
-    sha256: 29e9ff61b8bf4b4fcff55cde3ac106ebb971f0d21331dccac9eee63374fa6ca8
-  original: lts-15.3
+    size: 567677
+    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/17/14.yaml
+    sha256: 3740f22286bf5e6e3d82f88125e1c708b6e27847211f956b530aa5d83cf39383
+  original: lts-17.14

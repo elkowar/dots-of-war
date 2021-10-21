@@ -1,12 +1,23 @@
 
-resolver: lts-15.3
+#resolver: lts-15.3
+resolver: lts-17.14
 
 packages:
 - .
 - xmonad-contrib
 
 extra-deps:
-  - iwlib-0.1.0
-  - netlink-1.1.1.0
-  - dbus-1.2.12
-  - text-1.2.4.0
+  - X11-1.10.1@sha256:962d3bedba2d3463f24c278cf04e0694d7d231e7f3cec856bc7c9205e7068524,3705
+  - iwlib-0.1.0@sha256:226e4582d6878166a172ff98c868e25c4ed478ab28ab493498e464b1fe19d39a,921
+  - netlink-1.1.1.0@sha256:d83424b5ba9921191449e4b1f53c7cba7f4375f2c55a9b737c77e982e1f40d00,3689
+  - github: xmonad/xmonad
+    commit: master@{today}
+
+  #- iwlib-0.1.0
+  #- netlink-1.1.1.0
+  #- dbus-1.2.12
+  #- text-1.2.4.0
+  #- github: xmonad/X11
+    #commit: master@{today}
+  #- X11-1.10.1
+
