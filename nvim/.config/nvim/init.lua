@@ -23,7 +23,7 @@ end
 -- Bootstrap essential plugins required for installing and loading the rest.
 ensure("wbthomason", "packer.nvim", "master")
 ensure("Olical", "aniseed", "develop")
-ensure("lewis6991", "impatient.nvim")
+ensure("lewis6991", "impatient.nvim", "main")
 
 require("impatient")
 
