@@ -39,7 +39,7 @@
   "h" (cmd "bprevious"              "previous buffer")
   "l" (cmd "bnext"                  "next buffer")
   "o" (cmd "Telescope live_grep"    "Grep files")
-  "P" (cmd "Telescope frecency frecency default_text=:CWD:"     "Open file-browser")
+  "P" (cmd "Telescope frecency frecency default_text=:CWD:"     "Frecency magic")
   "p" (cmd "Telescope find_files"   "Open file-browser")
   ":" (cmd "Telescope commands"     "Search command with fzf")
   "s" (cmd "w"                      "Save file")
@@ -58,22 +58,24 @@
             "i" [#(req dap.step_into)       "into"]}}
 
   "m" {:name "+Code actions"
-       "d" (cmd "Lspsaga hover_doc"                       "Show documentation") 
-       "b" (cmd "Lspsaga lsp_finder"                      "Find stuff") 
+       "d" [vim.lsp.buf.hover                             "Show documentation"] 
        "x" (cmd "Lspsaga preview_definition"              "Preview definition") 
        "o" (cmd "SymbolsOutline"                          "Outline") 
        "S" (cmd "Telescope lsp_document_symbols"          "Symbols in document") 
        "s" (cmd "Telescope lsp_dynamic_workspace_symbols" "Symbols in workspace") 
-       "T" (cmd "Lspsaga signature_help"                  "Show signature help") 
+       "T" [vim.lsp.buf.signature_help                    "Show signature help"] 
+       ;"T" (cmd "Lspsaga signature_help"                  "Show signature help") ; lspsaga broken
        "n" (cmd "Lspsaga rename"                          "Rename") 
        "v" (cmd "Lspsaga code_action"                     "Apply codeaction") 
        "A" (cmd "Lspsaga show_cursor_diagnostics"         "Cursor diagnostics") 
        "a" (cmd "Lspsaga show_line_diagnostics"           "Line diagnostics")
        "h" (cmd "RustToggleInlayHints"                    "Toggle inlay hints")
-       "r" (cmd "Trouble lsp_references"                  "Show references") 
+       "r" [vim.lsp.buf.references                        "Show references"]  ; trouble broken?
+       ;"r" (cmd "Trouble lsp_references"                  "Show references") 
        "E" (cmd "Trouble lsp_document_diagnostics"        "List diagnostics")
        "e" (cmd "Trouble lsp_workspace_diagnostics"       "Show diagnostics")
-       "t" [vim.lsp.buf.declaration                       "Go to declaration"] 
+       "t" [vim.lsp.buf.type_definition                   "Go to type-definition"] 
+       ;"t" [vim.lsp.buf.declaration                       "Go to declaration"] 
        "g" [vim.lsp.buf.definition                        "Go to definition"] 
        "i" (cmd "Trouble lsp_implementations"             "Show implementation") 
        "f" [format                                        "format file"]
