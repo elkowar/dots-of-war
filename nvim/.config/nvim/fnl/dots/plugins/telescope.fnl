@@ -9,6 +9,5 @@
    :extensions {:frecency {:persistent_filter false}}})
                   
 (telescope.load_extension "dap")
-(telescope.load_extension "packer")
 
 (utils.keymap :n :<C-p> ":Telescope find_files<CR>")

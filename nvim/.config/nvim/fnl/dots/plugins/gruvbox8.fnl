@@ -7,7 +7,9 @@
 (set vim.g.gruvbox_filetype_hi_groups 1)
 (set vim.g.gruvbox_plugin_hi_groups 1)
 
-(vim.cmd "colorscheme gruvbox8")
+(if (= "epix" (vim.fn.hostname))
+  (vim.cmd "colorscheme gruvbox8_hard")
+  (vim.cmd "colorscheme gruvbox8"))
 
 (utils.highlight :SignColumn {:bg colors.dark0})
 
