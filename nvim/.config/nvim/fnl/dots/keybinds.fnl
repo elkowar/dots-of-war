@@ -66,7 +66,8 @@
        "T" [vim.lsp.buf.signature_help                    "Show signature help"] 
        ;"T" (cmd "Lspsaga signature_help"                  "Show signature help") ; lspsaga broken
        "n" (cmd "Lspsaga rename"                          "Rename") 
-       "v" (cmd "Lspsaga code_action"                     "Apply codeaction") 
+       "v" (cmd "CodeActionMenu"                          "Apply codeaction") 
+       "V" (cmd "Lspsaga code_action"                     "saga Apply codeaction") 
        "A" (cmd "Lspsaga show_cursor_diagnostics"         "Cursor diagnostics") 
        "a" (cmd "Lspsaga show_line_diagnostics"           "Line diagnostics")
        "h" (cmd "RustToggleInlayHints"                    "Toggle inlay hints")

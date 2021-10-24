@@ -42,6 +42,7 @@
   :psliwka/vim-smoothie {}
   :norcalli/nvim-colorizer.lua {:opt false :config #(require "dots.plugins.nvim-colorizer")}
   :nathanaelkane/vim-indent-guides {:cmd ["IndentGuidesToggle"]}
+  :luukvbaal/stabilize.nvim {:opt false :config #((. (require :stabilize) :setup))}
 
   :tweekmonster/startuptime.vim {:cmd ["StartupTime"]}
   :folke/persistence.nvim {:opt false :config #(require "dots.plugins.persistence")}
@@ -107,6 +108,7 @@
 
   ; lsp <<<
   :ray-x/lsp_signature.nvim {:events [:BufEnter]}
+  :weilbith/nvim-code-action-menu {:cmd ["CodeActionMenu"]}
   
   :elkowar/trouble.nvim {:config #(require "dots.plugins.trouble")
                          :cmd ["Trouble" "TroubleClose" "TroubleRefresh" "TroubleToggle"]}
