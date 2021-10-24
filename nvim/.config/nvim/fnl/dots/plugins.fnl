@@ -21,7 +21,14 @@
                (-?> (. opts :mod) (safe-req-conf))
                (use (a.assoc opts 1 name)))))
        :config {:compile_path (.. (vim.fn.stdpath "config") "/lua/packer_compiled.lua")}})))
-      
+
+
+(macro cfg [config-mod opts]
+  (let [a (require "aniseed.core")]
+    (a.assoc (or opts {}) 
+      :opt `false 
+      :config `#(require ,config-mod))))
+
 (use
   ; sort me pls
 
@@ -32,22 +39,22 @@
   :lewis6991/impatient.nvim {}
   :nvim-lua/plenary.nvim {}
   :norcalli/nvim.lua {}
-  :lifepillar/vim-gruvbox8 {:opt false :config #(require "dots.plugins.gruvbox8")}
+  :lifepillar/vim-gruvbox8 (cfg "dots.plugins.gruvbox8")
   :kyazdani42/nvim-web-devicons {}
 
   :folke/which-key.nvim {}
-  :Famiu/feline.nvim {:opt false :config #(require "dots.plugins.feline")}
-  :akinsho/nvim-bufferline.lua {:opt false :config #(require "dots.plugins.bufferline")}
+  :Famiu/feline.nvim (cfg "dots.plugins.feline")
+  :akinsho/nvim-bufferline.lua (cfg "dots.plugins.bufferline")
 
   :psliwka/vim-smoothie {}
-  :norcalli/nvim-colorizer.lua {:opt false :config #(require "dots.plugins.nvim-colorizer")}
+  :norcalli/nvim-colorizer.lua (cfg "dots.plugins.nvim-colorizer")
   :nathanaelkane/vim-indent-guides {:cmd ["IndentGuidesToggle"]}
   :luukvbaal/stabilize.nvim {:opt false :config #((. (require :stabilize) :setup))}
 
   :tweekmonster/startuptime.vim {:cmd ["StartupTime"]}
-  :folke/persistence.nvim {:opt false :config #(require "dots.plugins.persistence")}
-  :folke/zen-mode.nvim {:cmd ["ZenMode"] :config #(require "dots.plugins.zen-mode")}
-  :folke/twilight.nvim {:config #(require "dots.plugins.twilight")}
+  :folke/persistence.nvim (cfg "dots.plugins.persistence")
+  :folke/zen-mode.nvim (cfg "dots.plugins.zen-mode" {:cmd ["ZenMode"]})
+  :folke/twilight.nvim (cfg "dots.plugins.twilight")
   :nvim-telescope/telescope.nvim {:config #(require "dots.plugins.telescope")
                                   :cmd ["Telescope"]
                                   :requires [:nvim-lua/popup.nvim :nvim-lua/plenary.nvim]}
