@@ -146,7 +146,9 @@ myLayout = noBorders
   where
     -- | if the screen is wider than 1900px it's horizontal, so use horizontal layouts.
     -- if it's not, it's vertical, so use layouts for vertical screens.
-    layouts = PerScreen.ifWider 1900 (PerScreen.ifWider 3000 chonkyScreenLayouts horizScreenLayouts) vertScreenLayouts
+    layouts = PerScreen.ifWider 1900 
+      (PerScreen.ifWider 3000 chonkyScreenLayouts (MTog.mkToggle1 ONLYONTOPHALF horizScreenLayouts))
+      vertScreenLayouts
 
     chonkyScreenLayouts = (rn "UltraTall" $ withGaps $ centeredIfSingle 0.6 resizableThreeCol)
       ||| horizScreenLayouts
@@ -183,16 +185,8 @@ myLayout = noBorders
 -- | window decoration layout modifier. this needs you to add `dragginVisualizer` yourself
 data WINDOWDECORATION = WINDOWDECORATION deriving (Read, Show, Eq, Typeable)
 instance MTog.Transformer WINDOWDECORATION Window where
-  transform WINDOWDECORATION x k = k
-    (windowSwitcherDecoration EmptyShrinker (myTabTheme { activeBorderColor = "#1d2021" }) $ x)
-    (const x)
+  transform WINDOWDECORATION layout k = k (windowSwitcherDecoration EmptyShrinker myTabTheme layout) (const layout)
 
-
--- | Layout modifier that tells layouts to only use a percentage of the screen, leaving space on the sides.
-newtype Smaller a = Smaller Double
-  deriving (Show, Read)
-instance LayoutModifier Smaller a where
-  modifyLayout (Smaller ratio) workspace rect = runLayout workspace (rectangleCenterPiece ratio rect)
 
 -- | Layout Modifier that places a window in the center of the screen, 
 -- leaving room on the left and right, if there is only a single window
@@ -206,7 +200,6 @@ instance LayoutModifier CenteredIfSingle Window where
 centeredIfSingle :: Double -> l a -> ModifiedLayout CenteredIfSingle l a
 centeredIfSingle ratio = ModifiedLayout (CenteredIfSingle ratio)
 
-
 -- | Give the center piece of a rectangle by taking the given percentage 
 -- of the rectangle and taking that in the middle.
 rectangleCenterPiece :: Double -> Rectangle -> Rectangle
@@ -215,6 +208,25 @@ rectangleCenterPiece ratio (Rectangle rx ry rw rh) = Rectangle start ry width rh
     sides = floor $ ((fi rw) * (1.0 - ratio)) / 2
     start = (fi rx) + sides
     width = fi $ (fi rw) - (sides * 2)
+
+-- Layout modifier that restricts windows to only display on the top part of the monitor
+-- I use this because sometimes I have my bottom monitor obscure part of the top monitor,
+-- thus having windows only be placed on the visible part of the screen is a good thing.
+
+data ONLYONTOPHALF = ONLYONTOPHALF deriving (Read, Show, Eq, Typeable)
+instance MTog.Transformer ONLYONTOPHALF Window where
+    transform ONLYONTOPHALF layout k = k (onlyOnTopHalf 0.62 layout) (const layout) 
+
+newtype OnlyOnTopHalf a = OnlyOnTopHalf Double deriving (Show, Read) 
+instance LayoutModifier OnlyOnTopHalf Window where
+  pureModifier (OnlyOnTopHalf ratio) _screenRect _ wins = (fmap (second (rectangleTopHalf ratio)) wins, Nothing)
+
+onlyOnTopHalf :: Double -> l a -> ModifiedLayout OnlyOnTopHalf l a
+onlyOnTopHalf ratio = ModifiedLayout (OnlyOnTopHalf ratio)
+
+-- | Calculate the top part of a rectangle by a given ratio
+rectangleTopHalf :: Double -> Rectangle -> Rectangle
+rectangleTopHalf ratio (Rectangle rx ry rw rh) = Rectangle rx (floor $ (fi ry) * ratio) rw (floor $ (fi rh) * ratio)
 
 
 fi :: (Integral a, Num b) => a -> b
@@ -464,16 +476,16 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
 
   specialCommands :: [(String,  X ())]
   specialCommands =
-    [ ("screenshot",              spawn $ scriptFile "screenshot.sh")
-    , ("screenshot to file",      spawn $ scriptFile "screenshot.sh --tofile")
-    , ("screenshot full to file", spawn $ scriptFile "screenshot.sh --tofile --fullscreen")
-    , ("screenvideo to file",     spawn (scriptFile "screenvideo.sh") >> notify "video" "stop video-recording with M-S-C-g")
-    , ("screengif to file",       spawn (scriptFile "screengif.sh") >> notify "gif" "stop gif-recording with M-S-C-g")
-    , ("Copy to all workspaces",  windows copyToAll)
-    , ("Kill all other copies",   killAllOtherCopies)
-    , ("get debug data",          debugStackFullString >>= (\str -> safeSpawn "xmessage" [str]))
-    , ("get full stackset",       withWindowSet (\ws -> spawn $ "echo '" ++ show (W.floating ws) ++ "\n" ++ show (W.current ws) ++ "' | xclip -in -selection clipboard"))
-    , ("asdf", windows (\ws -> ws {W.floating = M.empty }))
+    [ ("screenshot",                spawn $ scriptFile "screenshot.sh")
+    , ("screenshot to file",        spawn $ scriptFile "screenshot.sh --tofile")
+    , ("screenshot full to file",   spawn $ scriptFile "screenshot.sh --tofile --fullscreen")
+    , ("screenvideo to file",       spawn (scriptFile "screenvideo.sh") >> notify "video" "stop video-recording with M-S-C-g")
+    , ("screengif to file",         spawn (scriptFile "screengif.sh") >> notify "gif" "stop gif-recording with M-S-C-g")
+    , ("Copy to all workspaces",    windows copyToAll)
+    , ("Kill all other copies",     killAllOtherCopies)
+    , ("get debug data",            debugStackFullString >>= (\str -> safeSpawn "xmessage" [str]))
+    , ("get full stackset",         withWindowSet (\ws -> spawn $ "echo '" ++ show (W.floating ws) ++ "\n" ++ show (W.current ws) ++ "' | xclip -in -selection clipboard"))
+    , ("toggle top screen halving", sendMessage $ MTog.Toggle ONLYONTOPHALF)
     ]
 
 
