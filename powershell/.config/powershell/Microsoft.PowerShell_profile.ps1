@@ -19,11 +19,8 @@ function Convert-HexToAnsiiEscape
 {
   param ([Parameter(Mandatory)] [string]$hex)
   $nohash = $hex.substring(1)
-  $rgb = $nohash -split '(..)' -ne ''
-  $r = [Convert]::ToInt64($rgb[0], 16)
-  $g = [Convert]::ToInt64($rgb[1], 16)
-  $b = [Convert]::ToInt64($rgb[2], 16)
-  [char]27 + "$ansi_escape[38;2;{0};{1};{2}m" -f $r, $g, $b
+  $rgb = $nohash -split '(..)' -ne '' | ForEach-Object { [Convert]::ToInt64($_, 16) }
+  [char]27 + "$ansi_escape[38;2;{0};{1};{2}m" -f $rgb[0], $rgb[1],$rgb[2]
 }
 
 $Colors = @{
