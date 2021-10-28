@@ -115,7 +115,7 @@
 
   ; lsp <<<
   :ray-x/lsp_signature.nvim {:events [:BufEnter]}
-  :weilbith/nvim-code-action-menu {:cmd ["CodeActionMenu"]}
+  :weilbith/nvim-code-action-menu {}
   
   :elkowar/trouble.nvim {:config #(require "dots.plugins.trouble")
                          :cmd ["Trouble" "TroubleClose" "TroubleRefresh" "TroubleToggle"]}

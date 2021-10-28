@@ -1,5 +1,6 @@
 (module dots.plugins.lsp
   {autoload {a aniseed.core
+             str aniseed.string
              lsp lspconfig 
              lsp-configs lspconfig/configs
              utils dots.utils
@@ -70,6 +71,14 @@
 (init-lsp :html)
 (init-lsp :svelte)
 (init-lsp :elmls)
+
+(init-lsp :powershell_es {:bundle_path "/home/leon/powershell"})
+         
+         
+         
+         
+
+;(init-lsp :powershell_es {})
 ;(init-lsp :clangd)
 ;(init-lsp :ccls)
 
