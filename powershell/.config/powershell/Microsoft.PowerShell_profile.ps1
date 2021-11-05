@@ -1,3 +1,7 @@
+# todo I looked again and you could use the [System.Drawing.Color] type to parse and store your colors
+# [drawing.color]("#ffffff") 
+# https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_ansi_terminals?view=powershell-7.2
+
 if ($host.Name -eq "ConsoleHost")
 {
   Import-Module PSReadline
