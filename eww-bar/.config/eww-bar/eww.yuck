@@ -22,27 +22,34 @@
        :class "time"
     hour min sec))
 
+
+(defwidget metric [icon ?font-size]
+  (box :class "metric" 
+       :orientation "v"
+    (label :class "metric-icon" 
+           :style {font-size != "" ? "font-size: ${font-size}rem;" : ""} 
+           :text icon)
+    (children)))
+
 (defwidget bottom [screen] 
   (box :orientation "v"
        :valign "end"
        :space-evenly true
        :spacing "5"
-    (box :class "metric" :orientation "v" 
-      ;(button :onclick "eww -c /home/leon/.config/eww-bar open --toggle music_popup --screen ${screen}" )
-      ""
-      (music-button))
+
+    (metric :icon "" :font-size 1 (music-button))
+
     (volume)
-    (box :class "metric" :orientation "v" 
-      (label :class "metric-icon" :style "font-size: 0.8rem;" :text "")
+
+    (metric :icon "" 
+            :font-size 0.8
       "${round((1 - (EWW_DISK["/"].free / EWW_DISK["/"].total)) * 100, 0)}%")
-    (box :class "metric" :orientation "v" 
-      (label :class "metric-icon":text "") 
-      "${round(EWW_RAM.used_mem_perc, 0)}%")
-    (box :class "metric" :orientation "v" 
-      (label :class "metric-icon" :text "") 
-      "${round(EWW_CPU.avg, 0)}%")
-    (box :class "metric"
-      (date))))
+
+    (metric :icon "" "${round(EWW_RAM.used_mem_perc, 0)}%")
+
+    (metric :icon "" "${round(EWW_CPU.avg, 0)}%")
+
+    (box :class "metric" (date))))
 
 (defwidget music-button []
   (button :onclick "playerctl play-pause"
@@ -53,23 +60,23 @@
        :orientation "v"
        :space-evenly false
        :valign "fill"
-
        :vexpand false
     (scale :orientation "h" 
            :min 0
            :max 100 
            :onchange "pamixer --set-volume $(echo {} | sed 's/\\..*//g')"
            :value volume)
-    (box :orientation "v"
-         :valign "fill"
-         :vexpand true
-      (button :onclick "./audio.sh toggle"
-              :onscroll "notify-send test {}; if [ '{}' == 'up' ]; then pamixer -i 5; else pamixer -d 5; fi"
-        (label :style "font-size: 1.2em; font-family: DejaVuSansMono Nerd Font Mono"
-               :text audio_sink))
-      (button :onclick "pavucontrol &"
-              :onscroll "if [ '{}' == 'up' ]; then pamixer -i 5; else pamixer -d 5; fi"
-        "${volume}%"))))
+    (eventbox :onscroll "notify-send test {}; if [ '{}' == 'up' ]; then pamixer -i 5; else pamixer -d 5; fi"
+              :vexpand true
+              :valign "fill"
+      (box :orientation "v"
+           :valign "fill"
+           :vexpand true
+        (button :onclick "./audio.sh toggle"
+          (label :style "font-size: 1.2em; font-family: DejaVuSansMono Nerd Font Mono"
+                 :text audio_sink))
+        (button :onclick "pavucontrol &"
+          "${volume}%")))))
 
 
 
@@ -91,7 +98,7 @@
   :initial `{"status": ""}`
   `
   playerctl          metadata --format '{ "status": "{{status}}", "artist": "{{artist}}", "title": "{{title}}"}' || echo '{"status": ""}';
-  playerctl --follow metadata --format '{ "status": "{{status}}", "artist": "{{artist}}", "title": "{{title}}"}'
+  # playerctl --follow metadata --format '{ "status": "{{status}}", "artist": "{{artist}}", "title": "{{title}}"}'
   `)
 
 (defpoll hour :interval "1s" "date +%H")
@@ -106,10 +113,6 @@
 (defvar workspaces_1_yuck "")
 (defvar workspaces_2_yuck "")
 
-; these are not needed because updates are done via update-workspaces.sh triggered from xmonad
-;(deflisten workspaces_0_yuck "./workspaces.sh 0")
-;(deflisten workspaces_1_yuck "./workspaces.sh 1")
-;(deflisten workspaces_2_yuck "./workspaces.sh 2")
 
 (defwindow bar_1
   :monitor 1

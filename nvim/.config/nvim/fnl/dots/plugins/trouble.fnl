@@ -8,7 +8,7 @@
   :auto_preview true
   :auto_close true
   :auto_open false
-  :auto_jump ["lsp_definitions" "lsp_workspace_diagnostics"]
+  :auto_jump ["lsp_definitions" "lsp_workspace_diagnostics" "lsp_type_definitions"]
   :indent_lines false
   :action_keys
     {:jump "o"

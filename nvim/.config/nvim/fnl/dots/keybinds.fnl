@@ -3,7 +3,8 @@
              nvim aniseed.nvim
              utils dots.utils
              wk which-key
-             treesitter-selection nvim-treesitter.incremental_selection}
+             treesitter-selection nvim-treesitter.incremental_selection
+             lspactions lspactions}
    require-macros [macros]})
 
 ; undo autopairs fuckup    
@@ -30,6 +31,7 @@
   (if (a.some #$1.resolved_capabilities.document_formatting (vim.lsp.get_active_clients))
     (vim.lsp.buf.formatting)
     (vim.cmd "Neoformat")))
+
 
 (wk.setup {})
 (wk.register 
@@ -71,14 +73,14 @@
        "A" (cmd "Lspsaga show_cursor_diagnostics"         "Cursor diagnostics") 
        "a" (cmd "Lspsaga show_line_diagnostics"           "Line diagnostics")
        "h" (cmd "RustToggleInlayHints"                    "Toggle inlay hints")
-       "r" [vim.lsp.buf.references                        "Show references"]  ; trouble broken?
-       ;"r" (cmd "Trouble lsp_references"                  "Show references") 
+       "r" (cmd "Trouble lsp_references"                  "Show references") 
        "E" (cmd "Trouble lsp_document_diagnostics"        "List diagnostics")
        "e" (cmd "Trouble lsp_workspace_diagnostics"       "Show diagnostics")
-       "t" [vim.lsp.buf.type_definition                   "Go to type-definition"] 
-       ;"t" [vim.lsp.buf.declaration                       "Go to declaration"] 
-       "g" [vim.lsp.buf.definition                        "Go to definition"] 
+       "t" (cmd "Trouble lsp_type_definitions"            "Go to type-definition") 
        "i" (cmd "Trouble lsp_implementations"             "Show implementation") 
+       "g" (cmd "Trouble lsp_definitions"                 "Go to definition") 
+       ;"g" [vim.lsp.buf.definition                        "Go to definition"] 
+       ;"t" [vim.lsp.buf.declaration                       "Go to declaration"] 
        "f" [format                                        "format file"]
        "," (cmd "RustRunnables"                           "Run rust stuff")}
 

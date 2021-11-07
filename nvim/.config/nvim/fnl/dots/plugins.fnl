@@ -32,6 +32,7 @@
 (use
   ; sort me pls
 
+  :github/copilot.vim {:opt true :cmd ["Copilot"]}
 
 
   ; sorted from here!
@@ -41,8 +42,8 @@
   :norcalli/nvim.lua {}
   :lifepillar/vim-gruvbox8 (cfg "dots.plugins.gruvbox8")
   :kyazdani42/nvim-web-devicons {}
-
   :folke/which-key.nvim {}
+
   :Famiu/feline.nvim (cfg "dots.plugins.feline")
   :akinsho/nvim-bufferline.lua (cfg "dots.plugins.bufferline")
 
@@ -117,11 +118,12 @@
   :ray-x/lsp_signature.nvim {:events [:BufEnter]}
   :weilbith/nvim-code-action-menu {}
   
-  :elkowar/trouble.nvim {:config #(require "dots.plugins.trouble")
-                         :cmd ["Trouble" "TroubleClose" "TroubleRefresh" "TroubleToggle"]}
+  ;:elkowar/trouble.nvim {:config #(require "dots.plugins.trouble")
+                         ;:cmd ["Trouble" "TroubleClose" "TroubleRefresh" "TroubleToggle"]
 
-  ;"/home/leon/coding/prs/trouble.nvim" {:opt false :config #(require "dots.plugins.trouble")
-                                        ;:cmd ["Trouble" "TroubleClose" "TroubleRefresh" "TroubleToggle"]}
+  "/home/leon/coding/prs/trouble.nvim" {:opt false :config #(require "dots.plugins.trouble")
+                                        :cmd ["Trouble" "TroubleClose" "TroubleRefresh" "TroubleToggle"]}
+
   ;:folke/lsp-trouble.nvim {:opt false :config #(require "dots.plugins.trouble")
                            ;:cmd ["Trouble" "TroubleClose" "TroubleRefresh" "TroubleToggle"]}
   
