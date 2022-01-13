@@ -34,6 +34,10 @@
 
   :github/copilot.vim {:opt true :cmd ["Copilot"]}
 
+  :lervag/vimtex (cfg "dots.plugins.vimtex" {:opt true :ft ["tex"]})
+  :brymer-meneses/grammar-guard.nvim {:opt false
+                                      :requires ["williamboman/nvim-lsp-installer"
+                                                 "neovim/nvim-lspconfig"]}
 
   ; sorted from here!
   :Olical/aniseed {:branch "develop"}

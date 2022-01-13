@@ -66,7 +66,7 @@
            :max 100 
            :onchange "pamixer --set-volume $(echo {} | sed 's/\\..*//g')"
            :value volume)
-    (eventbox :onscroll "notify-send test {}; if [ '{}' == 'up' ]; then pamixer -i 5; else pamixer -d 5; fi"
+    (eventbox :onscroll "if [ '{}' == 'up' ]; then pamixer -i 5; else pamixer -d 5; fi"
               :vexpand true
               :valign "fill"
       (box :orientation "v"

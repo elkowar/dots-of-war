@@ -146,7 +146,7 @@ myLayout = noBorders
   where
     -- | if the screen is wider than 1900px it's horizontal, so use horizontal layouts.
     -- if it's not, it's vertical, so use layouts for vertical screens.
-    layouts = PerScreen.ifWider 1900 
+    layouts = PerScreen.ifWider 1900
       (PerScreen.ifWider 3000 chonkyScreenLayouts (MTog.mkToggle1 ONLYONTOPHALF horizScreenLayouts))
       vertScreenLayouts
 
@@ -215,9 +215,9 @@ rectangleCenterPiece ratio (Rectangle rx ry rw rh) = Rectangle start ry width rh
 
 data ONLYONTOPHALF = ONLYONTOPHALF deriving (Read, Show, Eq, Typeable)
 instance MTog.Transformer ONLYONTOPHALF Window where
-    transform ONLYONTOPHALF layout k = k (onlyOnTopHalf 0.62 layout) (const layout) 
+    transform ONLYONTOPHALF layout k = k (onlyOnTopHalf 0.62 layout) (const layout)
 
-newtype OnlyOnTopHalf a = OnlyOnTopHalf Double deriving (Show, Read) 
+newtype OnlyOnTopHalf a = OnlyOnTopHalf Double deriving (Show, Read)
 instance LayoutModifier OnlyOnTopHalf Window where
   pureModifier (OnlyOnTopHalf ratio) _screenRect _ wins = (fmap (second (rectangleTopHalf ratio)) wins, Nothing)
 
@@ -559,6 +559,31 @@ main = do
 
 
 -- }}}
+
+
+
+
+-- | for a list of queries, finds the first one that
+-- matches the currently focused window and executes that X action, 
+-- or a fallback if no window is active.
+perQueryAction :: X () -> [(Query Bool, X ())] -> X ()
+perQueryAction fallback options = withWindowSet $ \ws -> case W.peek ws of
+  Nothing -> fallback
+  Just w  -> do
+    matching <- findM (\(q, _) -> runQuery q w) options
+    maybe fallback snd matching
+
+findM :: Monad m => (a -> m Bool) -> [a] -> m (Maybe a)
+findM _ [] = pure Nothing
+findM f (x:xs) =  do b <- f x; if b then pure $ Just x else findM f xs
+
+fooElseBar :: X ()
+fooElseBar = perQueryAction 
+  (spawn "notify-send no window") 
+  [ ((className =? "Alacritty"),     spawn "notify-send kek hehe")
+  , ((className =? "Google-chrome"), spawn "notify-send chrome user")
+  ]
+
 
 
 myActivateManageHook :: ManageHook

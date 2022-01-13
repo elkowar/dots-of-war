@@ -22,6 +22,11 @@
 (utils.keymap :n :MN "<cmd>lua require('nvim-gehzu').show_definition()<CR>" {})
 
 
+; Fix keybinds in linewrapped mode
+;(utils.keymap [:n] :j "gj")
+;(utils.keymap [:n] :k "gk")
+
+
 (fn cmd [s desc] [(.. "<cmd>" s "<cr>") desc])
 (fn sel-cmd [s desc] [(.. "<cmd>'<,'>" s "<cr>") desc])
 (fn rebind [s desc] [s desc])
@@ -60,6 +65,7 @@
             "i" [#(req dap.step_into)       "into"]}}
 
   "m" {:name "+Code actions"
+       ";" [#(set vim.o.spell (not vim.o.spell))          "Toggle spell checking"]
        "d" [vim.lsp.buf.hover                             "Show documentation"] 
        "x" (cmd "Lspsaga preview_definition"              "Preview definition") 
        "o" (cmd "SymbolsOutline"                          "Outline") 
@@ -94,7 +100,8 @@
        "n" (cmd "set relativenumber!"             "toggle relative numbers") 
        "m" (cmd "set nonumber! norelativenumber"  "toggle numbers") 
        "g" (cmd "ZenMode"                         "toggle zen mode") 
-       "i" (cmd "IndentGuidesToggle"              "toggle indent guides")}
+       "i" (cmd "IndentGuidesToggle"              "toggle indent guides")
+       "w" (cmd "set wrap! linebreak!"            "toggle linewrapping")}
 
   "b" {:name "+buffers"
        "b" (cmd "Buffers"   "select open buffer")

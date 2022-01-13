@@ -19,13 +19,13 @@
 
 
 (fn on_attach [client bufnr]
-  (pkg lsp_signature.nvim [lsp_signature (require "lsp_signature")]
-       (lsp_signature.on_attach {:bind true
-                                 :hint_scheme "String" 
-                                 :hint_prefix "ƒ "
-                                 :handler_opts {:border "single"}
-                                 :use_lspsaga false
-                                 :decorator ["`" "`"]}))
+  ;(pkg lsp_signature.nvim [lsp_signature (require "lsp_signature")]
+       ;(lsp_signature.on_attach {:bind true
+                                 ;:hint_scheme "String" 
+                                 ;:hint_prefix "ƒ "
+                                 ;:handler_opts {:border "single"}
+                                 ;:use_lspsaga false
+                                 ;:decorator ["`" "`"]}))
 
   ;(req dots.utils.highlight :LspDiagnosticsUnderlineError {:gui "underline"})
   (if client.resolved_capabilities.document_highlight
@@ -71,6 +71,7 @@
 (init-lsp :html)
 (init-lsp :svelte)
 (init-lsp :elmls)
+(init-lsp :texlab)
 
 (init-lsp :powershell_es {:bundle_path "/home/leon/powershell"})
          
@@ -83,15 +84,12 @@
 ;(init-lsp :ccls)
 
 
-(let [ewwls-path "/home/leon/coding/projects/ls-eww/crates/ewwls/target/debug/ewwls"]
-  (when (vim.fn.filereadable ewwls-path)
-    (when (not lsp.ewwls)
-      (set lsp-configs.ewwls
-        {:default_config {:cmd [ewwls-path]
-                          :filetypes ["yuck"]
-                          :root_dir (fn [fname] (or (lsp.util.find_git_ancestor fname) (vim.loop.os_homedir)))
-                          :settings {}}}))
-    (init-lsp :ewwls)))
+
+((. (require "grammar-guard") :init))
+(init-lsp :grammar_guard {:cmd "~/.local/share/nvim/lsp_servers/ltex/ltex-ls/bin/ltex-ls"
+                          :settings {:ltex {:language "de"
+                                            :enabled ["latex" "tex"]}}})
+
 
                                               
 (init-lsp :cssls {:filestypes ["css" "scss" "less" "stylus"]
@@ -130,14 +128,29 @@
                                             (vim.fn.expand "$VIMRUNTIME/lua/vim/lsp") true}}
                       :telemetry false}}}))
 
-(when (not lsp.prolog_lsp)
-  (tset lsp-configs :prolog_lsp
-       {:default_config {:cmd ["swipl" "-g" "use_module(library(lsp_server))." "-g" "lsp_server:main" "-t" "halt" "--" "stdio"]
-                         :filetypes ["prolog"]
-                         :root_dir (fn [fname] (or (lsp.util.find_git_ancestor fname) (vim.loop.os_homedir)))
-                         :settings {}}}))
 
-(lsp.prolog_lsp.setup {})
+
+(comment
+  (when (not lsp.prolog_lsp)
+    (tset lsp-configs :prolog_lsp
+         {:default_config {:cmd ["swipl" "-g" "use_module(library(lsp_server))." "-g" "lsp_server:main" "-t" "halt" "--" "stdio"]
+                           :filetypes ["prolog"]
+                           :root_dir (fn [fname] (or (lsp.util.find_git_ancestor fname) (vim.loop.os_homedir)))
+                           :settings {}}}))
+
+  (lsp.prolog_lsp.setup {}))
+
+
+(comment
+  (let [ewwls-path "/home/leon/coding/projects/ls-eww/crates/ewwls/target/debug/ewwls"]
+    (when (vim.fn.filereadable ewwls-path)
+      (when (not lsp.ewwls)
+        (set lsp-configs.ewwls
+          {:default_config {:cmd [ewwls-path]
+                            :filetypes ["yuck"]
+                            :root_dir (fn [fname] (or (lsp.util.find_git_ancestor fname) (vim.loop.os_homedir)))
+                            :settings {}}}))
+      (init-lsp :ewwls))))
 
 
 
