@@ -34,7 +34,6 @@ in
 
 
       sxhkd
-      okular
 
     ];
 

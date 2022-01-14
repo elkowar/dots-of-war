@@ -20,8 +20,8 @@
    :mapping {:<C-d> (cmp.mapping.scroll_docs -4)
              :<C-f> (cmp.mapping.scroll_docs 4)
              :<C-space> (cmp.mapping.complete)
-             :<esc> #(do (cmp.mapping.close) (vim.cmd "stopinsert"))}
-             ;:<CR>  (cmp.mapping.confirm {:select true})}
+             :<esc> #(do (cmp.mapping.close) (vim.cmd "stopinsert"))
+             :<CR>  (cmp.mapping.confirm {:select true})}
 
    :experimental {:custom_menu true}
 
@@ -47,4 +47,6 @@
                            cmp.config.compare.length
                            cmp.config.compare.order]}})
                            
+(cmp.setup.cmdline "/" {:sources [{:name :buffer}]})
+
 

@@ -83,6 +83,7 @@
 (vim.cmd "autocmd! TextYankPost * silent! lua vim.highlight.on_yank {higroup=\"IncSearch\", timeout=300}")
 
 
+(set vim.g.copilot_filetypes {:TelescopePrompt false}) 
 
 
 ; foldend
@@ -125,6 +126,7 @@
 
 (vim.cmd "highlight link Function GruvboxGreen")
 (utils.highlight-add :Function {:gui "NONE"})
+
 
 
 

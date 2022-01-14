@@ -591,7 +591,11 @@ myActivateManageHook = pure mempty
 
 mySwallowEventHook = WindowSwallowing.swallowEventHook
   (className =? "Alacritty" <||> className =? "Termite" <||> className =? "NOPE Thunar")
-  ((not <$> (className =* "eww" <||> className =? "Dragon" <||> className =? "noswallow")) <||> className =? "re") -- remove that last part
+  (not <$> foldl1 (<||>) [ className =* "eww"
+                         , className =? "Dragon"
+                         , className =? "okular"
+                         , className =? "noswallow"
+                         ])
 
 
 (=*) :: Query String  -> String -> Query Bool

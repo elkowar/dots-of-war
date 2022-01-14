@@ -34,7 +34,10 @@
 
   :github/copilot.vim {:opt true :cmd ["Copilot"]}
 
-  :lervag/vimtex (cfg "dots.plugins.vimtex" {:opt true :ft ["tex"]})
+  :lervag/vimtex {:opt false 
+                  :cmd ["VimtexInverseSearch"]
+                  :setup #(require :dots.plugins.vimtex)}
+
   :brymer-meneses/grammar-guard.nvim {:opt false
                                       :requires ["williamboman/nvim-lsp-installer"
                                                  "neovim/nvim-lspconfig"]}
@@ -125,11 +128,8 @@
   ;:elkowar/trouble.nvim {:config #(require "dots.plugins.trouble")
                          ;:cmd ["Trouble" "TroubleClose" "TroubleRefresh" "TroubleToggle"]
 
-  "/home/leon/coding/prs/trouble.nvim" {:opt false :config #(require "dots.plugins.trouble")
-                                        :cmd ["Trouble" "TroubleClose" "TroubleRefresh" "TroubleToggle"]}
-
-  ;:folke/lsp-trouble.nvim {:opt false :config #(require "dots.plugins.trouble")
-                           ;:cmd ["Trouble" "TroubleClose" "TroubleRefresh" "TroubleToggle"]}
+  :folke/lsp-trouble.nvim {:opt false :config #(require "dots.plugins.trouble")
+                           :cmd ["Trouble" "TroubleClose" "TroubleRefresh" "TroubleToggle"]}
   
   :simrat39/symbols-outline.nvim {:opt false :config #(require "dots.plugins.symbols-outline")}
   
@@ -148,6 +148,8 @@
 
   ; cmp <<<
   :hrsh7th/vim-vsnip {}
+  :hrsh7th/vim-vsnip-integ {}
+  :rafamadriz/friendly-snippets {}
 
   :hrsh7th/cmp-vsnip {}
   :hrsh7th/cmp-nvim-lsp {}
