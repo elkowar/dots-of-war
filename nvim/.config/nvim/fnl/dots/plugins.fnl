@@ -35,7 +35,6 @@
   :github/copilot.vim {:opt true :cmd ["Copilot"]}
 
   :lervag/vimtex {:opt false 
-                  :cmd ["VimtexInverseSearch"]
                   :setup #(require :dots.plugins.vimtex)}
 
   :brymer-meneses/grammar-guard.nvim {:opt false

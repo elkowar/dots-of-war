@@ -1,5 +1,8 @@
 (module dots.plugins.vimtex)
 
+
+;(set vim.g.vimtex_quickfix_enabled 0)
+
 (set vim.g.vimtex_view_method "general")
 (set vim.g.vimtex_view_general_viewer "okular")
 (set vim.g.vimtex_view_general_options "--unique file:@pdf#src:@line@tex")
