@@ -90,7 +90,6 @@
                           :settings {:ltex {:language "de"
                                             :enabled ["latex" "tex"]}}})
 
-
                                               
 (init-lsp :cssls {:filestypes ["css" "scss" "less" "stylus"]
                   :root_dir (lsp.util.root_pattern ["package.json" ".git"])
@@ -128,8 +127,6 @@
                                             (vim.fn.expand "$VIMRUNTIME/lua/vim/lsp") true}}
                       :telemetry false}}}))
 
-
-
 (comment
   (when (not lsp.prolog_lsp)
     (tset lsp-configs :prolog_lsp
@@ -151,7 +148,6 @@
                             :root_dir (fn [fname] (or (lsp.util.find_git_ancestor fname) (vim.loop.os_homedir)))
                             :settings {}}}))
       (init-lsp :ewwls))))
-
 
 
 ; Idris2 ----------------------------------------------------------- <<<<<
