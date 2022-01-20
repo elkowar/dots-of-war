@@ -27,6 +27,7 @@
 
    :sources [{:name "nvim_lsp" :priority 5}
              {:name "vsnip" :priority 3}
+             {:name "omni"}
              {:name "nvim_lua"}
              {:name "calc"}
              {:name "path"}

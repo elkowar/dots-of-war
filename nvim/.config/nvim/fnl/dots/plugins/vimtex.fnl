@@ -4,8 +4,26 @@
 ;(set vim.g.vimtex_quickfix_enabled 0)
 
 (set vim.g.vimtex_view_method "general")
-(set vim.g.vimtex_view_general_viewer "okular")
-(set vim.g.vimtex_view_general_options "--unique file:@pdf#src:@line@tex")
+;(set vim.g.vimtex_view_general_viewer "okular")
+(set vim.g.vimtex_view_general_viewer "zathura")
+;(set vim.g.vimtex_view_general_options "--unique file:@pdf#src:@line@tex")
+(set vim.g.vimtex_quickfix_method "pplatex")
+(set vim.g.vimtex_quickfix_mode 2)
+(set vim.g.vimtex_quickfix_open_on_warning 0)
+
+(set vim.g.vimtex_compiler_latexmk {:build_dir ""
+                                    :callback 1
+                                    :continuous 1
+                                    :executable "latexmk"
+                                    :hooks []
+                                    :options ["-verbose"
+                                              "-file-line-error"
+                                              "-synctex=1"
+                                              "-interaction=nonstopmode"
+                                              "-shell-escape"]})
+
+(set vim.g.vimtex_syntax_custom_cmds
+     [{:name "scripture" :argstyle "ital"}])
 
 (set vim.g.vimtex_syntax_conceal {:accents 1
                                   :cites 1

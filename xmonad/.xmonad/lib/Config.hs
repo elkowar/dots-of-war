@@ -594,6 +594,7 @@ mySwallowEventHook = WindowSwallowing.swallowEventHook
   (not <$> foldl1 (<||>) [ className =* "eww"
                          , className =? "Dragon"
                          , className =? "okular"
+                         , className =? "Zathura"
                          , className =? "noswallow"
                          ])
 

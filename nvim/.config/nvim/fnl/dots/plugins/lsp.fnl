@@ -8,6 +8,8 @@
 
    require-macros [macros]})
 
+(require dots.plugins.ltex-ls)
+
 ; TODO check https://github.com/neovim/nvim-lspconfig/blob/master/ADVANCED_README.md for default config for all of them
 
 (tset vim.lsp.handlers :textDocument/publishDiagnostics
@@ -60,7 +62,7 @@
     ((. lsp lsp-name :setup) merged-opts)))
 
 (init-lsp :jsonls   {:commands {:Format [ #(vim.lsp.buf.range_formatting [] [0 0] [(vim.fn.line "$") 0])]}})
-(init-lsp :denols   {:root_dir (better_root_pattern [".git"] ["package.json"])})
+;(init-lsp :denols   {:root_dir (better_root_pattern [".git"] ["package.json"])})
 (init-lsp :hls      {:settings {:languageServerHaskell {:formattingProvider "stylish-haskell"}}})
 (init-lsp :ocamllsp)
 (init-lsp :vimls)
@@ -72,6 +74,11 @@
 (init-lsp :svelte)
 (init-lsp :elmls)
 (init-lsp :texlab)
+;(init-lsp :ltex {:settings {:ltex {:dictionary           {:de-DE [":~/.config/ltex-ls/dictionary.txt"]}
+                                   ;:disabledRules        {:de-DE [":~/.config/ltex-ls/disabledRules.txt"]}
+                                   ;:hiddenFalsePositives {:de-DE [":~/.config/ltex-ls/hiddenFalsePositives.txt"]}
+                                   ;:additionalRules {:motherTongue "de-DE"}}}})
+
 
 (init-lsp :powershell_es {:bundle_path "/home/leon/powershell"})
          
@@ -85,10 +92,10 @@
 
 
 
-((. (require "grammar-guard") :init))
-(init-lsp :grammar_guard {:cmd "~/.local/share/nvim/lsp_servers/ltex/ltex-ls/bin/ltex-ls"
-                          :settings {:ltex {:language "de"
-                                            :enabled ["latex" "tex"]}}})
+;((. (require "grammar-guard") :init))
+;(init-lsp :grammar_guard {:cmd "~/.local/share/nvim/lsp_servers/ltex/ltex-ls/bin/ltex-ls"
+                          ;:settings {:ltex {:enabled ["latex" "tex"]
+                                            ;:additionalRules {:motherTongue "de-DE"}}}})
 
 
                                               
