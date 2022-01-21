@@ -8,9 +8,23 @@
              cmp_nvim_lsp cmp_nvim_lsp}})
 
 
-(local Dictionary-file      {:de-DE [(.. (vim.fn.getenv "HOME") "/.config/ltex-ls/dictionary.txt")]})
-(local Disabled-rules-file  {:de-DE [(.. (vim.fn.getenv "HOME") "/.config/ltex-ls/disable.txt")]})
-(local False-positives-file {:de-DE [(.. (vim.fn.getenv "HOME") "/.config/ltex-ls/false.txt")]})
+(def latex-command-settings
+  {:dummy ["\\texttt{}"]})
+  
+
+
+(def Dictionary-file      {:de-DE [(.. (vim.fn.getenv "HOME") "/.config/ltex-ls/dictionary.txt")]})
+(def Disabled-rules-file  {:de-DE [(.. (vim.fn.getenv "HOME") "/.config/ltex-ls/disable.txt")]})
+(def False-positives-file {:de-DE [(.. (vim.fn.getenv "HOME") "/.config/ltex-ls/false.txt")]})
+
+
+(def latex-command-settings-formatted
+  (let [tbl {}]
+    (each [option commands (pairs latex-command-settings)]
+      (each [_ command (ipairs commands)]
+        (tset tbl command option))))
+  (tbl))
+
 
 (fn read-files [files]
   (let [dict {}]
@@ -87,55 +101,58 @@
         (lua "return nil")))
     (add-to-file filetype lang file value)))
 
-(set configs.ltex
-     {:default_config {:cmd [:ltex-ls]
-                       :filetypes [:tex :bib :md]
-                       :root_dir (fn [filename] (lsputil.path.dirname filename))
-                       :settings {:ltex {:enabled [:latex :tex :bib :md]
-                                         :language "de-DE"
-                                         :checkFrequency "save"
-                                         :diagnosticSeverity "information"
-                                         :setenceCacheSize 5000
-                                         :additionalRules {:enablePickyRules true
-                                                           :motherTongue "de-DE"}
-                                         :dictionary           {:de-DE (read-files (. Dictionary-file :de-DE))}
-                                         :disabledRules        {:de-DE (read-files (. Disabled-rules-file :de-DE))}
-                                         :hiddenFalsePositives {:de-DE (read-files (. False-positives-file :de-DE))}}}}})
 
-(lsp.ltex.setup {:settings {:ltex {:enabled [:latex :tex :bib :md]
-                                   :language "de-DE"
-                                   :checkFrequency "save"
-                                   :diagnosticSeverity "information"
-                                   :setenceCacheSize 5000
-                                   :additionalRules {:enablePickyRules true
-                                                     :motherTongue "de-DE"}
-                                   :dictionary           {:de-DE (read-files (. Dictionary-file :de-DE))}
-                                   :disabledRules        {:de-DE (read-files (. Disabled-rules-file :de-DE))}
-                                   :hiddenFalsePositives {:de-DE (read-files (. False-positives-file :de-DE))}}}})
-                 
-(set lsp.ltex.dictionary_file Dictionary-file)
-(set lsp.ltex.disabledrules_file Disabled-rules-file)
-(set lsp.ltex.falsepostivies_file False-positives-file)
-(local orig-execute-command vim.lsp.buf.execute_command)
+(defn init []
+  (set configs.ltex
+       {:default_config {:cmd [:ltex-ls]
+                         :filetypes [:tex :bib :md]
+                         :root_dir (fn [filename] (lsputil.path.dirname filename))
+                         :settings {:ltex {:enabled [:latex :tex :bib :md]
+                                           :language "de-DE"
+                                           :checkFrequency "save"
+                                           :diagnosticSeverity "information"
+                                           :setenceCacheSize 5000
+                                           :additionalRules {:enablePickyRules true
+                                                             :motherTongue "de-DE"}
+                                           :dictionary           {:de-DE (read-files (. Dictionary-file :de-DE))}
+                                           :disabledRules        {:de-DE (read-files (. Disabled-rules-file :de-DE))}
+                                           :hiddenFalsePositives {:de-DE (read-files (. False-positives-file :de-DE))}
+                                           :latex {:commands latex-command-settings-formatted}}}}})
 
-(set vim.lsp.buf.execute_command
-     (fn [command]
-       (if (= command.command :_ltex.addToDictionary)
-           (let [arg (. (. command.arguments 1) :words)]
-             (each [lang words (pairs arg)]
-               (each [_ word (ipairs words)]
-                 (local filetype :dictionary)
-                 (add-to filetype lang (find-ltex-files filetype lang) word))))
-           (= command.command :_ltex.disableRules)
-           (let [arg (. (. command.arguments 1) :ruleIds)]
-             (each [lang rules (pairs arg)]
-               (each [_ rule (ipairs rules)]
-                 (local filetype :disable)
-                 (add-to filetype lang (find-ltex-files filetype lang) rule))))
-           (= command.command :_ltex.hideFalsePositives)
-           (let [arg (. (. command.arguments 1) :falsePositives)]
-             (each [lang rules (pairs arg)]
-               (each [_ rule (ipairs rules)]
-                 (local filetype :falsePositive)
-                 (add-to filetype lang (find-ltex-files filetype lang) rule))))
-           (orig-execute-command command))))
+  (lsp.ltex.setup {:settings {:ltex {:enabled [:latex :tex :bib :md]
+                                     :language "de-DE"
+                                     :checkFrequency "save"
+                                     :diagnosticSeverity "information"
+                                     :setenceCacheSize 5000
+                                     :additionalRules {:enablePickyRules true
+                                                       :motherTongue "de-DE"}
+                                     :dictionary           {:de-DE (read-files (. Dictionary-file :de-DE))}
+                                     :disabledRules        {:de-DE (read-files (. Disabled-rules-file :de-DE))}
+                                     :hiddenFalsePositives {:de-DE (read-files (. False-positives-file :de-DE))}}}})
+                   
+  (set lsp.ltex.dictionary_file Dictionary-file)
+  (set lsp.ltex.disabledrules_file Disabled-rules-file)
+  (set lsp.ltex.falsepostivies_file False-positives-file)
+  (local orig-execute-command vim.lsp.buf.execute_command)
+
+  (set vim.lsp.buf.execute_command
+       (fn [command]
+         (if (= command.command :_ltex.addToDictionary)
+             (let [arg (. (. command.arguments 1) :words)]
+               (each [lang words (pairs arg)]
+                 (each [_ word (ipairs words)]
+                   (local filetype :dictionary)
+                   (add-to filetype lang (find-ltex-files filetype lang) word))))
+             (= command.command :_ltex.disableRules)
+             (let [arg (. (. command.arguments 1) :ruleIds)]
+               (each [lang rules (pairs arg)]
+                 (each [_ rule (ipairs rules)]
+                   (local filetype :disable)
+                   (add-to filetype lang (find-ltex-files filetype lang) rule))))
+             (= command.command :_ltex.hideFalsePositives)
+             (let [arg (. (. command.arguments 1) :falsePositives)]
+               (each [lang rules (pairs arg)]
+                 (each [_ rule (ipairs rules)]
+                   (local filetype :falsePositive)
+                   (add-to filetype lang (find-ltex-files filetype lang) rule))))
+             (orig-execute-command command)))))

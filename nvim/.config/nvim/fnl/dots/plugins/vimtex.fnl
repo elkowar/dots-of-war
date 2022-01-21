@@ -6,6 +6,7 @@
 (set vim.g.vimtex_view_method "general")
 ;(set vim.g.vimtex_view_general_viewer "okular")
 (set vim.g.vimtex_view_general_viewer "zathura")
+(set vim.g.vimtex_view_general_options "--synctex-forward @line:1:@tex @pdf")
 ;(set vim.g.vimtex_view_general_options "--unique file:@pdf#src:@line@tex")
 (set vim.g.vimtex_quickfix_method "pplatex")
 (set vim.g.vimtex_quickfix_mode 2)

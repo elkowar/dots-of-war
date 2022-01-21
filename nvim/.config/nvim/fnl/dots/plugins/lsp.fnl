@@ -4,11 +4,10 @@
              lsp lspconfig 
              lsp-configs lspconfig/configs
              utils dots.utils
+             ltex-ls dots.plugins.ltex-ls
              cmp_nvim_lsp cmp_nvim_lsp}
 
    require-macros [macros]})
-
-(require dots.plugins.ltex-ls)
 
 ; TODO check https://github.com/neovim/nvim-lspconfig/blob/master/ADVANCED_README.md for default config for all of them
 
@@ -81,6 +80,7 @@
 
 
 (init-lsp :powershell_es {:bundle_path "/home/leon/powershell"})
+(ltex-ls.init)
          
          
          
