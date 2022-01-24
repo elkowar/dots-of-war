@@ -62,6 +62,8 @@
                        (.. msg.title " " msg.message)))]
      (or-empty (str.join " | " s))))
 
+
+
 (defn lsp-diagnostic-component [kind color]
   {:enabled #(~= 0 (length (vim.diagnostic.get 0 {:severity kind})))
    :provider #(spaces (length (vim.diagnostic.get 0 {:severity kind})))

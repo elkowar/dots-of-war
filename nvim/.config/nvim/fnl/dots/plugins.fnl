@@ -33,6 +33,7 @@
   ; sort me pls
 
   :github/copilot.vim {:opt true :cmd ["Copilot"]}
+  :lervag/vimtex {:opt false}
 
   :lervag/vimtex {:opt false 
                   :setup #(require :dots.plugins.vimtex)}
