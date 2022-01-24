@@ -9,7 +9,7 @@
 
 
 (def latex-command-settings
-  {:dummy ["\\texttt{}"]})
+  {:dummy ["\\texttt{}" "\\scripture{}"]})
   
 
 
@@ -22,8 +22,8 @@
   (let [tbl {}]
     (each [option commands (pairs latex-command-settings)]
       (each [_ command (ipairs commands)]
-        (tset tbl command option))))
-  (tbl))
+        (tset tbl command option)))
+    tbl))
 
 
 (fn read-files [files]
@@ -106,18 +106,7 @@
   (set configs.ltex
        {:default_config {:cmd [:ltex-ls]
                          :filetypes [:tex :bib :md]
-                         :root_dir (fn [filename] (lsputil.path.dirname filename))
-                         :settings {:ltex {:enabled [:latex :tex :bib :md]
-                                           :language "de-DE"
-                                           :checkFrequency "save"
-                                           :diagnosticSeverity "information"
-                                           :setenceCacheSize 5000
-                                           :additionalRules {:enablePickyRules true
-                                                             :motherTongue "de-DE"}
-                                           :dictionary           {:de-DE (read-files (. Dictionary-file :de-DE))}
-                                           :disabledRules        {:de-DE (read-files (. Disabled-rules-file :de-DE))}
-                                           :hiddenFalsePositives {:de-DE (read-files (. False-positives-file :de-DE))}
-                                           :latex {:commands latex-command-settings-formatted}}}}})
+                         :root_dir (fn [filename] (lsputil.path.dirname filename))}})
 
   (lsp.ltex.setup {:settings {:ltex {:enabled [:latex :tex :bib :md]
                                      :language "de-DE"
@@ -128,7 +117,8 @@
                                                        :motherTongue "de-DE"}
                                      :dictionary           {:de-DE (read-files (. Dictionary-file :de-DE))}
                                      :disabledRules        {:de-DE (read-files (. Disabled-rules-file :de-DE))}
-                                     :hiddenFalsePositives {:de-DE (read-files (. False-positives-file :de-DE))}}}})
+                                     :hiddenFalsePositives {:de-DE (read-files (. False-positives-file :de-DE))}
+                                     :latex {:commands latex-command-settings-formatted}}}})
                    
   (set lsp.ltex.dictionary_file Dictionary-file)
   (set lsp.ltex.disabledrules_file Disabled-rules-file)

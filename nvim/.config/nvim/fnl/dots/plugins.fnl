@@ -140,7 +140,7 @@
 
   :tami5/lspsaga.nvim {:after "vim-gruvbox8"
                        :opt false 
-                       :commit "373bc031b39730cbfe492533c3acfac36007899a"
+                       :branch "nvim6.0"
                        :config #(require "dots.plugins.lspsaga")}
 
   ; >>>
