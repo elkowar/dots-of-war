@@ -151,7 +151,7 @@
   :rafamadriz/friendly-snippets {}
 
   :hrsh7th/cmp-omni {}
-  :hrsh7th/cmp-vsnip {}
+  ;:hrsh7th/cmp-vsnip {}
   :hrsh7th/cmp-nvim-lsp {}
   :hrsh7th/cmp-buffer {}
   :hrsh7th/cmp-path {}
@@ -159,6 +159,7 @@
   :hrsh7th/cmp-calc {}
   
   :hrsh7th/nvim-cmp {:opt false 
+                     :commit "4c0a6512a0f8a235213959badf70031b9fa0220a"
                      :requires [:hrsh7th/cmp-nvim-lsp 
                                 :hrsh7th/cmp-buffer
                                 :hrsh7th/cmp-vsnip

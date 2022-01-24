@@ -27,7 +27,7 @@
 
    :sources [{:name "nvim_lsp" :priority 5}
              {:name "vsnip" :priority 3}
-             {:name "omni"}
+             ; {:name "omni"} ; this prints the completion thing, for some reason,....
              {:name "nvim_lua"}
              {:name "calc"}
              {:name "path"}
