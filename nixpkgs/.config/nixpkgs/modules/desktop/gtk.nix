@@ -31,6 +31,7 @@ in
         gtk-button-images = 1;
         #ctk-cursor-theme-name = "capitaine-cursors-light";
         gtk-cursor-theme-size = 0;
+        gtk-cursor-theme-name="phinger-cursors-light";
       };
 
       gtk3.extraCss = ''

@@ -9,7 +9,8 @@
 
 
 (def latex-command-settings
-  {:dummy ["\\texttt{}" "\\scripture{}"]})
+  {:dummy ["\\texttt{}" "\\scripture{}" "\\todo{}" "\\lstref{}" "\\personaltextcite{}" "\\personalparencite{}"]
+   :ignore ["\\urlfootnote{}"]})
   
 
 

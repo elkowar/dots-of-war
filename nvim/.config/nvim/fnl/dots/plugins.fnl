@@ -32,6 +32,11 @@
 (use
   ; sort me pls
 
+  ;:vimwiki/vimwiki {:opt false
+                    ;:config #(set vim.g.vimwiki_list [{:path "~/obsidian-stuff/obsidian-vault"
+                                                       ;:syntax "markdown"
+                                                       ;:ext "md"}])}
+
   :github/copilot.vim {:opt true :cmd ["Copilot"]}
 
   :lervag/vimtex {:opt false 

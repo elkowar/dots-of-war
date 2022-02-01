@@ -9,7 +9,7 @@ in
 
   config = lib.mkIf cfg.enable {
     programs.alacritty = {
-      enable = true;
+      enable = false;
 
       settings = {
         live_config_reload = true;

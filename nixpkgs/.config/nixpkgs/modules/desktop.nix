@@ -101,7 +101,7 @@ in
 
     xresources.properties = with config.elkowar.desktop.colors; {
       "Xcursor.size" = "16";
-      "Xcursor.theme" = "capitaine-cursors-light";
+      #"Xcursor.theme" = "capitaine-cursors-light";
       "Xft.autohint" = "0";
       "Xft.antialias" = "1";
       "Xft.hinting" = "true";

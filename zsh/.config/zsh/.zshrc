@@ -111,3 +111,6 @@ alias ls="exa --icons"
 # load prompt
 source "$ZDOTDIR/prompt.zsh"
 
+if command -v direnv >/dev/null; then
+    eval "$(direnv hook zsh)"
+fi
