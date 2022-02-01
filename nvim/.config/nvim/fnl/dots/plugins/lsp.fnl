@@ -15,7 +15,8 @@
   (vim.lsp.with vim.lsp.diagnostic.on_publish_diagnostics 
                 {:update_in_insert false
                  :virtual_text {:prefix "◆"}
-                 :signs false}))
+                 :signs false
+                 :severity_sort true}))
 
 
 
@@ -86,16 +87,8 @@
          
          
 
-;(init-lsp :powershell_es {})
 (init-lsp :clangd)
-;(init-lsp :ccls)
 
-
-
-;((. (require "grammar-guard") :init))
-;(init-lsp :grammar_guard {:cmd "~/.local/share/nvim/lsp_servers/ltex/ltex-ls/bin/ltex-ls"
-                         ;:settings {:ltex {:enabled ["latex" "tex"]
-                                           ;:additionalRules {:motherTongue "de-DE"}}}})
 
                                               
 (init-lsp :cssls {:filestypes ["css" "scss" "less" "stylus"]

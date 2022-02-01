@@ -73,7 +73,7 @@
 
 (defn coordinates []
   (let [[line col] (vim.api.nvim_win_get_cursor 0)]
-    (.. " #" line " ")))
+    (.. " " line " ")))
 
 
 ; Fills the bar with an horizontal line
@@ -86,7 +86,7 @@
 
 (tset components.active 1
   [{:provider vim-mode :hl #(vim-mode-hl false)} 
-   {:provider get-current-filepath :left_sep " "}
+   {:provider get-current-filepath :left_sep " " :hl {:fg colors.light4}}
    {:provider git-status-provider :left_sep " " :hl #(vim-mode-hl true)}]) 
 
 (tset components.active 2

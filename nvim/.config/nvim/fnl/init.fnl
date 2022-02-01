@@ -1,4 +1,3 @@
-
 (module init 
   {autoload {utils dots.utils
              nvim aniseed.nvim
@@ -22,11 +21,9 @@
 (make-errors-epic (require "dots.plugins.lsp"))
 (make-errors-epic (require "dots.keybinds"))
 
-
-;(set vim.opt.runtimepath (.. vim.o.runtimepath ",/home/leon/coding/projects/kbd-vim"))
-
-; TODO
-;(make-errors-epic (require "smart-compe-conjure"))
+; add to runtimepath
+(let [added-paths []]
+  (set vim.opt.runtimepath (.. vim.o.runtimepath (str.join "," added-paths))))
 
 ; Basic setup --------------------------------------- foldstart
 
@@ -98,31 +95,40 @@
 (utils.highlight :EndOfBuffer {:bg "NONE" :fg colors.dark0})
 (utils.highlight :LineNr {:bg "NONE"})
 
-(utils.highlight-add :Pmenu {:bg colors.dark0_hard})
-(utils.highlight-add :PmenuSel {:bg colors.bright_aqua})
-(utils.highlight-add :PmenuSbar {:bg colors.dark0_hard})
-(utils.highlight-add :PmenuThumb {:bg colors.dark1})
-(utils.highlight-add :NormalFloat {:bg colors.dark0_hard})
-(utils.highlight-add :SignColumn {:bg colors.dark0})
+(utils.highlight-add :Pmenu          {:bg colors.dark0_hard})
+(utils.highlight-add :PmenuSel       {:bg colors.bright_aqua})
+(utils.highlight-add :PmenuSbar      {:bg colors.dark0_hard})
+(utils.highlight-add :PmenuThumb     {:bg colors.dark1})
+(utils.highlight-add :NormalFloat    {:bg colors.dark0_hard})
+(utils.highlight-add :SignColumn     {:bg colors.dark0})
 
-(utils.highlight-add :FloatBorder {:bg colors.dark0_hard})
+(utils.highlight-add :FloatBorder    {:bg colors.dark0_hard})
 (utils.highlight-add :SpecialComment {:fg colors.dark4})
 
 (utils.highlight-add 
   [:LspDiagnosticsSignError :LspDiagnosticsSignWarning :LspDiagnosticsSignInformation :LspDiagnosticsSignHint] 
   {:bg "NONE"})
 
-(utils.highlight-add :LspDiagnosticsDefaultError {:bg "#342828"})
-(utils.highlight-add :LspDiagnosticsDefaultWarning {:bg "#473027"})
-(utils.highlight-add :LspDiagnosticsDefaultWarning {:bg "#3b2c28"})
-(utils.highlight-add :LspDiagnosticsDefaultInformation {:bg "#272d2f"})
+(utils.highlight-add :DiagnosticError       {:fg colors.bright_red})
+(utils.highlight-add :DiagnosticWarning     {:fg colors.bright_orange})
+(utils.highlight-add :DiagnosticInformation {:fg colors.bright_aqua})
+(utils.highlight-add :DiagnosticHint        {:fg colors.bright_yellow}) 
 
-(utils.highlight-add :LspDiagnosticsDefaultHint {:bg "#272d2f"}) 
+(utils.highlight-add :DiagnosticVirtualTextError       {:bg "#342828" :fg colors.bright_red})
+(utils.highlight-add :DiagnosticVirtualTextWarning     {:bg "#473027" :fg colors.bright_orange})
+(utils.highlight-add :DiagnosticVirtualTextWarning     {:bg "#3b2c28" :fg colors.bright_orange})
+(utils.highlight-add :DiagnosticVirtualTextInformation {:bg "#272d2f" :fg colors.bright_aqua})
+(utils.highlight-add :DiagnosticVirtualTextHint        {:bg "#272d2f" :fg colors.bright_yellow}) 
 
-(utils.highlight :LspDiagnosticsUnderlineError {:gui "undercurl"})
+(utils.highlight :LspDiagnosticsUnderlineError         {:gui "undercurl"})
+
+(vim.fn.sign_define :LspDiagnosticsSignError {:text "◆"})
+(vim.fn.sign_define :LspDiagnosticsSignWarning {:text "◆"})
+(vim.fn.sign_define :LspDiagnosticsSignHint {:text "◆"})
+(vim.fn.sign_define :LspDiagnosticsSignInformation {:text "◆"})
 
 
-(utils.highlight ["StatusLine" "GalaxyLineInfo" "GalaxySpace" ] {:bg colors.dark1 :fg colors.light0})
+(utils.highlight :StatusLine {:bg colors.dark1 :fg colors.light0})
 
 (vim.cmd "highlight link Function GruvboxGreen")
 (utils.highlight-add :Function {:gui "NONE"})
@@ -130,10 +136,6 @@
 
 
 
-(vim.fn.sign_define :LspDiagnosticsSignError {:text "◆"})
-(vim.fn.sign_define :LspDiagnosticsSignWarning {:text "◆"})
-(vim.fn.sign_define :LspDiagnosticsSignHint {:text "◆"})
-(vim.fn.sign_define :LspDiagnosticsSignInformation {:text "◆"})
 
 
 

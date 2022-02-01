@@ -37,15 +37,6 @@
                                                        ;:syntax "markdown"
                                                        ;:ext "md"}])}
 
-  :github/copilot.vim {:opt true :cmd ["Copilot"]}
-
-  :lervag/vimtex {:opt false 
-                  :setup #(require :dots.plugins.vimtex)}
-
-  :brymer-meneses/grammar-guard.nvim {:opt false
-                                      :requires ["williamboman/nvim-lsp-installer"
-                                                 "neovim/nvim-lspconfig"]}
-
   ; sorted from here!
   :Olical/aniseed {:branch "develop"}
   :lewis6991/impatient.nvim {}
@@ -100,10 +91,7 @@
   :rcarriga/nvim-dap-ui {:opt false 
                          :config #((. (require :dapui) :setup))
                          :requires [:mfussenegger/nvim-dap]}
-
-  
-  :mfussenegger/nvim-dap {:opt false :config #(require "dots.plugins.nvim-dap")}
-  
+  :mfussenegger/nvim-dap {:opt false}
   :nvim-telescope/telescope-dap.nvim {:requires [:mfussenegger/nvim-dap
                                                  :nvim-telescope/telescope.nvim]}
 
@@ -176,6 +164,8 @@
   ; >>>
 
   ; code-related ----------------------------------------- <<<
+  :github/copilot.vim {:opt true :cmd ["Copilot"]}
+
   :tpope/vim-sleuth {}
   :editorconfig/editorconfig-vim {}
   :pechorin/any-jump.vim {}
@@ -184,7 +174,7 @@
   :Olical/conjure {:ft ["fennel"]}
   :eraserhd/parinfer-rust {:run "cargo build --release"}
 
-
+  :lervag/vimtex {:opt false :setup #(require :dots.plugins.vimtex)}
   :kmonad/kmonad-vim {}
   :elkowar/yuck.vim {:ft ["yuck"]}
   :cespare/vim-toml {:ft ["toml"]}
