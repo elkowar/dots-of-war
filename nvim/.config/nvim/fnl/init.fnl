@@ -5,7 +5,7 @@
              str aniseed.string
              colors dots.colors}
    require-macros [macros]})
-
+(utils.clear-deferred)
 
 (macro make-errors-epic [f]
   `(xpcall #,f #(let [fennel# (require :aniseed.fennel)]
@@ -200,6 +200,9 @@
 
 (vim.cmd
   "command! -nargs=1 L :lua print(vim.inspect(<args>))")
+
+
+(utils.run-deferred)
 
 ; vim:foldmarker=foldstart,foldend
 

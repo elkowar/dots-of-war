@@ -117,19 +117,12 @@
   :ray-x/lsp_signature.nvim {:events [:BufEnter]}
   :weilbith/nvim-code-action-menu {}
   
-  ;:elkowar/trouble.nvim {:config #(require "dots.plugins.trouble")
-                         ;:cmd ["Trouble" "TroubleClose" "TroubleRefresh" "TroubleToggle"]
-
   :folke/lsp-trouble.nvim {:opt false :config #(require "dots.plugins.trouble")
                            :cmd ["Trouble" "TroubleClose" "TroubleRefresh" "TroubleToggle"]}
   
   :simrat39/symbols-outline.nvim {:opt false :config #(require "dots.plugins.symbols-outline")}
   
   :neovim/nvim-lspconfig {}
-
-  ;:ms-jpq/coq_nvim {:opt false :config #(require "dots.plugins.coq-nvim") 
-                    ;:branch "coq"
-  ;:ms-jpq/coq.artifacts {:branch "artifacts"}
 
   :tami5/lspsaga.nvim {:after "vim-gruvbox8"
                        :opt false 

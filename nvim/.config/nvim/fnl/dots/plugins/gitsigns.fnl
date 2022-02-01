@@ -20,9 +20,9 @@
   (..
     "
     augroup gitsignsHighlight
-    autocmd ColorScheme * :hi! GitSignsAdd    gui='NONE' guibg='NONE' guifg='" colors.bright_aqua "'
-    autocmd ColorScheme * :hi! GitSignsDelete gui='NONE' guibg='NONE' guifg='" colors.neutral_red "'
-    autocmd ColorScheme * :hi! GitSignsChange gui='NONE' guibg='NONE' guifg='" colors.bright_blue "'
+    autocmd! ColorScheme * :hi! GitSignsAdd    gui='NONE' guibg='NONE' guifg='" colors.bright_aqua "'
+    autocmd! ColorScheme * :hi! GitSignsDelete gui='NONE' guibg='NONE' guifg='" colors.neutral_red "'
+    autocmd! ColorScheme * :hi! GitSignsChange gui='NONE' guibg='NONE' guifg='" colors.bright_blue "'
     augroup END
     "))
 ;(utils.highlight :GitSignsAdd    {:bg "NONE" :fg colors.bright_aqua})

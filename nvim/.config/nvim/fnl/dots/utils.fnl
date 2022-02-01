@@ -122,3 +122,25 @@
 (defn comp [f g]
   (fn [...]
     (f (g ...))))
+
+
+; These are a workaround around broken load order
+; mostly used for themeing stuff
+; given that the colorscheme may override highlight stuff set before it loaded, this can _ensure_
+; that code is ran at the very end of the config
+
+(var deferred-funs [])
+(var did-exec-deferred false)
+(defn clear-deferred [] (set deferred-funs []))
+
+; defer a function. If deferred funcs have already been ran,
+; assume we're reloading config because the user is configuring, and just execute immediately
+(defn defer-to-end [f]
+  (if did-exec-deferred
+    (f)
+    (table.insert deferred-funs f)))
+
+(defn run-deferred []
+  (set did-exec-deferred true)
+  (each [_ f (ipairs deferred-funs)]
+    (f)))

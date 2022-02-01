@@ -5,6 +5,12 @@
        (nvim.ex.autocmd_)
        ,...
        (nvim.ex.augroup :END)))
+
+  :defer
+  (fn [...]
+    `(let [utils# (require :dots.utils)]
+       (utils#.defer-to-end (fn [] ,...))))
+     
   
   :req
   (fn [name ...]
@@ -93,5 +99,6 @@
                ,(unpack
                  (icollect [_# v# (ipairs use-statements)]
                   `(,use-sym ,v#)))))))))}
+
 
 
