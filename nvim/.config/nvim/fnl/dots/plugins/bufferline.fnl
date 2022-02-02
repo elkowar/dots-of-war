@@ -3,7 +3,8 @@
              nvim aniseed.nvim 
              utils dots.utils
              colors dots.colors
-             bufferline bufferline}})
+             bufferline bufferline}
+   require-macros [macros]})
 
 ; :h bufferline-lua-highlights
 (let [selected {:gui "" :guibg colors.neutral_aqua :guifg colors.dark0}
@@ -25,19 +26,11 @@
      :background visible
      :buffer_visible visible
      :buffer_selected selected
-     :modified visible
-     :modified_visible visible
-     :modified_selected selected
-     :error visible
-     :error_selected selected
-     :error_visible selected
-     :warning visible
-     :warning_selected selected
-     :warning_visible visible
-
-     :duplicate visible
-     :duplicate_visible visible
-     :duplicate_selected selected
+     :modified  visible   :modified_selected  selected   :modified_visible  visible  
+     :info      visible   :info_selected      selected   :info_visible      visible  
+     :warning   visible   :warning_selected   selected   :warning_visible   visible
+     :error     visible   :error_selected     selected   :error_visible     visible
+     :duplicate visible   :duplicate_selected selected   :duplicate_visible visible
 
      :diagnostic                  {:gui "" :guibg colors.dark1        :guifg colors.neutral_red}
      :diagnostic_visible          {:gui "" :guibg colors.dark1        :guifg colors.neutral_red}
@@ -62,7 +55,3 @@
      :pick_selected {:guibg colors.bright_red :guifg colors.bright_red}
      :tab_selected {:guibg colors.bright_green :guifg colors.bright_green}
      :tab {:guibg colors.bright_yellow :guifg colors.bright_yellow}}}))
-
-
-(utils.highlight :BufferLineInfoSelected {:bg colors.neutral_aqua :fg colors.dark0 :gui "NONE"})
-(defn foo [] (print "hi"))
