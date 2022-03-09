@@ -34,6 +34,7 @@
 (vim.cmd "syntax on")
 
 (set vim.opt.foldmethod "marker")
+(set vim.opt.scrolloff 5)
 (set vim.opt.showmode false)
 (set vim.opt.undodir (.. vim.env.HOME "/.vim/undo-dir"))
 (set vim.opt.undofile true)

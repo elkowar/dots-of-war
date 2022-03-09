@@ -14,6 +14,7 @@ export PATH="$HOME/.nix-profile/bin/:$PATH"
 export PATH="$HOME/.cpm/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.nimble/bin:$PATH"
+export PATH="$HOME/.dotnet/tools:$PATH"
 
 
 export EDITOR="$(which nvim)"

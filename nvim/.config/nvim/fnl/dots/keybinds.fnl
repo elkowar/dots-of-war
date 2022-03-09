@@ -21,6 +21,9 @@
 (utils.keymap :n :MM "<cmd>lua require('nvim-gehzu').go_to_definition()<CR>" {})
 (utils.keymap :n :MN "<cmd>lua require('nvim-gehzu').show_definition()<CR>" {})
 
+(utils.keymap :n :zt "zt<c-y><c-y><c-y>")
+(utils.keymap :n :zb "zb<c-e><c-e><c-e>")
+
 
 ; Fix keybinds in linewrapped mode
 ;(utils.keymap [:n] :j "gj")

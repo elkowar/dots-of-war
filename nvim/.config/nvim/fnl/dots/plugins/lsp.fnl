@@ -62,7 +62,7 @@
     ((. lsp lsp-name :setup) merged-opts)))
 
 (init-lsp :jsonls   {:commands {:Format [ #(vim.lsp.buf.range_formatting [] [0 0] [(vim.fn.line "$") 0])]}})
-(init-lsp :denols   {:root_dir (better_root_pattern [".git"] ["package.json"])})
+;(init-lsp :denols   {:root_dir (better_root_pattern [".git"] ["package.json"])})
 (init-lsp :hls      {:settings {:languageServerHaskell {:formattingProvider "stylish-haskell"}}})
 (init-lsp :ocamllsp)
 (init-lsp :vimls)
@@ -97,10 +97,10 @@
                              :less {:validate true}
                              :scss {:validate true}}})
 
-;(lsp.tsserver.setup {:root_dir (lsp.util.root_pattern "package.json")
-                     ;:on_attach (fn [client bufnr] 
-                                  ;(set client.resolved_capabilities.document_formatting false)
-                                  ;(on_attach client bufnr))})
+(lsp.tsserver.setup {:root_dir (lsp.util.root_pattern "package.json")
+                     :on_attach (fn [client bufnr] 
+                                  (set client.resolved_capabilities.document_formatting false)
+                                  (on_attach client bufnr))})
 
 
 (let [rust-tools (require "rust-tools")

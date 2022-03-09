@@ -47,6 +47,11 @@
 (defn keep-if [f x]
   (when (f x) x))
 
+(defn map-values [f t]
+  "Map over the values of a table, keeping the keys intact"
+  (collect [k v (pairs t)]
+    k (f v)))
+
 
 (defn without-keys [keys t]
   (filter-table #(not (contains? keys $1)) t))

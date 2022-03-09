@@ -30,12 +30,13 @@
       :config `#(require ,config-mod))))
 
 (use
-  ; sort me pls
+  ; TODO sort me pls
 
-  ;:vimwiki/vimwiki {:opt false
-                    ;:config #(set vim.g.vimwiki_list [{:path "~/obsidian-stuff/obsidian-vault"
-                                                       ;:syntax "markdown"
-                                                       ;:ext "md"}])}
+  :vimwiki/vimwiki {:opt false
+                    :branch "dev"
+                    :config #(set vim.g.vimwiki_list [{:path "~/notes/veil-vimwiki/"
+                                                       :syntax "markdown"
+                                                       :ext "md"}])}
 
   ; sorted from here!
   :Olical/aniseed {:branch "develop"}
@@ -45,6 +46,7 @@
   :lifepillar/vim-gruvbox8 (cfg "dots.plugins.gruvbox8")
   :kyazdani42/nvim-web-devicons {}
   :folke/which-key.nvim {}
+  :folke/todo-comments.nvim (cfg "dots.plugins.todo-comments")
 
   :Famiu/feline.nvim (cfg "dots.plugins.feline")
   :akinsho/nvim-bufferline.lua (cfg "dots.plugins.bufferline")
@@ -183,6 +185,8 @@
   :purescript-contrib/purescript-vim {:ft ["purescript"]}
   :derekelkins/agda-vim {:ft ["agda"]}
   :neovimhaskell/haskell-vim { :ft ["haskell"]}
+  :stewy33/mercury-vim {:opt false} 
+  :ionide/Ionide-vim {:opt false}
 
   
   :rust-lang/rust.vim {:ft ["rust"]
