@@ -2,7 +2,7 @@
 # history config
 HISTSIZE=50000
 SAVEHIST=50000
-HISTFILE="$XDG_CACHE_HOME"/zsh/history
+HISTFILE="/home/leon/.cache/zsh/history"
 setopt HIST_SAVE_NO_DUPS
 setopt HIST_IGNORE_ALL_DUPS
 #setopt INC_APPEND_HISTORY

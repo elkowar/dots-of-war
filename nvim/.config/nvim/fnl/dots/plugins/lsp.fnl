@@ -78,6 +78,9 @@
                                    ;:disabledRules        {:de-DE [":~/.config/ltex-ls/disabledRules.txt"]}
                                    ;:hiddenFalsePositives {:de-DE [":~/.config/ltex-ls/hiddenFalsePositives.txt"]}
                                    ;:additionalRules {:motherTongue "de-DE"}}}})
+(init-lsp :vls)
+;(init-lsp :clangd)
+;(init-lsp :ccls)
 
 
 (init-lsp :powershell_es {:bundle_path "/home/leon/powershell"})

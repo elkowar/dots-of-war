@@ -49,8 +49,10 @@
 
 (defn map-values [f t]
   "Map over the values of a table, keeping the keys intact"
-  (collect [k v (pairs t)]
-    k (f v)))
+  (let [tbl {}]
+    (each [k v (pairs t)] (tset tbl k (f v)))
+    tbl))
+
 
 
 (defn without-keys [keys t]

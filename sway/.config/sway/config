@@ -253,6 +253,7 @@ bar {
     #font "Terminus (TTF)"
     height 20
 
+
     colors {
         statusline #ebdbb2
         background #1d202100
