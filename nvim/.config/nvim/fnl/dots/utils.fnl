@@ -151,3 +151,15 @@
   (set did-exec-deferred true)
   (each [_ f (ipairs deferred-funs)]
     (f)))
+
+
+(defn get-selection []
+  (let [[_ s-start-line s-start-col] (vim.fn.getpos "'<")
+        [_ s-end-line s-end-col]     (vim.fn.getpos "'>")
+        n-lines                      (+ 1 (math.abs (- s-end-line s-start-line)))
+        lines                        (vim.api.nvim_buf_get_lines 0 (- s-start-line 1) s-end-line false)]
+    (tset lines 1 (string.sub (. lines 1) s-start-col -1))
+    (if (= 1 n-lines)
+      (tset lines n-lines (string.sub (. lines n-lines) 1 (+ 1 (- s-end-col s-start-col))))
+      (tset lines n-lines (string.sub (. lines n-lines) 1 s-end-col)))
+    (values s-start-line s-end-line lines)))

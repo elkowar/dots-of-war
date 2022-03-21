@@ -1,5 +1,6 @@
 (module dots.keybinds
   {autoload {a aniseed.core
+             str aniseed.string
              nvim aniseed.nvim
              utils dots.utils
              wk which-key
@@ -28,6 +29,10 @@
 ; Fix keybinds in linewrapped mode
 ;(utils.keymap [:n] :j "gj")
 ;(utils.keymap [:n] :k "gk")
+
+(defn open-selection-zotero []
+  (let [(_ _ sel) (utils.get-selection)]
+    (vim.cmd (.. "silent !xdg-open zotero://select/items/@" (str.join sel)))))
 
 
 (fn cmd [s desc] [(.. "<cmd>" s "<cr>") desc])
@@ -110,9 +115,9 @@
        "b" (cmd "Buffers"   "select open buffer")
        "c" (cmd "bdelete!"  "close open buffer")
        "w" (cmd "bwipeout!" "wipeout open buffer")}}
+  
 
-
- {:prefix "<leader>"})
+ {:prefix"<leader>"})
 
 (wk.register
  {"<tab>" "which_key_ignore"
@@ -126,7 +131,8 @@
  {:mode "i"})
 
 (wk.register
- {"s" (sel-cmd "VSSplit" "keep selection visible in split")}
+ {"s" (sel-cmd "VSSplit" "keep selection visible in split")
+  "z" [open-selection-zotero "open in zotero"]}
  {:prefix "<leader>"
   :mode "v"})
            

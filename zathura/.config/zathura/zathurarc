@@ -12,4 +12,4 @@ set statusbar-fg "#ebdbb2"
 
 set synctex true
 set synctex-editor-command "nvim --headless -c \"VimtexInverseSearch %{line} '%{input}'\""
-set highlight-transparency 0
+set highlight-transparency 0.1

@@ -106,7 +106,7 @@ in
       "Xft.antialias" = "1";
       "Xft.hinting" = "true";
       "Xft.hintstyle" = "hintslight";
-      "Xft.dpi" = "96";
+      "Xft.dpi" = "110";
       "Xft.rgba" = "rgb";
       "Xft.lcdfilter" = "lcddefault";
 
