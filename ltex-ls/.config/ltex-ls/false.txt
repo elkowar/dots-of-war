@@ -41,3 +41,11 @@
 {"rule":"COMMA_BEHIND_RELATIVE_CLAUSE","sentence":"^\\QDer größte Vorteil der Übersetzung in Maschinencode ist die Laufzeiteffizienz und Hardwarenähe, die dadurch erreicht werden kann \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q.\\E$"}
 {"rule":"GERMAN_SPELLER_RULE","sentence":"^\\QDa keine konkrete Syntax vorgegeben werden soll, setzt \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q hier auf eine strukturierte Darstellung in Form eines Abstract Syntax Trees (\\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q).\\E$"}
 {"rule":"GERMAN_SPELLER_RULE","sentence":"^\\QDer Aufbau der textbasierten Programmierspiele von Zachtronics ist ähnlich: laut Firmengründer \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q setzen diese auf eine weitgehend klassische Parser- und Compilerstruktur, welche den Programmcode in eine separate Laufzeitsimulation übergibt, die den Code schrittweise ausführt.\\E$"}
+{"rule":"COMMA_BEHIND_RELATIVE_CLAUSE","sentence":"^\\QVariablen sind hier in dem Kontext, in dem sie initialisiert wurden, und allen darin enthaltenen Kontexten verfügbar, nicht aber außerhalb des jeweiligen Kontexts.\\E$"}
+{"rule":"COMMA_BEHIND_RELATIVE_CLAUSE","sentence":"^\\QVariablen sind hier nur in dem Kontext, in dem sie initialisiert wurden, verfügbar.\\E$"}
+{"rule":"COMMA_BEHIND_RELATIVE_CLAUSE","sentence":"^\\QVariablen sind in solchen Systemen nur in dem Kontext, in dem sie initialisiert wurden, verfügbar.\\E$"}
+{"rule":"DE_CASE","sentence":"^\\QDiese Unterschiede fallen vor allem durch unterschiedliche mitgelieferte Typen und Klassen der Standardbibliothek, als auch bei der Verwendung von F-spezifischen Typkonstrukten aus C heraus auf.\\E$"}
+{"rule":"GERMAN_SPELLER_RULE","sentence":"^\\QDieses ist in F als \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q mit spezifischer Syntax gut unterstützt, und wird sowohl von F- als auch C-Listen implementiert.\\E$"}
+{"rule":"GERMAN_SPELLER_RULE","sentence":"^\\QDieses ist in F als \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q mit spezifischer Syntax gut unterstützt und wird sowohl von F- als auch C-Listen implementiert.\\E$"}
+{"rule":"DE_CASE","sentence":"^\\QDurch die direkte Verwendung von F-spezifischen Datenstrukturen wie den Summentypen in der \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q-Darstellung oder den F-Typen \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q und \\E(?:Dummy|Ina|Jimmy-)[0-9]+$"}
+{"rule":"DE_CASE","sentence":"^\\Q[Verwendung von F-spezifischen Konstrukten]\\E$"}

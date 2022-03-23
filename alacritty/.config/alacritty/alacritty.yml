@@ -27,10 +27,14 @@ cursor:
   style: "Block"
   unfocused_hollow: true
 font:
-  normal: { "family": "Fira Code" }
+  #normal: { "family": "Fira Code" }
+  normal: { "family": "Jetbrains Mono" }
   #normal: { "family": "Victor Mono" }
   #normal: { "family": "Monoid" }
   #normal: { "family": "Mono Lisa" }
+  #normal: { "family": "cherry" }
+  #normal: { "family": "scientifica" }
+  #normal: { "family": "cozette" }
   #normal: { "family": "xos4 Terminus" }
   offset: { "x": 0, "y": 0 }
   size: 12

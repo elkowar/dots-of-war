@@ -9,6 +9,7 @@ setopt HIST_IGNORE_ALL_DUPS
 setopt EXTENDED_HISTORY
 setopt SHARE_HISTORY
 
+source "$ZDOTDIR/utils.zsh"
 
 
 ### Added by Zinit's installer
@@ -35,21 +36,6 @@ zinit light-mode for \
 ### End of Zinit's installer chunk
 
 
-# if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
-#     print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}zdharma/zinit%F{220})…%f"
-#     command mkdir -p "$HOME/.zinit" && command chmod g-rwX "$HOME/.zinit"
-#     command git clone https://github.com/zdharma/zinit "$HOME/.zinit/bin" && \
-#         print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
-#         print -P "%F{160}▓▒░ The clone has failed.%f%b"
-# fi
-# 
-# source "$HOME/.zinit/bin/zinit.zsh"
-# autoload -Uz _zinit
-# (( ${+_comps} )) && _comps[zinit]=_zinit
-# 
-# zinit snippet OMZP::git
-# zinit wait lucid for "zsh-users/zsh-completions"
-
 # compinit must be ran before fzf-tab, but fzf-tab must be before syntax highlighting etc
 autoload -Uz compinit
 compinit
@@ -65,8 +51,12 @@ zinit wait lucid for \
     "pkulev/zsh-rustup-completion"
 
 
+# clear the default keybinds, from utils.zsh
+clear-keybinds
+
 # load more stuff
 source "$ZDOTDIR/fzf-tab.zsh"
+source "$ZDOTDIR/keybinds.zsh"
 
 
 eval "$(zoxide init zsh)"
@@ -87,22 +77,6 @@ export MANPAGER='nvim +Man! +"set nocul" +"set noshowcmd" +"set noruler" +"set n
 
 autoload -Uz colors && colors
 autoload -Uz promptinit && promptinit
-
-# epic keybinds
-
-my-backward-delete-word() {
-    local WORDCHARS=${WORDCHARS/\//}
-    zle backward-delete-word
-}
-zle -N my-backward-delete-word
-bindkey '^W' my-backward-delete-word
-bindkey '^H' backward-delete-word
-bindkey "^[[H" beginning-of-line
-bindkey "^[[F" end-of-line
-bindkey "^[." insert-last-word
-
-bindkey '^[[A' history-substring-search-up
-bindkey '^[[B' history-substring-search-down
 
 
 # alias
