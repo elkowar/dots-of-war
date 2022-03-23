@@ -49,3 +49,5 @@
 {"rule":"GERMAN_SPELLER_RULE","sentence":"^\\QDieses ist in F als \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q mit spezifischer Syntax gut unterstützt und wird sowohl von F- als auch C-Listen implementiert.\\E$"}
 {"rule":"DE_CASE","sentence":"^\\QDurch die direkte Verwendung von F-spezifischen Datenstrukturen wie den Summentypen in der \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q-Darstellung oder den F-Typen \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q und \\E(?:Dummy|Ina|Jimmy-)[0-9]+$"}
 {"rule":"DE_CASE","sentence":"^\\Q[Verwendung von F-spezifischen Konstrukten]\\E$"}
+{"rule":"DE_CASE","sentence":"^\\QDie Bibliothek setzt an vielen Stellen auf F-spezifische Features, welche sowohl der strukturellen Komplexität als auch der Lesbarkeit des Bibliothekscodes deutlich helfen.\\E$"}
+{"rule":"DE_CASE","sentence":"^\\QAndererseits sind einige der Programmierschnittstellen der Bibliothek aufgrund der Verwendung von F-spezifischen Sprachkonstrukten in der öffentlichen API aus C heraus deutlich schwieriger nutzbar.\\E$"}

@@ -54,7 +54,9 @@ bindkey "^[[1;5D" backward-word           # C-ArrowLeft
 bindkey "\e[3~"   delete-char             # Del
 bindkey "^E"      end-of-line             # C-E
 bindkey "^[[F"    end-of-line             # END
+bindkey "^[[4~"   end-of-line             # END
 bindkey "^[[H"    beginning-of-line       # HOME
+bindkey "^[[1~"   beginning-of-line       # HOME
 bindkey "^A"      beginning-of-line       # C-A
 bindkey '^W'      my-backward-delete-word # C-w
 bindkey '^H'      my-backward-delete-word # C-backspace
