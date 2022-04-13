@@ -84,7 +84,7 @@
 
 
 (init-lsp :powershell_es {:bundle_path "/home/leon/powershell"})
-(ltex-ls.init)
+;(ltex-ls.init)
          
          
          

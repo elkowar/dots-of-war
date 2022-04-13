@@ -27,8 +27,8 @@ cursor:
   style: "Block"
   unfocused_hollow: true
 font:
-  #normal: { "family": "Fira Code" }
-  normal: { "family": "Jetbrains Mono" }
+  normal: { "family": "Fira Code" }
+  #normal: { "family": "Jetbrains Mono" }
   #normal: { "family": "Victor Mono" }
   #normal: { "family": "Monoid" }
   #normal: { "family": "Mono Lisa" }

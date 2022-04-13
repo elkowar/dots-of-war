@@ -13,7 +13,7 @@
     (.. "\\" x "{}")))
 
 (def latex-command-settings
-  {:dummy (cmds ["texttt" "scripture" "lstref" "figref" "tblref" "secref" "personaltextcite" "personalparencite" "textcite" "parencite" "parencite[]" "game" "acsu" "enquote" "name" "item"])
+  {:dummy (cmds ["texttt" "scripture" "lstref" "figref" "tblref" "secref" "personaltextcite" "personalparencite" "textcite" "parencite" "parencite[]" "game" "acsu" "enquote" "name" "item" "reqref" "gamebtn" "fs" "cs" "appref" "sorty"])
    :ignore (cmds ["urlfootnote" "caption" "todo"])})
   
 
