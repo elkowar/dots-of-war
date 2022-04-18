@@ -49,7 +49,9 @@
   :folke/todo-comments.nvim (cfg "dots.plugins.todo-comments")
 
   :Famiu/feline.nvim (cfg "dots.plugins.feline")
-  :akinsho/nvim-bufferline.lua (cfg "dots.plugins.bufferline")
+  :akinsho/nvim-bufferline.lua {:opt false
+                                :config #(require "dots.plugins.bufferline")
+                                :tag "v1.1.1"}
 
   :psliwka/vim-smoothie {}
   :norcalli/nvim-colorizer.lua (cfg "dots.plugins.nvim-colorizer")
