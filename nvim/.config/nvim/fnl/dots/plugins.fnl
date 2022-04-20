@@ -121,8 +121,11 @@
   :ray-x/lsp_signature.nvim {:events [:BufEnter]}
   :weilbith/nvim-code-action-menu {}
   
-  :folke/lsp-trouble.nvim {:opt false :config #(require "dots.plugins.trouble")
-                           :cmd ["Trouble" "TroubleClose" "TroubleRefresh" "TroubleToggle"]}
+  ;:folke/trouble.nvim {:opt false}
+  :elkowar/trouble.nvim {:branch "fix_error_on_nil_window"
+                         :opt false
+                         :config #(require "dots.plugins.trouble")
+                         :cmd ["Trouble" "TroubleClose" "TroubleRefresh" "TroubleToggle"]}
   
   :simrat39/symbols-outline.nvim {:opt false :config #(require "dots.plugins.symbols-outline")}
   

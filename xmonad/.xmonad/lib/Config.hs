@@ -264,6 +264,8 @@ myStartupHook = do
   spawnOnce "mailnag"
   spawn "flashfocus"
   spawnOnce "dunst"
+  -- This supposedly fixes slow startup of gtk applications???
+  spawn "dbus-update-activation-environment --systemd DBUS_SESSION_BUS_ADDRESS DISPLAY XAUTHORITY"
   for_ ["led1", "led2"] $ \led -> safeSpawn "sudo" ["liquidctl", "set", led, "color", "fixed", "00ffff"]
   setGtkFrameExtents
 

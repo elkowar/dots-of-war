@@ -39,7 +39,7 @@ in
 
 
     elkowar.desktop = {
-      gtk.enable = true;
+      gtk.enable = false;
     };
 
     elkowar.programs = {
@@ -106,7 +106,7 @@ in
       "Xft.antialias" = "1";
       "Xft.hinting" = "true";
       "Xft.hintstyle" = "hintslight";
-      "Xft.dpi" = "110";
+      "Xft.dpi" = "96";
       "Xft.rgba" = "rgb";
       "Xft.lcdfilter" = "lcddefault";
 

@@ -115,7 +115,10 @@
                              :autoSetHints false}
                      :dap {:adapter (rust-tools-dap.get_codelldb_adapter codelldb-path liblldb-path)}
                      :server {:on_attach on_attach
-                              :capabilities default-capabilities}}))
+                              :capabilities default-capabilities
+                              :settings {:rust-analyzer {:cargo {:loadOutDirsFromCheck true}
+                                                         :procMacro {:enable true}}}}}))
+                              
                               ;:cmd ["/home/leon/coding/prs/rust-analyzer/target/release/rust-analyzer"]}}))
 
 (let [sumneko_root_path (.. vim.env.HOME "/.local/share/lua-language-server")
