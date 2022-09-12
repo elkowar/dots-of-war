@@ -93,10 +93,12 @@ import qualified XMonad.Actions.Sift as Sift
 
 -- Values -------------------- {{{
 
-verticalMonitorIndex = 0 :: Int
 myModMask  = mod4Mask
 myLauncher = Rofi.asCommand def ["-show run"]
 myTerminal = "alacritty"
+screenIndexMain = 0
+screenIndexVert = 1
+screenIndexTop  = 2
 
 {-| adds the scripts-directory path to the filename of a script |-}
 scriptFile :: String -> String
@@ -294,9 +296,6 @@ removedKeys :: [String]
 removedKeys = ["M-<Tab>", "M-S-c", "M-S-q", "M-h", "M-l", "M-j", "M-k", "M-S-<Return>", "M-S-j", "M-S-k"]
   ++ [key ++ show n | key <- ["M-", "M-S-", "M-C-"], n <- [1..9 :: Int]]
 
-screenIndexMain = 0
-screenIndexVert = 1
-screenIndexTop  = 2
 
 myKeys :: [(String, X ())]
 myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, programLaunchBindings, miscBindings, windowControlBindings, workspaceBindings ]
@@ -523,7 +522,7 @@ main = do
   currentScreenCount :: Int <- IS.countScreens
 
   -- set up the fifo for polybar
-  safeSpawn "mkfifo" ["/tmp/xmonad-state-bar" ++ show verticalMonitorIndex]
+  safeSpawn "mkfifo" ["/tmp/xmonad-state-bar" ++ show (fi screenIndexVert)]
 
   let myConfig = flip additionalKeysP myKeys
                $ flip removeKeysP removedKeys
@@ -533,7 +532,7 @@ main = do
         , modMask            = myModMask
         , borderWidth        = 0
         , layoutHook         = myLayout
-        , logHook            = mconcat [ polybarLogHook verticalMonitorIndex
+        , logHook            = mconcat [ polybarLogHook (fi screenIndexVert)
                                        , ewwLogHook
                                        --, Ewmh.ewmhDesktopsLogHook
                                        , logHook Desktop.desktopConfig
