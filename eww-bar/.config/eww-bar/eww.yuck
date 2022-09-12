@@ -115,7 +115,7 @@
 
 
 (defwindow bar_1
-  :monitor 1
+  :monitor "DisplayPort-0"
   :stacking "bg"
   :geometry (geometry :x 0 :y 0 :width "40px" :height "100%")
   :anchor "top left"
@@ -123,7 +123,7 @@
   (bar :screen 1))
 
 (defwindow bar_2
-  :monitor 2
+  :monitor "HDMI-A-1"
   :geometry (geometry :x 0 :y 0 :width "40px" :height "100%")
   :anchor "top left"
   :reserve (struts :distance "40px" :side "left")

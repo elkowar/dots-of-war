@@ -257,7 +257,7 @@ myStartupHook = do
   --spawnOnce "/home/leon/Downloads/picom --config /home/leon/.config/picom.conf --experimental-backends --backend xrender"  --no-fading-openclose"
   spawnOnce "/home/leon/Downloads/picom-epic-animations --config /home/leon/.config/picom.conf --experimental-backends --animations --animation-stiffness 200 --animation-dampening 20" --backend glx"  --no-fading-openclose"
   --spawn "/home/leon/.config/polybar/launch.sh"
-  setupPolybarOn "DisplayPort-0"
+  setupPolybarOn "DisplayPort-1"
   spawnOnce "eww -c /home/leon/.config/eww-bar open-many bar_2 bar_1 &"
   spawn "xsetroot -cursor_name left_ptr"
   spawnOnce "nitrogen --restore"
@@ -294,6 +294,9 @@ removedKeys :: [String]
 removedKeys = ["M-<Tab>", "M-S-c", "M-S-q", "M-h", "M-l", "M-j", "M-k", "M-S-<Return>", "M-S-j", "M-S-k"]
   ++ [key ++ show n | key <- ["M-", "M-S-", "M-C-"], n <- [1..9 :: Int]]
 
+screenIndexMain = 0
+screenIndexVert = 1
+screenIndexTop  = 2
 
 myKeys :: [(String, X ())]
 myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, programLaunchBindings, miscBindings, windowControlBindings, workspaceBindings ]
@@ -329,12 +332,12 @@ myKeys = concat [ zoomRowBindings, tabbedBindings, multiMonitorBindings, program
 
   multiMonitorBindings :: [(String, X ())]
   multiMonitorBindings =
-    [ ("M-a",   windows $ IS.focusScreen 0)
-    , ("M-s",   windows $ IS.focusScreen 2)
-    , ("M-d",   windows $ IS.focusScreen 1)
-    , ("M-S-a", windows $ IS.withWspOnScreen 0 (\wsp -> W.view wsp . W.shift wsp))
-    , ("M-S-s", windows $ IS.withWspOnScreen 2 (\wsp -> W.view wsp . W.shift wsp))
-    , ("M-S-d", windows $ IS.withWspOnScreen 1 (\wsp -> W.view wsp . W.shift wsp))
+    [ ("M-a",   windows $ IS.focusScreen screenIndexVert)
+    , ("M-s",   windows $ IS.focusScreen screenIndexTop)
+    , ("M-d",   windows $ IS.focusScreen screenIndexMain)
+    , ("M-S-a", windows $ IS.withWspOnScreen screenIndexVert (\wsp -> W.view wsp . W.shift wsp))
+    , ("M-S-s", windows $ IS.withWspOnScreen screenIndexTop (\wsp -> W.view wsp . W.shift wsp))
+    , ("M-S-d", windows $ IS.withWspOnScreen screenIndexMain (\wsp -> W.view wsp . W.shift wsp))
     , ("M-C-s", windows swapScreenContents)
     ]
 

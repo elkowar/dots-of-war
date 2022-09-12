@@ -119,7 +119,9 @@
                      :server {:on_attach on_attach
                               :capabilities default-capabilities
                               :settings {:rust-analyzer {:cargo {:loadOutDirsFromCheck true}
-                                                         :procMacro {:enable true}}}}}))
+                                                         :procMacro {:enable true}
+                                                         :diagnostics {:enable false ;; native rust analyzer diagnostics
+                                                                       :experimental {:enable false}}}}}}))
                               
                               ;:cmd ["/home/leon/coding/prs/rust-analyzer/target/release/rust-analyzer"]}}))
 
