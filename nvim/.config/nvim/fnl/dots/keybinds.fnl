@@ -41,7 +41,7 @@
 
 
 (defn format []
-  (if (a.some #$1.resolved_capabilities.document_formatting (vim.lsp.get_active_clients))
+  (if (a.some #$1.server_capabilities.documentFormatting (vim.lsp.get_active_clients))
     (vim.lsp.buf.formatting)
     (vim.cmd "Neoformat")))
 

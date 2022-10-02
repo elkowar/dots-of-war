@@ -30,7 +30,7 @@
                                  ;:decorator ["`" "`"]}))
 
   ;(req dots.utils.highlight :LspDiagnosticsUnderlineError {:gui "underline"})
-  (if client.resolved_capabilities.document_highlight
+  (if client.server_capabilities.documentHighlight
     (do
       (utils.highlight "LspReferenceRead"  {:gui "underline"})
       (utils.highlight "LspReferenceText"  {:gui "underline"})

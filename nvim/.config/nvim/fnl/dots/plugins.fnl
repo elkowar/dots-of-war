@@ -131,10 +131,10 @@
   
   :neovim/nvim-lspconfig {}
 
-  :tami5/lspsaga.nvim {:after "vim-gruvbox8"
-                       :opt false 
-                       :branch "nvim6.0"
-                       :config #(require "dots.plugins.lspsaga")}
+  :glepnir/lspsaga.nvim {:after "vim-gruvbox8"
+                         :opt false 
+                         :branch "version_2.2"
+                         :config #(require "dots.plugins.lspsaga")}
 
   ; >>>
 

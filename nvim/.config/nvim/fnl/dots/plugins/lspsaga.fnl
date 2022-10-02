@@ -7,11 +7,11 @@
 
 (saga.init_lsp_saga 
   {:border_style "single" ; single double round plus
-   :code_action_prompt {:enable true
-                        :sign false
-                        :virtual_text false}
+   :code_action_lightbulb {:enable true
+                           :sign false
+                           :virtual_text false}
    :code_action_keys {:quit "<esc>" :exec "<CR>"} 
-   :rename_action_keys {:quit "<esc>" :exec "<CR>"} 
+   :rename_action_quit "<esc>"
    :finder_action_keys {:quit "<esc>"
                         :open "<CR>" 
                         :vsplit "v" 
