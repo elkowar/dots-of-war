@@ -58,6 +58,7 @@ clear-keybinds
 source "$ZDOTDIR/fzf-tab.zsh"
 source "$ZDOTDIR/keybinds.zsh"
 
+unalias zi
 
 eval "$(zoxide init zsh)"
 
