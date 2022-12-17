@@ -41,8 +41,8 @@
 
 
 (defn format []
-  (if (a.some #$1.server_capabilities.documentFormatting (vim.lsp.get_active_clients))
-    (vim.lsp.buf.formatting)
+  (if (a.some #$1.server_capabilities.documentFormattingProvider (vim.lsp.get_active_clients))
+    (vim.lsp.buf.format {:async true})
     (vim.cmd "Neoformat")))
 
 
