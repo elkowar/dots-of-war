@@ -1,4 +1,5 @@
 abbr cvim="cd ~/.config/nvim && nvim && cd -"
+abbr cnt="cargo nextest run"
 abbr cnix="cd ~/.config/nixpkgs && nvim && cd -"
 abbr cxmonad="cd ~/.xmonad && nvim lib/Config.hs && cd -"
 abbr ra="ranger"

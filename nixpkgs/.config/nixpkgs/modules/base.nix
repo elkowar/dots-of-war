@@ -57,7 +57,6 @@ in
         ripgrep
         fd
         jq
-        nodejs
         nodePackages.bash-language-server
         nodePackages.dockerfile-language-server-nodejs
         cargo-outdated

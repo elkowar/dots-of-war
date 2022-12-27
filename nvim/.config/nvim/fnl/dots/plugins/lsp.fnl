@@ -54,7 +54,7 @@
 (def default-capabilities
   (let [capabilities (vim.lsp.protocol.make_client_capabilities)]
     (set capabilities.textDocument.completion.completionItem.snippetSupport true)
-    (cmp_nvim_lsp.update_capabilities capabilities)))
+    (cmp_nvim_lsp.default_capabilities capabilities)))
 
 (fn init-lsp [lsp-name ?opts]
   "initialize a language server with defaults"
@@ -102,10 +102,10 @@
                              :less {:validate true}
                              :scss {:validate true}}})
 
-;(lsp.tsserver.setup {:root_dir (lsp.util.root_pattern "package.json")
-                     ;:on_attach (fn [client bufnr] 
-                                  ;(set client.resolved_capabilities.document_formatting false)
-                                  ;(on_attach client bufnr))})
+(lsp.tsserver.setup {:root_dir (lsp.util.root_pattern "package.json")
+                     :on_attach (fn [client bufnr] 
+                                  (set client.resolved_capabilities.document_formatting false)
+                                  (on_attach client bufnr))})
 
 
 (let [rust-tools (require "rust-tools")
@@ -231,6 +231,21 @@
 ; --------------------------------- >>>>>
 
 (set vim.opt.signcolumn "yes")
+
+; Cleanup links in markdown documentation
+(defn- cleanup-markdown [contents]
+  (if (= contents.kind "markdown")
+    (tset contents :value (string.gsub contents.value "%[([^%]]+)%]%(([^%)]+)%)" "[%1]")))
+  contents)
+
+(let [previous-handler (. vim.lsp.handlers :textDocument/hover)]
+  (tset vim.lsp.handlers :textDocument/hover 
+    (fn [a result b c]
+      (if (not (and result result.contents))
+        (previous-handler a result b c)
+        (let [new-contents (cleanup-markdown result.contents)]
+          (tset result :contents new-contents)
+          (previous-handler a result b c))))))
 
 
 

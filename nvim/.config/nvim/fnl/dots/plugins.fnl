@@ -102,6 +102,13 @@
   ; >>>
 
   ; git stuff  <<<
+  :ldelossa/gh.nvim {:config #(do ((. (require "litee.lib") :setup))
+                                  ((. (require "litee.gh") :setup)))
+                     :requires [:ldelossa/litee.nvim]}
+  :pwntester/octo.nvim {:requires [:nvim-lua/plenary.nvim
+                                   :nvim-telescope/telescope.nvim
+                                   :kyazdani42/nvim-web-devicons]
+                        :config #((. (require "octo") :setup))}
   :sindrets/diffview.nvim {:cmd ["DiffviewOpen" "DiffviewToggleFiles"]
                            :config #(require "dots.plugins.diffview")}
   

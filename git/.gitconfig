@@ -6,11 +6,14 @@
 	helper = store
 [core]
 	autocrlf = input
-	pager = delta
+	;pager = delta
 [pull]
 	rebase = false
 [github]
 	user = ElKowar
+
+[diff]
+	external = "difft"
 
 
 [delta]
@@ -37,3 +40,6 @@
 	dn = diff --numstat
 	ss = status
 	a = add
+[push]
+	autoSetupRemote = true
+	default = current
