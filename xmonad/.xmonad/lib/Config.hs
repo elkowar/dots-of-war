@@ -600,6 +600,7 @@ mySwallowEventHook = WindowSwallowing.swallowEventHook
                          , className =? "okular"
                          , className =? "Zathura"
                          , className =? "noswallow"
+                         , className =? "Bazed"
                          ])
 
 

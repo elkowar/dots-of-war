@@ -59,6 +59,8 @@
   :luukvbaal/stabilize.nvim {:opt false :config #((. (require :stabilize) :setup))}
 
   :tweekmonster/startuptime.vim {:cmd ["StartupTime"]}
+  :folke/noice.nvim {:config #((. (require :noice) :setup))
+                     :requires [:MunifTanjim/nui.nvim]}
   :folke/persistence.nvim (cfg "dots.plugins.persistence")
   :folke/zen-mode.nvim (cfg "dots.plugins.zen-mode" {:cmd ["ZenMode"]})
   :folke/twilight.nvim (cfg "dots.plugins.twilight")
