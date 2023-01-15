@@ -120,8 +120,7 @@
   :sindrets/diffview.nvim {:cmd ["DiffviewOpen" "DiffviewToggleFiles"]
                            :config #(require "dots.plugins.diffview")}
   
-  :lewis6991/gitsigns.nvim {:lazy true
-                            :dependencies [:vim-gruvbox8]
+  :lewis6991/gitsigns.nvim {:dependencies [:vim-gruvbox8]
                             :config #(require "dots.plugins.gitsigns")}
 
   :ruanyl/vim-gh-line {}

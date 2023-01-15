@@ -107,7 +107,6 @@
                                   (set client.resolved_capabilities.document_formatting false)
                                   (on_attach client bufnr))})
 
-
 (let [rust-tools (require "rust-tools")
       rust-tools-dap (require "rust-tools.dap")
       extension-path "/home/leon/.vscode/extensions/vadimcn.vscode-lldb-1.6.8/"
@@ -118,11 +117,15 @@
                      :dap {:adapter (rust-tools-dap.get_codelldb_adapter codelldb-path liblldb-path)}
                      :server {:on_attach on_attach
                               :capabilities default-capabilities
-                              :settings {:rust-analyzer {:cargo {:loadOutDirsFromCheck true}
+                              :settings {:rust-analyzer {:cargo {:loadOutDirsFromCheck true
+                                                                 :features (or features "all")
+                                                                 :noDefaultFeatures (~= nil features)}
                                                          :procMacro {:enable true}
                                                          :diagnostics {:enable false ;; native rust analyzer diagnostics
                                                                        :experimental {:enable false}}
-                                                         :checkOnSave {:overrideCommand ["cargo" "clippy" "--workspace" "--message-format=json" "--all-targets" "--all-features"]}}}}}))
+                                                         :checkOnSave {:overrideCommand ["cargo" "clippy" "--workspace" "--message-format=json" "--all-targets"]}}}}}))
+
+                                                                                               ; "--all-features"
                               
                               ;:cmd ["/home/leon/coding/prs/rust-analyzer/target/release/rust-analyzer"]}}))
 
