@@ -1,6 +1,6 @@
 (module dots.plugins
   {autoload {a aniseed.core
-             packer packer}
+             lazy lazy}
    require-macros [macros]})
 
 
@@ -11,16 +11,15 @@
     (when (not ok?)
       (print (.. "Plugin config error: " val-or-err)))))
 
-(defn use [...]
+(defn setup-lazy [...]
   (let [pkgs [...]]
-    (packer.startup
-      {1 (fn [use]
-           (for [i 1 (a.count pkgs) 2]
-             (let [name (. pkgs i)
-                   opts (. pkgs (+ i 1))]
-               (-?> (. opts :mod) (safe-req-conf))
-               (use (a.assoc opts 1 name)))))
-       :config {:compile_path (.. (vim.fn.stdpath "config") "/lua/packer_compiled.lua")}})))
+    (local args [])
+    (for [i 1 (a.count pkgs) 2]
+      (let [name (. pkgs i)
+            opts (. pkgs (+ i 1))]
+        (table.insert args (a.assoc opts 1 name))))
+    (lazy.setup args)))
+
 
 
 (macro cfg [config-mod opts]
@@ -29,44 +28,42 @@
       :opt `false 
       :config `#(require ,config-mod))))
 
-(use
-  ; TODO sort me pls
+(macro setup [name opts]
+  `((. (require ,name) :setup) ,opts))
 
-  :vimwiki/vimwiki {:opt false
-                    :branch "dev"
-                    :config #(set vim.g.vimwiki_list [{:path "~/notes/veil-vimwiki/"
-                                                       :syntax "markdown"
-                                                       :ext "md"}])}
+
+(setup-lazy
+  ; TODO sort me pls
 
   ; sorted from here!
   :Olical/aniseed {:branch "develop"}
   :lewis6991/impatient.nvim {}
   :nvim-lua/plenary.nvim {}
   :norcalli/nvim.lua {}
-  :lifepillar/vim-gruvbox8 (cfg "dots.plugins.gruvbox8")
+  :lifepillar/vim-gruvbox8 {:config #(require "dots.plugins.gruvbox8")}
   :kyazdani42/nvim-web-devicons {}
   :folke/which-key.nvim {}
-  :folke/todo-comments.nvim (cfg "dots.plugins.todo-comments")
+  :folke/todo-comments.nvim {:config #(require "dots.plugins.todo-comments")}
 
-  :Famiu/feline.nvim (cfg "dots.plugins.feline")
-  :akinsho/nvim-bufferline.lua {:opt false
-                                :config #(require "dots.plugins.bufferline")
+  :Famiu/feline.nvim {:config #(require "dots.plugins.feline")}
+  :akinsho/nvim-bufferline.lua {:config #(require "dots.plugins.bufferline")
                                 :tag "v1.1.1"}
 
   :psliwka/vim-smoothie {}
-  :norcalli/nvim-colorizer.lua (cfg "dots.plugins.nvim-colorizer")
+  :norcalli/nvim-colorizer.lua {:config #(require "dots.plugins.nvim-colorizer")}
   :nathanaelkane/vim-indent-guides {:cmd ["IndentGuidesToggle"]}
-  :luukvbaal/stabilize.nvim {:opt false :config #((. (require :stabilize) :setup))}
+  :luukvbaal/stabilize.nvim {:config #(setup :stabilize)}
 
   :tweekmonster/startuptime.vim {:cmd ["StartupTime"]}
-  :folke/noice.nvim {:config #((. (require :noice) :setup))
-                     :requires [:MunifTanjim/nui.nvim]}
-  :folke/persistence.nvim (cfg "dots.plugins.persistence")
-  :folke/zen-mode.nvim (cfg "dots.plugins.zen-mode" {:cmd ["ZenMode"]})
-  :folke/twilight.nvim (cfg "dots.plugins.twilight")
+  :folke/noice.nvim {:config #(setup :noice {:presets {:inc_rename true}})
+                     :dependencies [:MunifTanjim/nui.nvim]}
+  :folke/persistence.nvim {:config #(require "dots.plugins.persistence")}
+  :folke/zen-mode.nvim {:config #(require "dots.plugins.zen-mode")
+                        :cmd ["ZenMode"]}
+  :folke/twilight.nvim {:config #(require "dots.plugins.twilight")}
   :nvim-telescope/telescope.nvim {:config #(require "dots.plugins.telescope")
                                   :cmd ["Telescope"]
-                                  :requires [:nvim-lua/popup.nvim :nvim-lua/plenary.nvim]}
+                                  :dependencies [:nvim-lua/popup.nvim :nvim-lua/plenary.nvim]}
 
   ; editing and movement <<<
   :jiangmiao/auto-pairs {}
@@ -78,44 +75,42 @@
   :wellle/targets.vim {} ; more text objects. IE: cin (change in next parens). generally better handling of surrounding objects.
   :mg979/vim-visual-multi {}
   :tommcdo/vim-exchange {}
-  :justinmk/vim-sneak {:opt false :config #(require "dots.plugins.sneak")}
+  :justinmk/vim-sneak {:config #(require "dots.plugins.sneak")}
   ; >>>
   
   ; treesitter <<<
   :nvim-treesitter/nvim-treesitter {:config #(require "dots.plugins.treesitter") 
                                     :event ["BufEnter"]
-                                    :run ":TSUpdate"}
+                                    :build ":TSUpdate"}
 
   :JoosepAlviste/nvim-ts-context-commentstring {:event ["BufEnter"]
-                                                :requires [:nvim-treesitter/nvim-treesitter]}
+                                                :dependencies [:nvim-treesitter/nvim-treesitter]}
   
   :nvim-treesitter/playground {:event ["BufEnter"]
-                               :requires [:nvim-treesitter/nvim-treesitter]}
+                               :dependencies [:nvim-treesitter/nvim-treesitter]}
   ; >>>
  
   ; debugger <<<
-  :rcarriga/nvim-dap-ui {:opt false 
-                         :config #((. (require :dapui) :setup))
-                         :requires [:mfussenegger/nvim-dap]}
-  :mfussenegger/nvim-dap {:opt false}
-  :nvim-telescope/telescope-dap.nvim {:requires [:mfussenegger/nvim-dap
-                                                 :nvim-telescope/telescope.nvim]}
+  :rcarriga/nvim-dap-ui {:config #(setup :dapui)
+                         :dependencies [:mfussenegger/nvim-dap]}
+  :mfussenegger/nvim-dap {}
+  :nvim-telescope/telescope-dap.nvim {:dependencies [:mfussenegger/nvim-dap
+                                                     :nvim-telescope/telescope.nvim]}
 
   ; >>>
 
   ; git stuff  <<<
   :ldelossa/gh.nvim {:config #(do ((. (require "litee.lib") :setup))
                                   ((. (require "litee.gh") :setup)))
-                     :requires [:ldelossa/litee.nvim]}
-  :pwntester/octo.nvim {:requires [:nvim-lua/plenary.nvim
-                                   :nvim-telescope/telescope.nvim
-                                   :kyazdani42/nvim-web-devicons]
-                        :config #((. (require "octo") :setup))}
+                     :dependencies [:ldelossa/litee.nvim]}
+  :pwntester/octo.nvim {:dependencies [:nvim-lua/plenary.nvim
+                                       :nvim-telescope/telescope.nvim
+                                       :kyazdani42/nvim-web-devicons]
+                        :config #(setup :octo)}
   :sindrets/diffview.nvim {:cmd ["DiffviewOpen" "DiffviewToggleFiles"]
                            :config #(require "dots.plugins.diffview")}
   
   :lewis6991/gitsigns.nvim {:after ["vim-gruvbox8"]
-                            :opt false
                             :config #(require "dots.plugins.gitsigns")}
 
   :ruanyl/vim-gh-line {}
@@ -132,19 +127,14 @@
   
   ;:folke/trouble.nvim {:opt false}
   :elkowar/trouble.nvim {:branch "fix_error_on_nil_window"
-                         :opt false
                          :config #(require "dots.plugins.trouble")
                          :cmd ["Trouble" "TroubleClose" "TroubleRefresh" "TroubleToggle"]}
   
-  :simrat39/symbols-outline.nvim {:opt false :config #(require "dots.plugins.symbols-outline")}
+  :simrat39/symbols-outline.nvim {:config #(require "dots.plugins.symbols-outline")}
   
   :neovim/nvim-lspconfig {}
 
-  :glepnir/lspsaga.nvim {:after "vim-gruvbox8"
-                         :opt false 
-                         :branch "version_2.2"
-                         :config #(require "dots.plugins.lspsaga")}
-
+  :smjonas/inc-rename.nvim {:config #(setup :inc_rename)}
   ; >>>
 
   ; cmp <<<
@@ -160,30 +150,29 @@
   :hrsh7th/cmp-nvim-lua {}
   :hrsh7th/cmp-calc {}
   
-  :hrsh7th/nvim-cmp {:opt false 
-                     :commit "4c0a6512a0f8a235213959badf70031b9fa0220a"
-                     :requires [:hrsh7th/cmp-nvim-lsp 
-                                :hrsh7th/cmp-buffer
-                                :hrsh7th/cmp-vsnip
-                                :hrsh7th/cmp-nvim-lua
-                                :hrsh7th/cmp-calc
-                                :hrsh7th/cmp-path
-                                :hrsh7th/cmp-omni]
+  :hrsh7th/nvim-cmp {:commit "4c0a6512a0f8a235213959badf70031b9fa0220a"
+                     :dependencies [:hrsh7th/cmp-nvim-lsp 
+                                    :hrsh7th/cmp-buffer
+                                    :hrsh7th/cmp-vsnip
+                                    :hrsh7th/cmp-nvim-lua
+                                    :hrsh7th/cmp-calc
+                                    :hrsh7th/cmp-path
+                                    :hrsh7th/cmp-omni]
                      :config #(require "dots.plugins.cmp")}
   ; >>>
 
   ; code-related ----------------------------------------- <<<
-  :github/copilot.vim {:opt true :cmd ["Copilot"]}
+  :github/copilot.vim {:cmd ["Copilot"]}
 
   :tpope/vim-sleuth {}
   :editorconfig/editorconfig-vim {}
   :pechorin/any-jump.vim {}
   :sbdchd/neoformat {}
-  :elkowar/antifennel-nvim {:opt false :config #(set vim.g.antifennel_executable "/home/leon/tmp/antifennel/antifennel")}
+  :elkowar/antifennel-nvim {:config #(set vim.g.antifennel_executable "/home/leon/tmp/antifennel/antifennel")}
   :Olical/conjure {:ft ["fennel"]}
-  :eraserhd/parinfer-rust {:run "cargo build --release"}
+  :eraserhd/parinfer-rust {:build "cargo build --release"}
 
-  :lervag/vimtex {:opt false :setup #(require :dots.plugins.vimtex)}
+  :lervag/vimtex {:config #(require :dots.plugins.vimtex)}
   :kmonad/kmonad-vim {}
   :elkowar/yuck.vim {:ft ["yuck"]}
   :cespare/vim-toml {:ft ["toml"]}
@@ -195,23 +184,23 @@
   :leafgarland/typescript-vim {:ft ["typescript" "typescript-react" "javascript"]}
   :HerringtonDarkholme/yats.vim {} ; typescript syntax highlighting
   :mxw/vim-jsx {}
-  :mattn/emmet-vim {:opt false :config #(require "dots.plugins.emmet")}
+  :mattn/emmet-vim {:config #(require "dots.plugins.emmet")}
   :purescript-contrib/purescript-vim {:ft ["purescript"]}
   :derekelkins/agda-vim {:ft ["agda"]}
   :neovimhaskell/haskell-vim { :ft ["haskell"]}
-  :stewy33/mercury-vim {:opt false} 
-  :ionide/Ionide-vim {:opt false}
+  :stewy33/mercury-vim {} 
+  :ionide/Ionide-vim {}
 
   
   :rust-lang/rust.vim {:ft ["rust"]
-                       :requires ["mattn/webapi-vim"]
-                       :opt false :config #(do (set vim.g.rustfmt_fail_silently 1))}
+                       :dependencies ["mattn/webapi-vim"]
+                       :config #(do (set vim.g.rustfmt_fail_silently 1))}
                                   
-  :simrat39/rust-tools.nvim {:requires ["nvim-lua/popup.nvim" "nvim-lua/plenary.nvim"]}
+  :simrat39/rust-tools.nvim {:dependencies ["nvim-lua/popup.nvim" "nvim-lua/plenary.nvim"]}
 
-  :Saecki/crates.nvim {:requires ["nvim-lua/plenary.nvim"]
+  :Saecki/crates.nvim {:dependencies ["nvim-lua/plenary.nvim"]
                        :event ["BufRead Cargo.toml"]
-                       :opt false :config #((. (require "crates") :setup))}
+                       :config #(setup :crates)}
 
   :qnighy/lalrpop.vim {}
   :edwinb/idris2-vim {:ft ["idris2"]}
@@ -222,7 +211,7 @@
 
 ; >>>
 
-(require "packer_compiled")
+;(require "packer_compiled")
 
 ; vim:foldmarker=<<<,>>>
 

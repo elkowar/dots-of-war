@@ -46,6 +46,7 @@
     (vim.cmd "Neoformat")))
 
 
+
 (wk.setup {})
 (wk.register 
  {"c" {:name "+comment out"}
@@ -75,17 +76,14 @@
   "m" {:name "+Code actions"
        ";" [#(set vim.o.spell (not vim.o.spell))          "Toggle spell checking"]
        "d" [vim.lsp.buf.hover                             "Show documentation"] 
-       "x" (cmd "Lspsaga preview_definition"              "Preview definition") 
        "o" (cmd "SymbolsOutline"                          "Outline") 
        "S" (cmd "Telescope lsp_document_symbols"          "Symbols in document") 
        "s" (cmd "Telescope lsp_dynamic_workspace_symbols" "Symbols in workspace") 
        "T" [vim.lsp.buf.signature_help                    "Show signature help"] 
-       ;"T" (cmd "Lspsaga signature_help"                  "Show signature help") ; lspsaga broken
-       "n" (cmd "Lspsaga rename"                          "Rename") 
+       "n" (cmd "IncRename "                               "Rename") 
        "v" (cmd "CodeActionMenu"                          "Apply codeaction") 
-       "V" (cmd "Lspsaga code_action"                     "saga Apply codeaction") 
-       "A" (cmd "Lspsaga show_cursor_diagnostics"         "Cursor diagnostics") 
-       "a" (cmd "Lspsaga show_line_diagnostics"           "Line diagnostics")
+       "A" [#(vim.diagnostic.open_float [cursor])         "Cursor diagnostics"] 
+       "A" [#(vim.diagnostic.open_float {})               "Line diagnostics"] 
        "h" (cmd "RustToggleInlayHints"                    "Toggle inlay hints")
        "r" (cmd "Trouble lsp_references"                  "Show references") 
        "E" (cmd "Trouble document_diagnostics"            "List diagnostics")
@@ -93,8 +91,6 @@
        "t" (cmd "Trouble lsp_type_definitions"            "Go to type-definition") 
        "i" (cmd "Trouble lsp_implementations"             "Show implementation") 
        "g" (cmd "Trouble lsp_definitions"                 "Go to definition") 
-       ;"g" [vim.lsp.buf.definition                        "Go to definition"] 
-       ;"t" [vim.lsp.buf.declaration                       "Go to declaration"] 
        "f" [format                                        "format file"]
        "," (cmd "RustRunnables"                           "Run rust stuff")}
 

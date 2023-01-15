@@ -35,7 +35,7 @@ function ensure(user, repo, branch, commit)
 end
 
 -- Bootstrap essential plugins required for installing and loading the rest.
-ensure("wbthomason", "packer.nvim", "master")
+--ensure("wbthomason", "packer.nvim", "master")
 ensure("Olical", "aniseed", "develop")
 ensure("lewis6991", "impatient.nvim", "main")
 

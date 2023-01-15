@@ -142,6 +142,11 @@
 
 ; foldend 
 
+(vim.diagnostic.config
+  {:float {:scope scope
+           :border "single"
+           :style "minimal"}})
+
 ; Plugin config ----------------------- foldstart
 
 (set vim.g.VM_leader "m") ; visual-multi leader
