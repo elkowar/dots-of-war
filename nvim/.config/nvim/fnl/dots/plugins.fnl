@@ -18,7 +18,7 @@
       (let [name (. pkgs i)
             opts (. pkgs (+ i 1))]
         (table.insert args (a.assoc opts 1 name))))
-    (lazy.setup args)))
+    (lazy.setup args {:colorscheme "gruvbox8"})))
 
 
 
@@ -55,13 +55,13 @@
   :luukvbaal/stabilize.nvim {:config #(setup :stabilize)}
 
   :tweekmonster/startuptime.vim {:cmd ["StartupTime"]}
-  :folke/noice.nvim {:lazy true
-                     :config #(setup :noice {:presets {:inc_rename true}})
+  :folke/noice.nvim {:config #(setup :noice {:presets {:inc_rename true}})
                      :dependencies [:MunifTanjim/nui.nvim]}
   :folke/persistence.nvim {:config #(require "dots.plugins.persistence")}
   :folke/zen-mode.nvim {:config #(require "dots.plugins.zen-mode")
                         :cmd ["ZenMode"]}
   :folke/twilight.nvim {:config #(require "dots.plugins.twilight")}
+  :moll/vim-bbye {:lazy true :cmd [:Bdelete :Bwipeout]}
   :nvim-telescope/telescope.nvim {:config #(require "dots.plugins.telescope")
                                   :cmd ["Telescope"]
                                   :dependencies [:nvim-lua/popup.nvim
@@ -137,10 +137,13 @@
   :weilbith/nvim-code-action-menu {:cmd "CodeActionMenu"
                                    :config #(set vim.g.code_action_menu_show_details false)}
   
-  ;:folke/trouble.nvim {:opt false}
-  :elkowar/trouble.nvim {:branch "fix_error_on_nil_window"
-                         :config #(require "dots.plugins.trouble")
-                         :cmd ["Trouble" "TroubleClose" "TroubleRefresh" "TroubleToggle"]}
+  :folke/trouble.nvim {:lazy true 
+                       :config #(require "dots.plugins.trouble")
+                       :cmd ["Trouble" "TroubleClose" "TroubleRefresh" "TroubleToggle"]}
+                       
+  ; :elkowar/trouble.nvim {:branch "fix_error_on_nil_window"
+  ;                        :config #(require "dots.plugins.trouble")
+  ;                        :cmd ["Trouble" "TroubleClose" "TroubleRefresh" "TroubleToggle"]}
   
   :simrat39/symbols-outline.nvim {:config #(require "dots.plugins.symbols-outline")}
   

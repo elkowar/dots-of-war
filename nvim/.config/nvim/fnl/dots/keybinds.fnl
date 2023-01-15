@@ -5,7 +5,8 @@
              utils dots.utils
              wk which-key
              treesitter-selection nvim-treesitter.incremental_selection
-             lspactions lspactions}
+             lspactions lspactions
+             glance glance}
    require-macros [macros]})
 
 ; undo autopairs fuckup    
@@ -48,6 +49,8 @@
     (vim.lsp.buf.format {:async true})
     (vim.cmd "Neoformat")))
 
+(defn open-rename []
+  (vim.api.nvim_feedkeys (.. ":IncRename " (vim.fn.expand "<cword>")) "n" ""))
 
 
 (wk.setup {})
@@ -83,7 +86,7 @@
        "S" (cmd "Telescope lsp_document_symbols"          "Symbols in document") 
        "s" (cmd "Telescope lsp_dynamic_workspace_symbols" "Symbols in workspace") 
        "T" [vim.lsp.buf.signature_help                    "Show signature help"] 
-       "n" (cmd "IncRename "                              "Rename") 
+       "n" [open-rename                                   "Rename"] 
        "v" (cmd "CodeActionMenu"                          "Apply codeaction") 
        "A" [#(vim.diagnostic.open_float {:scope :cursor}) "Cursor diagnostics"] 
        "a" [#(vim.diagnostic.open_float {})               "Line diagnostics"] 
@@ -95,7 +98,12 @@
        "i" (cmd "Trouble lsp_implementations"             "Show implementation") 
        "g" (cmd "Trouble lsp_definitions"                 "Go to definition") 
        "f" [format                                        "format file"]
-       "," (cmd "RustRunnables"                           "Run rust stuff")}
+       "," (cmd "RustRunnables"                           "Run rust stuff")
+       "x" {:name "+Glance"
+            "d" [#(glance.open "definitions")             "Definitions"] 
+            "r" [#(glance.open "references")              "References"] 
+            "t" [#(glance.open "type_definitions")        "Type definitions"] 
+            "i" [#(glance.open "implementations")         "Implementations"]}} 
 
   "f" {:name "+folds"
        "o" (cmd "foldopen"  "open fold") 
@@ -112,8 +120,8 @@
 
   "b" {:name "+buffers"
        "b" (cmd "Buffers"   "select open buffer")
-       "c" (cmd "bdelete!"  "close open buffer")
-       "w" (cmd "bwipeout!" "wipeout open buffer")}}
+       "c" (cmd ":Bdelete!"  "close open buffer")
+       "w" (cmd ":Bwipeout!" "wipeout open buffer")}}
   
 
  {:prefix"<leader>"})
