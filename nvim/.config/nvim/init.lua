@@ -7,6 +7,20 @@ local vim_config_root = vim.fn.expand("<sfile>:p:h")
 
 local pack_path = vim.fn.stdpath("data") .. "/site/pack"
 
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
+
+
 function ensure(user, repo, branch, commit)
   -- Ensures a given github.com/USER/REPO is cloned in the pack/packer/start directory.
   local install_path = pack_path .. "/packer/start/" .. repo

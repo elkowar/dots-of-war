@@ -121,7 +121,8 @@
                               :settings {:rust-analyzer {:cargo {:loadOutDirsFromCheck true}
                                                          :procMacro {:enable true}
                                                          :diagnostics {:enable false ;; native rust analyzer diagnostics
-                                                                       :experimental {:enable false}}}}}}))
+                                                                       :experimental {:enable false}}
+                                                         :checkOnSave {:overrideCommand ["cargo" "clippy" "--workspace" "--message-format=json" "--all-targets" "--all-features"]}}}}}))
                               
                               ;:cmd ["/home/leon/coding/prs/rust-analyzer/target/release/rust-analyzer"]}}))
 
