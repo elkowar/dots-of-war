@@ -25,6 +25,9 @@
 (utils.keymap :n :zt "zt<c-y><c-y><c-y>")
 (utils.keymap :n :zb "zb<c-e><c-e><c-e>")
 
+; these should really not be necessary, but whatever...
+(utils.keymap :n :<space>c<space> "<cmd>call nerdcommenter#Comment(\"m\", \"Toggle\")<CR>" {})
+(utils.keymap :v :<space>c<space> "<cmd>call nerdcommenter#Comment(\"x\", \"Toggle\")<CR>" {})
 
 ; Fix keybinds in linewrapped mode
 ;(utils.keymap [:n] :j "gj")
@@ -80,10 +83,10 @@
        "S" (cmd "Telescope lsp_document_symbols"          "Symbols in document") 
        "s" (cmd "Telescope lsp_dynamic_workspace_symbols" "Symbols in workspace") 
        "T" [vim.lsp.buf.signature_help                    "Show signature help"] 
-       "n" (cmd "IncRename "                               "Rename") 
+       "n" (cmd "IncRename "                              "Rename") 
        "v" (cmd "CodeActionMenu"                          "Apply codeaction") 
-       "A" [#(vim.diagnostic.open_float [cursor])         "Cursor diagnostics"] 
-       "A" [#(vim.diagnostic.open_float {})               "Line diagnostics"] 
+       "A" [#(vim.diagnostic.open_float {:scope :cursor}) "Cursor diagnostics"] 
+       "a" [#(vim.diagnostic.open_float {})               "Line diagnostics"] 
        "h" (cmd "RustToggleInlayHints"                    "Toggle inlay hints")
        "r" (cmd "Trouble lsp_references"                  "Show references") 
        "E" (cmd "Trouble document_diagnostics"            "List diagnostics")

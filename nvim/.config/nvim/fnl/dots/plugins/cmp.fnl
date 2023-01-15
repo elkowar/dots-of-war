@@ -17,11 +17,12 @@
 
    :completion {:autocomplete false}
 
-   :mapping {:<C-d> (cmp.mapping.scroll_docs -4)
-             :<C-f> (cmp.mapping.scroll_docs 4)
-             :<C-space> (cmp.mapping.complete)
-             :<esc> #(do (cmp.mapping.close) (vim.cmd "stopinsert"))
-             :<CR>  (cmp.mapping.confirm {:select true})}
+   :mapping (cmp.mapping.preset.insert
+              {:<C-d> (cmp.mapping.scroll_docs -4)
+               :<C-f> (cmp.mapping.scroll_docs 4)
+               :<C-space> (cmp.mapping.complete)
+               :<esc> #(do (cmp.mapping.close) (vim.cmd "stopinsert"))
+               :<CR>  (cmp.mapping.confirm {:select true})})
 
    :experimental {:custom_menu true}
 
@@ -31,12 +32,15 @@
              {:name "nvim_lua"}
              {:name "calc"}
              {:name "path"}
+             {:name "nvim_lsp_signature_help"}
+             {:name "conventionalcommits"}
              {:name "crates"}]
              ;{:name "buffer"}]
 
    :formatting {:format item-formatter}
 
-   :sorting {:comparators [#(do (if (and (= 15 ($1:get_kind)) (= 15 ($2:get_kind))) nil
+   :sorting {:priority_weight 2
+             :comparators [#(do (if (and (= 15 ($1:get_kind)) (= 15 ($2:get_kind))) nil
                                     (= 15 ($1:get_kind)) false 
                                     (= 15 ($2:get_kind)) true
                                     nil)) ; 15 means "SNIPPET", see https://github.com/hrsh7th/nvim-cmp/blob/main/lua/cmp/types/lsp.lua

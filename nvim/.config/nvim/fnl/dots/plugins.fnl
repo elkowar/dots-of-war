@@ -40,7 +40,7 @@
   :lewis6991/impatient.nvim {}
   :nvim-lua/plenary.nvim {}
   :norcalli/nvim.lua {}
-  :lifepillar/vim-gruvbox8 {:config #(require "dots.plugins.gruvbox8")}
+  :lifepillar/vim-gruvbox8 {:lazy false :priority 1000 :config #(require "dots.plugins.gruvbox8")}
   :kyazdani42/nvim-web-devicons {}
   :folke/which-key.nvim {}
   :folke/todo-comments.nvim {:config #(require "dots.plugins.todo-comments")}
@@ -63,12 +63,14 @@
   :folke/twilight.nvim {:config #(require "dots.plugins.twilight")}
   :nvim-telescope/telescope.nvim {:config #(require "dots.plugins.telescope")
                                   :cmd ["Telescope"]
-                                  :dependencies [:nvim-lua/popup.nvim :nvim-lua/plenary.nvim]}
+                                  :dependencies [:nvim-lua/popup.nvim
+                                                 :nvim-lua/plenary.nvim
+                                                 :nvim-telescope/telescope-ui-select.nvim]}
 
   ; editing and movement <<<
   :jiangmiao/auto-pairs {}
   :tpope/vim-repeat {}
-  :preservim/nerdcommenter {}
+  :preservim/nerdcommenter {:lazy false :priority 1000}
   :godlygeek/tabular {:cmd ["Tabularize"]}
   :tpope/vim-surround {}
   :hauleth/sad.vim {}
@@ -94,8 +96,10 @@
   :rcarriga/nvim-dap-ui {:config #(setup :dapui)
                          :dependencies [:mfussenegger/nvim-dap]}
   :mfussenegger/nvim-dap {}
-  :nvim-telescope/telescope-dap.nvim {:dependencies [:mfussenegger/nvim-dap
-                                                     :nvim-telescope/telescope.nvim]}
+  :nvim-telescope/telescope-dap.nvim {:dependencies [:nvim-telescope/telescope.nvim
+                                                     :mfussenegger/nvim-dap]}
+                                                     
+                                                     
 
   ; >>>
 
@@ -110,7 +114,7 @@
   :sindrets/diffview.nvim {:cmd ["DiffviewOpen" "DiffviewToggleFiles"]
                            :config #(require "dots.plugins.diffview")}
   
-  :lewis6991/gitsigns.nvim {:after ["vim-gruvbox8"]
+  :lewis6991/gitsigns.nvim {:dependencies [:vim-gruvbox8]
                             :config #(require "dots.plugins.gitsigns")}
 
   :ruanyl/vim-gh-line {}
@@ -122,8 +126,9 @@
   ; >>>
 
   ; lsp <<<
-  :ray-x/lsp_signature.nvim {:events [:BufEnter]}
-  :weilbith/nvim-code-action-menu {}
+  :ray-x/lsp_signature.nvim {:event :BufEnter}
+  :weilbith/nvim-code-action-menu {:cmd "CodeActionMenu"
+                                   :config #(set vim.g.code_action_menu_show_details false)}
   
   ;:folke/trouble.nvim {:opt false}
   :elkowar/trouble.nvim {:branch "fix_error_on_nil_window"
@@ -135,29 +140,23 @@
   :neovim/nvim-lspconfig {}
 
   :smjonas/inc-rename.nvim {:config #(setup :inc_rename)}
+  :dnlhc/glance.nvim {:config #(require "dots.plugins.glance")}
   ; >>>
 
   ; cmp <<<
   :hrsh7th/vim-vsnip {}
   :hrsh7th/vim-vsnip-integ {}
   :rafamadriz/friendly-snippets {}
-
-  :hrsh7th/cmp-omni {}
-  ;:hrsh7th/cmp-vsnip {}
-  :hrsh7th/cmp-nvim-lsp {}
-  :hrsh7th/cmp-buffer {}
-  :hrsh7th/cmp-path {}
-  :hrsh7th/cmp-nvim-lua {}
-  :hrsh7th/cmp-calc {}
   
-  :hrsh7th/nvim-cmp {:commit "4c0a6512a0f8a235213959badf70031b9fa0220a"
-                     :dependencies [:hrsh7th/cmp-nvim-lsp 
-                                    :hrsh7th/cmp-buffer
-                                    :hrsh7th/cmp-vsnip
-                                    :hrsh7th/cmp-nvim-lua
-                                    :hrsh7th/cmp-calc
-                                    :hrsh7th/cmp-path
-                                    :hrsh7th/cmp-omni]
+  :hrsh7th/nvim-cmp {:dependencies [[:hrsh7th/cmp-nvim-lsp] 
+                                    [:hrsh7th/cmp-buffer]
+                                    [:hrsh7th/cmp-vsnip]
+                                    [:hrsh7th/cmp-nvim-lua]
+                                    [:hrsh7th/cmp-calc]
+                                    [:hrsh7th/cmp-path]
+                                    [:hrsh7th/cmp-nvim-lsp-signature-help]
+                                    [:davidsierradz/cmp-conventionalcommits]
+                                    [:hrsh7th/cmp-omni]]
                      :config #(require "dots.plugins.cmp")}
   ; >>>
 
