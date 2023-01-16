@@ -32,6 +32,7 @@ font:
   normal: { "family": "Fira Code" }
   #normal: { "family": "Fira Code Nerd Font" }
   #normal: { "family": "APL 385 Unicode" }
+  #normal: { "family": "Fira Code" }
   #normal: { "family": "Jetbrains Mono" }
   #normal: { "family": "Victor Mono" }
   #normal: { "family": "Monoid" }
