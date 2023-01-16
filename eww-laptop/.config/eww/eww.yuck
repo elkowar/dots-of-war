@@ -1,43 +1,91 @@
 (deflisten workspaces :initial "[]" "bash ./scripts/get-workspaces")
 (deflisten current_workspace :initial "1" "bash ./scripts/get-active-workspace")
-(defpoll time :interval "1s" "date '+%d.%m.%Y - %H:%M:%S'")
 
-(defwidget workspaces []
-  (eventbox :halign "start"
-            :onscroll "bash ${EWW_CONFIG_DIR}/scripts/change-active-workspace {} ${current_workspace}"
-            :class "workspaces-widget"
-    (box :space-evenly true
-      (for workspace in workspaces
-        (eventbox :onclick "hyprctl dispatch workspace ${workspace.id}"
-          (label :class {workspace.id == current_workspace ? "current" : ""}
-                 :text " ${workspace.windows > 0 ? "◆" : "◇"} "))))))
-            
-(defwidget bar []
-  (centerbox :class "bar"
-    (workspaces)
-    "${time}"
-    (box :halign "end"
-         :space-evenly true
-         :width "150"
-      "󰁹 ${EWW_BATTERY["BAT1"].capacity}%"
-      "󰍛 ${round(EWW_RAM.used_mem_perc, 0)}%"
-      "󰻠 ${round(EWW_CPU.avg, 0)}%")))
+(defpoll brightness :interval "1s" "bash ./scripts/get-brightness")
+(defpoll volume :interval "1s" "bash ./scripts/getvol")
+
+(defwindow indicators
+  :monitor 0
+  :geometry (geometry :x 50 :y 50 :width "200px" :height "10px" :anchor "bottom left")
+  :stacking "fg"
+  (indicators))
+
+(defwidget indicators []
+  (box :orientation "v"
+    (box :space-evenly false
+      (label :text "󰃞 ")
+      (progress :valign "center" :value {brightness ?: 0}))
+    (box :space-evenly false
+      (label :text " ")
+      (progress :valign "center" :value {volume ?: 0}))))
 
 
 (defwindow bar
   :monitor 0
-  :geometry (geometry :x 0 :y 0 :width "100%" :height "30px" :anchor "top center")
+  :geometry (geometry :x 0 :y 0 :width "40px" :height "100%" :anchor "center left")
   :stacking "fg"
   :exclusive true
   (bar))
 
+(defwidget bar []
+  (centerbox :class "bar" :orientation "v"
+    (workspaces-display)
+    (time-display)
+    (data-display)))
 
-(defwindow test
-  :monitor 0
-  :exclusive true
-  :geometry (geometry :x 0 :y 0 :width "100%" :height "20px" :anchor "top center")
-  (box
-    "${EWW_NET["enp34s0"]}"
-    (tooltip
-      "${time}"
-      (button "test"))))
+(defwidget workspaces-display []
+  (eventbox :onscroll "bash ${EWW_CONFIG_DIR}/scripts/change-active-workspace {} ${current_workspace}"
+            :class "workspaces-widget"
+    (box :space-evenly false :orientation "v"
+      (for workspace in workspaces
+        (eventbox :onclick "hyprctl dispatch workspace ${workspace.id}"
+          (label :class {workspace.id == current_workspace ? "current" : ""}
+                 :xalign 0.6
+                 :text " ${workspace.windows > 0 ? "◆" : "◇"} "))))))
+
+(defwidget time-display []
+  (box :orientation "v"
+    {formattime(EWW_TIME, "%H")}
+    {formattime(EWW_TIME, "%M")}
+    {formattime(EWW_TIME, "%S")}
+    "—"
+    {formattime(EWW_TIME, "%d")}
+    {formattime(EWW_TIME, "%m")}
+    {formattime(EWW_TIME, "%y")}))
+
+(defwidget data-display []
+  (box :valign "end"
+       :space-evenly false
+       :orientation "v"
+    (box :class "entry" :orientation "v"
+      (overlay 
+        (entry-icon :text {EWW_BATTERY["BAT1"].capacity > 80 ? "󰁹" :
+                           EWW_BATTERY["BAT1"].capacity > 50 ? "󰂁" :
+                           EWW_BATTERY["BAT1"].capacity > 30 ? "󰁾" :
+                           EWW_BATTERY["BAT1"].capacity > 10 ? "󰁼" : "󰁺"})
+        (entry-icon :text {EWW_BATTERY["BAT1"].status == "Charging" ? "󱐋" : ""}))
+      (label :class "value" :text "${EWW_BATTERY["BAT1"].capacity}%"))
+    (entry :icon "󰍛" :value "${round(EWW_RAM.used_mem_perc, 0)}%")
+    (entry :icon "󰻠" :value "${round(EWW_CPU.avg, 0)}%")))
+    ;(systray :pack-direction "ttb")))
+
+            
+(defwidget entry [icon ?icon-class value]
+  (box :class "entry" :orientation "v"
+    (entry-icon :class "icon" :text "${icon}")
+    (label :class "value" :text value)))
+
+(defwidget entry-icon [text ?class]
+  (label :class "icon ${class}"
+         :valign "fill" :halign "fill"
+         :text "${text}"))
+
+
+
+
+
+;(defwindow test [foo]
+  ;:monitor 0
+  ;:geometry (geometry :x 50 :y 50 :width "200px" :height "10px" :anchor "bottom left")
+  ;:stacking "fg"
+  ;"${foo}")
