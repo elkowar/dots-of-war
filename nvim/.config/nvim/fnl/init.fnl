@@ -211,32 +211,3 @@
 (utils.run-deferred)
 
 ; vim:foldmarker=foldstart,foldend
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
