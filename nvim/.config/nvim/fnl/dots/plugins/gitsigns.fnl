@@ -15,6 +15,8 @@
    :current_line_blame false
    :update_debounce 100})
 
+(let [scrollbar-gitsigns (require "scrollbar.handlers.gitsigns")]
+  (scrollbar-gitsigns.setup))
 
 (vim.cmd
   (..
@@ -23,6 +25,10 @@
     autocmd ColorScheme * :hi! GitSignsAdd    gui='NONE' guibg='NONE' guifg='" colors.bright_aqua "'
     autocmd ColorScheme * :hi! GitSignsDelete gui='NONE' guibg='NONE' guifg='" colors.neutral_red "'
     autocmd ColorScheme * :hi! GitSignsChange gui='NONE' guibg='NONE' guifg='" colors.bright_blue "'
+
+    autocmd ColorScheme * :hi! ScrollbarGitAdd    gui='NONE' guibg='NONE' guifg='" colors.bright_aqua "'
+    autocmd ColorScheme * :hi! ScrollbarGitDelete gui='NONE' guibg='NONE' guifg='" colors.neutral_red "'
+    autocmd ColorScheme * :hi! ScrollbarGitChange gui='NONE' guibg='NONE' guifg='" colors.bright_blue "'
     augroup END
     "))
 ;(utils.highlight :GitSignsAdd    {:bg "NONE" :fg colors.bright_aqua})

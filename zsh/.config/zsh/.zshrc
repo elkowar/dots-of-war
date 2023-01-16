@@ -48,6 +48,7 @@ zinit wait lucid for \
     "zsh-users/zsh-autosuggestions" \
     "olets/zsh-abbr" \
     "sudosubin/zsh-github-cli" \
+    "wfxr/forgit" \
     "pkulev/zsh-rustup-completion"
 
 

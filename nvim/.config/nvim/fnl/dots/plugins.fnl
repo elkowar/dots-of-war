@@ -65,8 +65,9 @@
   :nvim-telescope/telescope.nvim {:config #(require "dots.plugins.telescope")
                                   :cmd ["Telescope"]
                                   :dependencies [:nvim-lua/popup.nvim
-                                                 :nvim-lua/plenary.nvim
-                                                 :nvim-telescope/telescope-ui-select.nvim]}
+                                                 :nvim-lua/plenary.nvim]}
+
+  :petertriho/nvim-scrollbar {:config #(setup :scrollbar)}
 
   ; editing and movement <<<
   :jiangmiao/auto-pairs {}
@@ -120,8 +121,11 @@
   :sindrets/diffview.nvim {:cmd ["DiffviewOpen" "DiffviewToggleFiles"]
                            :config #(require "dots.plugins.diffview")}
   
-  :lewis6991/gitsigns.nvim {:dependencies [:vim-gruvbox8]
+  :lewis6991/gitsigns.nvim {:dependencies [:vim-gruvbox8
+                                           :petertriho/nvim-scrollbar]
                             :config #(require "dots.plugins.gitsigns")}
+                                         
+
 
   :ruanyl/vim-gh-line {}
   :rhysd/conflict-marker.vim {}
@@ -154,8 +158,8 @@
   ; >>>
 
   ; cmp <<<
-  :hrsh7th/vim-vsnip {:lazy true}
-  :hrsh7th/vim-vsnip-integ {:lazy true}
+  :hrsh7th/vim-vsnip {}
+  :hrsh7th/vim-vsnip-integ {}
   :rafamadriz/friendly-snippets {}
   
   :hrsh7th/nvim-cmp {:lazy true

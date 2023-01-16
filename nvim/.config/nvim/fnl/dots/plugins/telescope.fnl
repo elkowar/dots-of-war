@@ -10,7 +10,7 @@
    :extensions {:ui-select [((. (require "telescope.themes") :get_dropdown))]}})
                   
 (telescope.load_extension "dap")
-(telescope.load_extension "ui-select")
+;(telescope.load_extension "ui-select")
 
 (utils.keymap :n :<C-p> ":Telescope find_files<CR>")
 
