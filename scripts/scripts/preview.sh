@@ -6,7 +6,7 @@ esac
 
 case "$(file --mime-type "$1")" in
   *text*)
-    bat --color always --plain --theme gruvbox "$1"
+    bat --color always --plain --theme gruvbox-dark "$1"
     ;;
   *image* | *pdf)
     if command -v timg; then 

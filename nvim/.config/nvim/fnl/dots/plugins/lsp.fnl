@@ -124,23 +124,22 @@
                                                          :procMacro {:enable true}
                                                          :diagnostics {:enable false ;; native rust analyzer diagnostics
                                                                        :experimental {:enable false}}
-                                                         :checkOnSave {:overrideCommand ["cargo" "clippy" "--workspace" "--message-format=json" "--all-targets"]}}}}}))
-
-                                                                                               ; "--all-features"
+                                                         :checkOnSave {:overrideCommand ["cargo" "clippy" "--workspace" "--message-format=json" "--all-targets" "--all-features"]}}}}}))
                               
                               ;:cmd ["/home/leon/coding/prs/rust-analyzer/target/release/rust-analyzer"]}}))
 
-(let [sumneko_root_path (.. vim.env.HOME "/.local/share/lua-language-server")
-      sumneko_binary (.. sumneko_root_path "/bin/Linux/lua-language-server")]
-  (init-lsp 
-    :lua_ls
-    {:cmd [sumneko_binary "-E" (.. sumneko_root_path "/main.lua")]
-     :settings {:Lua {:runtime {:version "LuaJIT"
-                                :path (vim.split package.path ";")}
-                      :diagnostics {:globals ["vim"]}
-                      :workspace {:library {(vim.fn.expand "$VIMRUNTIME/lua") true
-                                            (vim.fn.expand "$VIMRUNTIME/lua/vim/lsp") true}}
-                      :telemetry false}}}))
+
+; (let [sumneko_root_path (.. vim.env.HOME "/.local/share/lua-language-server")
+;       sumneko_binary (.. sumneko_root_path "/bin/Linux/lua-language-server"))
+;   (init-lsp 
+;     :lua_ls
+;     {:cmd [sumneko_binary "-E" (.. sumneko_root_path "/main.lua")]
+;      :settings {:Lua {:runtime {:version "LuaJIT"
+;                                 :path (vim.split package.path ";")}
+;                       :diagnostics {:globals ["vim"]}
+;                       :workspace {:library {(vim.fn.expand "$VIMRUNTIME/lua") true
+;                                             (vim.fn.expand "$VIMRUNTIME/lua/vim/lsp") true}}
+;                       :telemetry false}}}))
 
 (comment
   (when (not lsp.prolog_lsp)

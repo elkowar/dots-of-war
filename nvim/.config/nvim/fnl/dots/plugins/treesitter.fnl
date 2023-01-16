@@ -5,7 +5,7 @@
    require-macros [macros]})
 
 (configs.setup 
-  {:ensure_installed ["rust" "fennel" "commonlisp"]
+  {:ensure_installed ["rust" "fennel" "commonlisp" "vim" "regex" "lua" "bash" "markdown" "markdown_inline"]
   ; :ensure_installed "maintained" 
    :highlight {:enable true
                :disable ["fennel" "rust" "haskell"]}
@@ -17,6 +17,7 @@
                                      :scope_incremental "gsj"
                                      :scope_decremental "gsk"}}
    :textsubjects {:enable true
+                  :disable ["noice"]
                   :prev_selection ","
                   :keymaps {"." "textsubjects-smart"}}
 
@@ -26,7 +27,7 @@
    :context_commentstring {:enable true :disable ["rust" "fennel"]}
 
    :playground
-   {:enable true
+   {:enable false
     :disable ["fennel"]
     :updatetime 25 ; Debounced time for highlighting nodes in the playground from source code
     :persist_queries false ; Whether the query persists across vim sessions

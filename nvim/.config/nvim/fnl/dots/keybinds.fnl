@@ -6,7 +6,8 @@
              wk which-key
              treesitter-selection nvim-treesitter.incremental_selection
              lspactions lspactions
-             glance glance}
+             glance glance
+             crates crates}
    require-macros [macros]})
 
 ; undo autopairs fuckup    
@@ -41,6 +42,8 @@
 (utils.keymap :i :<C-l><C-p> "<Plug>(copilot-previous)")
 (utils.keymap :i :<C-l><C-o> "<cmd>Copilot panel<cr>")
 
+(utils.keymap :n :<a-s-j> "<cmd>RustMoveItemDown<cr>j")
+(utils.keymap :n :<a-s-k> "<cmd>RustMoveItemUp<cr>k")
 
 
 ; Fix keybinds in linewrapped mode
@@ -117,7 +120,14 @@
             "d" [#(glance.open "definitions")             "Definitions"] 
             "r" [#(glance.open "references")              "References"] 
             "t" [#(glance.open "type_definitions")        "Type definitions"] 
-            "i" [#(glance.open "implementations")         "Implementations"]}} 
+            "i" [#(glance.open "implementations")         "Implementations"]} 
+       "c" {:name "+Crates"
+            "j" [crates.show_popup "crates popup"]
+            "f" [crates.show_features_popup "crate features"]
+            "v" [crates.show_versions_popup "crate versions"]
+            "d" [crates.show_dependencies_popup "crate dependencies"]
+            "h" [crates.open_documentation "crate documentation"]}}
+  
 
   "f" {:name "+folds"
        "o" (cmd "foldopen"  "open fold") 

@@ -62,6 +62,7 @@ bindkey '^W'      my-backward-delete-word # C-w
 bindkey '^H'      my-backward-delete-word # C-backspace
 bindkey "^[."     insert-last-word        # alt-.
 bindkey "^[[3~"   delete-char             # DEL
+bindkey "^R"      history-incremental-search-backward # C-R
 
 bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down

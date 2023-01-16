@@ -22,19 +22,24 @@
            :popupmenu {:relative "editor"
                        :border {:style "none" :padding [1 1]}
                        :position {:row 8 :col "50%"}
-                       :size {:width 60 :height 10}}}
+                       :size {:width 60 :height 10}}
+           :mini      {:max_height 5}}
    :cmdline {:view "cmdline_popup" ; change to cmdline
              :format {:cmdline {:icon ":"}
                       :lua false
                       :help false}}
    :messages {:view "mini"
-              :view_error "mini"
+              :view_error "cmdline_output"
               :view_warn "mini"
               :view_search "virtualtext"}
    :markdown {:hover {"|(%S-)|" vim.cmd.help}}
-   :routes [{:view "notify" :filter {:event "msg_showmode"}}]})
+   :routes [{:view "notify" :filter {:event "msg_showmode"}}
+            {:view "mini"
+             :filter {:error true :max_height 5}}
+            {:view "cmdline_output"
+             :filter {:error true :min_height 6}}]})
 
-
+(+ 1 b)
 (defn- setup-noice-theme []
   (utils.highlight-add :NoicePopupmenu {:bg colors.dark0_hard})
   (utils.highlight-add :NoiceCmdline {:bg "#1f2324"})

@@ -31,6 +31,7 @@ cursor:
 font:
   #normal: { "family": "APL 385 Unicode" }
   normal: { "family": "Fira Code" }
+  normal: { "family": "Fira Code" }
   #normal: { "family": "Jetbrains Mono" }
   #normal: { "family": "Victor Mono" }
   #normal: { "family": "Monoid" }
@@ -38,7 +39,7 @@ font:
   #normal: { "family": "cherry" }
   #normal: { "family": "scientifica" }
   #normal: { "family": "cozette" }
-  #normal: { "family": "xos4 Terminus" }
+  #normal: { "family": "Terminus" }
   offset: { "x": 0, "y": 0 }
   size: 12
 

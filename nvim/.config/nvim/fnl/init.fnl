@@ -65,6 +65,7 @@
 (set vim.opt.background "dark")
 (set vim.opt.swapfile false)
 (set vim.opt.undolevels 10000)
+(set vim.opt.keywordprg "rusty-man")
 
 (set vim.g.AutoPairsMultilineClose 0)
 
