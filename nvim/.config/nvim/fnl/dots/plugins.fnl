@@ -54,6 +54,8 @@
   :nathanaelkane/vim-indent-guides {:cmd ["IndentGuidesToggle"]}
   :luukvbaal/stabilize.nvim {:config #(setup :stabilize)}
 
+  :stevearc/dressing.nvim {:config #(setup :dressing)}
+
   :tweekmonster/startuptime.vim {:cmd ["StartupTime"]}
   :folke/noice.nvim {:config #(require "dots.plugins.noice")
                      :dependencies [:MunifTanjim/nui.nvim]}
@@ -155,9 +157,8 @@
   
   :neovim/nvim-lspconfig {}
 
-  :smjonas/inc-rename.nvim {:config #(setup :inc_rename)}
-  :dnlhc/glance.nvim {:lazy true
-                      :config #(require "dots.plugins.glance")}
+  :smjonas/inc-rename.nvim {:config #(setup :inc_rename {:input_buffer_type "dressing"})}
+  :dnlhc/glance.nvim {:lazy true :config #(require "dots.plugins.glance")}
   ; >>>
 
   ; cmp <<<
