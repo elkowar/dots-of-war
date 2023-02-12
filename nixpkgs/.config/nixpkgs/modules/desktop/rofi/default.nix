@@ -68,7 +68,8 @@ in
         inputbar,
         prompt,
         textbox-prompt-colon,
-        entry {
+        entry,
+        element-text, element-icon {
           background-color: @background-light;
         }
 
