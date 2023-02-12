@@ -55,7 +55,7 @@
   :luukvbaal/stabilize.nvim {:config #(setup :stabilize)}
 
   :tweekmonster/startuptime.vim {:cmd ["StartupTime"]}
-  :folke/noice.nvim {:config #(setup :noice {:presets {:inc_rename true}})
+  :folke/noice.nvim {:config #(require "dots.plugins.noice")
                      :dependencies [:MunifTanjim/nui.nvim]}
   :folke/persistence.nvim {:config #(require "dots.plugins.persistence")}
   :folke/zen-mode.nvim {:config #(require "dots.plugins.zen-mode")
@@ -79,8 +79,9 @@
   :wellle/targets.vim {} ; more text objects. IE: cin (change in next parens). generally better handling of surrounding objects.
   :mg979/vim-visual-multi {:lazy true}
   :tommcdo/vim-exchange {}
-  :justinmk/vim-sneak {:lazy true
-                       :config #(require "dots.plugins.sneak")}
+  :phaazon/hop.nvim {:config #(setup "hop" {:keys "jfkdls;amvieurow"})}
+  ;:justinmk/vim-sneak {:lazy true}
+                       ;:config #(require "dots.plugins.sneak")}
   ; >>>
   
   ; treesitter <<<

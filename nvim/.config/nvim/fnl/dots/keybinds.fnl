@@ -30,6 +30,12 @@
 (utils.keymap :n :<space>c<space> "<cmd>call nerdcommenter#Comment(\"m\", \"Toggle\")<CR>" {})
 (utils.keymap :v :<space>c<space> "<cmd>call nerdcommenter#Comment(\"x\", \"Toggle\")<CR>" {})
 
+(utils.keymap :n :<C-LeftMouse> "<LeftMouse><cmd>lua vim.lsp.buf.definition()<CR>")
+(utils.keymap :n :<A-LeftMouse> "<Esc><LeftMouse><cmd>lua vim.lsp.buf.hover()<CR>")
+
+(utils.keymap :n :<Backspace> "<cmd>HopChar2<CR>")
+
+
 ; Fix keybinds in linewrapped mode
 ;(utils.keymap [:n] :j "gj")
 ;(utils.keymap [:n] :k "gk")
@@ -58,6 +64,7 @@
  {"c" {:name "+comment out"}
   "e" {:name "+emmet"}
 
+  "<backspace>" (cmd "HopWord" "Hop to a word")
   "h" (cmd "bprevious"              "previous buffer")
   "l" (cmd "bnext"                  "next buffer")
   "o" (cmd "Telescope live_grep"    "Grep files")
