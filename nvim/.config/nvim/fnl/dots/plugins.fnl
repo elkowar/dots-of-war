@@ -48,6 +48,7 @@
   :Famiu/feline.nvim {:config #(require "dots.plugins.feline")}
   :akinsho/nvim-bufferline.lua {:config #(require "dots.plugins.bufferline")
                                 :tag "v1.1.1"}
+  :ckipp01/nvim-jenkinsfile-linter {:dependencies ["nvim-lua/plenary.nvim"]}
 
   :psliwka/vim-smoothie {}
   :norcalli/nvim-colorizer.lua {:config #(require "dots.plugins.nvim-colorizer")}
