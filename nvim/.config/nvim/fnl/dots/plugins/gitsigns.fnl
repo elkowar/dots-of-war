@@ -18,19 +18,21 @@
 (let [scrollbar-gitsigns (require "scrollbar.handlers.gitsigns")]
   (scrollbar-gitsigns.setup))
 
-(vim.cmd
-  (..
-    "
-    augroup gitsignsHighlight
-    autocmd ColorScheme * :hi! GitSignsAdd    gui='NONE' guibg='NONE' guifg='" colors.bright_aqua "'
-    autocmd ColorScheme * :hi! GitSignsDelete gui='NONE' guibg='NONE' guifg='" colors.neutral_red "'
-    autocmd ColorScheme * :hi! GitSignsChange gui='NONE' guibg='NONE' guifg='" colors.bright_blue "'
+; the above code, but using vim.api.nvim_create_autocomand
+(vim.api.nvim_create_autocmd
+  "ColorScheme"
+  {:pattern "*"
+   :callback
+   (fn []
+     (utils.highlight-add "GitSignsAdd" {:gui "NONE" :bg "NONE" :fg colors.bright_aqua})
+     (utils.highlight-add "GitSignsDelete" {:gui "NONE" :bg "NONE" :fg colors.neutral_red})
+     (utils.highlight-add "GitSignsChange" {:gui "NONE" :bg "NONE" :fg colors.bright_blue})
+     (utils.highlight-add "ScrollbarGitAdd" {:gui "NONE" :bg "NONE" :fg colors.bright_aqua})
+     (utils.highlight-add "ScrollbarGitDelete" {:gui "NONE" :bg "NONE" :fg colors.neutral_red})
+     (utils.highlight-add "ScrollbarGitChange" {:gui "NONE" :bg "NONE" :fg colors.bright_blue}))})
+               
 
-    autocmd ColorScheme * :hi! ScrollbarGitAdd    gui='NONE' guibg='NONE' guifg='" colors.bright_aqua "'
-    autocmd ColorScheme * :hi! ScrollbarGitDelete gui='NONE' guibg='NONE' guifg='" colors.neutral_red "'
-    autocmd ColorScheme * :hi! ScrollbarGitChange gui='NONE' guibg='NONE' guifg='" colors.bright_blue "'
-    augroup END
-    "))
+
 ;(utils.highlight :GitSignsAdd    {:bg "NONE" :fg colors.bright_aqua})
 ;(utils.highlight :GitSignsDelete {:bg "NONE" :fg colors.neutral_red})
 ;(utils.highlight :GitSignsChange {:bg "NONE" :fg colors.bright_blue})

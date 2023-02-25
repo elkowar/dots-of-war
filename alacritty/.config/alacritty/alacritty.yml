@@ -24,9 +24,12 @@ colors:
     foreground: "#ebdbb2"
 
 cursor:
-  style: "Block"
+  style:
+    shape: "Block"
+    blinking: "On"
   unfocused_hollow: true
 font:
+  #normal: { "family": "APL 385 Unicode" }
   normal: { "family": "Fira Code" }
   #normal: { "family": "Jetbrains Mono" }
   #normal: { "family": "Victor Mono" }

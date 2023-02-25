@@ -5,7 +5,7 @@
    require-macros [macros]})
 
 (configs.setup 
-  {:ensure_installed []
+  {:ensure_installed ["rust" "fennel"]
   ; :ensure_installed "maintained" 
    :highlight {:enable true
                :disable ["fennel" "rust" "haskell"]}
@@ -16,6 +16,9 @@
                                      :node_decremental  "gsh"
                                      :scope_incremental "gsj"
                                      :scope_decremental "gsk"}}
+   :textsubjects {:enable true
+                  :prev_selection ","
+                  :keymaps {"." "textsubjects-smart"}}
 
    ; Might fuck with gitsigns
    ;:rainbow {:enable true

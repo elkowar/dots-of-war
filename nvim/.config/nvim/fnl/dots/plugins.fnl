@@ -88,6 +88,8 @@
   :nvim-treesitter/nvim-treesitter {:config #(require "dots.plugins.treesitter") 
                                     :event ["BufEnter"]
                                     :build ":TSUpdate"}
+  :RRethy/nvim-treesitter-textsubjects {:dependencies [:nvim-treesitter/nvim-treesitter]}
+  
 
   :JoosepAlviste/nvim-ts-context-commentstring {:event ["BufEnter"]
                                                 :dependencies [:nvim-treesitter/nvim-treesitter]}

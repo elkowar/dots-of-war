@@ -70,15 +70,21 @@
 
 (vim-let &t_ut "")
 
-(vim.cmd "autocmd! BufReadPost *.hs :set shiftwidth=2")
-(vim.cmd "autocmd! FileType vim setlocal foldmethod=marker")
+(vim.api.nvim_create_autocmd "BufWritePost" {:pattern "*.hs" :callback #(set vim.opt.shiftwidth 2)})
+(vim.api.nvim_create_autocmd "FileType" {:pattern "vim" :callback #(set vim.opt_local.foldmethod "marker")})
 
 ;Disables automatic commenting on newline)
-(vim.cmd "autocmd! FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o") 
+(vim.api.nvim_create_autocmd "FileType"
+                             {:pattern "*"
+                              :callback #(set vim.opt_local.formatoptions (vim.o.formatoptions:gsub "[cor]" ""))})
+          
 ; Auto-close quickfix list when element is selected)
-(vim.cmd "autocmd! FileType qf nnoremap <buffer> <CR> <CR>:cclose<CR>")
-
-(vim.cmd "autocmd! TextYankPost * silent! lua vim.highlight.on_yank {higroup=\"IncSearch\", timeout=300}")
+(vim.api.nvim_create_autocmd "FileType"
+                             {:pattern "qf"
+                              :callback #(vim.cmd "nnoremap <buffer> <CR> <CR>:cclose<CR>")})
+(vim.api.nvim_create_autocmd "TextYankPost"
+                             {:pattern "*"
+                              :callback #(vim.highlight.on_yank {:higroup "IncSearch" :timeout 300})})
 
 
 (set vim.g.copilot_filetypes {:TelescopePrompt false}) 
@@ -149,8 +155,8 @@
 
 ; Plugin config ----------------------- foldstart
 
-(set vim.g.VM_leader "m") ; visual-multi leader
 
+(set vim.g.VM_leader "m") ; visual-multi leader
 
 ; rust.vim
 (set vim.g.rust_clip_command "xclip -selection clipboard")
@@ -162,30 +168,6 @@
 
 ; foldend
 
-; :: and _ as space ------------------------------------------------------------------- foldstart
-(var remapped-space nil)
-(fn _G.RebindShit [newKey]
-  (set remapped-space {:old (vim.fn.maparg :<Space> :i)
-                       :cur newKey})
-  (utils.keymap :i :<Space> newKey {:buffer true}))
-
-(fn _G.UnbindSpaceStuff []
-  (when (and remapped-space (~= remapped-space {}))
-    (utils.del-keymap :i :<Space> true)
-    (when (~= remapped-space.old "")
-      (utils.keymap :i :<Space> remapped-space.old {:buffer true}))
-    (set remapped-space nil)))
- 
-
-
-(nvim.command "autocmd! InsertLeave * :call v:lua.UnbindSpaceStuff()")
-(utils.keymap :n "<Tab>j" ":call v:lua.RebindShit('_')<CR>")
-(utils.keymap :n "<Tab>k" ":call v:lua.RebindShit('::')<CR>")
-(utils.keymap :i "<Tab>j" "<space><C-o>:call v:lua.RebindShit('_')<CR>")
-(utils.keymap :i "<Tab>k" "<space><C-o>:call v:lua.RebindShit('::')<CR>")
-(utils.keymap :n "ö" "a")
-
-; foldend
 
 ; :: autoclose empty unnamed buffers ----------------------------------------------- foldstart
 
@@ -207,6 +189,7 @@
 (vim.cmd
   "command! -nargs=1 L :lua print(vim.inspect(<args>))")
 
+(vim.cmd "Copilot enable")
 
 (utils.run-deferred)
 

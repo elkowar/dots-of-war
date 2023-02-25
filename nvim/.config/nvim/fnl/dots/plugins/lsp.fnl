@@ -87,7 +87,7 @@
 
 (init-lsp :powershell_es {:bundle_path "/home/leon/powershell"})
 ;(ltex-ls.init)
-         
+
          
          
          
@@ -163,6 +163,7 @@
                             :root_dir (fn [fname] (or (lsp.util.find_git_ancestor fname) (vim.loop.os_homedir)))
                             :settings {}}}))
       (init-lsp :ewwls))))
+
 
 
 ; Idris2 ----------------------------------------------------------- <<<<<

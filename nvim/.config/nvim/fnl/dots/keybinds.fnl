@@ -35,6 +35,13 @@
 
 (utils.keymap :n :<Backspace> "<cmd>HopChar2<CR>")
 
+(utils.keymap :i :<C-l><C-j> "<Plug>(copilot-suggest)")
+(utils.keymap :i :<C-l><C-d> "<Plug>(copilot-dismiss)")
+(utils.keymap :i :<C-l><C-n> "<Plug>(copilot-next)")
+(utils.keymap :i :<C-l><C-p> "<Plug>(copilot-previous)")
+(utils.keymap :i :<C-l><C-o> "<cmd>Copilot panel<cr>")
+
+
 
 ; Fix keybinds in linewrapped mode
 ;(utils.keymap [:n] :j "gj")
