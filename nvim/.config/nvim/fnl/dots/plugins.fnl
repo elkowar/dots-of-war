@@ -43,7 +43,9 @@
   :lifepillar/vim-gruvbox8 {:lazy false :priority 1000 :config #(require "dots.plugins.gruvbox8")}
   :kyazdani42/nvim-web-devicons {}
   :folke/which-key.nvim {}
-  :folke/todo-comments.nvim {:config #(require "dots.plugins.todo-comments")}
+  :folke/todo-comments.nvim {:lazy true
+                             :event "VeryLazy
+                             ":config #(require "dots.plugins.todo-comments")}
 
   :Famiu/feline.nvim {:config #(require "dots.plugins.feline")}
   :akinsho/nvim-bufferline.lua {:config #(require "dots.plugins.bufferline")
@@ -51,7 +53,9 @@
   :ckipp01/nvim-jenkinsfile-linter {:dependencies ["nvim-lua/plenary.nvim"]}
 
   :psliwka/vim-smoothie {}
-  :norcalli/nvim-colorizer.lua {:config #(require "dots.plugins.nvim-colorizer")}
+  :norcalli/nvim-colorizer.lua {:event "VeryLazy"
+                                :lazy true
+                                :config #(require "dots.plugins.nvim-colorizer")}
   :nathanaelkane/vim-indent-guides {:cmd ["IndentGuidesToggle"]}
   :luukvbaal/stabilize.nvim {:config #(setup :stabilize)}
 
@@ -70,35 +74,46 @@
                                   :dependencies [:nvim-lua/popup.nvim
                                                  :nvim-lua/plenary.nvim]}
 
-  :petertriho/nvim-scrollbar {:config #(setup :scrollbar)}
+  :petertriho/nvim-scrollbar {:event "VeryLazy"
+                              :lazy true
+                              :config #(setup :scrollbar)}
 
 
   ; editing and movement <<<
   :jiangmiao/auto-pairs {}
   :tpope/vim-repeat {}
-  :preservim/nerdcommenter {:lazy false :priority 1000}
+  :preservim/nerdcommenter {:event "VeryLazy"
+                            :lazy true
+                            :priority 1000}
   :godlygeek/tabular {:cmd ["Tabularize"]}
   :tpope/vim-surround {}
   :hauleth/sad.vim {}
   :wellle/targets.vim {} ; more text objects. IE: cin (change in next parens). generally better handling of surrounding objects.
-  :mg979/vim-visual-multi {:lazy true}
+  :mg979/vim-visual-multi {:lazy true :event "VeryLazy"}
   :tommcdo/vim-exchange {}
-  :phaazon/hop.nvim {:config #(setup "hop" {:keys "jfkdls;amvieurow"})}
+  :phaazon/hop.nvim {:lazy true
+                     :event "VeryLazy"
+                     :config #(setup "hop" {:keys "jfkdls;amvieurow"})}
   ;:justinmk/vim-sneak {:lazy true}
                        ;:config #(require "dots.plugins.sneak")}
   ; >>>
   
   ; treesitter <<<
   :nvim-treesitter/nvim-treesitter {:config #(require "dots.plugins.treesitter") 
-                                    :event ["BufEnter"]
+                                    :lazy true
+                                    :event ["VeryLazy"]
                                     :build ":TSUpdate"}
-  :RRethy/nvim-treesitter-textsubjects {:dependencies [:nvim-treesitter/nvim-treesitter]}
+  :RRethy/nvim-treesitter-textsubjects {:dependencies [:nvim-treesitter/nvim-treesitter]
+                                        :lazy true
+                                        :event ["VeryLazy"]}
   
 
-  :JoosepAlviste/nvim-ts-context-commentstring {:event ["BufEnter"]
+  :JoosepAlviste/nvim-ts-context-commentstring {:event ["VeryLazy"]
+                                                :lazy true
                                                 :dependencies [:nvim-treesitter/nvim-treesitter]}
   
-  :nvim-treesitter/playground {:event ["BufEnter"]
+  :nvim-treesitter/playground {:event ["VeryLazy"]
+                               :lazy true
                                :dependencies [:nvim-treesitter/nvim-treesitter]}
   ; >>>
  
@@ -130,13 +145,15 @@
   
   :lewis6991/gitsigns.nvim {:dependencies [:vim-gruvbox8
                                            :petertriho/nvim-scrollbar]
+                            :lazy true
+                            :event "VeryLazy"
                             :config #(require "dots.plugins.gitsigns")}
                                          
 
 
   :ruanyl/vim-gh-line {}
   :rhysd/conflict-marker.vim {}
-  :tpope/vim-fugitive {}
+  :tpope/vim-fugitive {:lazy true :event "VeryLazy"}
   :TimUntersberger/neogit {:config #(require "dots.plugins.neogit")
                            :cmd ["Neogit"]}
 
@@ -155,20 +172,24 @@
   ;                        :config #(require "dots.plugins.trouble")
   ;                        :cmd ["Trouble" "TroubleClose" "TroubleRefresh" "TroubleToggle"]}
   
-  :simrat39/symbols-outline.nvim {:config #(require "dots.plugins.symbols-outline")}
+  :simrat39/symbols-outline.nvim {:lazy true
+                                  :cmd ["SymbolsOutline" "SymbolsOutlineClose" "SymbolsOutlineOpen"]
+                                  :config #(require "dots.plugins.symbols-outline")}
   
-  :neovim/nvim-lspconfig {}
+  :neovim/nvim-lspconfig {:event "VeryLazy"
+                          :lazy true}
 
   :smjonas/inc-rename.nvim {:config #(setup :inc_rename {:input_buffer_type "dressing"})}
   :dnlhc/glance.nvim {:lazy true :config #(require "dots.plugins.glance")}
   ; >>>
 
   ; cmp <<<
-  :hrsh7th/vim-vsnip {}
-  :hrsh7th/vim-vsnip-integ {}
+  :hrsh7th/vim-vsnip {:lazy true :event ["VeryLazy"]}
+  :hrsh7th/vim-vsnip-integ {:lazy true :event ["VeryLazy"]}
   :rafamadriz/friendly-snippets {}
   
   :hrsh7th/nvim-cmp {:lazy true
+                     :event ["VeryLazy"]
                      :dependencies [[:hrsh7th/cmp-nvim-lsp] 
                                     [:hrsh7th/cmp-buffer]
                                     [:hrsh7th/cmp-vsnip]
@@ -222,6 +243,7 @@
 
   :Saecki/crates.nvim {:dependencies ["nvim-lua/plenary.nvim"]
                        :event ["BufRead Cargo.toml"]
+                       :lazy true
                        :config #(setup :crates)}
 
   :qnighy/lalrpop.vim {}
