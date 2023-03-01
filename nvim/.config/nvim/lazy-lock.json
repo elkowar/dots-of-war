@@ -1,4 +1,5 @@
 {
+  "ChatGPT.nvim": { "branch": "main", "commit": "3f6fd348df53b9d15aa0a58709562cf0a3b4636a" },
   "agda-vim": { "branch": "master", "commit": "4a0f475aaef756702222bdd5b01e25f814f5691f" },
   "aniseed": { "branch": "master", "commit": "a7445c340fb7a0529f3c413eb99d3f8d29f50ba2" },
   "antifennel-nvim": { "branch": "master", "commit": "79261d02213a5093135e5d02431682f04459f0f7" },
@@ -41,6 +42,7 @@
   "neoformat": { "branch": "master", "commit": "ec601d38a2e9309109f405ce038c5a6ce774f1a9" },
   "neogit": { "branch": "master", "commit": "981207efd10425fef82ca09fa8bd22c3ac3e622d" },
   "nerdcommenter": { "branch": "master", "commit": "98cc4a2d64ca67cccbf5b5cf47c682ebadaaff58" },
+  "nui.nvim": { "branch": "main", "commit": "257da38029d3859ed111804f9d4e95b0fa993a31" },
   "nvim-bufferline.lua": { "branch": "main", "commit": "874f869a24e568980294b3200fc9dd842db65a36" },
   "nvim-cmp": { "branch": "main", "commit": "11a95792a5be0f5a40bab5fc5b670e5b1399a939" },
   "nvim-code-action-menu": { "branch": "main", "commit": "e4399dbaf6eabff998d3d5f1cbcd8d9933710027" },

@@ -72,6 +72,7 @@
 
   :petertriho/nvim-scrollbar {:config #(setup :scrollbar)}
 
+
   ; editing and movement <<<
   :jiangmiao/auto-pairs {}
   :tpope/vim-repeat {}

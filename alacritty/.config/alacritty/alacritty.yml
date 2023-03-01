@@ -9,7 +9,7 @@ colors:
     white: "#ebdbb2"
     yellow: "#fabd2f"
   normal:
-    black: "#282828"
+    black: "#665c54" # this is used for comments in bash, so let's make it visible...
     blue: "#458588"
     cyan: "#689d6a"
     green: "#98971a"
@@ -24,13 +24,13 @@ colors:
     foreground: "#ebdbb2"
 
 cursor:
-  style:
+  style: 
     shape: "Block"
-    blinking: "On"
+    blinking: "Never"
   unfocused_hollow: true
 font:
+  normal: { "family": "Fira Code Nerd Font" }
   #normal: { "family": "APL 385 Unicode" }
-  normal: { "family": "Fira Code" }
   #normal: { "family": "Jetbrains Mono" }
   #normal: { "family": "Victor Mono" }
   #normal: { "family": "Monoid" }
@@ -44,6 +44,31 @@ font:
 
 key_bindings:
   - { "action": "SpawnNewInstance", "key": "N", "mods": "Control|Shift" }
+  # let's increase font size 12 times every C-S-+, and decrease 12 times on C-S-A-+... lmao
+  - { "action": "IncreaseFontSize", "key": "Plus", "mods": "Control|Shift" }
+  - { "action": "IncreaseFontSize", "key": "Plus", "mods": "Control|Shift" }
+  - { "action": "IncreaseFontSize", "key": "Plus", "mods": "Control|Shift" }
+  - { "action": "IncreaseFontSize", "key": "Plus", "mods": "Control|Shift" }
+  - { "action": "IncreaseFontSize", "key": "Plus", "mods": "Control|Shift" }
+  - { "action": "IncreaseFontSize", "key": "Plus", "mods": "Control|Shift" }
+  - { "action": "IncreaseFontSize", "key": "Plus", "mods": "Control|Shift" }
+  - { "action": "IncreaseFontSize", "key": "Plus", "mods": "Control|Shift" }
+  - { "action": "IncreaseFontSize", "key": "Plus", "mods": "Control|Shift" }
+  - { "action": "IncreaseFontSize", "key": "Plus", "mods": "Control|Shift" }
+  - { "action": "IncreaseFontSize", "key": "Plus", "mods": "Control|Shift" }
+  - { "action": "IncreaseFontSize", "key": "Plus", "mods": "Control|Shift" }
+  - { "action": "DecreaseFontSize", "key": "Plus", "mods": "Control|Shift|Alt" }
+  - { "action": "DecreaseFontSize", "key": "Plus", "mods": "Control|Shift|Alt" }
+  - { "action": "DecreaseFontSize", "key": "Plus", "mods": "Control|Shift|Alt" }
+  - { "action": "DecreaseFontSize", "key": "Plus", "mods": "Control|Shift|Alt" }
+  - { "action": "DecreaseFontSize", "key": "Plus", "mods": "Control|Shift|Alt" }
+  - { "action": "DecreaseFontSize", "key": "Plus", "mods": "Control|Shift|Alt" }
+  - { "action": "DecreaseFontSize", "key": "Plus", "mods": "Control|Shift|Alt" }
+  - { "action": "DecreaseFontSize", "key": "Plus", "mods": "Control|Shift|Alt" }
+  - { "action": "DecreaseFontSize", "key": "Plus", "mods": "Control|Shift|Alt" }
+  - { "action": "DecreaseFontSize", "key": "Plus", "mods": "Control|Shift|Alt" }
+  - { "action": "DecreaseFontSize", "key": "Plus", "mods": "Control|Shift|Alt" }
+  - { "action": "DecreaseFontSize", "key": "Plus", "mods": "Control|Shift|Alt" }
 live_config_reload: true
 mouse:
   double_click: { "threshold": 300 }
