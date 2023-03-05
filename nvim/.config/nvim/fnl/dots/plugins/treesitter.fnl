@@ -5,7 +5,7 @@
    require-macros [macros]})
 
 (configs.setup 
-  {:ensure_installed ["rust" "fennel"]
+  {:ensure_installed ["rust" "fennel" "commonlisp"]
   ; :ensure_installed "maintained" 
    :highlight {:enable true
                :disable ["fennel" "rust" "haskell"]}
@@ -21,7 +21,7 @@
                   :keymaps {"." "textsubjects-smart"}}
 
    ; Might fuck with gitsigns
-   ;:rainbow {:enable true
+   ;:rainbow {:enable true}
              ;:extended_mode true}
    :context_commentstring {:enable true :disable ["rust" "fennel"]}
 

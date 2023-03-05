@@ -207,6 +207,7 @@
   :purescript-contrib/purescript-vim {:ft ["purescript"]}
   :derekelkins/agda-vim {:ft ["agda"]}
   :neovimhaskell/haskell-vim { :ft ["haskell"]}
+  :vlime/vlime {:ft ["lisp"]}
 
   
   :rust-lang/rust.vim {:ft ["rust"]

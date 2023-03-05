@@ -98,6 +98,7 @@
   "vim-vsnip": { "branch": "master", "commit": "8dde8c0ef10bb1afdbb301e2bd7eb1c153dd558e" },
   "vim-vsnip-integ": { "branch": "master", "commit": "1cf89903f12777b90dd79eb4b3d7fbc0b9a254a1" },
   "vimtex": { "branch": "master", "commit": "3a9180f1d2cc984fe24bc7afaf9d4d00b3e4c20a" },
+  "vlime": { "branch": "master", "commit": "3205f02306314ab8cfc9034cf72097891c923e9d" },
   "webapi-vim": { "branch": "master", "commit": "70c49ada7827d3545a65cbdab04c5c89a3a8464e" },
   "which-key.nvim": { "branch": "main", "commit": "5224c261825263f46f6771f1b644cae33cd06995" },
   "yats.vim": { "branch": "master", "commit": "4bf3879055847e675335f1c3050bd2dd11700c7e" },
