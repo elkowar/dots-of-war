@@ -47,7 +47,6 @@
 
 
 
-
 ; Fix keybinds in linewrapped mode
 ;(utils.keymap [:n] :j "gj")
 ;(utils.keymap [:n] :k "gk")

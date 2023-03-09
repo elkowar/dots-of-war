@@ -236,7 +236,6 @@
   :purescript-contrib/purescript-vim {:ft ["purescript"]}
   :derekelkins/agda-vim {:ft ["agda"]}
   :neovimhaskell/haskell-vim { :ft ["haskell"]}
-  :monkoose/nvlime {:ft ["lisp"] :dependencies ["monkoose/parsley"] :config #(set vim.g.vlime_overlay "slimv")}
 
   
   :rust-lang/rust.vim {:ft ["rust"]
