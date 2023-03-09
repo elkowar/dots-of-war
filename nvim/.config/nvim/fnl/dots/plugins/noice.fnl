@@ -48,4 +48,5 @@
   (utils.highlight-add :NoiceCmdlinePopupBorder {:fg colors.bright_aqua})
   (utils.highlight-add :NoiceCmdlineIcon {:fg colors.bright_aqua}))
 
-(vim.defer_fn setup-noice-theme 50)
+
+(vim.defer_fn setup-noice-theme 200)

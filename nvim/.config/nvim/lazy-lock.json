@@ -51,6 +51,7 @@
   "lazy.nvim": { "branch": "main", "commit": "e89acede13f46a5db229133cf0c87aee74938c56" },
 >>>>>>> b86d8cc (work adjustments)
   "litee.nvim": { "branch": "main", "commit": "bf366a1414fd0f9401631ac8884f2f9fa4bf18d2" },
+  "lsp_lines.nvim": { "branch": "main", "commit": "ec98b45c8280e5ef8c84028d4f38aa447276c002" },
   "lsp_signature.nvim": { "branch": "master", "commit": "6f6252f63b0baf0f2224c4caea33819a27f3f550" },
   "neoformat": { "branch": "master", "commit": "891fad5829f91cbc3d0866f7abd028d233b8763e" },
   "neogit": { "branch": "master", "commit": "85380916cec322b1351785cac4f4e3f24de36b2a" },

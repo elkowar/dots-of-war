@@ -18,7 +18,6 @@
 (let [scrollbar-gitsigns (require "scrollbar.handlers.gitsigns")]
   (scrollbar-gitsigns.setup))
 
-; the above code, but using vim.api.nvim_create_autocomand
 (vim.api.nvim_create_autocmd
   "ColorScheme"
   {:pattern "*"

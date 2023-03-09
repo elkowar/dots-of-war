@@ -74,6 +74,15 @@
 (defn open-rename []
   (vim.api.nvim_feedkeys (.. ":IncRename " (vim.fn.expand "<cword>")) "n" ""))
 
+(defn toggle-lsp-lines []
+  (let [lsp-lines (require "lsp_lines")]
+    (vim.diagnostic.config {:virtual_lines (not (. (vim.diagnostic.config) :virtual_lines))})
+    ; TODO: this doesn't seem to work...
+    (vim.diagnostic.config {:virtual_text (not (. (vim.diagnostic.config) :virtual_lines))})))
+
+(defn toggle-lsp-lines-current []
+  (let [lsp-lines (require "lsp_lines")]
+    (vim.diagnostic.config {:virtual_lines {:only_current_line true}})))
 
 (wk.setup {})
 (wk.register 
@@ -120,6 +129,8 @@
        "t" (cmd "Trouble lsp_type_definitions"            "Go to type-definition") 
        "i" (cmd "Trouble lsp_implementations"             "Show implementation") 
        "g" (cmd "Trouble lsp_definitions"                 "Go to definition") 
+       "w" [toggle-lsp-lines                              "Toggle LSP lines"]
+       "W" [toggle-lsp-lines-current                      "Toggle LSP line"]
        "f" [format                                        "format file"]
        "," (cmd "RustRunnables"                           "Run rust stuff")
        "x" {:name "+Glance"

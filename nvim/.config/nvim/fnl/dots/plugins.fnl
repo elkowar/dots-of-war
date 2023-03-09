@@ -78,6 +78,8 @@
                               :lazy true
                               :config #(setup :scrollbar)}
 
+  "https://git.sr.ht/~whynothugo/lsp_lines.nvim" {:config #(setup :lsp_lines)}
+
 
   ; editing and movement <<<
   :jiangmiao/auto-pairs {}
@@ -145,8 +147,6 @@
   
   :lewis6991/gitsigns.nvim {:dependencies [:vim-gruvbox8
                                            :petertriho/nvim-scrollbar]
-                            :lazy true
-                            :event "VeryLazy"
                             :config #(require "dots.plugins.gitsigns")}
                                          
 
