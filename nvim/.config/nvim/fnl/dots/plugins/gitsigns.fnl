@@ -17,4 +17,3 @@
 
 (let [scrollbar-gitsigns (require "scrollbar.handlers.gitsigns")]
   (scrollbar-gitsigns.setup))
-
