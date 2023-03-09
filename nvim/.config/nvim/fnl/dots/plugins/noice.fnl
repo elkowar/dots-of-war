@@ -39,7 +39,6 @@
             {:view "cmdline_output"
              :filter {:error true :min_height 6}}]})
 
-(+ 1 b)
 (defn- setup-noice-theme []
   (utils.highlight-add :NoicePopupmenu {:bg colors.dark0_hard})
   (utils.highlight-add :NoiceCmdline {:bg "#1f2324"})

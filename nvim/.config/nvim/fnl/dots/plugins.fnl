@@ -203,7 +203,10 @@
   ; >>>
 
   ; code-related ----------------------------------------- <<<
-  :github/copilot.vim {:cmd ["Copilot"]}
+  ;:github/copilot.vim {:cmd ["Copilot"]}
+  :zbirenbaum/copilot.lua {:cmd "Copilot"
+                           :event "InsertEnter"
+                           :config #(require "dots.plugins.copilot")}
 
   :tpope/vim-sleuth {}
   :editorconfig/editorconfig-vim {}
