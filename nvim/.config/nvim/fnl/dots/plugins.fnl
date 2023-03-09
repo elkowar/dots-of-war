@@ -208,8 +208,6 @@
                            :event "InsertEnter"
                            :config #(require "dots.plugins.copilot")}
 
-  :monkoose/nvlime {:ft ["lisp"] :dependencies [:monkoose/parsley]}
-
   :tpope/vim-sleuth {}
   :editorconfig/editorconfig-vim {}
   :pechorin/any-jump.vim {}
