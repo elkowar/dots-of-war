@@ -1,6 +1,6 @@
 {
   "agda-vim": { "branch": "master", "commit": "4a0f475aaef756702222bdd5b01e25f814f5691f" },
-  "aniseed": { "branch": "develop", "commit": "a7445c340fb7a0529f3c413eb99d3f8d29f50ba2" },
+  "aniseed": { "branch": "master", "commit": "44d2886a9ec38abac61b4c73c2e57fb752232cfe" },
   "antifennel-nvim": { "branch": "master", "commit": "79261d02213a5093135e5d02431682f04459f0f7" },
   "any-jump.vim": { "branch": "master", "commit": "9768403b6381ce3758cebac9613910c0160969e3" },
   "ats-vim": { "branch": "master", "commit": "8e3e722b6d09ed81313573b4e7b108b265628ff1" },
@@ -35,7 +35,7 @@
   "inc-rename.nvim": { "branch": "main", "commit": "21c23c379342a731a0c90f226601ec0434627b26" },
   "kmonad-vim": { "branch": "master", "commit": "37978445197ab00edeb5b731e9ca90c2b141723f" },
   "lalrpop.vim": { "branch": "master", "commit": "7073eec8efdeff37cacd4bca378c28dad02c3c14" },
-  "lazy.nvim": { "branch": "main", "commit": "06f835d0b4b62d9d26fe0ec4190b981f2f5632d2" },
+  "lazy.nvim": { "branch": "main", "commit": "5b4444f0d7e556deba3f7ca949a2ba0e2c3369fb" },
   "litee.nvim": { "branch": "main", "commit": "bf366a1414fd0f9401631ac8884f2f9fa4bf18d2" },
   "lsp_signature.nvim": { "branch": "master", "commit": "6f6252f63b0baf0f2224c4caea33819a27f3f550" },
   "neoformat": { "branch": "master", "commit": "2e9fd3a7cbdce0c90379c8bc52e0bca6726eba81" },
