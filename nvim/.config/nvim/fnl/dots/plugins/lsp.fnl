@@ -114,6 +114,7 @@
       liblldb-path   (.. extension-path "lldb/lib/liblldb.so") 
       features nil]
   (rust-tools.setup {:tools {:inlay_hints {:show_parameter_hints false}
+                                           ;:auto false}
                              :autoSetHints false}
                      :dap {:adapter (rust-tools-dap.get_codelldb_adapter codelldb-path liblldb-path)}
                      :server {:on_attach on_attach

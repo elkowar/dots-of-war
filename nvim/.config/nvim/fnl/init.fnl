@@ -16,7 +16,7 @@
 
 (make-errors-epic (require "dots.plugins"))
 
-(require "impatient")
+; (require "impatient")
 
 (make-errors-epic (require "dots.plugins.lsp"))
 (make-errors-epic (require "dots.keybinds"))
@@ -179,7 +179,7 @@
                              (vim.api.nvim_buf_is_loaded $1)
                              (= "" (str.join (utils.buffer-content $1)))
                              (vim.api.nvim_buf_get_option $1 "buflisted"))
-                       (vim.fn.range 1 "$"))]
+                       (vim.fn.range 1 (vim.fn.bufnr "$")))]
     (when (not (a.empty? bufs))
       (vim.cmd (.. "bdelete " (str.join " " bufs))))))
 

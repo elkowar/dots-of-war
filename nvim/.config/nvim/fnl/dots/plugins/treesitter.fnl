@@ -7,7 +7,7 @@
 (configs.setup 
   {:ensure_installed ["rust" "fennel" "commonlisp" "vim" "regex" "lua" "bash" "markdown" "markdown_inline"]
   ; :ensure_installed "maintained" 
-   :highlight {:enable true
+   :highlight {:enable false
                :disable ["fennel" "rust" "haskell"]}
 
    :incremental_selection {:enable false

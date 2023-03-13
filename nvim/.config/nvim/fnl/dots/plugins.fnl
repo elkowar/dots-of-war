@@ -37,7 +37,7 @@
 
   ; sorted from here!
   :Olical/aniseed {:branch "develop"}
-  :lewis6991/impatient.nvim {}
+  ; :lewis6991/impatient.nvim {}
   :nvim-lua/plenary.nvim {}
   :norcalli/nvim.lua {}
   :lifepillar/vim-gruvbox8 {:lazy false :priority 1000 :config #(require "dots.plugins.gruvbox8")}
@@ -109,7 +109,6 @@
                                         :lazy true
                                         :event ["VeryLazy"]}
   
-
   :JoosepAlviste/nvim-ts-context-commentstring {:event ["VeryLazy"]
                                                 :lazy true
                                                 :dependencies [:nvim-treesitter/nvim-treesitter]}

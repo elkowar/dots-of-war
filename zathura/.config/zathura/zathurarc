@@ -1,6 +1,7 @@
 set default-bg "#1d2021"
 set recolor true
 set recolor-lightcolor "#282828"
+set recolor-lightcolor "#1d2021"
 set recolor-darkcolor "#ebdbb2"
 set recolor-keephue
 set inputbar-bg "#1d2021"
