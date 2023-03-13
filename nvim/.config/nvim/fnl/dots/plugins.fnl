@@ -207,6 +207,8 @@
                            :event "InsertEnter"
                            :config #(require "dots.plugins.copilot")}
 
+  :monkoose/nvlime {:ft ["lisp"] :dependencies [:monkoose/parsley]}
+
   :tpope/vim-sleuth {}
   :editorconfig/editorconfig-vim {}
   :pechorin/any-jump.vim {}
@@ -233,7 +235,6 @@
   :purescript-contrib/purescript-vim {:ft ["purescript"]}
   :derekelkins/agda-vim {:ft ["agda"]}
   :neovimhaskell/haskell-vim { :ft ["haskell"]}
-  :vlime/vlime {:ft ["lisp"]}
 
   
   :rust-lang/rust.vim {:ft ["rust"]

@@ -78,11 +78,7 @@ hide_edge_borders smart
 
 
 
-### Input configuration
-#
-# Example configuration:
-#
-input "1267:12370:ELAN0651:00_04F3:3052_Touchpad" {
+input "type:touchpad" {
     dwt enabled
     tap enabled
     natural_scroll enabled
