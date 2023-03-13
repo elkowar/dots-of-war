@@ -78,7 +78,8 @@
                               :lazy true
                               :config #(setup :scrollbar)}
 
-  "https://git.sr.ht/~whynothugo/lsp_lines.nvim" {:config #(setup :lsp_lines)}
+  "https://git.sr.ht/~whynothugo/lsp_lines.nvim" {:config #(do (setup :lsp_lines)
+                                                               (vim.diagnostic.config {:virtual_lines false}))}
 
 
   ; editing and movement <<<

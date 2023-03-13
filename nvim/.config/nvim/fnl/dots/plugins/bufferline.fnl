@@ -7,8 +7,8 @@
    require-macros [macros]})
 
 ; :h bufferline-lua-highlights
-(let [selected {:bg colors.neutral_aqua :fg colors.bg_main :gui "NONE"}
-      visible  {:bg colors.dark1        :fg colors.neutral_aqua}]
+(let [selected {:guibg colors.neutral_aqua :guifg colors.bg_main :gui "NONE"}
+      visible  {:guibg colors.dark1        :guifg colors.neutral_aqua}]
  (bufferline.setup 
    {:options
     {:diagnostics "nvim_lsp"
@@ -32,26 +32,26 @@
      :error     visible   :error_selected     selected   :error_visible     visible
      :duplicate visible   :duplicate_selected selected   :duplicate_visible visible
 
-     :diagnostic                  {:bg colors.dark1        :fg colors.neutral_red}
-     :diagnostic_visible          {:bg colors.dark1        :fg colors.neutral_red}
-     :diagnostic_selected         {:bg colors.neutral_aqua :fg colors.faded_redu}
+     :diagnostic                  {:guibg colors.dark1        :guifg colors.neutral_red}
+     :diagnostic_visible          {:guibg colors.dark1        :guifg colors.neutral_red}
+     :diagnostic_selected         {:guibg colors.neutral_aqua :guifg colors.faded_redu}
 
-     :info_diagnostic             {:bg colors.dark1        :fg colors.neutral_blue}
-     :info_diagnostic_visible     {:bg colors.dark1        :fg colors.neutral_blue}
-     :info_diagnostic_selected    {:bg colors.neutral_aqua :fg colors.faded_blue}
+     :info_diagnostic             {:guibg colors.dark1        :guifg colors.neutral_blue}
+     :info_diagnostic_visible     {:guibg colors.dark1        :guifg colors.neutral_blue}
+     :info_diagnostic_selected    {:guibg colors.neutral_aqua :guifg colors.faded_blue}
 
-     :warning_diagnostic          {:bg colors.dark1        :fg colors.neutral_yellow}
-     :warning_diagnostic_visible  {:bg colors.dark1        :fg colors.neutral_yellow}
-     :warning_diagnostic_selected {:bg colors.neutral_aqua :fg colors.faded_yellow}
+     :warning_diagnostic          {:guibg colors.dark1        :guifg colors.neutral_yellow}
+     :warning_diagnostic_visible  {:guibg colors.dark1        :guifg colors.neutral_yellow}
+     :warning_diagnostic_selected {:guibg colors.neutral_aqua :guifg colors.faded_yellow}
 
-     :error_diagnostic            {:bg colors.dark1        :fg colors.neutral_red}
-     :error_diagnostic_visible    {:bg colors.dark1        :fg colors.neutral_red}
-     :error_diagnostic_selected   {:bg colors.neutral_aqua :fg colors.red}
+     :error_diagnostic            {:guibg colors.dark1        :guifg colors.neutral_red}
+     :error_diagnostic_visible    {:guibg colors.dark1        :guifg colors.neutral_red}
+     :error_diagnostic_selected   {:guibg colors.neutral_aqua :guifg colors.red}
 
      :separator visible
-     :indicator_selected {:bg colors.neutral_aqua :fg colors.neutral_aqua}
+     :indicator_selected {:guibg colors.neutral_aqua :guifg colors.neutral_aqua}
 
       ; stuff I've never seen before :thonk:
-     :pick_selected {:bg colors.bright_red :fg colors.bright_red}
-     :tab_selected {:bg colors.bright_green :fg colors.bright_green}
-     :tab {:bg colors.bright_yellow :fg colors.bright_yellow}}}))
+     :pick_selected {:guibg colors.bright_red :guifg colors.bright_red}
+     :tab_selected {:guibg colors.bright_green :guifg colors.bright_green}
+     :tab {:guibg colors.bright_yellow :guifg colors.bright_yellow}}}))
