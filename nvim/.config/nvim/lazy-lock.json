@@ -90,6 +90,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   "lazy.nvim": { "branch": "main", "commit": "623e00cabbc908f635150e73d4250cf4f241d919" },
 =======
 =======
@@ -108,10 +109,13 @@
 =======
 =======
 >>>>>>> a524934 (Re-set up laptop)
+=======
+>>>>>>> a524934 (Re-set up laptop)
   "lazy.nvim": { "branch": "main", "commit": "623e00cabbc908f635150e73d4250cf4f241d919" },
 =======
   "lazy.nvim": { "branch": "main", "commit": "5b4444f0d7e556deba3f7ca949a2ba0e2c3369fb" },
 >>>>>>> 368c0a6 (update)
+<<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> d3e05df (update)
 =======
@@ -140,6 +144,11 @@
   "lazy.nvim": { "branch": "main", "commit": "5b4444f0d7e556deba3f7ca949a2ba0e2c3369fb" },
 >>>>>>> 368c0a6 (update)
 >>>>>>> d3e05df (update)
+=======
+=======
+  "lazy.nvim": { "branch": "main", "commit": "623e00cabbc908f635150e73d4250cf4f241d919" },
+>>>>>>> d78e6c9 (Re-set up laptop)
+>>>>>>> a524934 (Re-set up laptop)
   "litee.nvim": { "branch": "main", "commit": "bf366a1414fd0f9401631ac8884f2f9fa4bf18d2" },
 <<<<<<< HEAD
   "lsp_lines.nvim": { "branch": "main", "commit": "dcff567b3a2d730f31b6da229ca3bb40640ec5a6" },
