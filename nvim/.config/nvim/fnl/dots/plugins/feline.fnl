@@ -31,7 +31,7 @@
    :V   {:text "VISUAL LINE"   :color colors.neutral_blue}
    "" {:text "VISUAL BLOCK"  :color colors.neutral_blue}})
 
-(def bar-bg colors.dark0)
+(def bar-bg colors.bg_main)
 (def horiz-separator-color colors.light1) 
 
 (defn or-empty [x] (or x ""))
@@ -111,6 +111,6 @@
 
 (utils.highlight-add :StatusLineNC {:bg "NONE" :fg colors.light1})
 
-(feline.setup {:theme {:fg colors.light1 :bg colors.dark0}
+(feline.setup {:theme {:fg colors.light1 :bg colors.bg_main}
                :components components})
 

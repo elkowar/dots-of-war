@@ -1,6 +1,8 @@
 (module dots.colors
   {}
-  {:dark0_hard "#1d2021"
+  {:bg_main   (if (= "epix" (vim.fn.hostname)) "#1d2021" "#282828")
+   :bg_second (if (= "epix" (vim.fn.hostname)) "#181A1B" "#1d2021")
+   :dark0_hard "#1d2021"
    :dark0 "#282828"
    :dark0_soft "#32302f"
    :dark1 "#3c3836"

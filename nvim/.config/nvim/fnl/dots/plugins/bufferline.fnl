@@ -7,7 +7,7 @@
    require-macros [macros]})
 
 ; :h bufferline-lua-highlights
-(let [selected {:bg colors.neutral_aqua :fg colors.dark0}
+(let [selected {:bg colors.neutral_aqua :fg colors.bg_main :gui "NONE"}
       visible  {:bg colors.dark1        :fg colors.neutral_aqua}]
  (bufferline.setup 
    {:options
@@ -22,7 +22,7 @@
 
      ; https://github.com/akinsho/nvim-bufferline.lua/blob/4ebab39af2376b850724dd29c29579c8e024abe6/lua/bufferline/config.lua#L74
     :highlights 
-    {:fill {:bg colors.dark0 :fg colors.light0}
+    {:fill {:guibg colors.bg_main :guifg colors.light0}
      :background visible
      :buffer_visible visible
      :buffer_selected selected
@@ -34,7 +34,7 @@
 
      :diagnostic                  {:bg colors.dark1        :fg colors.neutral_red}
      :diagnostic_visible          {:bg colors.dark1        :fg colors.neutral_red}
-     :diagnostic_selected         {:bg colors.neutral_aqua :fg colors.faded_red}
+     :diagnostic_selected         {:bg colors.neutral_aqua :fg colors.faded_redu}
 
      :info_diagnostic             {:bg colors.dark1        :fg colors.neutral_blue}
      :info_diagnostic_visible     {:bg colors.dark1        :fg colors.neutral_blue}
