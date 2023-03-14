@@ -206,7 +206,7 @@ input "type:keyboard" {
 #bindsym --locked XF86AudioLowerVolume  exec pamixer -d 5
 
 bindsym $mod+Shift+S exec grimshot copy area
-bindsym $mod+Shift+b exec google-chrome-stable
+bindsym $mod+Shift+b exec google-chrome-stable --enable-features=TouchpadOverscrollHistoryNavigation
 
 
 #

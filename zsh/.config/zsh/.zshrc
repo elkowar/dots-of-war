@@ -90,6 +90,7 @@ autoload -Uz promptinit && promptinit
 
 # alias
 alias ls="exa --icons"
+alias dots="git -C $HOME/dots-of-war"
 
 # load prompt
 source "$ZDOTDIR/prompt.zsh"
