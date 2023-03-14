@@ -35,10 +35,17 @@ zinit light-mode for \
 
 ### End of Zinit's installer chunk
 
-
-# compinit must be ran before fzf-tab, but fzf-tab must be before syntax highlighting etc
+# some magic to run compinit stuff only once a day, which should speed up zsh startup a good bit
 autoload -Uz compinit
-compinit
+for dump in $ZSHDOTDIR/.zcompdump(N.mh+24); do
+  compinit
+done
+compinit -C
+
+# this would be the regular version of the above compinit code:
+# compinit must be ran before fzf-tab, but fzf-tab must be before syntax highlighting etc
+#autoload -Uz compinit
+#compinit
 
 zinit light "Aloxaf/fzf-tab"
 
