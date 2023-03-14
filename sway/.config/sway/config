@@ -24,7 +24,7 @@ set $menu dmenu_path | dmenu | xargs swaymsg exec --
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
-output * bg /home/leon/Pictures/wallpapers/0126.jpg fill
+#output * bg /home/leon/Pictures/wallpapers/0126.jpg fill
 #
 # Example configuration:
 #

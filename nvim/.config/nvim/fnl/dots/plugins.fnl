@@ -44,8 +44,8 @@
   :kyazdani42/nvim-web-devicons {}
   :folke/which-key.nvim {}
   :folke/todo-comments.nvim {:lazy true
-                             :event "VeryLazy
-                             ":config #(require "dots.plugins.todo-comments")}
+                             :event "VeryLazy"
+                             :config #(require "dots.plugins.todo-comments")}
 
   :Famiu/feline.nvim {:config #(require "dots.plugins.feline")}
   :akinsho/nvim-bufferline.lua {:config #(require "dots.plugins.bufferline")

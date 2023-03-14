@@ -4,6 +4,7 @@ local __bright_cyan="#8ec07c"
 local __bright_white="#ebdbb2"
 local __bright_green="#b8bb26"
 
+local CUTOFF=3
 
 # black magic that reruns prompt whenever the vi mode changes {{{
 function zle-line-init zle-keymap-select {
@@ -19,10 +20,9 @@ zle -N zle-keymap-select
 
 
 
-dir() {
-  local CUTOFF=3
+function get_dir() {
   local IFS=/
-  local my_path=($(print -P '%~'))
+  local my_path=$(print -P '%~')
   local p
   for p in $my_path; do
     printf %s "${s}${p[0,$CUTOFF]}"
@@ -32,7 +32,7 @@ dir() {
 }
 
 
-git_status() {
+function git_status() {
   local BRANCH=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/*\s*\(.*\)/\1/')
 
   if [ ! -z $BRANCH ]; then
@@ -48,7 +48,7 @@ function _my_prompt() {
   #echo -n "%F{$__bright_white}╭───"
   echo -n "%F{$__bright_cyan}$USER"
   echo -n "%F{$__bright_white} in"
-  echo -n "%F{$__bright_green} $(dir)"
+  echo -n "%F{$__bright_green} $(get_dir)"
   echo -n "%F{$__bright_white} $(git_status)"
   if [ ! "$exit_code" = 0 ]; then
     echo -n "%F{red} REEEEEEEEEEE $exit_code"
