@@ -1,5 +1,5 @@
-(deflisten workspaces :initial "[]" "bash ~/.config/eww/scripts/get-workspaces")
-(deflisten current_workspace :initial "1" "bash ~/.config/eww/scripts/get-active-workspace")
+(deflisten workspaces :initial "[]" "bash ./scripts/get-workspaces")
+(deflisten current_workspace :initial "1" "bash ./scripts/get-active-workspace")
 (defpoll time :interval "1s" "date '+%d.%m.%Y - %H:%M'")
 
 (defwidget workspaces []
@@ -9,8 +9,8 @@
     (box :space-evenly true
       (for workspace in workspaces
         (eventbox :onclick "hyprctl dispatch workspace ${workspace.id}"
-          (box :class "workspace-entry ${workspace.id == current_workspace ? "current" : ""} ${workspace.windows > 0 ? "occupied" : "empty"}"
-            (label :text " ${workspace.id == current_workspace ? "◆" : "◇"} ")))))))
+          (label :class {workspace.id == current_workspace ? "current" : ""}
+                 :text " ${workspace.windows > 0 ? "◆" : "◇"} "))))))
             
 (defwidget bar []
   (centerbox :class "bar"
