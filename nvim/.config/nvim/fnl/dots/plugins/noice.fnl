@@ -38,4 +38,3 @@
              :filter {:error true :max_height 5}}
             {:view "cmdline_output"
              :filter {:error true :min_height 6}}]})
-

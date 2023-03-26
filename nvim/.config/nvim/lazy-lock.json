@@ -122,6 +122,7 @@
   "rust-tools.nvim": { "branch": "master", "commit": "bd1aa99ffb911a1cf99b3fcf3b44c0391c57e3ef" },
   "rust.vim": { "branch": "master", "commit": "889b9a7515db477f4cb6808bef1769e53493c578" },
   "sad.vim": { "branch": "master", "commit": "2f5b33b239a566ffedaa81cee3051bb613482d1e" },
+  "slimv.vim": { "branch": "master", "commit": "61ce81ff6b1a05314a6d750a32a1c7379f35a5dc" },
   "stabilize.nvim": { "branch": "master", "commit": "34069870a8e72632c5447188e638e1c6bfebc353" },
   "startuptime.vim": { "branch": "master", "commit": "dfa57f522d6f61793fe5fea65bca7484751b8ca2" },
   "symbols-outline.nvim": { "branch": "master", "commit": "512791925d57a61c545bc303356e8a8f7869763c" },
