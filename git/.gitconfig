@@ -1,7 +1,8 @@
 [user]
 	email = 5300871+elkowar@users.noreply.github.com
 	name = elkowar
-	signingkey = 9EFD181455D31DD0F42DA932862BA3D7D7760F13
+[include]
+	path = ~/.gitconfig.local
 [credential]
 	helper = store
 [core]
