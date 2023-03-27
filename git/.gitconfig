@@ -33,6 +33,7 @@
 [commit]
 	gpgsign = true
 [alias]
+	df = difftool
 	c = commit --verbose
 	s = status -s
 	d = diff
@@ -41,6 +42,7 @@
 	dn = diff --numstat
 	ss = status
 	a = add
+	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 [push]
 	autoSetupRemote = true
 	default = current
