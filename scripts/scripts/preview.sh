@@ -5,6 +5,9 @@ case "$1" in
 esac
 
 case "$(file --mime-type "$1")" in
+  *directory*)
+    exa --icons -1 --color=always "$1"
+    ;;
   *text*)
     bat --color always --plain --theme gruvbox-dark "$1"
     ;;
@@ -16,9 +19,6 @@ case "$(file --mime-type "$1")" in
     else
       echo "Install timg or catimg to view images!"
     fi
-    ;;
-  *directory*)
-    exa --icons -1 --color=always "$1"
     ;;
   *)
     echo "unknown file format"

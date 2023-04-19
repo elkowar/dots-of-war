@@ -74,6 +74,7 @@
 (init-lsp :svelte)
 (init-lsp :elmls)
 (init-lsp :texlab)
+(init-lsp :pyright)
 ;(init-lsp :ltex {:settings {:ltex {:dictionary           {:de-DE [":~/.config/ltex-ls/dictionary.txt"]}
                                    ;:disabledRules        {:de-DE [":~/.config/ltex-ls/disabledRules.txt"]}
                                    ;:hiddenFalsePositives {:de-DE [":~/.config/ltex-ls/hiddenFalsePositives.txt"]}
