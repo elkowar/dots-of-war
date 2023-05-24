@@ -27,7 +27,7 @@
  esc    f1     f2     f3     f4     f5     f6     f7     f8     f9     f10    f11   f12            ssrq   slck   pause
  grv    1      2      3      4      5      6      7      8      9      0      -     =      bspc    ins    home   pgup
  @tab   q      w      e      r      t      @cy    @cu    @ci    @co    @cp    [     +      ret     del    end    pgdn
- @cps   @ca    @cs    @cd    @cf    g      @ch    @cj    k      @cl    scln   '     \
+ @cps   @ca    @cs    @cd    @cf    g      @ch    @cj    @ck    @cl    @cscln '     \
  lsft   102d   z      x      c      v      b      n      m      ,      .      /     rsft                  up
  lctl   lmet   lalt                 spc                         ralt   ralt                        left   down   rght
  )
@@ -45,6 +45,8 @@
   ci (chord chords i)
   cj (chord chords j)
   cl (chord chords l)
+  ck (chord chords k)
+  cscln (chord chords scln)
 )
 
 (defchords chords 100
@@ -60,9 +62,11 @@
   (u) u
   (o) o
   (p) p
+  (k) k
+  (scln) scln
   (y p) (macro = S-.)
-  (u i o) @uml-u
-  (i o p) @uml-o
+  (i o p) @uml-u
+  (k l scln) @uml-o
   (a s d) @uml-a
   (s d f) @uml-s
   (h j) (macro S-scln S-scln)
