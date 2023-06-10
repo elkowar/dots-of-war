@@ -13,6 +13,17 @@
   .current  {
     color: #8ec07c;
   }
+
+  .entry {
+    .icon {
+      font-family: "Fira Code Nerd Font";
+    }
+
+    .icon.charging-indicator {
+      font-size: 9px;
+      color: #1d2021;
+    }
+  }
   
 }
 

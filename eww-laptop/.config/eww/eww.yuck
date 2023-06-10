@@ -19,9 +19,30 @@
     (box :halign "end"
          :space-evenly true
          :width "150"
-      "󰁹 ${EWW_BATTERY["BAT1"].capacity}%"
-      "󰍛 ${round(EWW_RAM.used_mem_perc, 0)}%"
-      "󰻠 ${round(EWW_CPU.avg, 0)}%")))
+      (box :class "entry"
+        (overlay 
+          (label :class "icon"
+                 :valign "fill" :halign "fill" :xalign 0.9 :yalign 0.45
+                 :text {EWW_BATTERY["BAT1"].capacity > 80 ? "󰁹" :
+                        EWW_BATTERY["BAT1"].capacity > 50 ? "󰂁" :
+                        EWW_BATTERY["BAT1"].capacity > 30 ? "󰁾" :
+                        EWW_BATTERY["BAT1"].capacity > 10 ? "󰁼" : "󰁺"})
+          (label :class "icon charging-indicator"
+                 :valign "fill" :halign "fill" :xalign 0.9 :yalign 0.45
+                 :text {EWW_BATTERY["BAT1"].status == "Charging" ? "󱐋" : ""}))
+        (label :class "value" :text "${EWW_BATTERY["BAT1"].capacity}%"))
+      (entry :icon "󰍛" :value "${round(EWW_RAM.used_mem_perc, 0)}%")
+      (entry :icon "󰻠" :value "${round(EWW_CPU.avg, 0)}%"))))
+
+(defwidget entry [icon ?icon-class value]
+  (box :class "entry"
+    (label :class "icon ${icon-class}"
+           :valign "fill"
+           :halign "fill"
+           :xalign 0.9
+           :yalign 0.45
+           :text "${icon}")
+    (label :class "value" :text value)))
 
 (defwindow bar
   :monitor 0
