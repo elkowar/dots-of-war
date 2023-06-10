@@ -1,52 +1,62 @@
 (deflisten workspaces :initial "[]" "bash ./scripts/get-workspaces")
 (deflisten current_workspace :initial "1" "bash ./scripts/get-active-workspace")
-(defpoll time :interval "1s" "date '+%d.%m.%Y - %H:%M'")
-
-(defwidget workspaces []
-  (eventbox :halign "start"
-            :onscroll "bash ${EWW_CONFIG_DIR}/scripts/change-active-workspace {} ${current_workspace}"
-            :class "workspaces-widget"
-    (box :space-evenly true
-      (for workspace in workspaces
-        (eventbox :onclick "hyprctl dispatch workspace ${workspace.id}"
-          (label :class {workspace.id == current_workspace ? "current" : ""}
-                 :text " ${workspace.windows > 0 ? "◆" : "◇"} "))))))
-            
-(defwidget bar []
-  (centerbox :class "bar"
-    (workspaces)
-    "${time}"
-    (box :halign "end"
-         :space-evenly true
-         :width "150"
-      (box :class "entry"
-        (overlay 
-          (label :class "icon"
-                 :valign "fill" :halign "fill" :xalign 0.9 :yalign 0.45
-                 :text {EWW_BATTERY["BAT1"].capacity > 80 ? "󰁹" :
-                        EWW_BATTERY["BAT1"].capacity > 50 ? "󰂁" :
-                        EWW_BATTERY["BAT1"].capacity > 30 ? "󰁾" :
-                        EWW_BATTERY["BAT1"].capacity > 10 ? "󰁼" : "󰁺"})
-          (label :class "icon charging-indicator"
-                 :valign "fill" :halign "fill" :xalign 0.9 :yalign 0.45
-                 :text {EWW_BATTERY["BAT1"].status == "Charging" ? "󱐋" : ""}))
-        (label :class "value" :text "${EWW_BATTERY["BAT1"].capacity}%"))
-      (entry :icon "󰍛" :value "${round(EWW_RAM.used_mem_perc, 0)}%")
-      (entry :icon "󰻠" :value "${round(EWW_CPU.avg, 0)}%"))))
-
-(defwidget entry [icon ?icon-class value]
-  (box :class "entry"
-    (label :class "icon ${icon-class}"
-           :valign "fill"
-           :halign "fill"
-           :xalign 0.9
-           :yalign 0.45
-           :text "${icon}")
-    (label :class "value" :text value)))
 
 (defwindow bar
   :monitor 0
-  :geometry (geometry :x 0 :y 0 :width "100%" :height "30px" :anchor "top center")
+  :geometry (geometry :x 0 :y 0 :width "40px" :height "100%" :anchor "center left")
   :stacking "fg"
   :exclusive true
   (bar))
+
+(defwidget bar []
+  (centerbox :class "bar" :orientation "v"
+    (workspaces-display)
+    (time-display)
+    (data-display)))
+
+(defwidget workspaces-display []
+  (eventbox :onscroll "bash ${EWW_CONFIG_DIR}/scripts/change-active-workspace {} ${current_workspace}"
+            :class "workspaces-widget"
+    (box :space-evenly false :orientation "v"
+      (for workspace in workspaces
+        (eventbox :onclick "hyprctl dispatch workspace ${workspace.id}"
+          (label :class {workspace.id == current_workspace ? "current" : ""}
+                 :xalign 0.6
+                 :text " ${workspace.windows > 0 ? "◆" : "◇"} "))))))
+
+(defwidget time-display []
+  (box :orientation "v"
+    {formattime(EWW_TIME, "%H")}
+    {formattime(EWW_TIME, "%M")}
+    {formattime(EWW_TIME, "%S")}
+    "—"
+    {formattime(EWW_TIME, "%d")}
+    {formattime(EWW_TIME, "%m")}
+    {formattime(EWW_TIME, "%y")}))
+
+(defwidget data-display []
+  (box :valign "end"
+       :space-evenly false
+       :orientation "v"
+    (box :class "entry" :orientation "v"
+      (overlay 
+        (entry-icon :text {EWW_BATTERY["BAT1"].capacity > 80 ? "󰁹" :
+                           EWW_BATTERY["BAT1"].capacity > 50 ? "󰂁" :
+                           EWW_BATTERY["BAT1"].capacity > 30 ? "󰁾" :
+                           EWW_BATTERY["BAT1"].capacity > 10 ? "󰁼" : "󰁺"})
+        (entry-icon :text {EWW_BATTERY["BAT1"].status == "Charging" ? "󱐋" : ""}))
+      (label :class "value" :text "${EWW_BATTERY["BAT1"].capacity}%"))
+    (entry :icon "󰍛" :value "${round(EWW_RAM.used_mem_perc, 0)}%")
+    (entry :icon "󰻠" :value "${round(EWW_CPU.avg, 0)}%")))
+
+            
+(defwidget entry [icon ?icon-class value]
+  (box :class "entry" :orientation "v"
+    (entry-icon :class "icon" :text "${icon}")
+    (label :class "value" :text value)))
+
+(defwidget entry-icon [text ?class]
+  (label :class "icon ${class}"
+         :valign "fill" :halign "fill"
+         :text "${text}"))
+
