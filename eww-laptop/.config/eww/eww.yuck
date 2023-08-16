@@ -1,6 +1,25 @@
 (deflisten workspaces :initial "[]" "bash ./scripts/get-workspaces")
 (deflisten current_workspace :initial "1" "bash ./scripts/get-active-workspace")
 
+(defpoll brightness :interval "1s" "bash ./scripts/get-brightness")
+(defpoll volume :interval "1s" "bash ./scripts/getvol")
+
+(defwindow indicators
+  :monitor 0
+  :geometry (geometry :x 50 :y 50 :width "200px" :height "10px" :anchor "bottom left")
+  :stacking "fg"
+  (indicators))
+
+(defwidget indicators []
+  (box :orientation "v"
+    (box :space-evenly false
+      (label :text "󰃞 ")
+      (progress :valign "center" :value {brightness ?: 0}))
+    (box :space-evenly false
+      (label :text " ")
+      (progress :valign "center" :value {volume ?: 0}))))
+
+
 (defwindow bar
   :monitor 0
   :geometry (geometry :x 0 :y 0 :width "40px" :height "100%" :anchor "center left")
@@ -48,6 +67,7 @@
       (label :class "value" :text "${EWW_BATTERY["BAT1"].capacity}%"))
     (entry :icon "󰍛" :value "${round(EWW_RAM.used_mem_perc, 0)}%")
     (entry :icon "󰻠" :value "${round(EWW_CPU.avg, 0)}%")))
+    ;(systray :pack-direction "ttb")))
 
             
 (defwidget entry [icon ?icon-class value]
