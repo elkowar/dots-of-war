@@ -31,7 +31,6 @@
 (macro setup [name opts]
   `((. (require ,name) :setup) ,opts))
 
-
 (setup-lazy
   ; TODO sort me pls
 
@@ -247,9 +246,10 @@
                              :dependencies ["nvim-lua/popup.nvim" "nvim-lua/plenary.nvim"]}
 
   :Saecki/crates.nvim {:dependencies ["nvim-lua/plenary.nvim"]
+                       :dir "/Users/leon/tmp/crates.nvim"
                        :event ["BufRead Cargo.toml"]
                        :lazy true
-                       :config #(setup :crates)}
+                       :config #(require :dots.plugins.crates)}
 
   :qnighy/lalrpop.vim {}
   :edwinb/idris2-vim {:ft ["idris2"]}
