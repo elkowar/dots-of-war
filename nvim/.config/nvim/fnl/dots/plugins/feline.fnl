@@ -38,7 +38,7 @@
 (defn spaces [x] (if x (.. " " x " ") ""))
 
 (defn get-current-filepath []
-  (let [file (utils.shorten-path (vim.fn.bufname) 5 30)]
+  (let [file (utils.shorten-path (vim.fn.bufname) 30 30)]
     (if (a.empty? file) ""
        nvim.bo.readonly (.. "RO " file)
        (and nvim.bo.modifiable nvim.bo.modified) (.. file " ●")
