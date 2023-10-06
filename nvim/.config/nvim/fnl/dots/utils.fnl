@@ -1,6 +1,4 @@
-(local {: autoload} (require :nfnl.module))
-(local a (autoload :nfnl.core))
-(local str (autoload :nfnl.string))
+(local {: autoload : a : str} (require :dots.prelude))
 
 (fn plugin [name ?opts]
   (if (= nil ?opts)

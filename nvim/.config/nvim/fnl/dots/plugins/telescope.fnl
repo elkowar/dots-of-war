@@ -1,5 +1,4 @@
-(local {: autoload} (require :nfnl.module))
-(local utils (autoload :dots.utils))
+(local {: autoload : utils} (require :dots.prelude))
 (local telescope (autoload :telescope))
 (local actions (autoload :telescope.actions))
 

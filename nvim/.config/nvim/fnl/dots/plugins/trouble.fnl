@@ -1,6 +1,4 @@
-(local {: autoload} (require :nfnl.module))
-(local utils (autoload :dots.utils))
-(local colors (autoload :dots.colors))
+(local {: autoload : utils : colors} (require :dots.prelude))
 (local trouble (autoload :trouble))
 
 (fn setup []

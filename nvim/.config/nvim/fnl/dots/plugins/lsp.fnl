@@ -1,8 +1,6 @@
-(local {: autoload} (require :nfnl.module))
-(local a (autoload :aniseed.core))
+(local {: autoload : a : utils} (require :dots.prelude))
 (local lsp (autoload :lspconfig)) 
 (local lsp-configs (autoload :lspconfig/configs))
-(local utils (autoload :dots.utils))
 (local cmp_nvim_lsp (autoload :cmp_nvim_lsp))
 
 (fn setup []

@@ -1,8 +1,4 @@
-(local {: autoload} (require :nfnl.module))
-(local utils (autoload :dots.utils))
-(local a (autoload :nfnl.core))
-(local str (autoload :nfnl.string))
-(local colors (autoload :dots.colors))
+(local {: autoload : utils : a : str : colors} (require :dots.prelude))
 (local feline (autoload :feline))
 
 

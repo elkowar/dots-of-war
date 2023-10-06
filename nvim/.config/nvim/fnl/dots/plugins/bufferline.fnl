@@ -1,8 +1,5 @@
-(local {: autoload} (require :nfnl.module))
-(local a (autoload :aniseed.core))
-(local utils (autoload :dots.utils))
+(local {: autoload : a : utils : colors} (require :dots.prelude))
 (local bufferline (autoload :bufferline))
-(local colors (autoload :dots.colors))
 
 (vim.cmd "hi link BufferLineTabSeparatorSelected BufferLineSeparatorSelected")
 (vim.cmd "hi link BufferLineTabSeparator BufferLineSeparator")

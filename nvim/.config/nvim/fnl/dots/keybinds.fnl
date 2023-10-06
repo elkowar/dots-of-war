@@ -1,7 +1,4 @@
-(local {: autoload} (require :nfnl.module))
-(local a (autoload :nfnl.core))
-(local str (autoload :nfnl.string))
-(local utils (autoload :dots.utils))
+(local {: autoload : a : str : utils} (require :dots.prelude))
 (local wk (autoload :which-key))
 (local glance (autoload :glance))
 (local crates (autoload :crates))

@@ -1,8 +1,7 @@
-(local {: autoload} (require :nfnl.module))
+(local {: autoload : utils} (require :dots.prelude))
 (local lsp (autoload :lspconfig))
 (local configs (autoload :lspconfig/configs))
 (local lsputil (autoload :lspconfig/util))
-(local utils (require :dots.utils))
 
 
 (fn cmds [xs]

@@ -1,5 +1,4 @@
-(local {: autoload} (require :nfnl.module))
-(local utils (require :dots.utils))
+(local {: autoload : utils} (require :dots.prelude))
 (local cb (autoload :diffview.config))
 (local diffview (autoload :diffview))
 
