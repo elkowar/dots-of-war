@@ -1,6 +1,9 @@
-(module dots.plugins.neogit
-  {autoload {a aniseed.core
-             neogit neogit}})
+(import-macros m :macros)
+(m.al neogit neogit)
+(m.al utils dots.utils)
 
-(neogit.setup
-  {:integrations {:diffview true}})
+[(utils.plugin :TimUntersberger/neogit
+               {:config #(neogit.setup {:integrations {:diffview true}})
+                :cmd ["Neogit"]})]
+
+

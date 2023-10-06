@@ -1,29 +1,29 @@
-(module dots.plugins.ltex-ls
-  {autoload {a aniseed.core
-             str aniseed.string
-             lsp lspconfig
-             configs lspconfig/configs
-             lsputil lspconfig/util
-             utils dots.utils
-             cmp_nvim_lsp cmp_nvim_lsp}})
+(import-macros m :macros)
+(m.al a aniseed.core)
+(m.al str aniseed.string)
+(m.al lsp lspconfig)
+(m.al configs lspconfig/configs)
+(m.al lsputil lspconfig/util)
+(m.al utils dots.utils)
+(m.al cmp_nvim_lsp cmp_nvim_lsp)
 
 
-(defn cmds [xs]
+(fn cmds [xs]
   (icollect [_ x (ipairs xs)]
     (.. "\\" x "{}")))
 
-(def latex-command-settings
+(local latex-command-settings
   {:dummy (cmds ["texttt" "scripture" "lstref" "figref" "tblref" "secref" "personaltextcite" "personalparencite" "textcite" "parencite" "parencite[]" "game" "acsu" "enquote" "name" "item" "reqref" "gamebtn" "fs" "cs" "appref" "sorty"])
    :ignore (cmds ["urlfootnote" "caption" "todo"])})
   
 
 
-(def Dictionary-file      {:de-DE [(.. (vim.fn.getenv "HOME") "/.config/ltex-ls/dictionary.txt")]})
-(def Disabled-rules-file  {:de-DE [(.. (vim.fn.getenv "HOME") "/.config/ltex-ls/disable.txt")]})
-(def False-positives-file {:de-DE [(.. (vim.fn.getenv "HOME") "/.config/ltex-ls/false.txt")]})
+(local Dictionary-file      {:de-DE [(.. (vim.fn.getenv "HOME") "/.config/ltex-ls/dictionary.txt")]})
+(local Disabled-rules-file  {:de-DE [(.. (vim.fn.getenv "HOME") "/.config/ltex-ls/disable.txt")]})
+(local False-positives-file {:de-DE [(.. (vim.fn.getenv "HOME") "/.config/ltex-ls/false.txt")]})
 
 
-(def latex-command-settings-formatted
+(local latex-command-settings-formatted
   (let [tbl {}]
     (each [option commands (pairs latex-command-settings)]
       (each [_ command (ipairs commands)]
@@ -107,7 +107,7 @@
     (add-to-file filetype lang file value)))
 
 
-(defn init []
+(fn init []
   (set configs.ltex
        {:default_config {:cmd [:ltex-ls]
                          :filetypes [:tex :latex :bib]
@@ -153,4 +153,4 @@
              (orig-execute-command command)))))
 
 
-
+[]

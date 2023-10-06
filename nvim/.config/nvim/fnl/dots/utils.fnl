@@ -1,29 +1,31 @@
-(module dots.utils
-  {autoload {a aniseed.core
-             nvim aniseed.nvim
-             str aniseed.string}
-   require-macros [macros]})
+(import-macros {: al} :macros)
+(al a nfnl.core)
+(al str nfnl.string)
 
-(defn plugin-installed? [name]
-  (~= nil (. packer_plugins name)))
+(fn plugin [name ?opts]
+  (if (= nil ?opts)
+    name
+    (do
+      (tset ?opts 1 name)
+      ?opts)))
 
-(defn all [f xs]
+(fn all [f xs]
   (not (a.some #(not (f $1)))))
 
-(defn single-to-list [x]
+(fn single-to-list [x]
   "Returns the list given to it. If given a single value, wraps it in a list"
   (if (a.table? x) x [x]))
 
-(defn contains? [list elem]
+(fn contains? [list elem]
   (or (a.some #(= elem $1) list)) false)
 
-(defn filter-table [f t]
+(fn filter-table [f t]
   (collect [k v (pairs t)]
     (when (f k v)
       (values k v))))
 
 
-(defn split-last [s sep]
+(fn split-last [s sep]
   "split a string at the last occurrence of a separator"
   (for [i (length s) 1 -1]
     (let [c (s:sub i i)]
@@ -33,21 +35,21 @@
           (lua "return { left, right }")))))
   [s])
 
-(defn find-where [pred xs]
+(fn find-where [pred xs]
   (each [_ x (ipairs xs)]
     (when (pred x)
       (lua "return x"))))
 
-(defn find-map [f xs]
+(fn find-map [f xs]
   (each [_ x (ipairs xs)]
     (let [res (f x)]
       (when (~= nil res)
         (lua "return res")))))
 
-(defn keep-if [f x]
+(fn keep-if [f x]
   (when (f x) x))
 
-(defn map-values [f t]
+(fn map-values [f t]
   "Map over the values of a table, keeping the keys intact"
   (let [tbl {}]
     (each [k v (pairs t)] (tset tbl k (f v)))
@@ -55,27 +57,25 @@
 
 
 
-(defn without-keys [keys t]
+(fn without-keys [keys t]
   (filter-table #(not (contains? keys $1)) t))
 
-(defn keymap [modes from to ?opts]
+(fn keymap [modes from to ?opts]
   "Set a mapping in the given modes, and some optional parameters, defaulting to {:noremap true :silent true}.
   If :buffer is set, uses buf_set_keymap rather than set_keymap"
   (let [full-opts (->> (or ?opts {})
                        (a.merge {:noremap true :silent true})
                        (without-keys [:buffer]))]
     (each [_ mode (ipairs (single-to-list modes))]
-      (if (-?> ?opts (. :buffer))
-        (nvim.buf_set_keymap 0 mode from to full-opts)
-        (nvim.set_keymap mode from to full-opts)))))
+      (let [keymap-opts (if (-?> ?opts (. :buffer)) (a.assoc full-opts :buffer 0) full-opts)]
+        (vim.keymap.set mode from to keymap-opts)))))
 
-(defn del-keymap [mode from ?buf-local]
+(fn del-keymap [mode from ?buf-local]
   "Remove a keymap. Arguments: mode, mapping, bool if mapping should be buffer-local."
-  (if ?buf-local
-    (nvim.buf_del_keymap 0 mode from)
-    (nvim.del_keymap mode from)))
+  (vim.keymap.del mode from
+    (if ?buf-local {:buffer 0} {})))
 
-(defn safe-require [name]
+(fn safe-require [name]
   (xpcall 
     #(
       ;do
@@ -86,24 +86,24 @@
       (a.println (.. "Error sourcing " name ":\n" (fennel.traceback $1))))))
 
 
-(defn buffer-content [bufnr]
+(fn buffer-content [bufnr]
   "Returns a table of lines in the given buffer"
   (vim.api.nvim_buf_get_lines bufnr 0 -1 false))
 
-(defn surround-if-present [a mid b]
+(fn surround-if-present [a mid b]
   (if mid 
     (.. a mid b)
     ""))
 
-(defn highlight [group-arg colset]
+(fn highlight [group-arg colset]
   (let [default { :fg "NONE" :bg "NONE" :gui "NONE"}
         opts (a.merge default colset)]
     (each [_ group (ipairs (single-to-list group-arg))]
-      (nvim.command (.. "hi! "group" guifg='"opts.fg"' guibg='"opts.bg"' gui='"opts.gui"'")))))
+      (vim.cmd (.. "hi! "group" guifg='"opts.fg"' guibg='"opts.bg"' gui='"opts.gui"'")))))
 
-(defn highlight-add [group-arg colset]
+(fn highlight-add [group-arg colset]
   (each [_ group (ipairs (single-to-list group-arg))]
-    (nvim.command 
+    (vim.cmd
       (.. "hi! "
           group
           (surround-if-present " guibg='"colset.bg"'")
@@ -115,7 +115,7 @@
 
 
 
-(defn shorten-path [path seg-length shorten-after]
+(fn shorten-path [path seg-length shorten-after]
   "shorten a filepath by truncating the segments to n characters, if the path exceeds a given length"
   (let [segments (str.split path "/")]
     (if (or (> shorten-after (length path))
@@ -126,7 +126,7 @@
             shortened-segs (a.map #(string.sub $1 1 seg-length) init)]
         (.. (str.join "/" shortened-segs) "/" filename))))) 
 
-(defn comp [f g]
+(fn comp [f g]
   (fn [...]
     (f (g ...))))
 
@@ -138,28 +138,56 @@
 
 (var deferred-funs [])
 (var did-exec-deferred false)
-(defn clear-deferred [] (set deferred-funs []))
+(fn clear-deferred [] (set deferred-funs []))
 
 ; defer a function. If deferred funcs have already been ran,
 ; assume we're reloading config because the user is configuring, and just execute immediately
-(defn defer-to-end [f]
+(fn defer-to-end [f]
   (if did-exec-deferred
     (f)
     (table.insert deferred-funs f)))
 
-(defn run-deferred []
+(fn run-deferred []
   (set did-exec-deferred true)
   (each [_ f (ipairs deferred-funs)]
     (f)))
 
-
-(defn get-selection []
+(fn get-selection []
   (let [[_ s-start-line s-start-col] (vim.fn.getpos "'<")
         [_ s-end-line s-end-col]     (vim.fn.getpos "'>")
         n-lines                      (+ 1 (math.abs (- s-end-line s-start-line)))
         lines                        (vim.api.nvim_buf_get_lines 0 (- s-start-line 1) s-end-line false)]
-    (tset lines 1 (string.sub (. lines 1) s-start-col -1))
-    (if (= 1 n-lines)
-      (tset lines n-lines (string.sub (. lines n-lines) 1 (+ 1 (- s-end-col s-start-col))))
-      (tset lines n-lines (string.sub (. lines n-lines) 1 s-end-col)))
-    (values s-start-line s-end-line lines)))
+    (if (= nil (. lines 1))
+      (values s-start-line s-end-line lines)
+      (do
+        (tset lines 1 (string.sub (. lines 1) s-start-col -1))
+        (if (= 1 n-lines)
+          (tset lines n-lines (string.sub (. lines n-lines) 1 (+ 1 (- s-end-col s-start-col))))
+          (tset lines n-lines (string.sub (. lines n-lines) 1 s-end-col)))
+        (values s-start-line s-end-line lines)))))
+
+{: plugin
+ : plugin-installed?
+ : all
+ : single-to-list
+ : contains?
+ : filter-table
+ : split-last
+ : find-where
+ : find-map
+ : keep-if
+ : map-values
+ : without-keys
+ : keymap
+ : del-keymap
+ : safe-require
+ : buffer-content
+ : surround-if-present
+ : highlight
+ : highlight-add
+ : shorten-path
+ : comp
+ : clear-deferred
+ : defer-to-end
+ : run-deferred
+ : get-selection}

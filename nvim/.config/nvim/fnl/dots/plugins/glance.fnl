@@ -1,5 +1,8 @@
-(module dots.plugins.glance
-  {autoload {a aniseed.core
-             glance glance}})
+(import-macros m :macros)
+(m.al a aniseed.core)
+(m.al glance glance)
+(m.al utils dots.utils)
 
-(glance.setup)
+[(utils.plugin
+   :dnlhc/glance.nvim
+   {:lazy true :config #(glance.setup)})]

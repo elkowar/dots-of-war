@@ -1,6 +1,6 @@
-(module dots.plugins.todo-comments
-  {autoload {a aniseed.core
-             todo-comments todo-comments}})
+(import-macros m :macros)
+(m.al a aniseed.core)
+(m.al todo-comments todo-comments)
 
 (todo-comments.setup  
   {:keywords {:TODO {:icon " "}
@@ -9,3 +9,4 @@
               :FIX  {:icon " " :alt [:FIXME :BUG :FIXIT :ISSUE :PHIX]} 
               :PERF {:icon " " :alt [:OPTIM :PERFORMANCE :OPTIMIZE]}
               :HACK {:icon " "}}})
+[]

@@ -1,3 +1,5 @@
+;; [nfnl-macro]
+
 {:augroup
   (fn [name ...]
     `(do
@@ -5,6 +7,11 @@
        (nvim.ex.autocmd_)
        ,...
        (nvim.ex.augroup :END)))
+
+  :al
+  (fn [name thing]
+    `(local ,name ((. (require :nfnl.module) :autoload) ,(tostring thing))))
+
 
   :defer
   (fn [...]
@@ -14,8 +21,8 @@
   
   :req
   (fn [name ...]
-    (let [str  (require :aniseed.string) 
-          a    (require :aniseed.core)
+    (let [str  (require :nfnl.string) 
+          a    (require :nfnl.core)
           segs (str.split (tostring name) "%.")
           mod  (str.join "." (a.butlast segs))
           func (a.last segs)]
@@ -33,19 +40,6 @@
   (fn [name]
     `(.. "lua require('" *module-name* "')['" ,(tostring name) "']()"))
  
-  :dbg
-  (fn [x]
-    `(let [view# (require "aniseed.view")]
-      (print (.. `,(tostring x) " => " (view#.serialise ,x)))
-      ,x))
- 
-  :dbg-call
-  (fn [x ...]
-    `(do
-      (let [a# (require "aniseed.core")]
-        (a#.println ,...))
-      (,x ,...)))
- 
   :pkg
   (fn [name mappings ...]
     `(if (~= nil (. packer_plugins `,(tostring name)))
@@ -60,7 +54,7 @@
   :each-pair
   (fn [args ...]
     (let [[l# r# d#] args]
-      `(let [a# (require "aniseed.core")
+      `(let [a# (require "nfnl.core")
              data# ,d#]
         (for [i# 1 (a#.count data#) 2]
           (let [,l# (. data# i#)
@@ -69,7 +63,7 @@
 
   :packer-use
   (fn [...]
-    (let [a (require "aniseed.core")
+    (let [a (require "nfnl.core")
           args [...]
           use-statements []]
       (for [i 1 (a.count args) 2]

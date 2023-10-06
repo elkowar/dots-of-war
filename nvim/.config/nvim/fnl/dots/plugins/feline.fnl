@@ -1,15 +1,13 @@
-(module dots.plugins.feline
-  {autoload {a aniseed.core
-             nvim aniseed.nvim
-             utils dots.utils
-             str aniseed.string
-             colors dots.colors
-             view aniseed.view
-             feline feline
-             feline-git feline.providers.git
-             feline-lsp feline.providers.lsp}
-   require-macros [macros]})
+(import-macros m :macros)
+(m.al a nfnl.core)
+(m.al utils dots.utils)
+(m.al str nfnl.string)
+(m.al colors dots.colors)
+(m.al feline feline)
+(m.al feline-git feline.providers.git)
+(m.al feline-lsp feline.providers.lsp)
 
+(fn setup [])
 (set vim.opt.termguicolors true)
 
 (local modes 
@@ -31,31 +29,31 @@
    :V   {:text "VISUAL LINE"   :color colors.neutral_blue}
    "" {:text "VISUAL BLOCK"  :color colors.neutral_blue}})
 
-(def bar-bg colors.bg_main)
-(def horiz-separator-color colors.light1) 
+(local bar-bg colors.bg_main)
+(local horiz-separator-color colors.light1) 
 
-(defn or-empty [x] (or x ""))
-(defn spaces [x] (if x (.. " " x " ") ""))
+(fn or-empty [x] (or x ""))
+(fn spaces [x] (if x (.. " " x " ") ""))
 
-(defn get-current-filepath []
+(fn get-current-filepath []
   (let [file (utils.shorten-path (vim.fn.bufname) 30 30)]
     (if (a.empty? file) ""
-       nvim.bo.readonly (.. "RO " file)
-       (and nvim.bo.modifiable nvim.bo.modified) (.. file " ●")
+       vim.bo.readonly (.. "RO " file)
+       (and vim.bo.modifiable vim.bo.modified) (.. file " ●")
        (.. file " "))))
 
-(defn vim-mode-hl [use-as-fg?]
+(fn vim-mode-hl [use-as-fg?]
   (let [color (. modes (vim.fn.mode) :color)] 
     (if use-as-fg? {:bg bar-bg :fg color} {:bg color :fg bar-bg})))
 
-(defn git-status-provider []
+(fn git-status-provider []
   (or-empty (utils.keep-if #(~= "master" $1)
                            (?. vim.b :gitsigns_status_dict :head))))
 
-(defn vim-mode []
+(fn vim-mode []
   (.. " " (or (. modes (vim.fn.mode) :text) vim.fn.mode) " "))
 
-(defn lsp-progress-provider []
+(fn lsp-progress-provider []
   (let [msgs (vim.lsp.util.get_progress_messages)
         s (icollect [_ msg (ipairs msgs)]
                     (when msg.message
@@ -64,25 +62,25 @@
 
 
 
-(defn lsp-diagnostic-component [kind color]
+(fn lsp-diagnostic-component [kind color]
   {:enabled #(~= 0 (length (vim.diagnostic.get 0 {:severity kind})))
    :provider #(spaces (length (vim.diagnostic.get 0 {:severity kind})))
    :left_sep ""
    :right_sep ""
    :hl {:fg bar-bg :bg color}})
 
-(defn coordinates []
+(fn coordinates []
   (let [[line col] (vim.api.nvim_win_get_cursor 0)]
     (.. " " line " ")))
 
 
-; Fills the bar with an horizontal line
-(defn inactive-separator-provider []
+  ; Fills the bar with an horizontal line
+(fn inactive-separator-provider []
   (if (not= (vim.fn.winnr) (vim.fn.winnr :j))
     (string.rep "─" (vim.api.nvim_win_get_width 0))
     ""))
-        
-(def components {:active {} :inactive {}})
+          
+(local components {:active {} :inactive {}})
 
 (tset components.active 1
   [{:provider vim-mode :hl #(vim-mode-hl false)} 
@@ -114,3 +112,4 @@
 (feline.setup {:theme {:fg colors.light1 :bg colors.bg_main}
                :components components})
 
+[(utils.plugin :Famiu/feline.nvim {:config setup})]

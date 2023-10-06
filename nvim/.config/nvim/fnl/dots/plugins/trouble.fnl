@@ -1,7 +1,7 @@
-(module dots.plugins.trouble
-  {autoload {utils dots.utils
-             colors dots.colors}
-   require {trouble trouble}})
+(import-macros m :macros)
+(m.al utils dots.utils)
+(m.al colors dots.colors)
+(local trouble (require :trouble))
 
 (trouble.setup
  {:icons false
@@ -25,3 +25,4 @@
 (utils.highlight "TroubleSignWarning"     {:bg "NONE" :fg colors.bright_yellow})
 (utils.highlight "TroubleSignInformation" {:bg "NONE" :fg colors.bright_aqua})
 (utils.highlight "TroubleSignHint"        {:bg "NONE" :fg colors.bright_blue})
+[]

@@ -1,14 +1,12 @@
-(module dots.keybinds
-  {autoload {a aniseed.core
-             str aniseed.string
-             nvim aniseed.nvim
-             utils dots.utils
-             wk which-key
-             treesitter-selection nvim-treesitter.incremental_selection
-             lspactions lspactions
-             glance glance
-             crates crates}
-   require-macros [macros]})
+(import-macros {: al} :macros)
+(al a nfnl.core)
+(al str nfnl.string)
+(al utils dots.utils)
+(al wk which-key)
+; (al treesitter-selection nvim-treesitter.incremental_selection)
+(al lspactions lspactions)
+(al glance glance)
+(al crates crates)
 
 ; undo autopairs fuckup    
 (set vim.g.AutoPairsShortcutBackInsert "<M-b>")
@@ -52,7 +50,7 @@
 ;(utils.keymap [:n] :j "gj")
 ;(utils.keymap [:n] :k "gk")
 
-(defn open-selection-zotero []
+(fn open-selection-zotero []
   (let [(_ _ sel) (utils.get-selection)]
     (vim.cmd (.. "silent !xdg-open zotero://select/items/@" (str.join sel)))))
 
@@ -62,21 +60,21 @@
 (fn rebind [s desc] [s desc])
 
 
-(defn format []
+(fn format []
   (if (a.some #$1.server_capabilities.documentFormattingProvider (vim.lsp.get_active_clients))
     (vim.lsp.buf.format {:async true})
     (vim.cmd "Neoformat")))
 
-(defn open-rename []
+(fn open-rename []
   (vim.api.nvim_feedkeys (.. ":IncRename " (vim.fn.expand "<cword>")) "n" ""))
 
-(defn toggle-lsp-lines []
+(fn toggle-lsp-lines []
   (let [lsp-lines (require "lsp_lines")]
     (vim.diagnostic.config {:virtual_lines (not (. (vim.diagnostic.config) :virtual_lines))})
     ; TODO: this doesn't seem to work...
     (vim.diagnostic.config {:virtual_text (not (. (vim.diagnostic.config) :virtual_lines))})))
 
-(defn toggle-lsp-lines-current []
+(fn toggle-lsp-lines-current []
   (let [lsp-lines (require "lsp_lines")]
     (vim.diagnostic.config {:virtual_lines {:only_current_line true}})))
 
@@ -191,5 +189,5 @@
   :mode "v"})
 
 
-(set nvim.o.timeoutlen 200)
+(set vim.o.timeoutlen 200)
 

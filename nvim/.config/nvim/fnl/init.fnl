@@ -1,20 +1,27 @@
-(module init 
-  {autoload {utils dots.utils
-             nvim aniseed.nvim
-             a aniseed.core
-             str aniseed.string
-             colors dots.colors}
-   require-macros [macros]})
+(import-macros {: al : vim-let} :macros)
+(al a nfnl.core)
+(al utils dots.utils)
+(al str nfnl.string)
+(al colors dots.colors)
+(local lazy (require :lazy))
+
 (utils.clear-deferred)
 
+;(macro make-errors-epic [f]
+;  `(xpcall #,f #(let [fennel# (require :aniseed.fennel)]
+;                  (a.println (fennel#.traceback $1)))))
 (macro make-errors-epic [f]
-  `(xpcall #,f #(let [fennel# (require :aniseed.fennel)]
-                  (a.println (fennel#.traceback $1)))))
+  f)
 
 (when (vim.fn.has "termguicolors")
   (set vim.opt.termguicolors true))
 
-(make-errors-epic (require "dots.plugins"))
+;(make-errors-epic (require "dots.plugins"))
+
+(vim-let mapleader "\\<Space>")
+(vim-let maplocalleader ",")
+
+(lazy.setup {:import "dots.plugins" :install {:colorscheme "gruvbox8"}})
 
 ; (require "impatient")
 
@@ -27,8 +34,6 @@
 
 ; Basic setup --------------------------------------- foldstart
 
-(vim-let mapleader "\\<Space>")
-(vim-let maplocalleader ",")
 
 (vim.cmd "filetype plugin indent on")
 (vim.cmd "syntax on")
@@ -140,7 +145,7 @@
 (vim.cmd
   "command! -nargs=1 L :lua print(vim.inspect(<args>))")
 
-(vim.cmd "Copilot enable")
+; (vim.cmd "Copilot enable")
 
 (utils.run-deferred)
 

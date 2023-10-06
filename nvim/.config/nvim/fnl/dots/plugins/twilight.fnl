@@ -1,5 +1,5 @@
-
-(module dots.plugins.twilight
-  {autoload {twilight twilight}})
+(import-macros m :macros)
+(m.al twilight twilight)
 
 (twilight.setup)
+[]

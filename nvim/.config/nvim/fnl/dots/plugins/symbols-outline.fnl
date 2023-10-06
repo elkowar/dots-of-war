@@ -1,4 +1,5 @@
-(module dots.plugins.symbols-outline
-  {require {symbols-outline symbols-outline}})
+(import-macros m :macros)
+(local symbols-outline (require :symbols-outline))
 
-(symbols-outline.setup {:highlight_hovered_item true :show_guides true})
+; (symbols-outline.setup {:highlight_hovered_item true :show_guides true})
+[]

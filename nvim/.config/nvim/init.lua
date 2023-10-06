@@ -1,7 +1,3 @@
-
-
-
-
 -- not even used, but epic. stores the path to the root config directory.
 local vim_config_root = vim.fn.expand("<sfile>:p:h")
 
@@ -33,15 +29,22 @@ end
 
 -- Bootstrap essential plugins required for installing and loading the rest.
 --ensure("wbthomason", "packer.nvim", "master")
-ensure("Olical", "aniseed", "master")
+--ensure("Olical", "aniseed", "master")
+ensure("Olical", "nfnl", "main")
+
+-- require('nfnl')['compile-all-files']()
+
+require("lua.init")
+
+
 -- ensure("lewis6991", "impatient.nvim", "main")
 
 -- require("impatient")
 
 
-vim.g["aniseed#env"] = {
-  compile = true
-}
+-- vim.g["aniseed#env"] = {
+--   compile = true
+-- }
 --require("aniseed.env").init({compile = true})
 
 
