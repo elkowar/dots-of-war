@@ -1,8 +1,9 @@
-(import-macros {: al : vim-let} :macros)
-(al a nfnl.core)
-(al utils dots.utils)
-(al str nfnl.string)
-(al colors dots.colors)
+(import-macros {: vim-let} :macros)
+
+(local {: autoload} (require :nfnl.module))
+(local a (autoload :aniseed.core))
+(local str (autoload :aniseed.string))
+(local utils (autoload :dots.utils))
 (local lazy (require :lazy))
 
 (utils.clear-deferred)

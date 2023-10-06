@@ -1,11 +1,9 @@
-(import-macros {: al} :macros)
-(al a aniseed.core)
-(al str aniseed.string)
-(al lsp lspconfig) 
-(al lsp-configs lspconfig/configs)
-(al utils dots.utils)
-(al ltex-ls dots.plugins.ltex-ls)
-(al cmp_nvim_lsp cmp_nvim_lsp)
+(local {: autoload} (require :nfnl.module))
+(local a (autoload :aniseed.core))
+(local lsp (autoload :lspconfig)) 
+(local lsp-configs (autoload :lspconfig/configs))
+(local utils (autoload :dots.utils))
+(local cmp_nvim_lsp (autoload :cmp_nvim_lsp))
 
 (fn setup []
   ; TODO check https://github.com/neovim/nvim-lspconfig/blob/master/ADVANCED_README.md for default config for all of them
@@ -50,7 +48,7 @@
         ((lsp.util.root_pattern patterns) path))))
 
   ; advertise snippet support
-  (def default-capabilities
+  (local default-capabilities
     (let [capabilities (vim.lsp.protocol.make_client_capabilities)]
       (set capabilities.textDocument.completion.completionItem.snippetSupport true)
       (cmp_nvim_lsp.default_capabilities capabilities)))
@@ -128,16 +126,19 @@
                                 
                                 ;:cmd ["/home/leon/coding/prs/rust-analyzer/target/release/rust-analyzer"]}}))
 
-  (when (not lsp.fennel_language_server)
+  (when (or true (not lsp.fennel_language_server))
     (tset lsp-configs :fennel_language_server
           {:default_config {:cmd "/Users/leon/.cargo/bin/fennel-language-server"
                             :filetypes [:fennel]
                             :single_file_support true
-                            :root_dir (lsp.util.root_pattern "fnl")
+                            :root_dir (lsp.util.root_pattern ["fnl" "init.lua"])
                             :settings {:fennel {:workspace {:library (vim.api.nvim_list_runtime_paths)}
                                                 :diagnostics {:globals [:vim]}}}}}))
                             
-  (init-lsp :fennel_language_server)
+  (init-lsp :fennel_language_server
+            {:root_dir (lsp.util.root_pattern ["fnl" "init.lua"])
+             :settings {:fennel {:workspace {:library (vim.api.nvim_list_runtime_paths)}
+                                 :diagnostics {:globals [:vim :comment]}}}})
 ;
 ;
 
@@ -180,7 +181,7 @@
 
   ; Idris2 ----------------------------------------------------------- <<<<<
 
-  (def autostart-semantic-highlighting true)
+  (local autostart-semantic-highlighting true)
   (fn refresh-semantic-highlighting []
     (when autostart-semantic-highlighting
       (vim.lsp.buf_request 0
@@ -265,5 +266,5 @@
             (tset result :contents new-contents)
             (previous-handler a result b c)))))))
 
-[(utils.plugin :neovim/nvim-lspconfig {:event "VeryLazy" :lazy true})]
+[(utils.plugin :neovim/nvim-lspconfig {:event "VeryLazy" :lazy true :config setup})]
 ; vim:foldmarker=<<<<<,>>>>>

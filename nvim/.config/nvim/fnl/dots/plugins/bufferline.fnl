@@ -1,11 +1,16 @@
-(import-macros {: al} :macros)
-(al a nfnl.core)
-(al utils dots.utils)
-(al colors dots.colors)
-(al bufferline bufferline)
+(local {: autoload} (require :nfnl.module))
+(local a (autoload :aniseed.core))
+(local utils (autoload :dots.utils))
+(local bufferline (autoload :bufferline))
+(local colors (autoload :dots.colors))
 
 (vim.cmd "hi link BufferLineTabSeparatorSelected BufferLineSeparatorSelected")
 (vim.cmd "hi link BufferLineTabSeparator BufferLineSeparator")
+
+(fn mk-active [fg]
+  {:bg colors.neutral_aqua :fg fg :italic false :bold false})
+(fn mk-visible [fg]
+  {:bg colors.dark1 :fg fg :italic false :bold false})
 
 (fn setup []
   ; :h bufferline-lua-highlights
@@ -14,7 +19,7 @@
    (bufferline.setup 
      {:options
       {:diagnostics "nvim_lsp"
-       :diagnostics_indicator (fn [cnt lvl diagnostics-dict] (.. " (" cnt ")"))
+       :diagnostics_indicator (fn [cnt _lvl _diagnostics-dict] (.. " (" cnt ")"))
        :show_buffer_close_icons false
        :show_buffer_icons false
        :show_close_icon false
@@ -28,30 +33,35 @@
        :background visible
        :buffer_visible visible
        :buffer_selected (a.assoc selected :bold false :italic false)
-       :modified  visible   :modified_selected  selected   :modified_visible  visible  
-       :info      visible   :info_selected      selected   :info_visible      visible  
-       :warning   visible   :warning_selected   selected   :warning_visible   visible
-       :error     visible   :error_selected     selected   :error_visible     visible
-       :duplicate visible   :duplicate_selected selected   :duplicate_visible visible
+       :modified  visible   :modified_visible  visible   :modified_selected  selected
+       :hint      visible   :hint_visible      visible   :hint_selected      selected
+       :info      visible   :info_visible      visible   :info_selected      selected
+       :warning   visible   :warning_visible   visible   :warning_selected   selected
+       :error     visible   :error_visible     visible   :error_selected     selected
+       :duplicate visible   :duplicate_visible visible   :duplicate_selected selected
 
-       :diagnostic                  {:bg colors.dark1        :fg colors.neutral_red}
-       :diagnostic_visible          {:bg colors.dark1        :fg colors.neutral_red}
-       :diagnostic_selected         {:bg colors.neutral_aqua :fg colors.faded_redu}
+       :diagnostic                  (mk-visible colors.neutral_red)
+       :diagnostic_visible          (mk-visible colors.neutral_red)
+       :diagnostic_selected         (mk-active colors.faded_red)
 
-       :info_diagnostic             {:bg colors.dark1        :fg colors.neutral_blue}
-       :info_diagnostic_visible     {:bg colors.dark1        :fg colors.neutral_blue}
-       :info_diagnostic_selected    {:bg colors.neutral_aqua :fg colors.faded_blue}
+       :info_diagnostic             (mk-visible colors.neutral_blue)
+       :info_diagnostic_visible     (mk-visible colors.neutral_blue)
+       :info_diagnostic_selected    (mk-active colors.faded_blue)
 
-       :warning_diagnostic          {:bg colors.dark1        :fg colors.neutral_yellow}
-       :warning_diagnostic_visible  {:bg colors.dark1        :fg colors.neutral_yellow}
-       :warning_diagnostic_selected {:bg colors.neutral_aqua :fg colors.faded_yellow}
+       :hint_diagnostic             (mk-visible colors.neutral_yellow)
+       :hint_diagnostic_visible     (mk-visible colors.neutral_yellow)
+       :hint_diagnostic_selected    (mk-active colors.faded_orange)
 
-       :error_diagnostic            {:bg colors.dark1        :fg colors.neutral_red}
-       :error_diagnostic_visible    {:bg colors.dark1        :fg colors.neutral_red}
-       :error_diagnostic_selected   {:bg colors.neutral_aqua :fg colors.red}
+       :warning_diagnostic          (mk-visible colors.neutral_orange)
+       :warning_diagnostic_visible  (mk-visible colors.neutral_orange)
+       :warning_diagnostic_selected (mk-active colors.faded_orange)
+
+       :error_diagnostic            (mk-visible colors.neutral_red)
+       :error_diagnostic_visible    (mk-visible colors.neutral_red)
+       :error_diagnostic_selected   (mk-active colors.red)
 
        :separator visible
-       :indicator_selected {:bg colors.neutral_aqua :fg colors.neutral_aqua}
+       :indicator_selected {:bg colors.neutral_aqua :fg colors.neutral_aqua :italic false :bold false}
        :tab_separator {:bg colors.red}
        :tab_separator_selected {:bg colors.neutral_aqua :fg colors.neutral_aqua}
 
