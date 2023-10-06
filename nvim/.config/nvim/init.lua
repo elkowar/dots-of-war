@@ -34,7 +34,7 @@ ensure("Olical", "nfnl", "main")
 
 -- require('nfnl')['compile-all-files']()
 
-require("lua.init")
+require("main")
 
 
 -- ensure("lewis6991", "impatient.nvim", "main")

@@ -4,7 +4,8 @@
 (al colors dots.colors)
 (al bufferline bufferline)
 
-(print (vim.inspect colors))
+(vim.cmd "hi link BufferLineTabSeparatorSelected BufferLineSeparatorSelected")
+(vim.cmd "hi link BufferLineTabSeparator BufferLineSeparator")
 
 (fn setup []
   ; :h bufferline-lua-highlights

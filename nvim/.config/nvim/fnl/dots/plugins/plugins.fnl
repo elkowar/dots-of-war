@@ -17,10 +17,6 @@
  (plugin :norcalli/nvim.lua)
  (plugin :kyazdani42/nvim-web-devicons)
  (plugin :folke/which-key.nvim)
- (plugin :folke/todo-comments.nvim
-         {:lazy true
-          :event "VeryLazy"
-          :config #(require "dots.plugins.todo-comments")})
  (plugin :ckipp01/nvim-jenkinsfile-linter
          {:dependencies ["nvim-lua/plenary.nvim"]})
  (plugin :psliwka/vim-smoothie)
@@ -34,11 +30,6 @@
 
  (plugin :tweekmonster/startuptime.vim
          {:cmd ["StartupTime"]})
- (plugin :folke/zen-mode.nvim
-         {:config #(require "dots.plugins.zen-mode")
-          :cmd ["ZenMode"]})
- (plugin :folke/twilight.nvim
-         {:config #(require "dots.plugins.twilight")})
  (plugin :moll/vim-bbye
          {:lazy true :cmd [:Bdelete :Bwipeout]})
  (plugin :petertriho/nvim-scrollbar
@@ -111,21 +102,6 @@
          {:cmd "CodeActionMenu"
           :config #(set vim.g.code_action_menu_show_details false)})
 
- (plugin :folke/trouble.nvim
-         {:lazy true 
-          :config #(require "dots.plugins.trouble")
-          :cmd ["Trouble" "TroubleClose" "TroubleRefresh" "TroubleToggle"]})
-                     
- ; :elkowar/trouble.nvim {:branch "fix_error_on_nil_window"
- ;                        :config #(require "dots.plugins.trouble")
- ;                        :cmd ["Trouble" "TroubleClose" "TroubleRefresh" "TroubleToggle"]}
-
- (plugin :simrat39/symbols-outline.nvim
-         {:lazy true
-          :cmd ["SymbolsOutline" "SymbolsOutlineClose" "SymbolsOutlineOpen"]
-          :config #(require "dots.plugins.symbols-outline")})
-
-
  (plugin :smjonas/inc-rename.nvim
          {:config #(setup :inc_rename {:input_buffer_type "dressing"})})
  ; >>>
@@ -146,10 +122,6 @@
          {:config #(set vim.g.antifennel_executable "/home/leon/tmp/antifennel/antifennel")})
  (plugin :Olical/conjure {:ft ["fennel"]})
  (plugin :eraserhd/parinfer-rust {:build "cargo build --release"})
-
- (plugin :lervag/vimtex
-         {:ft ["latex" "tex"]
-          :config #(require :dots.plugins.vimtex)})
  (plugin :kmonad/kmonad-vim)
  (plugin :elkowar/yuck.vim {:ft ["yuck"]})
  (plugin :cespare/vim-toml {:ft ["toml"]})
@@ -161,9 +133,6 @@
  (plugin :leafgarland/typescript-vim {:ft ["typescript" "typescript-react" "javascript"]})
  (plugin :HerringtonDarkholme/yats.vim {}) ; typescript syntax highlighting
  (plugin :mxw/vim-jsx {})
- (plugin :mattn/emmet-vim
-         {:lazy true
-          :config #(require "dots.plugins.emmet")})
  (plugin :purescript-contrib/purescript-vim {:ft ["purescript"]})
  (plugin :derekelkins/agda-vim {:ft ["agda"]})
  (plugin :neovimhaskell/haskell-vim { :ft ["haskell"]})

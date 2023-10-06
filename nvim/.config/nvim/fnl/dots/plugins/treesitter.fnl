@@ -2,9 +2,8 @@
 (m.al utils dots.utils)
 (m.al a nfnl.core)
 
-(fn setup [])
 
-(fn setup1 []
+(fn setup []
   (local configs (require :nvim-treesitter.configs))
   (configs.setup 
     {:ensure_installed ["rust" "fennel" "commonlisp" "vim" "regex" "lua" "bash" "markdown" "markdown_inline"]

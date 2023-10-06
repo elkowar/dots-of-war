@@ -1,8 +1,15 @@
 (import-macros m :macros)
+(m.al utils dots.utils)
 
-(set vim.g.user_emmet_mode "n")
-(set vim.g.user_emmet_leader_key "<leader>e")
-(set vim.g.user_emmet_settings {:javascript.jsx {:extends "jsx"} 
-                                :typescript.jsx {:extends "jsx"}})
+(fn setup []
+  (set vim.g.user_emmet_mode "n")
+  (set vim.g.user_emmet_leader_key "<leader>e")
+  (set vim.g.user_emmet_settings {:javascript.jsx {:extends "jsx"} 
+                                  :typescript.jsx {:extends "jsx"}}))
 
-[]
+[(utils.plugin
+   :mattn/emmet-vim
+   {:lazy true
+    :config setup})]
+
+ 
