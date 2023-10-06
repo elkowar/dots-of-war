@@ -1,6 +1,4 @@
-(import-macros m :macros)
-(m.al utils dots.utils)
-(m.al a nfnl.core)
+(local utils (require :dots.utils))
 
 
 (fn setup []

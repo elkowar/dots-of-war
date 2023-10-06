@@ -1,6 +1,4 @@
-(import-macros {: al} :macros)
-(al a nfnl.core)
-(al lazy lazy)
+;(local {: autolod} (require :nfnl.module))
 
 
 (macro setup [name opts]
@@ -22,20 +20,19 @@
  (plugin :psliwka/vim-smoothie)
  (plugin :nathanaelkane/vim-indent-guides
          {:cmd ["IndentGuidesToggle"]})
- (plugin :luukvbaal/stabilize.nvim
-         {:config #(setup :stabilize)})
-
- (plugin :stevearc/dressing.nvim
-         {:config #(setup :dressing)})
-
- (plugin :tweekmonster/startuptime.vim
-         {:cmd ["StartupTime"]})
- (plugin :moll/vim-bbye
-         {:lazy true :cmd [:Bdelete :Bwipeout]})
+ (plugin :luukvbaal/stabilize.nvim {:config true})
+ (plugin :stevearc/dressing.nvim {:config true})
+ (plugin :tweekmonster/startuptime.vim {:cmd ["StartupTime"]})
+ (plugin :moll/vim-bbye {:lazy true :cmd [:Bdelete :Bwipeout]})
  (plugin :petertriho/nvim-scrollbar
          {:event "VeryLazy"
           :lazy true
-          :config #(setup :scrollbar)})
+          :config true})
+ (plugin :TimUntersberger/neogit
+         {:opts {:integrations {:diffview true}}
+          :cmd ["Neogit"]})
+ (plugin :folke/persistence.nvim
+         {:opts {:dir (vim.fn.expand (.. (vim.fn.stdpath "cache") "/sessions/"))}})
 
  (plugin "https://git.sr.ht/~whynothugo/lsp_lines.nvim"
          {:config #(do (setup :lsp_lines)
@@ -59,13 +56,13 @@
  (plugin :phaazon/hop.nvim
          {:lazy true
           :event "VeryLazy"
-          :config #(setup "hop" {:keys "jfkdls;amvieurow"})})
+          :opts {:keys "jfkdls;amvieurow"}})
  ; >>>
 
  ; debugger <<<
  (plugin :rcarriga/nvim-dap-ui
          {:lazy true
-          :config #(setup :dapui)
+          :config true
           :dependencies [:mfussenegger/nvim-dap]})
  (plugin :mfussenegger/nvim-dap
          {:lazy true})
@@ -87,7 +84,7 @@
           :dependencies [:nvim-lua/plenary.nvim
                          :nvim-telescope/telescope.nvim
                          :kyazdani42/nvim-web-devicons]
-                       :config #(setup :octo)})
+                       :config true})
 
  (plugin :ruanyl/vim-gh-line)
  (plugin :rhysd/conflict-marker.vim)
@@ -101,9 +98,11 @@
  (plugin :weilbith/nvim-code-action-menu
          {:cmd "CodeActionMenu"
           :config #(set vim.g.code_action_menu_show_details false)})
+ (plugin :dnlhc/glance.nvim
+         {:lazy true :config true})
 
  (plugin :smjonas/inc-rename.nvim
-         {:config #(setup :inc_rename {:input_buffer_type "dressing"})})
+         {:opts {:input_buffer_type "dressing"}})
  ; >>>
 
  ; cmp <<<
@@ -146,10 +145,22 @@
          {:ft ["rust"]
           :dependencies ["mattn/webapi-vim"]
           :config #(do (set vim.g.rustfmt_fail_silently 1))})
+
+ (plugin :Saecki/crates.nvim
+         {:dependencies ["nvim-lua/plenary.nvim"]
+          :dir "/Users/leon/tmp/crates.nvim"
+          :event ["BufRead Cargo.toml"]
+          :lazy true
+          :opts {:disable_invalid_feature_diagnostic true
+                 :enable_update_available_warning false}})
                                 
- (plugin :simrat39/rust-tools.nvim
+ ; temporarily using this fork that merges a few fixes, until simrat is back
+ (plugin :MunifTanjim/rust-tools.nvim
          {:ft ["rust" "toml"]
           :dependencies ["nvim-lua/popup.nvim" "nvim-lua/plenary.nvim"]})
+ ;(plugin :simrat39/rust-tools.nvim
+         ;{:ft ["rust" "toml"]
+          ;:dependencies ["nvim-lua/popup.nvim" "nvim-lua/plenary.nvim"]})
 
 
  (plugin :qnighy/lalrpop.vim {})

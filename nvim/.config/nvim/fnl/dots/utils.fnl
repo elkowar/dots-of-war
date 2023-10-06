@@ -1,6 +1,6 @@
-(import-macros {: al} :macros)
-(al a nfnl.core)
-(al str nfnl.string)
+(local {: autoload} (require :nfnl.module))
+(local a (autoload :nfnl.core))
+(local str (autoload :nfnl.string))
 
 (fn plugin [name ?opts]
   (if (= nil ?opts)
@@ -9,7 +9,7 @@
       (tset ?opts 1 name)
       ?opts)))
 
-(fn all [f xs]
+(fn all [f]
   (not (a.some #(not (f $1)))))
 
 (fn single-to-list [x]
@@ -56,7 +56,6 @@
     tbl))
 
 
-
 (fn without-keys [keys t]
   (filter-table #(not (contains? keys $1)) t))
 
@@ -74,16 +73,6 @@
   "Remove a keymap. Arguments: mode, mapping, bool if mapping should be buffer-local."
   (vim.keymap.del mode from
     (if ?buf-local {:buffer 0} {})))
-
-(fn safe-require [name]
-  (xpcall 
-    #(
-      ;do
-       ;(print name)
-       ;(time 
-        (require name)) 
-    #(let [fennel (require :aniseed.fennel)]
-      (a.println (.. "Error sourcing " name ":\n" (fennel.traceback $1))))))
 
 
 (fn buffer-content [bufnr]
@@ -131,27 +120,6 @@
     (f (g ...))))
 
 
-; These are a workaround around broken load order
-; mostly used for themeing stuff
-; given that the colorscheme may override highlight stuff set before it loaded, this can _ensure_
-; that code is ran at the very end of the config
-
-(var deferred-funs [])
-(var did-exec-deferred false)
-(fn clear-deferred [] (set deferred-funs []))
-
-; defer a function. If deferred funcs have already been ran,
-; assume we're reloading config because the user is configuring, and just execute immediately
-(fn defer-to-end [f]
-  (if did-exec-deferred
-    (f)
-    (table.insert deferred-funs f)))
-
-(fn run-deferred []
-  (set did-exec-deferred true)
-  (each [_ f (ipairs deferred-funs)]
-    (f)))
-
 (fn get-selection []
   (let [[_ s-start-line s-start-col] (vim.fn.getpos "'<")
         [_ s-end-line s-end-col]     (vim.fn.getpos "'>")
@@ -167,7 +135,6 @@
         (values s-start-line s-end-line lines)))))
 
 {: plugin
- : plugin-installed?
  : all
  : single-to-list
  : contains?
@@ -180,14 +147,10 @@
  : without-keys
  : keymap
  : del-keymap
- : safe-require
  : buffer-content
  : surround-if-present
  : highlight
  : highlight-add
  : shorten-path
  : comp
- : clear-deferred
- : defer-to-end
- : run-deferred
  : get-selection}

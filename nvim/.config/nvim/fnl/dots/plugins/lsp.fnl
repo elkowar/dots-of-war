@@ -18,15 +18,6 @@
 
 
   (fn on_attach [client bufnr]
-    ;(pkg lsp_signature.nvim [lsp_signature (require "lsp_signature")]
-         ;(lsp_signature.on_attach {:bind true
-                                   ;:hint_scheme "String" 
-                                   ;:hint_prefix "ƒ "
-                                   ;:handler_opts {:border "single"}
-                                   ;:use_lspsaga false
-                                   ;:decorator ["`" "`"]}))
-
-    ;(req dots.utils.highlight :LspDiagnosticsUnderlineError {:gui "underline"})
     (if client.server_capabilities.documentHighlight
       (do
         (utils.highlight "LspReferenceRead"  {:gui "underline"})

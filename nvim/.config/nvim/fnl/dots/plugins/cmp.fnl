@@ -1,20 +1,17 @@
-(import-macros {: al} :macros)
-(al a nfnl.core)
-(al cmp cmp)
-(al utils dots.utils)
+(local {: autoload} (require :nfnl.module))
+(local utils (autoload :dots.utils))
+(local cmp (autoload :cmp))
 
+; check this for coloring maybe
+; https://github.com/hrsh7th/nvim-cmp/blob/ada9ddeff71e82ad0e52c9a280a1e315a8810b9a/lua/cmp/entry.lua#L199
+(fn item-formatter [item vim-item]
+  (let [padding (string.rep " " (- 10 (vim.fn.strwidth vim-item.abbr)))
+        details (?. item :completion_item :detail)]
+    (when details
+      (set vim-item.abbr (.. vim-item.abbr padding " " details))))
+  vim-item)
 
 (fn setup []
-  ; check this for coloring maybe
-  ; https://github.com/hrsh7th/nvim-cmp/blob/ada9ddeff71e82ad0e52c9a280a1e315a8810b9a/lua/cmp/entry.lua#L199
-  (fn item-formatter [item vim-item]
-    (let [padding (string.rep " " (- 10 (vim.fn.strwidth vim-item.abbr)))
-          details (?. item :completion_item :detail)]
-      (when details
-        (set vim-item.abbr (.. vim-item.abbr padding " " details))))
-    vim-item)
-
-
   (cmp.setup
     {:snippet {:expand (fn [args] ((. vim.fn :vsnip#anonymous) args.body))}
 

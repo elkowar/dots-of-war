@@ -1,11 +1,8 @@
-(import-macros m :macros)
-(m.al a aniseed.core)
-(m.al str aniseed.string)
-(m.al lsp lspconfig)
-(m.al configs lspconfig/configs)
-(m.al lsputil lspconfig/util)
-(m.al utils dots.utils)
-(m.al cmp_nvim_lsp cmp_nvim_lsp)
+(local {: autoload} (require :nfnl.module))
+(local lsp (autoload :lspconfig))
+(local configs (autoload :lspconfig/configs))
+(local lsputil (autoload :lspconfig/util))
+(local utils (require :dots.utils))
 
 
 (fn cmds [xs]

@@ -1,5 +1,4 @@
-(import-macros m :macros)
-(m.al utils dots.utils)
+(local utils (require :dots.utils))
 
 (fn setup []
   (set vim.g.user_emmet_mode "n")

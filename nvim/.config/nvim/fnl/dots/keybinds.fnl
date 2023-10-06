@@ -1,26 +1,24 @@
-(import-macros {: al} :macros)
-(al a nfnl.core)
-(al str nfnl.string)
-(al utils dots.utils)
-(al wk which-key)
-; (al treesitter-selection nvim-treesitter.incremental_selection)
-(al lspactions lspactions)
-(al glance glance)
-(al crates crates)
+(local {: autoload} (require :nfnl.module))
+(local a (autoload :nfnl.core))
+(local str (autoload :nfnl.string))
+(local utils (autoload :dots.utils))
+(local wk (autoload :which-key))
+(local glance (autoload :glance))
+(local crates (autoload :crates))
+(local dap (autoload :dap))
+(local dapui (autoload :dapui))
+
+
 
 ; undo autopairs fuckup    
 (set vim.g.AutoPairsShortcutBackInsert "<M-b>")
 
-(utils.keymap [:n] :<C-p> "<cmd>Telescope file_browser<cr>")
 (utils.keymap :n :K "<Nop>")
 (utils.keymap :v :K "<Nop>")
 
 (utils.keymap :i "" "<C-w>")
 (utils.keymap :i :<C-h> "<C-w>")
 (utils.keymap :i :<C-BS> "<C-w>")
-
-(utils.keymap :n :MM "<cmd>lua require('nvim-gehzu').go_to_definition()<CR>" {})
-(utils.keymap :n :MN "<cmd>lua require('nvim-gehzu').show_definition()<CR>" {})
 
 (utils.keymap :n :zt "zt<c-y><c-y><c-y>")
 (utils.keymap :n :zb "zb<c-e><c-e><c-e>")
@@ -32,7 +30,6 @@
 (utils.keymap :n :<C-LeftMouse> "<LeftMouse><cmd>lua vim.lsp.buf.definition()<CR>")
 (utils.keymap :n :<A-LeftMouse> "<Esc><LeftMouse><cmd>lua vim.lsp.buf.hover()<CR>")
 
-(utils.keymap :n :<Backspace> "<cmd>HopChar2<CR>")
 
 ;(utils.keymap :i :<C-l><C-j> "<Plug>(copilot-suggest)")
 ;(utils.keymap :i :<C-l><C-d> "<Plug>(copilot-dismiss)")
@@ -44,6 +41,7 @@
 (utils.keymap :n :<a-s-k> "<cmd>RustMoveItemUp<cr>k")
 
 
+(utils.keymap :n :<Backspace> "<cmd>HopChar2<CR>")
 
 
 ; Fix keybinds in linewrapped mode
@@ -69,21 +67,19 @@
   (vim.api.nvim_feedkeys (.. ":IncRename " (vim.fn.expand "<cword>")) "n" ""))
 
 (fn toggle-lsp-lines []
-  (let [lsp-lines (require "lsp_lines")]
-    (vim.diagnostic.config {:virtual_lines (not (. (vim.diagnostic.config) :virtual_lines))})
-    ; TODO: this doesn't seem to work...
-    (vim.diagnostic.config {:virtual_text (not (. (vim.diagnostic.config) :virtual_lines))})))
+  (vim.diagnostic.config {:virtual_lines (not (. (vim.diagnostic.config) :virtual_lines))})
+  ; TODO: this doesn't seem to work...
+  (vim.diagnostic.config {:virtual_text (not (. (vim.diagnostic.config) :virtual_lines))}))
 
 (fn toggle-lsp-lines-current []
-  (let [lsp-lines (require "lsp_lines")]
-    (vim.diagnostic.config {:virtual_lines {:only_current_line true}})))
+  (vim.diagnostic.config {:virtual_lines {:only_current_line true}}))
 
 (wk.setup {})
 (wk.register 
  {"c" {:name "+comment out"}
   "e" {:name "+emmet"}
 
-  "<backspace>" (cmd "HopWord" "Hop to a word")
+  "[" (cmd "HopWord" "Hop to a word")
   "h" (cmd "bprevious"              "previous buffer")
   "l" (cmd "bnext"                  "next buffer")
   "o" (cmd "Telescope live_grep"    "Grep files")
@@ -96,14 +92,14 @@
   "n" [(. (require :persistence) :load) "Load last session"]
 
   "d" {:name "+Debugging"
-       "b" [#(req dap.toggle_breakpoint)    "toggle breakpoint"]
-       "u" [#(req dapui.toggle)             "toggle dapui"]
-       "c" [#(req dap.step_into)            "continue"]
-       "r" [(. (require "dap") :repl :open) "open repl"]
+       "b" [dap.toggle_breakpoint    "toggle breakpoint"]
+       "u" [dapui.toggle             "toggle dapui"]
+       "c" [dap.step_into            "continue"]
+       "r" [dap.repl.open            "open repl"]
        "s" {:name "+Step"
-            "o" [#(req dap.step_over)       "over"]
-            "u" [#(req dap.step_out)        "out"]
-            "i" [#(req dap.step_into)       "into"]}}
+            "o" [dap.step_over       "over"]
+            "u" [dap.step_out        "out"]
+            "i" [dap.step_into       "into"]}}
 
   "m" {:name "+Code actions"
        ";" [#(set vim.o.spell (not vim.o.spell))          "Toggle spell checking"]
@@ -154,9 +150,9 @@
        "w" (cmd "set wrap! linebreak!"            "toggle linewrapping")}
 
   "b" {:name "+buffers"
-       "b" (cmd "Buffers"   "select open buffer")
-       "c" (cmd ":Bdelete!"  "close open buffer")
-       "w" (cmd ":Bwipeout!" "wipeout open buffer")}}
+       "b" (cmd ":Telescope buffers" "select open buffer")
+       "c" (cmd ":Bdelete!"          "close open buffer")
+       "w" (cmd ":Bwipeout!"         "wipeout open buffer")}}
   
 
  {:prefix"<leader>"})

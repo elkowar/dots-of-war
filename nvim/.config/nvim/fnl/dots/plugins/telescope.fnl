@@ -1,8 +1,7 @@
-(import-macros {: al} :macros)
-(al utils dots.utils)
-(al telescope telescope)
-(al actions telescope.actions)
-(al colors dots.colors)
+(local {: autoload} (require :nfnl.module))
+(local utils (autoload :dots.utils))
+(local telescope (autoload :telescope))
+(local actions (autoload :telescope.actions))
 
 (fn setup []
   (telescope.setup 
@@ -11,7 +10,6 @@
      :extensions {:ui-select [((. (require "telescope.themes") :get_dropdown))]}})
                     
   (telescope.load_extension "dap")
-  ;(telescope.load_extension "ui-select")
 
   (utils.keymap :n :<C-p> ":Telescope find_files<CR>"))
 

@@ -1,6 +1,6 @@
-(import-macros {: al} :macros)
-(al utils dots.utils)
-(al colors dots.colors)
+(local {: autoload} (require :nfnl.module))
+(local utils (autoload :dots.utils))
+(local colors (autoload :dots.colors))
 
 
 (fn setup []

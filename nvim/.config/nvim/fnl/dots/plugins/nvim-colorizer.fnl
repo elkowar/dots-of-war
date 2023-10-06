@@ -1,7 +1,6 @@
-(import-macros m :macros)
-(m.al colorizer colorizer)
-(m.al utils dots.utils)
-
+(local {: autoload} (require :nfnl.module))
+(local colorizer (autoload :colorizer))
+(local utils (autoload :dots.utils))
 
 (fn setup []
   ; this really shouldn't be necessary,.. but it is

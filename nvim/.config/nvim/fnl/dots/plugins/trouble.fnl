@@ -6,16 +6,21 @@
 (fn setup []
   (trouble.setup
    {:icons false
-    :auto_preview true
+    ; disabled due to https://github.com/folke/trouble.nvim/issues/125
+    :auto_preview false
     :auto_close true
     :auto_open false
     :auto_jump ["lsp_definitions" "lsp_workspace_diagnostics" "lsp_type_definitions"]
     :indent_lines false
+    :multiline false
     :action_keys
-      {:jump "o"
-       :jump_close "<CR>"
-       :close "<esc>"
+      {:jump "<CR>"
+       :jump_close "o"
+       :close ["<esc>" "q"]
        :cancel "q"
+       :preview "p"
+       :toggle_preview "P"
+       :toggle_mode "m"
        :hover ["a" "K"]}})
 
   (utils.highlight "TroubleFoldIcon" {:bg "NONE" :fg colors.bright_orange})

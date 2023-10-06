@@ -1,33 +1,22 @@
-(import-macros {: vim-let} :macros)
-
 (local {: autoload} (require :nfnl.module))
-(local a (autoload :aniseed.core))
-(local str (autoload :aniseed.string))
+(local a (autoload :nfnl.core))
+(local str (autoload :nfnl.string))
 (local utils (autoload :dots.utils))
 (local lazy (require :lazy))
 
-(utils.clear-deferred)
 
-;(macro make-errors-epic [f]
-;  `(xpcall #,f #(let [fennel# (require :aniseed.fennel)]
-;                  (a.println (fennel#.traceback $1)))))
-(macro make-errors-epic [f]
-  f)
 
 (when (vim.fn.has "termguicolors")
   (set vim.opt.termguicolors true))
 
-;(make-errors-epic (require "dots.plugins"))
-
-(vim-let mapleader "\\<Space>")
-(vim-let maplocalleader ",")
+(vim.cmd "let mapleader=\"\\<Space>\"")
+(vim.cmd "let maplocalleader=\",\"")
 
 (lazy.setup {:import "dots.plugins" :install {:colorscheme "gruvbox8"}})
 
 ; (require "impatient")
 
-(make-errors-epic (require "dots.plugins.lsp"))
-(make-errors-epic (require "dots.keybinds"))
+(require "dots.keybinds")
 
 ; add to runtimepath
 (let [added-paths []]
@@ -75,7 +64,7 @@
 
 (set vim.g.AutoPairsMultilineClose 0)
 
-(vim-let &t_ut "")
+(vim.cmd "let &t_ut=\"\"")
 
 (vim.api.nvim_create_autocmd "BufWritePost" {:pattern "*.hs" :callback #(set vim.opt.shiftwidth 2)})
 (vim.api.nvim_create_autocmd "FileType" {:pattern "vim" :callback #(set vim.opt_local.foldmethod "marker")})
@@ -148,6 +137,5 @@
 
 ; (vim.cmd "Copilot enable")
 
-(utils.run-deferred)
 
 ; vim:foldmarker=foldstart,foldend

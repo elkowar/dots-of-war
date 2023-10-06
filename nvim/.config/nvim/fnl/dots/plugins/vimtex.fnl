@@ -1,5 +1,4 @@
-(import-macros m :macros)
-(m.al utils dots.utils)
+(local utils (require :dots.utils))
 
 (fn setup []
   (set vim.g.vimtex_view_method "general")

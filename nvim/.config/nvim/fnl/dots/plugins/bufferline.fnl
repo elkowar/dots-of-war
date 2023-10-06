@@ -39,7 +39,7 @@
        :warning   visible   :warning_visible   visible   :warning_selected   selected
        :error     visible   :error_visible     visible   :error_selected     selected
        :duplicate visible   :duplicate_visible visible   :duplicate_selected selected
-
+       
        :diagnostic                  (mk-visible colors.neutral_red)
        :diagnostic_visible          (mk-visible colors.neutral_red)
        :diagnostic_selected         (mk-active colors.faded_red)
@@ -61,6 +61,8 @@
        :error_diagnostic_selected   (mk-active colors.red)
 
        :separator visible
+       :separator_visible {:bg colors.red}
+       :separator_selected {:bg colors.red}
        :indicator_selected {:bg colors.neutral_aqua :fg colors.neutral_aqua :italic false :bold false}
        :tab_separator {:bg colors.red}
        :tab_separator_selected {:bg colors.neutral_aqua :fg colors.neutral_aqua}

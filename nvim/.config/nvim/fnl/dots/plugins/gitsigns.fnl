@@ -1,7 +1,6 @@
-(import-macros m :macros)
-(m.al utils dots.utils)
-(m.al colors dots.colors)
-(m.al gitsigns gitsigns)
+(local {: autoload} (require :nfnl.module))
+(local utils (autoload :dots.utils))
+(local gitsigns (autoload :gitsigns))
 
 (fn setup []
   (gitsigns.setup 
