@@ -30,9 +30,10 @@ end
 -- Bootstrap essential plugins required for installing and loading the rest.
 --ensure("wbthomason", "packer.nvim", "master")
 --ensure("Olical", "aniseed", "master")
-ensure("Olical", "nfnl", "main")
+ensure("Olical", "nfnl", "v1.0.0")
 
--- require('nfnl')['compile-all-files']()
+require('nfnl')['setup']()
+--require('nfnl.api')['compile-all-files']()
 
 require("main")
 
