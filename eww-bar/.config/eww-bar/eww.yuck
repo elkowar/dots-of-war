@@ -11,15 +11,15 @@
       (bottom :screen screen))))
 
 (defwidget top [screen]
-  (workspaces :screen screen)) 
+  (workspaces :screen {screen == 1 ? "DP-2" : "HDMI-A-1"})) 
   ;(workspaces :wsp_yuck {screen == 1 ? workspaces_1_yuck : workspaces_2_yuck}))
 
 (defwidget workspaces [screen]
-  (box :orientation "v"
+  (box :orientation "v" :class "workspaces"
     (for wsp in {workspaces[screen]}
-      (button :class "${wsp.occupied ? "occupied" : "empty"} ${wsp.focused ? "active" : "inactive"}"
+      (button :class "${wsp.focused ? "active" : "inactive"}"
               :onclick "swaymsg workspace ${wsp.name}"
-        {wsp.occupied ? "◆" : "◇"}))))
+        {wsp.name}))))
 
 
 ;(defwidget workspaces [wsp_yuck]
@@ -96,7 +96,7 @@
 (defvar audio_sink "")
 
 (deflisten volume :initial "0" "./audio.sh volume")
-(deflisten workspaces :initial '{"0": [], "1": []}' "./swayspaces.py")
+(deflisten workspaces :initial '{"DP-2": [], "HDMI-A-1": []}' "./swayspaces.py")
 
 
 (defpoll hour :interval "1s" "date +%H")
