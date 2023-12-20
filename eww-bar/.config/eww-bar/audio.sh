@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
 
-
 case "$1" in
   "symbol")
     pactl subscribe | grep --line-buffered "Event 'change' on client" | while read -r; do
       case "$(pactl get-default-sink)" in
-        *Arctis_9*) echo "";;
+        *Arctis_9*) echo "";;
         #*Arctis_9*) echo "";;
         *)          echo "";;
       esac
@@ -28,7 +27,7 @@ case "$1" in
         pactl set-default-sink $speaker_sink_id
         ;;
       *)
-        eww -c ~/.config/eww-bar update audio_sink=""
+        eww -c ~/.config/eww-bar update audio_sink=""
         pactl set-default-sink $game_sink_id
         ;;
     esac

@@ -89,7 +89,7 @@ autoload -Uz promptinit && promptinit
 
 
 # alias
-alias ls="exa --icons"
+alias ls="lsd"
 alias dots="git -C $HOME/dots-of-war"
 
 # load prompt

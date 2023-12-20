@@ -1,5 +1,9 @@
 if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then 
   . $HOME/.nix-profile/etc/profile.d/nix.sh; 
+  export XDG_DATA_DIRS="$HOME/.nix-profile/share/applications:$HOME/.local/share/applications:/usr/local/share:/usr/share"
+  export LOCALE_ARCHIVE=$(nix-build '<nixpkgs>' --no-out-link -A glibcLocales)/lib/locale/locale-archive
+  export PATH="$HOME/.nix-profile/share/applications/:$PATH"
+  export PATH="$HOME/.nix-profile/bin/:$PATH"
 fi
 
 
@@ -9,8 +13,6 @@ export PATH="$HOME/.emacs.d/bin/:$PATH"
 export PATH="$HOME/.npm-global/bin:$PATH"
 export PATH="$HOME/intelliJInstall/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
-export PATH="$HOME/.nix-profile/share/applications/:$PATH"
-export PATH="$HOME/.nix-profile/bin/:$PATH"
 export PATH="$HOME/.cpm/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.nimble/bin:$PATH"
@@ -19,7 +21,8 @@ export PATH="$HOME/.dotnet/tools:$PATH"
 
 export EDITOR="$(which nvim)"
 export BROWSER="$(which google-chrome-stable)"
-export TERMINAL="$(which alacritty)"
+#export TERMINAL="$(which alacritty)"
+export TERMINAL="$(which foot)"
 
 
 export RANGER_LOAD_DEFAULT_RC=FALSE
@@ -51,8 +54,6 @@ export FREETYPE_PROPERTIES='truetype:interpreter-version=40'
 export _JAVA_OPTIONS='-Dswing.aatext=true -Dawt.useSystemAAFontSettings=lcd'
 
 
-export XDG_DATA_DIRS="$HOME/.nix-profile/share/applications:$HOME/.local/share/applications:/usr/local/share:/usr/share"
-export LOCALE_ARCHIVE=$(nix-build '<nixpkgs>' --no-out-link -A glibcLocales)/lib/locale/locale-archive
 
 export _JAVA_AWT_WM_NONREPARENTING=1
 
@@ -65,5 +66,7 @@ command -v zoxide > /dev/null && eval "$(zoxide init zsh)"
 
 ## Launches tbsm on session start
 if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
-  tbsm
+  if command -v tbsm > /dev/null; then
+    tbsm
+  fi
 fi

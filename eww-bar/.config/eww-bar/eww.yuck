@@ -11,10 +11,19 @@
       (bottom :screen screen))))
 
 (defwidget top [screen]
-  (workspaces :wsp_yuck {screen == 1 ? workspaces_1_yuck : workspaces_2_yuck}))
+  (workspaces :screen screen)) 
+  ;(workspaces :wsp_yuck {screen == 1 ? workspaces_1_yuck : workspaces_2_yuck}))
 
-(defwidget workspaces [wsp_yuck]
-  (literal :content wsp_yuck))
+(defwidget workspaces [screen]
+  (box :orientation "v"
+    (for wsp in {workspaces[screen]}
+      (button :class "${wsp.occupied ? "occupied" : "empty"} ${wsp.focused ? "active" : "inactive"}"
+              :onclick "swaymsg workspace ${wsp.name}"
+        {wsp.occupied ? "◆" : "◇"}))))
+
+
+;(defwidget workspaces [wsp_yuck]
+  ;(literal :content wsp_yuck))
 
 (defwidget middle [] (time))
 (defwidget time []
@@ -37,8 +46,6 @@
        :space-evenly true
        :spacing "5"
 
-    (metric :icon "" :font-size 1 (music-button))
-
     (volume)
 
     (metric :icon "" 
@@ -51,9 +58,6 @@
 
     (box :class "metric" (date))))
 
-(defwidget music-button []
-  (button :onclick "playerctl play-pause"
-    "${music_data == "" ? "⏸" : music_data.status == "Playing" ? "⏸" : "▶"}"))
 
 (defwidget volume []
   (box :class "volume-metric"
@@ -73,8 +77,7 @@
            :valign "fill"
            :vexpand true
         (button :onclick "./audio.sh toggle"
-          (label :style "font-size: 1.2em; font-family: DejaVuSansMono Nerd Font Mono"
-                 :text audio_sink))
+          (label :text audio_sink))
         (button :onclick "pavucontrol &"
           "${volume}%")))))
 
@@ -93,13 +96,8 @@
 (defvar audio_sink "")
 
 (deflisten volume :initial "0" "./audio.sh volume")
+(deflisten workspaces :initial '{"0": [], "1": []}' "./swayspaces.py")
 
-(deflisten music_data 
-  :initial `{"status": ""}`
-  `
-  playerctl          metadata --format '{ "status": "{{status}}", "artist": "{{artist}}", "title": "{{title}}"}' || echo '{"status": ""}';
-  # playerctl --follow metadata --format '{ "status": "{{status}}", "artist": "{{artist}}", "title": "{{title}}"}'
-  `)
 
 (defpoll hour :interval "1s" "date +%H")
 (defpoll min  :interval "1s" "date +%M")
@@ -115,36 +113,18 @@
 
 
 (defwindow bar_1
-  :monitor "DisplayPort-0"
-  :stacking "bg"
-  :geometry (geometry :x 0 :y 0 :width "40px" :height "100%")
-  :anchor "top left"
+  :monitor 0
+  ; :monitor "DisplayPort-0"
+  :stacking "fg"
+  :geometry (geometry :x 0 :y 0 :width "40px" :height "100%" :anchor "center left")
   :reserve (struts :distance "40px" :side "left")
+  :exclusive true
+  :stacking "fg"
   (bar :screen 1))
 
 (defwindow bar_2
   :monitor "HDMI-A-1"
-  :geometry (geometry :x 0 :y 0 :width "40px" :height "100%")
-  :anchor "top left"
+  :geometry (geometry :x 0 :y 0 :width "40px" :height "100%" :anchor "top left")
   :reserve (struts :distance "40px" :side "left")
   (bar :screen 2))
 
-
-
-
-;(defwidget music-popup []
-;(if-else :cond {music_data.status == "Stopped" || music_data.status == ""}
-;"No music playing"
-;(box :orientation "h" 
-;:valign "fill"
-;:space-evenly false 
-;:spacing 10
-;(button :onclick "playerctl previous" "⏮")
-;"${music_data.artist} - ${music_data.title}"
-;(button :onclick "playerctl next" "⏭"))))
-
-;(defwindow music_popup
-;:monitor 1
-;:anchor "bottom left"
-;:geometry (geometry :x "30px" :y "10px" :height "65px")
-;(music-popup))
