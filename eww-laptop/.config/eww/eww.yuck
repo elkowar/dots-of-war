@@ -29,3 +29,6 @@
   :stacking "fg"
   :exclusive true
   (bar))
+
+(defwindow test [a id] :monitor {a} :geometry (geometry :x 0 :y 0 :width "50px" :height "50px" :anchor "top center")
+  "${a} ${id}")
