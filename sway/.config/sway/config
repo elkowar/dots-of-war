@@ -156,8 +156,9 @@ input "type:keyboard" {
     bindsym $mod+a focus parent
 
 
-bindsym $mod+Shift+S exec flameshot gui
-bindsym $mod+Shift+b exec google-chrome --enable-features=TouchpadOverscrollHistoryNavigation
+bindsym $mod+Shift+S exec grim -g "$(slurp)" - | wl-copy
+#bindsym $mod+Shift+S exec flameshot gui
+bindsym $mod+b exec google-chrome --enable-features=TouchpadOverscrollHistoryNavigation
 
 bindsym $mod+Shift+minus move scratchpad
 bindsym $mod+minus scratchpad show
