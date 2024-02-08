@@ -135,7 +135,5 @@
 (vim.cmd
   "command! -nargs=1 L :lua print(vim.inspect(<args>))")
 
-; (vim.cmd "Copilot enable")
-
 
 ; vim:foldmarker=foldstart,foldend

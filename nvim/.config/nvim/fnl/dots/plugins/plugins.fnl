@@ -115,7 +115,6 @@
 
  (plugin :tpope/vim-sleuth)
  (plugin :editorconfig/editorconfig-vim)
- (plugin :pechorin/any-jump.vim)
  (plugin :sbdchd/neoformat)
  (plugin :elkowar/antifennel-nvim
          {:config #(set vim.g.antifennel_executable "/home/leon/tmp/antifennel/antifennel")})

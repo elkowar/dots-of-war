@@ -33,7 +33,7 @@ function get_dir() {
 
 
 function git_status() {
-  local BRANCH=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/*\s*\(.*\)/\1/')
+  local BRANCH=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/*\s*\(.*\)/\1/' | tr -d ' ')
 
   if [ ! -z $BRANCH ]; then
     echo -n "(%F{$__bright_cyan}$BRANCH%F{$__bright_white}"
