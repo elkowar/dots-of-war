@@ -56,6 +56,7 @@
   "nvim-web-devicons": { "branch": "master", "commit": "47103b80c38c59f7a1b5408c232b92bf5d018651" },
   "nvim.lua": { "branch": "master", "commit": "5d57be0b6eea6c06977b1c5fe0752da909cf4154" },
   "nvlime": { "branch": "master", "commit": "83606f7e2d017ee7fcafe4ed4bf91ac776705633" },
+  "obsidian.nvim": { "branch": "main", "commit": "387f5cf90718b729e1e855e66dd272039395a6dc" },
   "octo.nvim": { "branch": "master", "commit": "2e4cdb6faa3f05c85605c0074f471840747337da" },
   "parinfer-rust": { "branch": "master", "commit": "0e4d52e712641ad351a1bfe6cee3d34d63ed087b" },
   "parsley": { "branch": "main", "commit": "9a388fe9e8a443d9d892318b4cce6dd287c47e38" },

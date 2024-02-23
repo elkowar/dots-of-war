@@ -138,3 +138,6 @@ export SDKMAN_DIR="$HOME/.sdkman"
 
 if [ -f '~/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '~/Downloads/google-cloud-sdk/path.zsh.inc'; fi
 if [ -f '~/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '~/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
+
+[[ -f '/Applications/Tailscale.app/Contents/MacOS/Tailscale' ]] && alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
+command -v jless >/dev/null && alias yless="jless --yaml"

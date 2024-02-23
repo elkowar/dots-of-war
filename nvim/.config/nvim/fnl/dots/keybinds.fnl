@@ -27,7 +27,7 @@
 (utils.keymap :n :<C-LeftMouse> "<LeftMouse><cmd>lua vim.lsp.buf.definition()<CR>")
 (utils.keymap :n :<A-LeftMouse> "<Esc><LeftMouse><cmd>lua vim.lsp.buf.hover()<CR>")
 
-(utils.keymap :n :<space><space>c "\"+y")
+(utils.keymap [:n :v] :<space><space>c "\"+y")
 
 
 ;(utils.keymap :i :<C-l><C-j> "<Plug>(copilot-suggest)")

@@ -11,7 +11,7 @@ FZF_TAB_COMMAND=(
       '--query=$query'   # $query will be expanded to query string at runtime.
       '--header-lines=$#headers' # $#headers will be expanded to lines of headers at runtime
   )
-zstyle ':fzf-tab:*' command $FZF_TAB_COMMAND
+zstyle ':fzf-tab:*' fzf-command $FZF_TAB_COMMAND
 zstyle ':completion:complete:*:options' sort false
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 zstyle ':fzf-tab:complete:_zlua:*' query-string input
