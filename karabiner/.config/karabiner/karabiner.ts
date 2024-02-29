@@ -14,6 +14,10 @@ function manipulators(): Array<Mapping> {
     bind(["i", "o", "p"], umlaut("u")),
     bind(["s", "d", "f"], [press("s", ["left_option"]), press("vk_none")]),
 
+    bind(["f", "a", "s", "d"], umlaut("a", true)),
+    bind(["j", "k", "l", "semicolon"], umlaut("o", true)),
+    bind(["j", "i", "o", "p"], umlaut("u", true)),
+
     bind(["j", "l"], press("delete_or_backspace", ["left_option"])),
 
     bindCaps("d", press("9", ["shift"])),
@@ -138,10 +142,10 @@ function from(key: string | string[], optional: string[] = ["any"]): From {
   }
 }
 
-function umlaut(letter: string): To {
+function umlaut(letter: string, capital: boolean = false): To {
   return [
     press("u", ["left_option"]),
-    press(letter),
+    press(letter, capital ? ["left_shift"] : []),
     press("vk_none"),
   ];
 }

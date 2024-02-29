@@ -207,40 +207,6 @@
                 "from": {
                   "simultaneous": [
                     {
-                      "key_code": "s"
-                    },
-                    {
-                      "key_code": "d"
-                    },
-                    {
-                      "key_code": "f"
-                    }
-                  ],
-                  "modifiers": {
-                    "optional": [
-                      "any"
-                    ]
-                  }
-                },
-                "to": [
-                  {
-                    "key_code": "s",
-                    "modifiers": [
-                      "left_option"
-                    ]
-                  },
-                  {
-                    "key_code": "vk_none",
-                    "modifiers": []
-                  }
-                ],
-                "type": "basic"
-              },
-              {
-                "conditions": [],
-                "from": {
-                  "simultaneous": [
-                    {
                       "key_code": "k"
                     },
                     {
@@ -304,6 +270,169 @@
                   {
                     "key_code": "u",
                     "modifiers": []
+                  },
+                  {
+                    "key_code": "vk_none",
+                    "modifiers": []
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [],
+                "from": {
+                  "simultaneous": [
+                    {
+                      "key_code": "s"
+                    },
+                    {
+                      "key_code": "d"
+                    },
+                    {
+                      "key_code": "f"
+                    }
+                  ],
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "key_code": "s",
+                    "modifiers": [
+                      "left_option"
+                    ]
+                  },
+                  {
+                    "key_code": "vk_none",
+                    "modifiers": []
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [],
+                "from": {
+                  "simultaneous": [
+                    {
+                      "key_code": "f"
+                    },
+                    {
+                      "key_code": "a"
+                    },
+                    {
+                      "key_code": "s"
+                    },
+                    {
+                      "key_code": "d"
+                    }
+                  ],
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "key_code": "u",
+                    "modifiers": [
+                      "left_option"
+                    ]
+                  },
+                  {
+                    "key_code": "a",
+                    "modifiers": [
+                      "left_shift"
+                    ]
+                  },
+                  {
+                    "key_code": "vk_none",
+                    "modifiers": []
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [],
+                "from": {
+                  "simultaneous": [
+                    {
+                      "key_code": "j"
+                    },
+                    {
+                      "key_code": "k"
+                    },
+                    {
+                      "key_code": "l"
+                    },
+                    {
+                      "key_code": "semicolon"
+                    }
+                  ],
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "key_code": "u",
+                    "modifiers": [
+                      "left_option"
+                    ]
+                  },
+                  {
+                    "key_code": "o",
+                    "modifiers": [
+                      "left_shift"
+                    ]
+                  },
+                  {
+                    "key_code": "vk_none",
+                    "modifiers": []
+                  }
+                ],
+                "type": "basic"
+              },
+              {
+                "conditions": [],
+                "from": {
+                  "simultaneous": [
+                    {
+                      "key_code": "j"
+                    },
+                    {
+                      "key_code": "i"
+                    },
+                    {
+                      "key_code": "o"
+                    },
+                    {
+                      "key_code": "p"
+                    }
+                  ],
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "key_code": "u",
+                    "modifiers": [
+                      "left_option"
+                    ]
+                  },
+                  {
+                    "key_code": "u",
+                    "modifiers": [
+                      "left_shift"
+                    ]
                   },
                   {
                     "key_code": "vk_none",
