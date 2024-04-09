@@ -47,7 +47,7 @@ compinit -C
 #autoload -Uz compinit
 #compinit
 
-zinit light "Aloxaf/fzf-tab"
+# zinit light "Aloxaf/fzf-tab"
 
 zinit wait lucid for \
     "zsh-users/zsh-history-substring-search" \
@@ -63,7 +63,7 @@ zinit wait lucid for \
 clear-keybinds
 
 # load more stuff
-source "$ZDOTDIR/fzf-tab.zsh"
+# source "$ZDOTDIR/fzf-tab.zsh"
 source "$ZDOTDIR/keybinds.zsh"
 
 unalias zi
@@ -125,6 +125,7 @@ fi
 
 export PATH="$HOME/.volta/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.bun/bin:$PATH"
 
 
 if command -v flutter >/dev/null; then

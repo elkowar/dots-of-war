@@ -66,6 +66,11 @@
 
 (vim.cmd "let &t_ut=\"\"")
 
+(set vim.opt.title true)
+(set vim.opt.titlelen 0)
+(set vim.opt.titlestring "%{expand(\"%:p\")} [%{mode()}]")
+
+
 (vim.api.nvim_create_autocmd "BufWritePost" {:pattern "*.hs" :callback #(set vim.opt.shiftwidth 2)})
 (vim.api.nvim_create_autocmd "FileType" {:pattern "vim" :callback #(set vim.opt_local.foldmethod "marker")})
 

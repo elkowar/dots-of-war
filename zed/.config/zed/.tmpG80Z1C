@@ -1,0 +1,94 @@
+{"signed_in":false,"type":"Setting","setting":"theme","value":"Gruvbox Dark Hard","milliseconds_since_first_event":0}
+{"signed_in":false,"type":"Setting","setting":"keymap","value":"VSCode","milliseconds_since_first_event":0}
+{"signed_in":false,"type":"App","operation":"open","milliseconds_since_first_event":0}
+{"signed_in":false,"type":"Editor","operation":"open","file_extension":"toml","vim_mode":true,"copilot_enabled":true,"copilot_enabled_for_language":true,"milliseconds_since_first_event":0}
+{"signed_in":false,"type":"Editor","operation":"open","file_extension":"rs","vim_mode":true,"copilot_enabled":true,"copilot_enabled_for_language":true,"milliseconds_since_first_event":4}
+{"signed_in":false,"type":"Editor","operation":"open","file_extension":"lock","vim_mode":true,"copilot_enabled":true,"copilot_enabled_for_language":true,"milliseconds_since_first_event":11}
+{"signed_in":true,"type":"Editor","operation":"open","file_extension":null,"vim_mode":true,"copilot_enabled":true,"copilot_enabled_for_language":true,"milliseconds_since_first_event":74603}
+{"signed_in":true,"type":"App","operation":"project diagnostics: open","milliseconds_since_first_event":74603}
+{"signed_in":true,"type":"Editor","operation":"open","file_extension":"json","vim_mode":true,"copilot_enabled":true,"copilot_enabled_for_language":true,"milliseconds_since_first_event":134202}
+{"signed_in":true,"type":"Copilot","suggestion_id":null,"suggestion_accepted":false,"file_extension":"rs","milliseconds_since_first_event":138703}
+{"signed_in":true,"type":"Call","operation":"invite","room_id":216844,"channel_id":null,"milliseconds_since_first_event":210783}
+{"signed_in":true,"type":"Memory","memory_in_bytes":324358144,"virtual_memory_in_bytes":48039624704,"milliseconds_since_first_event":239802}
+{"signed_in":true,"type":"Cpu","usage_as_percentage":9.22127,"core_count":12,"milliseconds_since_first_event":239802}
+{"signed_in":true,"type":"Call","operation":"hang up","room_id":216844,"channel_id":null,"milliseconds_since_first_event":243437}
+{"signed_in":true,"type":"Call","operation":"invite","room_id":216845,"channel_id":null,"milliseconds_since_first_event":273173}
+{"signed_in":true,"type":"Call","operation":"disable microphone","room_id":216845,"channel_id":null,"milliseconds_since_first_event":279072}
+{"signed_in":true,"type":"Call","operation":"join channel","room_id":216846,"channel_id":3857,"milliseconds_since_first_event":296084}
+{"signed_in":true,"type":"Call","operation":"open channel notes","room_id":216846,"channel_id":3857,"milliseconds_since_first_event":0}
+{"signed_in":true,"type":"Call","operation":"open channel notes","room_id":216846,"channel_id":3857,"milliseconds_since_first_event":1268}
+{"signed_in":true,"type":"Call","operation":"invite","room_id":216846,"channel_id":3857,"milliseconds_since_first_event":11599}
+{"signed_in":true,"type":"Call","operation":"hang up","room_id":216846,"channel_id":3857,"milliseconds_since_first_event":26503}
+{"signed_in":true,"type":"Call","operation":"invite","room_id":216847,"channel_id":null,"milliseconds_since_first_event":30112}
+{"signed_in":true,"type":"Call","operation":"disable microphone","room_id":216847,"channel_id":null,"milliseconds_since_first_event":30921}
+{"signed_in":true,"type":"Edit","duration":64708,"environment":"editor","milliseconds_since_first_event":142766}
+{"signed_in":true,"type":"Copilot","suggestion_id":null,"suggestion_accepted":false,"file_extension":"rs","milliseconds_since_first_event":146368}
+{"signed_in":true,"type":"Copilot","suggestion_id":null,"suggestion_accepted":false,"file_extension":"rs","milliseconds_since_first_event":146731}
+{"signed_in":true,"type":"Copilot","suggestion_id":null,"suggestion_accepted":false,"file_extension":"rs","milliseconds_since_first_event":148166}
+{"signed_in":true,"type":"Copilot","suggestion_id":null,"suggestion_accepted":false,"file_extension":"rs","milliseconds_since_first_event":148748}
+{"signed_in":true,"type":"Copilot","suggestion_id":null,"suggestion_accepted":false,"file_extension":"rs","milliseconds_since_first_event":148851}
+{"signed_in":true,"type":"Copilot","suggestion_id":null,"suggestion_accepted":false,"file_extension":"rs","milliseconds_since_first_event":149752}
+{"signed_in":true,"type":"Copilot","suggestion_id":null,"suggestion_accepted":false,"file_extension":"rs","milliseconds_since_first_event":150681}
+{"signed_in":true,"type":"Copilot","suggestion_id":null,"suggestion_accepted":false,"file_extension":"rs","milliseconds_since_first_event":154044}
+{"signed_in":true,"type":"Copilot","suggestion_id":null,"suggestion_accepted":false,"file_extension":"rs","milliseconds_since_first_event":155000}
+{"signed_in":true,"type":"Copilot","suggestion_id":null,"suggestion_accepted":false,"file_extension":"rs","milliseconds_since_first_event":156363}
+{"signed_in":true,"type":"Copilot","suggestion_id":null,"suggestion_accepted":false,"file_extension":"rs","milliseconds_since_first_event":157150}
+{"signed_in":true,"type":"Copilot","suggestion_id":null,"suggestion_accepted":false,"file_extension":"rs","milliseconds_since_first_event":157714}
+{"signed_in":true,"type":"Copilot","suggestion_id":null,"suggestion_accepted":false,"file_extension":"rs","milliseconds_since_first_event":162350}
+{"signed_in":true,"type":"Memory","memory_in_bytes":368492544,"virtual_memory_in_bytes":108223430656,"milliseconds_since_first_event":175151}
+{"signed_in":true,"type":"Cpu","usage_as_percentage":11.061295,"core_count":12,"milliseconds_since_first_event":175151}
+{"signed_in":true,"type":"Edit","duration":26058,"environment":"editor","milliseconds_since_first_event":255905}
+{"signed_in":true,"type":"Call","operation":"enable screen share","room_id":216847,"channel_id":null,"milliseconds_since_first_event":264875}
+{"signed_in":true,"type":"Call","operation":"join channel","room_id":216855,"channel_id":3857,"milliseconds_since_first_event":0}
+{"signed_in":true,"type":"Memory","memory_in_bytes":377614336,"virtual_memory_in_bytes":39520542720,"milliseconds_since_first_event":27666}
+{"signed_in":true,"type":"Cpu","usage_as_percentage":9.829196,"core_count":12,"milliseconds_since_first_event":27666}
+{"signed_in":true,"type":"Call","operation":"invite","room_id":216855,"channel_id":3857,"milliseconds_since_first_event":60294}
+{"signed_in":true,"type":"App","operation":"open project","milliseconds_since_first_event":96118}
+{"signed_in":true,"type":"Call","operation":"unshare project","room_id":216855,"channel_id":3857,"milliseconds_since_first_event":114546}
+{"signed_in":true,"type":"App","operation":"open project","milliseconds_since_first_event":122632}
+{"signed_in":true,"type":"Editor","operation":"open","file_extension":"toml","vim_mode":true,"copilot_enabled":true,"copilot_enabled_for_language":true,"milliseconds_since_first_event":137074}
+{"signed_in":true,"type":"Editor","operation":"open","file_extension":"lock","vim_mode":true,"copilot_enabled":true,"copilot_enabled_for_language":true,"milliseconds_since_first_event":137082}
+{"signed_in":true,"type":"Editor","operation":"open","file_extension":"rs","vim_mode":true,"copilot_enabled":true,"copilot_enabled_for_language":true,"milliseconds_since_first_event":137085}
+{"signed_in":true,"type":"Call","operation":"disable microphone","room_id":216855,"channel_id":3857,"milliseconds_since_first_event":215887}
+{"signed_in":true,"type":"Memory","memory_in_bytes":447492096,"virtual_memory_in_bytes":74249580544,"milliseconds_since_first_event":267663}
+{"signed_in":true,"type":"Cpu","usage_as_percentage":16.644697,"core_count":12,"milliseconds_since_first_event":267663}
+{"signed_in":true,"type":"Call","operation":"open channel notes","room_id":216855,"channel_id":3857,"milliseconds_since_first_event":0}
+{"signed_in":true,"type":"Call","operation":"invite","room_id":216855,"channel_id":3857,"milliseconds_since_first_event":3839}
+{"signed_in":true,"type":"Edit","duration":4499,"environment":"editor","milliseconds_since_first_event":15170}
+{"signed_in":true,"type":"Copilot","suggestion_id":null,"suggestion_accepted":false,"file_extension":"rs","milliseconds_since_first_event":34929}
+{"signed_in":true,"type":"Copilot","suggestion_id":null,"suggestion_accepted":false,"file_extension":"rs","milliseconds_since_first_event":35879}
+{"signed_in":true,"type":"Copilot","suggestion_id":null,"suggestion_accepted":false,"file_extension":"rs","milliseconds_since_first_event":37012}
+{"signed_in":true,"type":"Copilot","suggestion_id":null,"suggestion_accepted":false,"file_extension":"rs","milliseconds_since_first_event":37196}
+{"signed_in":true,"type":"Editor","operation":"save","file_extension":"rs","vim_mode":true,"copilot_enabled":true,"copilot_enabled_for_language":true,"milliseconds_since_first_event":38342}
+{"signed_in":true,"type":"Action","source":"command palette","action":":write","milliseconds_since_first_event":39828}
+{"signed_in":true,"type":"Editor","operation":"save","file_extension":"rs","vim_mode":true,"copilot_enabled":true,"copilot_enabled_for_language":true,"milliseconds_since_first_event":39859}
+{"signed_in":true,"type":"Edit","duration":31045,"environment":"editor","milliseconds_since_first_event":46215}
+{"signed_in":true,"type":"Edit","duration":7068,"environment":"terminal","milliseconds_since_first_event":53283}
+{"signed_in":true,"type":"Editor","operation":"save","file_extension":"toml","vim_mode":true,"copilot_enabled":true,"copilot_enabled_for_language":true,"milliseconds_since_first_event":53664}
+{"signed_in":true,"type":"Editor","operation":"save","file_extension":"toml","vim_mode":true,"copilot_enabled":true,"copilot_enabled_for_language":true,"milliseconds_since_first_event":54643}
+{"signed_in":true,"type":"Call","operation":"invite","room_id":216855,"channel_id":3857,"milliseconds_since_first_event":71856}
+{"signed_in":true,"type":"Edit","duration":1482,"environment":"editor","milliseconds_since_first_event":79809}
+{"signed_in":true,"type":"Copilot","suggestion_id":null,"suggestion_accepted":false,"file_extension":"rs","milliseconds_since_first_event":83126}
+{"signed_in":true,"type":"Copilot","suggestion_id":null,"suggestion_accepted":false,"file_extension":"rs","milliseconds_since_first_event":83242}
+{"signed_in":true,"type":"Copilot","suggestion_id":null,"suggestion_accepted":false,"file_extension":"rs","milliseconds_since_first_event":83558}
+{"signed_in":true,"type":"Editor","operation":"save","file_extension":"rs","vim_mode":true,"copilot_enabled":true,"copilot_enabled_for_language":true,"milliseconds_since_first_event":84222}
+{"signed_in":true,"type":"Copilot","suggestion_id":null,"suggestion_accepted":false,"file_extension":"rs","milliseconds_since_first_event":91074}
+{"signed_in":true,"type":"Copilot","suggestion_id":"3d95d1e0-d810-4746-9c2b-8c85a6e02c92","suggestion_accepted":true,"file_extension":"rs","milliseconds_since_first_event":93993}
+{"signed_in":true,"type":"Edit","duration":14184,"environment":"editor","milliseconds_since_first_event":117103}
+{"signed_in":true,"type":"Copilot","suggestion_id":null,"suggestion_accepted":false,"file_extension":"rs","milliseconds_since_first_event":126807}
+{"signed_in":true,"type":"Copilot","suggestion_id":"b789669a-40f9-4330-b279-3f05d6111a6c","suggestion_accepted":true,"file_extension":"rs","milliseconds_since_first_event":132505}
+{"signed_in":true,"type":"Copilot","suggestion_id":null,"suggestion_accepted":false,"file_extension":"rs","milliseconds_since_first_event":135004}
+{"signed_in":true,"type":"Memory","memory_in_bytes":481632256,"virtual_memory_in_bytes":117205774336,"milliseconds_since_first_event":203069}
+{"signed_in":true,"type":"Cpu","usage_as_percentage":14.308095,"core_count":12,"milliseconds_since_first_event":203069}
+{"signed_in":true,"type":"Editor","operation":"open","file_extension":null,"vim_mode":true,"copilot_enabled":true,"copilot_enabled_for_language":true,"milliseconds_since_first_event":222395}
+{"signed_in":true,"type":"App","operation":"project diagnostics: open","milliseconds_since_first_event":222395}
+{"signed_in":true,"type":"Edit","duration":46003,"environment":"editor","milliseconds_since_first_event":222411}
+{"signed_in":true,"type":"Copilot","suggestion_id":null,"suggestion_accepted":false,"file_extension":"rs","milliseconds_since_first_event":260379}
+{"signed_in":true,"type":"Editor","operation":"save","file_extension":"rs","vim_mode":true,"copilot_enabled":true,"copilot_enabled_for_language":true,"milliseconds_since_first_event":262844}
+{"signed_in":true,"type":"Copilot","suggestion_id":null,"suggestion_accepted":false,"file_extension":"rs","milliseconds_since_first_event":263379}
+{"signed_in":true,"type":"Editor","operation":"save","file_extension":"rs","vim_mode":true,"copilot_enabled":true,"copilot_enabled_for_language":true,"milliseconds_since_first_event":263890}
+{"signed_in":true,"type":"Editor","operation":"save","file_extension":"rs","vim_mode":true,"copilot_enabled":true,"copilot_enabled_for_language":true,"milliseconds_since_first_event":277125}
+{"signed_in":true,"type":"Editor","operation":"open","file_extension":null,"vim_mode":true,"copilot_enabled":true,"copilot_enabled_for_language":true,"milliseconds_since_first_event":282844}
+{"signed_in":true,"type":"App","operation":"project diagnostics: open","milliseconds_since_first_event":282844}
+{"signed_in":true,"type":"Call","operation":"hang up","room_id":216855,"channel_id":3857,"milliseconds_since_first_event":290472}
+{"signed_in":true,"type":"Edit","duration":40435,"environment":"editor","milliseconds_since_first_event":291808}
