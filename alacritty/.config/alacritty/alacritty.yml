@@ -29,8 +29,8 @@ cursor:
     blinking: "Never"
   unfocused_hollow: true
 font:
-  normal: { "family": "Fira Code" }
-  #normal: { "family": "Fira Code Nerd Font" }
+  #normal: { "family": "Fira Code" }
+  normal: { "family": "Menlo" }
   #normal: { "family": "APL 385 Unicode" }
   #normal: { "family": "Fira Code" }
   #normal: { "family": "Jetbrains Mono" }
@@ -80,5 +80,6 @@ mouse:
 window:
   dynamic_padding: true
   dynamic_title: true
-  padding: { "x": 20, "y": 20 }
+  padding: { "x": 10, "y": 10 }
+    #padding: { "x": 20, "y": 20 }
   opacity: 1

@@ -1,17 +1,27 @@
 [
   {
-    "context": "Editor && VimControl && !VimWaiting && !menu",
-    "bindings": {
-      // put key-bindings here if you want them to work in normal & visual mode
-      "space m f": "editor::Format",
-      "space c space": "editor::ToggleComments"
-    }
+    "context": "Workspace && !VimWaiting && !menu",
+    "bindings": {}
   },
   {
-    "context": "Editor && vim_mode == normal && !VimWaiting && !menu",
+    "context": "Editor && VimControl && !VimWaiting && !menu",
     "bindings": {
-      // put key-bindings here if you want them to work only in normal mode
+      "space b c": "pane::CloseActiveItem",
+      ":": "command_palette::Toggle",
       "space p": "file_finder::Toggle",
+
+      "space h": "pane::ActivatePrevItem",
+      "space l": "pane::ActivateNextItem",
+      "space c space": "editor::ToggleComments",
+
+      // multi-cursor
+      "cmd-d": "editor::SelectNext",
+      "cmd-shift-d": "editor::SelectPrevious",
+      "cmd-shift-l": "editor::SelectAllMatches",
+      "ctrl-j": "editor::AddSelectionBelow",
+      "ctrl-k": "editor::AddSelectionAbove",
+      // lsp
+      "space m f": "editor::Format",
       "space m /": "project_symbols::Toggle",
       "space m g": "editor::GoToDefinition",
       "space m d": "editor::Hover",
@@ -22,15 +32,20 @@
       "space m E": "editor::GoToPrevDiagnostic",
       "space m v": "editor::ToggleCodeActions",
       "space m o": "outline::Toggle",
-      "space h": "pane::ActivatePrevItem",
-      "space l": "pane::ActivateNextItem",
-      "space b c": "pane::CloseActiveItem",
+      // diagnostics
       "space e e": "diagnostics::Deploy",
       "space e w": "diagnostics::ToggleWarnings",
+      // view
       "space v f": "project_panel::ToggleFocus",
-      "ctrl-j": "editor::AddSelectionBelow",
-      "ctrl-k": "editor::AddSelectionAbove"
+      "space v n": "editor::ToggleLineNumbers",
+      "space v i": "editor::ToggleInlayHints",
+      // Git
+      "space g b": "editor::ToggleGitBlame"
     }
+  },
+  {
+    "context": "Editor && vim_mode == normal && !VimWaiting && !menu",
+    "bindings": {}
   },
   {
     "context": "((Editor && vim_mode == normal) || Terminal) && !VimWaiting && !menu",
@@ -48,9 +63,6 @@
     "bindings": {
       "n": "editor::SelectLargerSyntaxNode",
       "N": "editor::SelectSmallerSyntaxNode",
-      "cmd-d": "editor::SelectNext",
-      "cmd-shift-d": "editor::SelectPrevious",
-      "cmd-shift-l": "editor::SelectAllMatches",
       "m": "vim::SelectNext",
       "M": "vim::SelectPrevious",
       ",": "editor::SplitSelectionIntoLines"
@@ -59,7 +71,6 @@
   {
     "context": "Editor && vim_mode == insert",
     "bindings": {
-      // put key-bindings here if you want them to work in insert mode
       "ctrl-w": "editor::DeleteToPreviousWordStart"
     }
   }
