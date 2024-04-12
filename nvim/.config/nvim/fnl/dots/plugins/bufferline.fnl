@@ -61,7 +61,8 @@
        :separator_visible {:bg colors.red}
        :separator_selected {:bg colors.red}
        :indicator_selected {:bg colors.neutral_aqua :fg colors.neutral_aqua :italic false :bold false}
-       ;:tab_separator {:bg colors.red}
+
+       :tab_separator {:bg colors.red}
        :tab_separator_selected {:bg colors.neutral_aqua :fg colors.neutral_aqua}
 
         ; stuff I've never seen before :thonk:

@@ -42,20 +42,21 @@
        :goto_node "<cr>"
        :show_help "?"}}}))
 
-[(utils.plugin :nvim-treesitter/nvim-treesitter
-               {:config setup 
-                :lazy true
-                :event ["VeryLazy"]
-                :build ":TSUpdate"})
- (utils.plugin :RRethy/nvim-treesitter-textsubjects
-               {:dependencies [:nvim-treesitter/nvim-treesitter]
-                :lazy true
-                :event ["VeryLazy"]})
- (utils.plugin :JoosepAlviste/nvim-ts-context-commentstring
-               {:event ["VeryLazy"]
-                :lazy true
-                :dependencies [:nvim-treesitter/nvim-treesitter]})
- (utils.plugin :nvim-treesitter/playground
-               {:event ["VeryLazy"]
-                :lazy true
-                :dependencies [:nvim-treesitter/nvim-treesitter]})]
+;[(utils.plugin :nvim-treesitter/nvim-treesitter
+               ;{:config setup 
+                ;:lazy true
+                ;:event ["VeryLazy"]
+                ;:build ":TSUpdate"})
+ ;(utils.plugin :RRethy/nvim-treesitter-textsubjects
+               ;{:dependencies [:nvim-treesitter/nvim-treesitter]
+                ;:lazy true
+                ;:event ["VeryLazy"]})
+ ;(utils.plugin :JoosepAlviste/nvim-ts-context-commentstring
+               ;{:event ["VeryLazy"]
+                ;:lazy true
+                ;:dependencies [:nvim-treesitter/nvim-treesitter]})
+ ;(utils.plugin :nvim-treesitter/playground
+               ;{:event ["VeryLazy"]
+                ;:lazy true
+                ;:dependencies [:nvim-treesitter/nvim-treesitter]})]
+[]
