@@ -36,7 +36,6 @@ style_user = "bright-cyan"
 format = " [$user]($style) in"
 
 
-#$aws\
 [directory]
 truncate_to_repo = false
 truncation_symbol = ''
@@ -86,6 +85,7 @@ symbol = 'REEEEEEE'
 
 [aws]
 format = '\[[($profile)(\($region\))(\[$duration\])]($style)\]'
+
 
 
 
