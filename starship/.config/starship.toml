@@ -10,7 +10,7 @@ $package\
 $python\
 \n╰─λ """
 
-right_format = """$jobs$status"""
+right_format = """$jobs$status$cmd_duration"""
 
 palette = "gruvbox"
 
@@ -61,6 +61,8 @@ style = "bright-blue"
 format = '\[[$symbol$version]($style)\]'
 disabled = true
 
+[cmd_duration]
+format = ' [$duration]($style)'
 
 
 #[git_metrics]
@@ -103,8 +105,6 @@ format = '\[[$symbol($version(-$name))]($style)\]'
 [cmake]
 format = '\[[$symbol($version)]($style)\]'
 
-[cmd_duration]
-format = '\[[⏱ $duration]($style)\]'
 
 [cobol]
 format = '\[[$symbol($version)]($style)\]'
