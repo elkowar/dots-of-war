@@ -2,20 +2,44 @@
 add_newline = false
 
 format = """
-╭─$character─[leon](bright-cyan) in $directory\
+╭─$character─$username $directory\
 $git_branch\
 $git_state\
 $git_status\
 $package\
 $python\
-$jobs\
-$status\
 \n╰─λ """
+
+right_format = """$jobs$status"""
+
+palette = "gruvbox"
+
+[palettes.gruvbox]
+cyan = "#689d6a"
+green = "#98971a"
+blue = "#458588"
+red = "#cc241d"
+yellow = "#d79921"
+purple = "#b16286"
+orange = "#d65d0e"
+
+bright-cyan = "#8ec07c"
+bright-green = "#b8bb26"
+bright-blue = "#83a598"
+bright-red = "#fb4934"
+bright-yellow = "#fabd2f"
+bright-purple = "#d3869b"
+bright-orange = "#fe8019"
+
+[username]
+style_user = "bright-cyan"
+format = " [$user]($style) in"
+
 
 #$aws\
 [directory]
 truncate_to_repo = false
-truncation_symbol = '…/'
+truncation_symbol = ''
 format='[$path](bright-green) '
 
 [python]
@@ -47,9 +71,9 @@ disabled = true
 format = "$symbol"
 success_symbol = "─"
 error_symbol = "─"
-vicmd_symbol = "N"
-vicmd_replace_symbol = "R"
-vicmd_visual_symbol = "V"
+vimcmd_symbol = "N"
+vimcmd_replace_symbol = "R"
+vimcmd_visual_symbol = "V"
 
 [status]
 disabled = false
@@ -58,10 +82,17 @@ style = "red"
 symbol = 'REEEEEEE'
 
 
-
-
 [aws]
 format = '\[[($profile)(\($region\))(\[$duration\])]($style)\]'
+
+
+
+
+
+
+
+
+
 
 [bun]
 format = '\[[$symbol($version)]($style)\]'
@@ -227,8 +258,6 @@ format = '\[[$symbol$workspace]($style)\]'
 [time]
 format = '\[[$time]($style)\]'
 
-[username]
-format = '\[[$user]($style)\]'
 
 [vagrant]
 format = '\[[$symbol($version)]($style)\]'
