@@ -1,7 +1,10 @@
 [
   {
-    "context": "Workspace && !VimWaiting && !menu",
-    "bindings": {}
+    "context": "EmptyPane",
+    "bindings": {
+      ":": "command_palette::Toggle",
+      "space p": "file_finder::Toggle"
+    }
   },
   {
     "context": "Editor && VimControl && !VimWaiting && !menu",

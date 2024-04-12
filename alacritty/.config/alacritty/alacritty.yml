@@ -1,3 +1,5 @@
+env:
+  TERM: xterm-256color
 colors:
   bright:
     black: "#928374"
@@ -29,8 +31,8 @@ cursor:
     blinking: "Never"
   unfocused_hollow: true
 font:
-  #normal: { "family": "Fira Code" }
-  normal: { "family": "Menlo" }
+  normal: { "family": "FiraMono Nerd Font" }
+  #normal: { "family": "Menlo" }
   #normal: { "family": "APL 385 Unicode" }
   #normal: { "family": "Fira Code" }
   #normal: { "family": "Jetbrains Mono" }
@@ -42,7 +44,7 @@ font:
   #normal: { "family": "cozette" }
   #normal: { "family": "Terminus" }
   offset: { "x": 0, "y": 0 }
-  size: 12
+  size: 14
 
 key_bindings:
   - { "action": "SpawnNewInstance", "key": "N", "mods": "Control|Shift" }

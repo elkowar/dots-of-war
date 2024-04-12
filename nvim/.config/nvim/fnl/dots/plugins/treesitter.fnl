@@ -23,7 +23,7 @@
      ; Might fuck with gitsigns
      ;:rainbow {:enable true}
                ;:extended_mode true}
-     :context_commentstring {:enable true :disable ["rust" "fennel"]}
+     ;:context_commentstring {:enable true :disable ["rust" "fennel"]}
 
      :playground
      {:enable false

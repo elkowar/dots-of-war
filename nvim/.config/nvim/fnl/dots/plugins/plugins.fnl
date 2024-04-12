@@ -63,7 +63,9 @@
  (plugin :rcarriga/nvim-dap-ui
          {:lazy true
           :config true
-          :dependencies [:mfussenegger/nvim-dap]})
+          :dependencies [:mfussenegger/nvim-dap
+                         :nvim-neotest/nvim-nio]})
+                         
  (plugin :mfussenegger/nvim-dap
          {:lazy true})
  (plugin :nvim-telescope/telescope-dap.nvim
@@ -154,9 +156,10 @@
                  :enable_update_available_warning false}})
                                 
  ; temporarily using this fork that merges a few fixes, until simrat is back
- (plugin :MunifTanjim/rust-tools.nvim
-         {:ft ["rust" "toml"]
-          :dependencies ["nvim-lua/popup.nvim" "nvim-lua/plenary.nvim"]})
+ (plugin :mrcjkb/rustaceanvim {:version 4 :ft ["rust" "toml"]})
+ ;(plugin :MunifTanjim/rust-tools.nvim
+         ;{:ft ["rust" "toml"]
+          ;:dependencies ["nvim-lua/popup.nvim" "nvim-lua/plenary.nvim"]})
  ;(plugin :simrat39/rust-tools.nvim
          ;{:ft ["rust" "toml"]
           ;:dependencies ["nvim-lua/popup.nvim" "nvim-lua/plenary.nvim"]})

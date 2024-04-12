@@ -93,25 +93,27 @@
                                     (set client.resolved_capabilities.document_formatting false)
                                     (on_attach client bufnr))})
 
-  (let [rust-tools (require "rust-tools")
-        rust-tools-dap (require "rust-tools.dap")
+
+  (let [
+        rustaceanvim (require "rustaceanvim")
+        rustaceanvim-config (require "rustaceanvim.config")
         extension-path "/home/leon/.vscode/extensions/vadimcn.vscode-lldb-1.6.8/"
         codelldb-path  (.. extension-path "adapter/codelldb")
         liblldb-path   (.. extension-path "lldb/lib/liblldb.so") 
         features nil]
-    (rust-tools.setup {:tools {:inlay_hints {:show_parameter_hints false}
-                                             ;:auto false}
-                               :autoSetHints false}
-                       :dap {:adapter (rust-tools-dap.get_codelldb_adapter codelldb-path liblldb-path)}
-                       :server {:on_attach on_attach
-                                :capabilities default-capabilities
-                                :settings {:rust-analyzer {:cargo {:loadOutDirsFromCheck true
-                                                                   :features (or features "all")
-                                                                   :noDefaultFeatures (~= nil features)}
-                                                           :procMacro {:enable true}
-                                                           :diagnostics {:enable false ;; native rust analyzer diagnostics
-                                                                         :experimental {:enable false}}
-                                                           :checkOnSave {:overrideCommand ["cargo" "clippy" "--workspace" "--message-format=json" "--all-targets" "--all-features"]}}}}}))
+
+    (set vim.g.rustaceanvim {:tools {:inlay_hints {:show_parameter_hints false}
+                                     :autoSetHints false}
+                             :dap {:adapter (rustaceanvim-config.get_codelldb_adapter codelldb-path liblldb-path)}
+                             :server {:on_attach on_attach
+                                      :capabilities default-capabilities
+                                      :settings {:rust-analyzer {:cargo {:loadOutDirsFromCheck true
+                                                                         :features (or features "all")
+                                                                         :noDefaultFeatures (~= nil features)}
+                                                                 :procMacro {:enable true}
+                                                                 :diagnostics {:enable false ;; native rust analyzer diagnostics
+                                                                               :experimental {:enable false}}
+                                                                 :checkOnSave {:overrideCommand ["cargo" "clippy" "--workspace" "--message-format=json" "--all-targets" "--all-features"]}}}}}))
                                 
                                 ;:cmd ["/home/leon/coding/prs/rust-analyzer/target/release/rust-analyzer"]}}))
 

@@ -61,7 +61,7 @@
        :separator_visible {:bg colors.red}
        :separator_selected {:bg colors.red}
        :indicator_selected {:bg colors.neutral_aqua :fg colors.neutral_aqua :italic false :bold false}
-       :tab_separator {:bg colors.red}
+       ;:tab_separator {:bg colors.red}
        :tab_separator_selected {:bg colors.neutral_aqua :fg colors.neutral_aqua}
 
         ; stuff I've never seen before :thonk:
@@ -70,4 +70,4 @@
        :tab {:bg colors.bright_yellow :fg colors.bright_yellow}}})))
 
 [(utils.plugin :akinsho/nvim-bufferline.lua
-               {:config setup :tag "v4.4.0"})]
+               {:config setup :tag "v4.5.2"})]
