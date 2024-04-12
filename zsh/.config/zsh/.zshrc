@@ -93,7 +93,11 @@ alias ls="exa --icons"
 alias dots="git -C $HOME/dots-of-war"
 
 # load prompt
-source "$ZDOTDIR/prompt.zsh"
+if command -v starship >/dev/null; then
+    eval "$(starship init zsh)"
+else 
+    source "$ZDOTDIR/prompt.zsh"
+fi
 
 if command -v direnv >/dev/null; then
     eval "$(direnv hook zsh)"
@@ -102,9 +106,13 @@ fi
 export EDITOR=nvim
 export VISUAL=nvim
 
+
+
 export ANDROID_HOME="$HOME/Android/Sdk"
 export ANDROID_NDK="$HOME/Android/Sdk/ndk/21.4.7075529"
 export JAVA_HOME="/usr/lib/jvm/java-1.19.0-openjdk-amd64/"
+
+
 
 if [ -d "$HOME/anaconda3" ]; then
     # >>> conda initialize >>>
