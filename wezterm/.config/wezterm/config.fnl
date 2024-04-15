@@ -17,7 +17,7 @@
     (each [k v (pairs b)] (tset merged k v))
     merged))
 
-(local gruvbox (. (wezterm.color.get_builtin_schemes) "GruvboxDarkHard"))
+(local gruvbox (. (wezterm.color.get_builtin_schemes) "GruvboxDark"))
 
 (local config (wezterm.config_builder))
 
