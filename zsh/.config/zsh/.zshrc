@@ -135,6 +135,9 @@ export PATH="$HOME/.volta/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.bun/bin:$PATH"
 
+if [ -d "/Applications/WezTerm.app" ]; then
+    export PATH="/Applications/WezTerm.app/Contents/MacOS:$PATH"
+fi
 
 if command -v flutter >/dev/null; then
     export PATH="$HOME/.pub-cache/bin:$PATH"

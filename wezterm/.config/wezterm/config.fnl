@@ -17,52 +17,80 @@
     (each [k v (pairs b)] (tset merged k v))
     merged))
 
+(local gruvbox (. (wezterm.color.get_builtin_schemes) "GruvboxDarkHard"))
 
-(local color-theme
-  { :background "#282828"
-    :background-dark "#1d2021"
-    :background-light "#3c3836"
-    :foreground "#ebdbb2"
-    :cursor_bg "#8ec07c"
-    :cursor_border "#8ec07c"
-    :cursor_fg "#282828"
-    :selection_bg "#e6d4a3"
-    :selection_fg "#534a42"
-    :ansi    [ "#282828" "#cc241d" "#98971a" "#d79921" "#458588" "#b16286" "#689d6a" "#a89984"]
-    :brights [ "#928374" "#fb4934" "#b8bb26" "#fabd2f" "#83a598" "#d3869b" "#8ec07c" "#ebdbb2"]
-    :accent "#689d6a"})
+(local config (wezterm.config_builder))
+
+(merge
+  config
+  {:font (wezterm.font "FiraMono Nerd Font")
+   :scrollback_lines 10000
+   :hide_tab_bar_if_only_one_tab true
+   :color_scheme "GruvboxDarkHard"
+   :leader { :mods "CTRL" :key "b" :timeout_milliseconds 500}
+
+   :window_frame
+   {:active_titlebar_bg "#1d2021"
+    :inactive_titlebar_bg "#1d2021"}
+    
+
+   :colors (merge
+             gruvbox
+             {:tab_bar
+              {:background "#282828"
+               :inactive_tab {:bg_color "#1d2021" :fg_color gruvbox.foreground}
+               :active_tab   {:bg_color gruvbox.background :fg_color gruvbox.foreground}
+               :new_tab   {:bg_color "#1d2021" :fg_color gruvbox.foreground}}})
+           
+   :keys
+   (gen-keys 
+     [ [:CTRL   :+ "IncreaseFontSize"]
+       [:LEADER :n "SpawnWindow"]
+       [:LEADER :f "TogglePaneZoomState"]
+       [:LEADER :p "ShowLauncher"]
+       [:LEADER :t { :SpawnTab "CurrentPaneDomain"}]
+       [:LEADER :c { :CloseCurrentTab {:confirm false}}]
+       [:LEADER :l { :ActivateTabRelative 1}]
+       [:LEADER :h { :ActivateTabRelative -1}]
+       [:LEADER :v { :SplitVertical   {:domain "CurrentPaneDomain"}}]
+       [:LEADER :b { :SplitHorizontal {:domain "CurrentPaneDomain"}}]
+       [:LEADER :s { :Search {:CaseInSensitiveString ""}}]
+       [:CTRL   :LeftArrow  { :ActivatePaneDirection "Left"}]
+       [:CTRL   :RightArrow { :ActivatePaneDirection "Right"}]
+       [:CTRL   :DownArrow  { :ActivatePaneDirection "Down"}]
+       [:CTRL   :UpArrow    { :ActivatePaneDirection "Up"}]])})
 
 
-{ :font (wezterm.font "Terminus (TTF)")
-  :hide_tab_bar_if_only_one_tab true
-  :scrollback_lines 5000
-  :line_height 0.91
-  :window_padding { :left 20 :right 20 :top 20 :bottom 20}
+;{ :font (wezterm.font "Terminus (TTF)")
+  ;:hide_tab_bar_if_only_one_tab true
+  ;:scrollback_lines 5000
+  ;:line_height 0.91
+  ;:window_padding { :left 20 :right 20 :top 20 :bottom 20}
 
-  :leader { :mods "CTRL" :key "a" :timeout_milliseconds 500}
-  :keys
-  (gen-keys 
-    [ [:CTRL   :+ "IncreaseFontSize"]
-      [:LEADER :n "SpawnWindow"]
-      [:LEADER :f "TogglePaneZoomState"]
-      [:LEADER :p "ShowLauncher"]
-      [:LEADER :t { :SpawnTab "CurrentPaneDomain"}]
-      [:LEADER :c { :CloseCurrentTab {:confirm false}}]
-      [:LEADER :l { :ActivateTabRelative 1}]
-      [:LEADER :h { :ActivateTabRelative -1}]
-      [:LEADER :v { :SplitVertical   {:domain "CurrentPaneDomain"}}]
-      [:LEADER :b { :SplitHorizontal {:domain "CurrentPaneDomain"}}]
-      [:LEADER :s { :Search {:CaseInSensitiveString ""}}]
-      [:CTRL   :LeftArrow  { :ActivatePaneDirection "Left"}]
-      [:CTRL   :RightArrow { :ActivatePaneDirection "Right"}]
-      [:CTRL   :DownArrow  { :ActivatePaneDirection "Down"}]
-      [:CTRL   :UpArrow    { :ActivatePaneDirection "Up"}]])
+  ;:leader { :mods "CTRL" :key "a" :timeout_milliseconds 500}
+  ;:keys
+  ;(gen-keys 
+    ;[ [:CTRL   :+ "IncreaseFontSize"]
+      ;[:LEADER :n "SpawnWindow"]
+      ;[:LEADER :f "TogglePaneZoomState"]
+      ;[:LEADER :p "ShowLauncher"]
+      ;[:LEADER :t { :SpawnTab "CurrentPaneDomain"}]
+      ;[:LEADER :c { :CloseCurrentTab {:confirm false}}]
+      ;[:LEADER :l { :ActivateTabRelative 1}]
+      ;[:LEADER :h { :ActivateTabRelative -1}]
+      ;[:LEADER :v { :SplitVertical   {:domain "CurrentPaneDomain"}}]
+      ;[:LEADER :b { :SplitHorizontal {:domain "CurrentPaneDomain"}}]
+      ;[:LEADER :s { :Search {:CaseInSensitiveString ""}}]
+      ;[:CTRL   :LeftArrow  { :ActivatePaneDirection "Left"}]
+      ;[:CTRL   :RightArrow { :ActivatePaneDirection "Right"}]
+      ;[:CTRL   :DownArrow  { :ActivatePaneDirection "Down"}]
+      ;[:CTRL   :UpArrow    { :ActivatePaneDirection "Up"}]])
 
-  :colors
-    (merge color-theme
-      { :tab_bar
-        { :background color-theme.background
-          :active_tab { :bg_color color-theme.accent :fg_color color-theme.background}
-          :inactive_tab { :bg_color color-theme.background-light :fg_color color-theme.accent}
-          :inactive_tab_hover { :bg_color color-theme.background-dark :fg_color color-theme.accent :italic false}}})}
+  ;:colors
+  ;(merge color-theme
+    ;{ :tab_bar
+      ;{ :background color-theme.background
+        ;:active_tab { :bg_color color-theme.accent :fg_color color-theme.background}
+        ;:inactive_tab { :bg_color color-theme.background-light :fg_color color-theme.accent}
+        ;:inactive_tab_hover { :bg_color color-theme.background-dark :fg_color color-theme.accent :italic false}}})}
 
