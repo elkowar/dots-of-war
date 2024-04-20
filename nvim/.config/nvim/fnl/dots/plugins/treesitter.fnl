@@ -1,8 +1,10 @@
 (local utils (require :dots.utils))
+; require('ts_context_commentstring').setup {} and set vim.g.skip_ts_context_commentstring_module = true to speed up loading instead.
 
 
 (fn setup []
   (local configs (require :nvim-treesitter.configs))
+  (set vim.g.skip_ts_context_commentstring_module true)
   (configs.setup 
     {:ensure_installed ["rust" "fennel" "commonlisp" "vim" "regex" "lua" "bash" "markdown" "markdown_inline"]
     ; :ensure_installed "maintained" 

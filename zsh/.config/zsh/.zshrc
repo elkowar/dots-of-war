@@ -142,6 +142,7 @@ fi
 if command -v flutter >/dev/null; then
     export PATH="$HOME/.pub-cache/bin:$PATH"
 fi
+[[ -d "$HOME/.deno/bin" ]] && export PATH="$HOME/.deno/bin:$PATH"
 
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!

@@ -1,4 +1,4 @@
-* {
+.bar * {
   all: unset;
 }
 
@@ -16,3 +16,7 @@
   
 }
 
+menuitem window {
+  background: #282828;
+  margin: 10px;
+}

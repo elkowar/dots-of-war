@@ -113,8 +113,7 @@
 
 
 (defwindow bar_1
-  :monitor 0
-  ;:monitor [0 "DisplayPort-0" "PHL 345B1C"]
+  :monitor '["<primary>", "DisplayPort-0", "PHL 345B1C"]'
   ; :monitor "DisplayPort-0"
   :stacking "fg"
   :geometry (geometry :x 0 :y 0 :width "40px" :height "100%" :anchor "center left")
@@ -123,7 +122,7 @@
   (bar :screen 1))
 
 (defwindow bar_2
-  :monitor "HDMI-A-1"
+  ;:monitor [1 "HDMI-A-1"]
   :geometry (geometry :x 0 :y 0 :width "40px" :height "100%" :anchor "top left")
   :reserve (struts :distance "40px" :side "left")
   (bar :screen 2))

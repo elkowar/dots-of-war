@@ -1,6 +1,6 @@
 (deflisten workspaces :initial "[]" "bash ./scripts/get-workspaces")
 (deflisten current_workspace :initial "1" "bash ./scripts/get-active-workspace")
-(defpoll time :interval "1s" "date '+%d.%m.%Y - %H:%M'")
+(defpoll time :interval "1s" "date '+%d.%m.%Y - %H:%M:%S'")
 
 (defwidget workspaces []
   (eventbox :halign "start"
@@ -23,6 +23,7 @@
       "󰍛 ${round(EWW_RAM.used_mem_perc, 0)}%"
       "󰻠 ${round(EWW_CPU.avg, 0)}%")))
 
+
 (defwindow bar
   :monitor 0
   :geometry (geometry :x 0 :y 0 :width "100%" :height "30px" :anchor "top center")
@@ -30,5 +31,13 @@
   :exclusive true
   (bar))
 
-(defwindow test [a id] :monitor {a} :geometry (geometry :x 0 :y 0 :width "50px" :height "50px" :anchor "top center")
-  "${a} ${id}")
+
+(defwindow test
+  :monitor 0
+  :exclusive true
+  :geometry (geometry :x 0 :y 0 :width "100%" :height "20px" :anchor "top center")
+  (box
+    "${EWW_NET["enp34s0"]}"
+    (tooltip
+      "${time}"
+      (button "test"))))
