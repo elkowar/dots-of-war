@@ -7,6 +7,9 @@
   // "buffer_font_family": "Zed Mono",
 
   // "active_pane_magnification": 1.3,
+  "tab_bar": {
+    "show_nav_history_buttons": false
+  },
 
   "calls": {
     "mute_on_join": true
@@ -27,13 +30,27 @@
     "use_smartcase_find": true,
     "use_system_clipboard": "on_yank"
   },
+  "languages": {
+    "JSON": {
+      "format_on_save": "off"
+    }
+  },
+
   "assistant": {
     "version": "1",
     "provider": {
       "name": "openai",
       "type": "openai",
-      "default_model": "gpt-3.5-turbo"
+      "default_model": "gpt-3.5-turbo",
+      // "default_model": "anthropic/claude-3-haiku",
+      "api_url": "http://localhost:4444",
+      //"api_url": "https://openrouter.ai/api/v1",
     }
+    // "provider": {
+    //   "name": "openai",
+    //   "type": "openai",
+    //   "default_model": "gpt-3.5-turbo"
+    // }
     //"provider": {
     //  "name": "zed.dev",
     //  "default_model": "gpt-3.5-turbo"

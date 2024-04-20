@@ -24,6 +24,7 @@
 (merge
   config
   {:font (wezterm.font "FiraMono Nerd Font")
+   :font_size 14
    :scrollback_lines 10000
    :hide_tab_bar_if_only_one_tab true
    :color_scheme "GruvboxDarkHard"

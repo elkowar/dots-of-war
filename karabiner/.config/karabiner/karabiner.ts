@@ -1,5 +1,9 @@
 function manipulators(): Array<Mapping> {
   return [
+    // Raise binds
+    bindWithMods(["left_option", "left_cmd"], "t", raise("Teams")),
+
+
     // movement
     bindCaps("h", press("left_arrow")),
     bindCaps("j", press("down_arrow")),
@@ -129,9 +133,9 @@ type Mapping = {
   type: "basic";
 };
 
-function from(key: string | string[], optional: string[] = ["any"]): From {
+function from(key: string | string[], optional: string[] = ["any"], mandatory: string[] = []): From {
   if (typeof key === "string") {
-    return { key_code: key, modifiers: { optional } };
+    return { key_code: key, modifiers: { optional, mandatory } };
   } else if (Array.isArray(key)) {
     return {
       simultaneous: key.map((x) => ({ key_code: x })),
@@ -169,6 +173,16 @@ function bind(
 ): Mapping {
   const toValue = Array.isArray(to) ? to : [to];
   return { conditions: when, from: from(f), to: toValue, type: "basic" };
+}
+
+function bindWithMods(
+  f: string | string[],
+  mods: string[],
+  to: ToAction | To,
+  when: Condition[] = [],
+): Mapping {
+  const toValue = Array.isArray(to) ? to : [to];
+  return { conditions: when, from: from(f, [], mods), to: toValue, type: "basic" };
 }
 
 function bindCaps(from: string | string[], to: ToAction | To): Mapping {
