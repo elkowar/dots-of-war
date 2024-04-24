@@ -31,10 +31,10 @@ cursor:
     blinking: "Never"
   unfocused_hollow: true
 font:
-  normal: { "family": "FiraMono Nerd Font" }
+  #normal: { "family": "FiraMono Nerd Font" }
   #normal: { "family": "Menlo" }
   #normal: { "family": "APL 385 Unicode" }
-  #normal: { "family": "Fira Code" }
+  normal: { "family": "Fira Code" }
   #normal: { "family": "Jetbrains Mono" }
   #normal: { "family": "Victor Mono" }
   #normal: { "family": "Monoid" }
