@@ -1,4 +1,3 @@
-
 # history config
 HISTSIZE=50000
 SAVEHIST=50000
@@ -89,7 +88,11 @@ autoload -Uz promptinit && promptinit
 
 
 # alias
-alias ls="lsd"
+if command -v lsd >/dev/null; then
+    alias ls="lsd"
+elif command -v exa >/dev/null; then
+    alias ls="exa"
+fi
 alias dots="git -C $HOME/dots-of-war"
 
 # load prompt
