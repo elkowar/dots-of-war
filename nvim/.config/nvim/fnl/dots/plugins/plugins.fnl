@@ -155,7 +155,7 @@
                  :enable_update_available_warning false}})
                                 
  ; temporarily using this fork that merges a few fixes, until simrat is back
- (plugin :mrcjkb/rustaceanvim {:version 4 :ft ["rust" "toml"]})
+ (plugin :mrcjkb/rustaceanvim {:version "^4" :ft ["rust" "toml"]})
  ;(plugin :MunifTanjim/rust-tools.nvim
          ;{:ft ["rust" "toml"]
           ;:dependencies ["nvim-lua/popup.nvim" "nvim-lua/plenary.nvim"]})
