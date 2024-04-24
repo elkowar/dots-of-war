@@ -149,9 +149,8 @@
 
  (plugin :Saecki/crates.nvim
          {:dependencies ["nvim-lua/plenary.nvim"]
-          ;:dir "/Users/leon/tmp/crates.nvim"
-          :event ["BufRead Cargo.toml"]
-          :lazy true
+          ;:event ["BufRead Cargo.toml"]
+          ;:lazy true
           :opts {:disable_invalid_feature_diagnostic true
                  :enable_update_available_warning false}})
                                 
