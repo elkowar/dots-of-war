@@ -1,7 +1,8 @@
 {
   "theme": "Gruvbox Dark Hard",
   "buffer_font_size": 14,
-  "buffer_font_family": "JetBrainsMono Nerd Font Mono",
+  "buffer_font_family": "FiraCodeNF-Reg",
+  //"buffer_font_family": "JetBrainsMono Nerd Font Mono",
   // "buffer_line_height": { "custom": 1.55 },
   // "ui_font_family": "Noto Sans",
   // "buffer_font_family": "Zed Mono",

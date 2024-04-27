@@ -1,5 +1,5 @@
 [user]
-	email = 5300871+elkowar@users.noreply.github.com
+	email = dev@elkowar.dev
 	name = elkowar
 [include]
 	path = ~/.gitconfig.local

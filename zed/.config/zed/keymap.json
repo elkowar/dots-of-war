@@ -1,9 +1,21 @@
 [
   {
-    "context": "EmptyPane",
+    "context": "os == macos && EmptyPane",
     "bindings": {
       ":": "command_palette::Toggle",
       "space p": "file_finder::Toggle"
+    }
+  },
+  {
+    "context": "os == macos && Editor && VimControl && !VimWaiting && !menu",
+    "bindings":{
+      "cmd-d": "editor::SelectNext"
+    }
+  },
+  {
+    "context": "os == linux && Editor && VimControl && !VimWaiting && !menu",
+    "bindings":{
+      "ctrl-shift-d": "editor::SelectNext"
     }
   },
   {
@@ -18,7 +30,6 @@
       "space c space": "editor::ToggleComments",
 
       // multi-cursor
-      "cmd-d": "editor::SelectNext",
       "cmd-shift-d": "editor::SelectPrevious",
       "cmd-shift-l": "editor::SelectAllMatches",
       "ctrl-j": "editor::AddSelectionBelow",
@@ -51,7 +62,7 @@
     "bindings": {}
   },
   {
-    "context": "((Editor && vim_mode == normal) || Terminal) && !VimWaiting && !menu",
+    "context": "os == macos && ((Editor && vim_mode == normal) || Terminal) && !VimWaiting && !menu",
     "bindings": {
       "cmd-t cmd-t": "terminal_panel::ToggleFocus",
       "cmd-t cmd-n": "workspace::NewTerminal",

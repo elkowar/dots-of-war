@@ -11,7 +11,9 @@
       (bottom :screen screen))))
 
 (defwidget top [screen]
-  (workspaces :screen {screen == 1 ? "DP-2" : "HDMI-A-1"})) 
+  (box :orientation "v"
+    (workspaces :screen {screen == 1 ? "DP-2" : "HDMI-A-1"}) 
+    (systray)))
   ;(workspaces :wsp_yuck {screen == 1 ? workspaces_1_yuck : workspaces_2_yuck}))
 
 (defwidget workspaces [screen]
@@ -122,7 +124,7 @@
   (bar :screen 1))
 
 (defwindow bar_2
-  ;:monitor [1 "HDMI-A-1"]
+  :monitor '[2, "HDMI-A-1"]'
   :geometry (geometry :x 0 :y 0 :width "40px" :height "100%" :anchor "top left")
   :reserve (struts :distance "40px" :side "left")
   (bar :screen 2))

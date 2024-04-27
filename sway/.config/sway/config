@@ -11,9 +11,9 @@ set $menu $rofi_cmd -show combi -combi-modes drun#run -modes combi
 set $out-vert HDMI-A-1
 set $out-main DP-2
 
+    #timeout 300 'swaylock -f -c 000000' \
 exec swayidle -w \
-    timeout 300 'swaylock -f -c 000000' \
-    timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
+    timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on" && sleep 5 && eww -c "$HOME/.config/eww-bar" reload' \
     before-sleep 'swaylock -f -c 000000'
 
 exec mako
