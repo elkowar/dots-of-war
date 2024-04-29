@@ -73,6 +73,18 @@
     }
   },
   {
+    "context": "os == linux && ((Editor && vim_mode == normal) || Terminal) && !VimWaiting && !menu",
+    "bindings": {
+      "alt-j": "workspace::ToggleBottomDock",
+      "alt-t alt-t": "terminal_panel::ToggleFocus",
+      "alt-t alt-n": "workspace::NewTerminal",
+      "alt-t alt-shift-n": "workspace::NewCenterTerminal",
+      "alt-t alt-h": "pane::ActivatePrevItem",
+      "alt-t alt-l": "pane::ActivateNextItem",
+      "alt-x alt-c": "pane::CloseActiveItem"
+    }
+  },
+  {
     "context": "Editor && vim_mode == visual && !VimWaiting && !menu",
     "bindings": {
       "n": "editor::SelectLargerSyntaxNode",
