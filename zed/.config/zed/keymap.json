@@ -8,13 +8,13 @@
   },
   {
     "context": "os == macos && Editor && VimControl && !VimWaiting && !menu",
-    "bindings":{
+    "bindings": {
       "cmd-d": "editor::SelectNext"
     }
   },
   {
     "context": "os == linux && Editor && VimControl && !VimWaiting && !menu",
-    "bindings":{
+    "bindings": {
       "ctrl-shift-d": "editor::SelectNext"
     }
   },
@@ -62,6 +62,18 @@
     "bindings": {}
   },
   {
+    "context": "os == linux && ((Editor && vim_mode == normal) || Terminal) && !VimWaiting && !menu",
+    "bindings": {
+      "ctrl-t ctrl-t": "terminal_panel::ToggleFocus",
+      "ctrl-t ctrl-n": "workspace::NewTerminal",
+      "ctrl-t ctrl-shift-n": "workspace::NewCenterTerminal",
+      "ctrl-t ctrl-h": "pane::ActivatePrevItem",
+      "ctrl-t ctrl-l": "pane::ActivateNextItem",
+      "ctrl-x ctrl-c": "pane::CloseActiveItem",
+      "alt-j": "workspace::ToggleBottomDock"
+    }
+  },
+  {
     "context": "os == macos && ((Editor && vim_mode == normal) || Terminal) && !VimWaiting && !menu",
     "bindings": {
       "cmd-t cmd-t": "terminal_panel::ToggleFocus",
@@ -98,6 +110,13 @@
     "context": "Editor && vim_mode == insert",
     "bindings": {
       "ctrl-w": "editor::DeleteToPreviousWordStart"
+    }
+  },
+  {
+    "context": "Pane",
+    "bindings": {
+      "ctrl-w": null,
+      "shift-escape": null,
     }
   }
 ]
