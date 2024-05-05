@@ -79,6 +79,14 @@ input "type:keyboard" {
     repeat_rate 40
 }
 
+input "1133:50503:Logitech_USB_Receiver" {
+    tap enabled
+    natural_scroll disabled
+    dwt enabled
+    accel_profile "flat"
+    pointer_accel -0.2
+}
+
 
     bindsym $mod+t exec $term
     bindsym $mod+Shift+q kill
