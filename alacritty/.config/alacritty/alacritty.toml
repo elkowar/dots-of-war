@@ -21,9 +21,10 @@ white = "#a89984"
 yellow = "#d79921"
 
 [colors.primary]
-background = "#282828"
-bg_darker = "#1d2021"
-bg_lighter = "#3c3836"
+background = "#1d2021"
+#background = "#282828"
+#bg_darker = "#1d2021"
+#bg_lighter = "#3c3836"
 foreground = "#ebdbb2"
 
 [cursor]
@@ -33,8 +34,11 @@ unfocused_hollow = true
 blinking = "Never"
 shape = "Block"
 
+[env]
+TERM = "xterm-256color"
+
 [font]
-size = 12
+size = 14
 
 [font.normal]
 family = "Fira Code"
@@ -171,11 +175,11 @@ mods = "Control|Shift|Alt"
 [mouse]
 hide_when_typing = true
 
-[mouse.double_click]
-threshold = 300
+#[mouse.double_click]
+#threshold = 300
 
-[mouse.triple_click]
-threshold = 300
+#[mouse.triple_click]
+#threshold = 300
 
 [window]
 dynamic_padding = true
@@ -183,5 +187,5 @@ dynamic_title = true
 opacity = 1
 
 [window.padding]
-x = 20
-y = 20
+x = 10
+y = 10
