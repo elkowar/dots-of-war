@@ -2,8 +2,8 @@
 (local wk (autoload :which-key))
 (local glance (autoload :glance))
 (local crates (autoload :crates))
-(local dap (autoload :dap))
-(local dapui (autoload :dapui))
+;(local dap (autoload :dap))
+;(local dapui (autoload :dapui))
 
 
 
@@ -90,15 +90,15 @@
 
   "n" [(. (require :persistence) :load) "Load last session"]
 
-  "d" {:name "+Debugging"
-       "b" [dap.toggle_breakpoint    "toggle breakpoint"]
-       "u" [dapui.toggle             "toggle dapui"]
-       "c" [dap.step_into            "continue"]
-       "r" [dap.repl.open            "open repl"]
-       "s" {:name "+Step"
-            "o" [dap.step_over       "over"]
-            "u" [dap.step_out        "out"]
-            "i" [dap.step_into       "into"]}}
+  ;"d" {:name "+Debugging"
+       ;"b" [dap.toggle_breakpoint    "toggle breakpoint"]
+       ;"u" [dapui.toggle             "toggle dapui"]
+       ;"c" [dap.step_into            "continue"]
+       ;"r" [dap.repl.open            "open repl"]
+       ;"s" {:name "+Step"
+            ;"o" [dap.step_over       "over"]
+            ;"u" [dap.step_out        "out"]
+            ;"i" [dap.step_into       "into"]}}
 
   "m" {:name "+Code actions"
        ";" [#(set vim.o.spell (not vim.o.spell))          "Toggle spell checking"]
