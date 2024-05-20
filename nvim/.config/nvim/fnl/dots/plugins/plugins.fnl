@@ -60,11 +60,11 @@
  ; >>>
 
  ; debugger <<<
- (plugin :rcarriga/nvim-dap-ui
-         {:lazy true
-          :config true
-          :dependencies [:mfussenegger/nvim-dap
-                         :nvim-neotest/nvim-nio]})
+ ;(plugin :rcarriga/nvim-dap-ui
+         ;{:lazy true
+          ;:config true
+          ;:dependencies [:mfussenegger/nvim-dap
+                         ;:nvim-neotest/nvim-nio]})
                          
  (plugin :mfussenegger/nvim-dap
          {:lazy true})
