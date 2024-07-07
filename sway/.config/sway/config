@@ -27,7 +27,8 @@ exec mkfifo $WOBSOCK && tail -f $WOBSOCK | wob
 exec_always import-gsettings
 
 
-output * bg /usr/share/backgrounds/default-dark.png fill
+output * bg /home/elk/Pictures/wallpapers/lamps_window_large.jpeg fill
+#output * bg /usr/share/backgrounds/default-dark.png fill
 
 output HDMI-A-1 {
     resolution 2560x1440@99.982Hz
@@ -83,8 +84,8 @@ input "1133:50503:Logitech_USB_Receiver" {
     tap enabled
     natural_scroll disabled
     dwt enabled
-    accel_profile "flat"
-    pointer_accel -0.2
+    accel_profile "adaptive"
+    pointer_accel -0.7
 }
 
 
@@ -95,6 +96,8 @@ input "1133:50503:Logitech_USB_Receiver" {
     bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
 
     bindsym $mod+Shift+p exec rofi -show drun -theme sidebar
+
+    bindsym Ctrl+Shift+space exec 1password --quick-access
 
     # Move your focus around
     bindsym $mod+$left focus left

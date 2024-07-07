@@ -78,7 +78,9 @@
       (box :orientation "v"
            :valign "fill"
            :vexpand true
-        (button :onclick "./audio.sh toggle"
+        (button :onclick "rofi -show rofi-sound -modi 'rofi-sound:rofi-sound-output-chooser' &"
+                :onrightclick "./audio.sh toggle"
+                
           (label :text audio_sink))
         (button :onclick "pavucontrol &"
           "${volume}%")))))
