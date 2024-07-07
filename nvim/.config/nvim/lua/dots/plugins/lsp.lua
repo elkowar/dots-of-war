@@ -160,4 +160,7 @@ local function setup()
   vim.lsp.handlers["textDocument/hover"] = _16_
   return nil
 end
-return {utils.plugin("neovim/nvim-lspconfig", {event = "VeryLazy", lazy = true, config = setup})}
+local function _18_()
+  return (require("mason")).setup()
+end
+return {utils.plugin("williamboman/mason.nvim", {config = _18_}), utils.plugin("williamboman/mason-lspconfig.nvim", {config = {ensure_installed = {"rust_analyzer"}}}), utils.plugin("neovim/nvim-lspconfig", {event = "VeryLazy", lazy = true, config = setup})}

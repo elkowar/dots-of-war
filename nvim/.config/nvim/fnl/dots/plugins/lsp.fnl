@@ -257,7 +257,7 @@
             (tset result :contents new-contents)
             (previous-handler a result b c)))))))
 
-[(utils.plugin :williamboman/mason.nvim {:config true})
+[(utils.plugin :williamboman/mason.nvim {:config #((. (require :mason) :setup))})
  (utils.plugin :williamboman/mason-lspconfig.nvim {:config {:ensure_installed ["rust_analyzer"]}})
  (utils.plugin :neovim/nvim-lspconfig {:event "VeryLazy" :lazy true :config setup})]
 ; vim:foldmarker=<<<<<,>>>>>
