@@ -42,7 +42,7 @@
     "provider": {
       "name": "openai",
       "type": "openai",
-      "default_model": "gpt-3.5-turbo",
+      "default_model": "gpt-3.5-turbo"
       // "default_model": "anthropic/claude-3-haiku",
       //"api_url": "http://localhost:4444",
       //"api_url": "https://openrouter.ai/api/v1",
