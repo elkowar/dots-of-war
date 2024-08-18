@@ -1,4 +1,9 @@
 {
+  "language_models": {
+    "openai": {
+      "version": "1"
+    }
+  },
   "theme": "Gruvbox Dark Hard",
   "buffer_font_size": 14,
   "buffer_font_family": "FiraCodeNF-Reg",
@@ -38,15 +43,12 @@
   },
 
   "assistant": {
-    "version": "1",
-    "provider": {
-      "name": "openai",
-      "type": "openai",
-      "default_model": "gpt-3.5-turbo"
-      // "default_model": "anthropic/claude-3-haiku",
-      //"api_url": "http://localhost:4444",
-      //"api_url": "https://openrouter.ai/api/v1",
-    }
+    "default_model": {
+      "provider": "openai",
+      "model": "gpt-3.5-turbo"
+    },
+    "version": "2",
+    "provider": null
     // "provider": {
     //   "name": "openai",
     //   "type": "openai",

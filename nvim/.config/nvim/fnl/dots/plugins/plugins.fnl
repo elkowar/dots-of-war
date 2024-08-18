@@ -34,6 +34,7 @@
  (plugin :folke/persistence.nvim
          {:opts {:dir (vim.fn.expand (.. (vim.fn.stdpath "cache") "/sessions/"))}})
 
+
  (plugin "https://git.sr.ht/~whynothugo/lsp_lines.nvim"
          {:config #(do (setup :lsp_lines)
                     (vim.diagnostic.config {:virtual_lines false}))})
@@ -115,6 +116,7 @@
  (plugin :monkoose/nvlime
          {:ft ["lisp"] :dependencies [:monkoose/parsley]})
 
+ (plugin :imsnif/kdl.vim)
  (plugin :tpope/vim-sleuth)
  (plugin :editorconfig/editorconfig-vim)
  (plugin :sbdchd/neoformat)
