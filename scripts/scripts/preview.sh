@@ -18,7 +18,7 @@ case "$(file --mime-type "$1")" in
     fi
     ;;
   *directory*)
-    exa --icons -1 --color=always "$1"
+    lsd --color=always "$1"
     ;;
   *)
     echo "unknown file format"

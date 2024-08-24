@@ -97,3 +97,31 @@ window {
   padding: 0px 20px;
   margin: 0;
 }
+
+// System Tray
+menu {
+	padding: 5px 5px;
+  background-color: #1d2021;
+
+	>menuitem {
+    font-size: 14px;
+		padding: 2px 5px;
+    //color: $foreground;
+
+		&:disabled label {
+			color: #928374;
+		}
+
+		&:hover {
+      background-color: #282828;
+		}
+	}
+
+	separator {
+		padding-top: 1px;
+
+		&:last-child {
+			padding: unset;
+		}
+	}
+}

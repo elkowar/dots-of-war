@@ -1,4 +1,11 @@
 {
+  "assistant": {
+    "default_model": {
+      "provider": "copilot_chat",
+      "model": "gpt-4o"
+    },
+    "version": "2"
+  },
   "language_models": {
     "openai": {
       "version": "1"
@@ -6,7 +13,7 @@
   },
   "theme": "Gruvbox Dark Hard",
   "buffer_font_size": 14,
-  "buffer_font_family": "FiraCodeNF-Reg",
+  "buffer_font_family": "FiraCode Nerd Font",
   //"buffer_font_family": "JetBrainsMono Nerd Font Mono",
   // "buffer_line_height": { "custom": 1.55 },
   // "ui_font_family": "Noto Sans",
@@ -40,23 +47,5 @@
     "JSON": {
       "format_on_save": "off"
     }
-  },
-
-  "assistant": {
-    "default_model": {
-      "provider": "openai",
-      "model": "gpt-3.5-turbo"
-    },
-    "version": "2",
-    "provider": null
-    // "provider": {
-    //   "name": "openai",
-    //   "type": "openai",
-    //   "default_model": "gpt-3.5-turbo"
-    // }
-    //"provider": {
-    //  "name": "zed.dev",
-    //  "default_model": "gpt-3.5-turbo"
-    //}
   }
 }

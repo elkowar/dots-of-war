@@ -1,11 +1,10 @@
 input {
     keyboard {
         xkb {
-            layout "us,ru"
+            layout "us"
             options "grp:win_space_toggle,compose:ralt,ctrl:nocaps"
         }
     }
-
     touchpad {
         dwt
         tap
@@ -13,16 +12,22 @@ input {
         // accel-speed 0.2
     }
     mouse {
-        accel-speed -0.6
+        accel-speed -0.1
     }
-    // warp-mouse-to-focus
+    warp-mouse-to-focus
     focus-follows-mouse max-scroll-amount="20%"
 
     workspace-auto-back-and-forth
 }
 
+environment {
+    DISPLAY ":0"
+    GDK_BACKEND "x11"
+}
+
 output "DP-2" {
-    mode "3440x1440"
+    mode "3440x1440@99.98"
+    //variable-refresh-rate
     scale 1
     transform "normal"
     position x=1440 y=0
@@ -37,6 +42,7 @@ output "HDMI-A-1" {
 
 layout {
     gaps 16
+    //center-focused-column "always" // - "never", "always" "on-overflow"
     center-focused-column "on-overflow" // - "never", "always" "on-overflow"
     preset-column-widths {
         proportion 0.33333
@@ -44,7 +50,7 @@ layout {
         proportion 0.66667
     }
 
-    default-column-width { proportion 0.5; }
+    default-column-width { proportion 0.33333; }
     focus-ring {
         width 2
         active-color "#8ec07c"
@@ -59,7 +65,8 @@ layout {
 // See the binds section below for more spawn examples.
 spawn-at-startup "bash" "-c" "eww -c ~/.config/eww-bar open bar_1 --restart"
 spawn-at-startup "xwayland-satellite"
-spawn-at-startup "bash" "-c" "DISPLAY=:0 1password --silent"
+spawn-at-startup "bash" "-c" "1password --silent"
+spawn-at-startup "wl-paste" "--watch" "xclip -in -sel c"
 prefer-no-csd
 
 screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
@@ -174,6 +181,7 @@ binds {
     Mod+T { spawn "foot"; }
     Mod+B { spawn "google-chrome" "--enable-features=TouchpadOverscrollHistoryNavigation"; }
     Mod+Shift+P { spawn "rofi" "-show" "drun" "-theme" "sidebar"; }
+    Mod+Shift+B { spawn "firefox"; }
 
     // Example volume keys mappings for PipeWire & WirePlumber.
     // The allow-when-locked=true property makes them work even when the session is locked.
@@ -223,14 +231,14 @@ binds {
     Mod+Ctrl+K     { focus-monitor-up; }
     Mod+Ctrl+L     { focus-monitor-right; }
 
-    Mod+Shift+Ctrl+Left  { move-column-to-monitor-left; }
-    Mod+Shift+Ctrl+Down  { move-column-to-monitor-down; }
-    Mod+Shift+Ctrl+Up    { move-column-to-monitor-up; }
-    Mod+Shift+Ctrl+Right { move-column-to-monitor-right; }
-    Mod+Shift+Ctrl+H     { move-column-to-monitor-left; }
-    Mod+Shift+Ctrl+J     { move-column-to-monitor-down; }
-    Mod+Shift+Ctrl+K     { move-column-to-monitor-up; }
-    Mod+Shift+Ctrl+L     { move-column-to-monitor-right; }
+    Mod+Shift+Ctrl+Left  { move-window-to-monitor-left; }
+    Mod+Shift+Ctrl+Down  { move-window-to-monitor-down; }
+    Mod+Shift+Ctrl+Up    { move-window-to-monitor-up; }
+    Mod+Shift+Ctrl+Right { move-window-to-monitor-right; }
+    Mod+Shift+Ctrl+H     { move-window-to-monitor-left; }
+    Mod+Shift+Ctrl+J     { move-window-to-monitor-down; }
+    Mod+Shift+Ctrl+K     { move-window-to-monitor-up; }
+    Mod+Shift+Ctrl+L     { move-window-to-monitor-right; }
 
     // Alternatively, there are commands to move just a single window:
     // Mod+Shift+Ctrl+Left  { move-window-to-monitor-left; }
@@ -362,9 +370,19 @@ binds {
     // Mod+Space       { switch-layout "next"; }
     // Mod+Shift+Space { switch-layout "prev"; }
 
-    Print { screenshot; }
+    Mod+Shift+S { screenshot; }
     Ctrl+Print { screenshot-screen; }
     Alt+Print { screenshot-window; }
+
+    Ctrl+Shift+Print {
+        spawn "sh" "-c" r#"
+            file=~/Videos/recordings/"$(date +%s)".mp4
+            wf-recorder -c h264_vaapi -r 60 --bframes 0 -g "$(slurp -b '#00000090' -w 0)" -f "$file"
+            wl-copy file:/"$file" -t text/uri-list
+        "#;
+    }
+
+    Ctrl+Escape { spawn "killall" "-s" "SIGINT" "wf-recorder"; }
 
     // The quit action will show a confirmation dialog to avoid accidental exits.
     Mod+Shift+E { quit; }

@@ -116,7 +116,7 @@
     "context": "Pane",
     "bindings": {
       "ctrl-w": null,
-      "shift-escape": null,
+      "shift-escape": null
     }
   }
 ]

@@ -12,7 +12,7 @@
 
 (defwidget top [screen]
   (box :orientation "v"
-    (workspaces :screen {screen == 1 ? "DP-2" : "HDMI-A-1"}) 
+    ;(workspaces :screen {screen == 1 ? "DP-2" : "HDMI-A-1"}) 
     (systray :orientation "v" :icon-size 15 :spacing 10)))
   ;(workspaces :wsp_yuck {screen == 1 ? workspaces_1_yuck : workspaces_2_yuck}))
 
