@@ -29,15 +29,6 @@ local function open_selection_zotero()
   local _, _0, sel = utils["get-selection"]()
   return vim.cmd(("silent !xdg-open zotero://select/items/@" .. str.join(sel)))
 end
-local function cmd(s, desc)
-  return {("<cmd>" .. s .. "<cr>"), desc}
-end
-local function sel_cmd(s, desc)
-  return {("<cmd>'<,'>" .. s .. "<cr>"), desc}
-end
-local function rebind(s, desc)
-  return {s, desc}
-end
 local function key_map(obj)
   local tbl_21_auto = {}
   local i_22_auto = 0
@@ -51,8 +42,17 @@ local function key_map(obj)
   end
   return tbl_21_auto
 end
-local function key(bind, desc)
+local function m(bind, desc)
   return {bind, desc = desc}
+end
+local function cmd(s, desc)
+  return utils.prepend(("<cmd>" .. s .. "<cr>"), {desc = desc})
+end
+local function sel_cmd(s, desc)
+  return utils.prepend(("<cmd>'<,'>" .. s .. "<cr>"), {desc = desc})
+end
+local function rebind(s, desc)
+  return m(s, desc)
 end
 local function format()
   local function _3_(_241)
@@ -75,7 +75,6 @@ local function toggle_lsp_lines_current()
   return vim.diagnostic.config({virtual_lines = {only_current_line = true}})
 end
 wk.setup({})
-wk.add(key_map({["<leader>c"] = {name = "+comment out"}, ["<leader>e"] = {name = "+emmet"}, ["<leader>["] = cmd("HopWord", "Hop to a word"), ["<leader>h"] = cmd("bprevious", "previous buffer"), ["<leader>l"] = cmd("bnext", "next buffer"), ["<leader>o"] = cmd("Telescope live_grep", "Grep files"), ["<leader>P"] = cmd("Telescope frecency frecency default_text=:CWD:", "Frecency magic"), ["<leader>p"] = cmd("Telescope find_files", "Open file-browser"), ["<leader>:"] = cmd("Telescope commands", "Search command with fzf"), ["<leader>s"] = cmd("w", "Save file"), ["<leader>g"] = cmd("Neogit", "Git"), ["<leader>n"] = {require("persistence").load, "Load last session"}}))
 local function _5_()
   vim.o.spell = not vim.o.spell
   return nil
@@ -98,9 +97,9 @@ end
 local function _11_()
   return glance.open("implementations")
 end
-wk.register({c = {name = "+comment out"}, e = {name = "+emmet"}, ["["] = cmd("HopWord", "Hop to a word"), h = cmd("bprevious", "previous buffer"), l = cmd("bnext", "next buffer"), o = cmd("Telescope live_grep", "Grep files"), P = cmd("Telescope frecency frecency default_text=:CWD:", "Frecency magic"), p = cmd("Telescope find_files", "Open file-browser"), [":"] = cmd("Telescope commands", "Search command with fzf"), s = cmd("w", "Save file"), g = cmd("Neogit", "Git"), n = {require("persistence").load, "Load last session"}, d = {name = "+Debugging", b = {dap.toggle_breakpoint, "toggle breakpoint"}, u = {dapui.toggle, "toggle dapui"}, c = {dap.step_into, "continue"}, r = {dap.repl.open, "open repl"}, s = {name = "+Step", o = {dap.step_over, "over"}, u = {dap.step_out, "out"}, i = {dap.step_into, "into"}}}, m = {name = "+Code actions", [";"] = {_5_, "Toggle spell checking"}, d = {vim.lsp.buf.hover, "Show documentation"}, o = cmd("SymbolsOutline", "Outline"), S = cmd("Telescope lsp_document_symbols", "Symbols in document"), s = cmd("Telescope lsp_dynamic_workspace_symbols", "Symbols in workspace"), T = {vim.lsp.buf.signature_help, "Show signature help"}, n = {open_rename, "Rename"}, v = cmd("CodeActionMenu", "Apply codeaction"), A = {_6_, "Cursor diagnostics"}, a = {_7_, "Line diagnostics"}, h = cmd("RustToggleInlayHints", "Toggle inlay hints"), r = cmd("Trouble lsp_references", "Show references"), E = cmd("Trouble document_diagnostics", "List diagnostics"), e = cmd("Trouble workspace_diagnostics", "Show diagnostics"), t = cmd("Trouble lsp_type_definitions", "Go to type-definition"), i = cmd("Trouble lsp_implementations", "Show implementation"), g = cmd("Trouble lsp_definitions", "Go to definition"), w = {toggle_lsp_lines, "Toggle LSP lines"}, W = {toggle_lsp_lines_current, "Toggle LSP line"}, f = {format, "format file"}, [","] = cmd("RustRunnables", "Run rust stuff"), x = {name = "+Glance", d = {_8_, "Definitions"}, r = {_9_, "References"}, t = {_10_, "Type definitions"}, i = {_11_, "Implementations"}}, c = {name = "+Crates", j = {crates.show_popup, "crates popup"}, f = {crates.show_features_popup, "crate features"}, v = {crates.show_versions_popup, "crate versions"}, d = {crates.show_dependencies_popup, "crate dependencies"}, h = {crates.open_documentation, "crate documentation"}}}, f = {name = "+folds", o = cmd("foldopen", "open fold"), n = cmd("foldclose", "close fold"), j = rebind("zj", "jump to next fold"), k = rebind("zk", "jump to previous fold")}, v = {name = "+view-and-layout", n = cmd("set relativenumber!", "toggle relative numbers"), m = cmd("set nonumber! norelativenumber", "toggle numbers"), g = cmd("ZenMode", "toggle zen mode"), i = cmd("IndentGuidesToggle", "toggle indent guides"), w = cmd("set wrap! linebreak!", "toggle linewrapping")}, b = {name = "+buffers", b = cmd(":Telescope buffers", "select open buffer"), c = cmd(":Bdelete!", "close open buffer"), w = cmd(":Bwipeout!", "wipeout open buffer")}}, {prefix = "<leader>"})
-wk.add(key_map({["<tab>"] = {hidden = true}, gss = {desc = "init selection"}, z = {group = "folds"}, zc = key("<cmd>foldclose<cr>", "close fold"), zo = key("<cmd>foldopen<cr>", "open fold")}))
+wk.add(key_map({["<leader>c"] = {group = "+Crates"}, ["<leader>e"] = {group = "+emmet"}, ["<leader>["] = cmd("HopWord", "Hop to a word"), ["<leader>h"] = cmd("bprevious", "previous buffer"), ["<leader>l"] = cmd("bnext", "next buffer"), ["<leader>o"] = cmd("Telescope live_grep", "Grep files"), ["<leader>P"] = cmd("Telescope frecency frecency default_text=:CWD:", "Frecency magic"), ["<leader>p"] = cmd("Telescope find_files", "Open file-browser"), ["<leader>:"] = cmd("Telescope commands", "Search command with fzf"), ["<leader>s"] = cmd("w", "Save file"), ["<leader>g"] = cmd("Neogit", "Git"), ["<leader>n"] = m(require("persistence").load, "Load last session"), ["<leader>d"] = {group = "+Debugging"}, ["<leader>db"] = m(dap.toggle_breakpoint, "toggle breakpoint"), ["<leader>du"] = m(dapui.toggle, "toggle dapui"), ["<leader>dc"] = m(dap.step_into, "continue"), ["<leader>dr"] = m(dap.repl.open, "open repl"), ["<leader>ds"] = {group = "+Step"}, ["<leader>dso"] = m(dap.step_over, "over"), ["<leader>dsu"] = m(dap.step_out, "out"), ["<leader>dsi"] = m(dap.step_into, "into"), ["<leader>m"] = {group = "+Code actions"}, ["<leader>m;"] = m(_5_, "Toggle spell checking"), ["<leader>md"] = m(vim.lsp.buf.hover, "Show documentation"), ["<leader>mo"] = cmd("SymbolsOutline", "Outline"), ["<leader>mS"] = cmd("Telescope lsp_document_symbols", "Symbols in document"), ["<leader>ms"] = cmd("Telescope lsp_dynamic_workspace_symbols", "Symbols in workspace"), ["<leader>mT"] = m(vim.lsp.buf.signature_help, "Show signature help"), ["<leader>mn"] = m(open_rename, "Rename"), ["<leader>mv"] = cmd("CodeActionMenu", "Apply codeaction"), ["<leader>mA"] = m(_6_, "Cursor diagnostics"), ["<leader>ma"] = m(_7_, "Line diagnostics"), ["<leader>mh"] = cmd("RustToggleInlayHints", "Toggle inlay hints"), ["<leader>mr"] = cmd("Trouble lsp_references", "Show references"), ["<leader>mE"] = cmd("Trouble document_diagnostics", "List diagnostics"), ["<leader>me"] = cmd("Trouble workspace_diagnostics", "Show diagnostics"), ["<leader>mt"] = cmd("Trouble lsp_type_definitions", "Go to type-definition"), ["<leader>mi"] = cmd("Trouble lsp_implementations", "Show implementation"), ["<leader>mg"] = cmd("Trouble lsp_definitions", "Go to definition"), ["<leader>mw"] = m(toggle_lsp_lines, "Toggle LSP lines"), ["<leader>mW"] = m(toggle_lsp_lines_current, "Toggle LSP line"), ["<leader>mf"] = m(format, "format file"), ["<leader>m,"] = cmd("RustRunnables", "Run rust stuff"), ["<leader>mx"] = {group = "+Glance"}, ["<leader>mxd"] = m(_8_, "Definitions"), ["<leader>mxr"] = m(_9_, "References"), ["<leader>mxt"] = m(_10_, "Type definitions"), ["<leader>mxi"] = m(_11_, "Implementations"), ["<leader>mcj"] = m(crates.show_popup, "crates popup"), ["<leader>mcf"] = m(crates.show_features_popup, "crate features"), ["<leader>mcv"] = m(crates.show_versions_popup, "crate versions"), ["<leader>mcd"] = m(crates.show_dependencies_popup, "crate dependencies"), ["<leader>mch"] = m(crates.open_documentation, "crate documentation"), ["<leader>f"] = {group = "+folds"}, ["<leader>fo"] = cmd("foldopen", "open fold"), ["<leader>fn"] = cmd("foldclose", "close fold"), ["<leader>fj"] = rebind("zj", "jump to next fold"), ["<leader>fk"] = rebind("zk", "jump to previous fold"), ["<leader>v"] = {group = "+view-and-layout"}, ["<leader>vn"] = cmd("set relativenumber!", "toggle relative numbers"), ["<leader>vm"] = cmd("set nonumber! norelativenumber", "toggle numbers"), ["<leader>vg"] = cmd("ZenMode", "toggle zen mode"), ["<leader>vi"] = cmd("IndentGuidesToggle", "toggle indent guides"), ["<leader>vw"] = cmd("set wrap! linebreak!", "toggle linewrapping"), ["<leader>b"] = {group = "+buffers"}, ["<leader>bb"] = cmd(":Telescope buffers", "select open buffer"), ["<leader>bc"] = cmd(":Bdelete!", "close open buffer"), ["<leader>bw"] = cmd(":Bwipeout!", "wipeout open buffer")}))
+wk.add(key_map({["<tab>"] = {hidden = true}, gss = {desc = "init selection"}, z = {group = "folds"}, zc = m("<cmd>foldclose<cr>", "close fold"), zo = m("<cmd>foldopen<cr>", "open fold")}))
 wk.add(key_map({["<tab>"] = {hidden = true, mode = "i"}}))
-wk.add(utils.prepend(key_map({["<leader>s"] = sel_cmd("VSSplit", "keep selection visible in split"), ["<leader>z"] = {open_selection_zotero, "open in zotero"}, gs = {group = "+Selection"}, gsj = {desc = "increment selection"}, gsk = {desc = "decrement selection"}, gsl = {desc = "increment node"}, gsh = {desc = "decrement node"}}), {mode = "v"}))
+wk.add(utils.prepend(key_map({["<leader>s"] = sel_cmd("VSSplit", "keep selection visible in split"), ["<leader>z"] = m(open_selection_zotero, "open in zotero"), gs = {group = "+Selection"}, gsj = {desc = "increment selection"}, gsk = {desc = "decrement selection"}, gsl = {desc = "increment node"}, gsh = {desc = "decrement node"}}), {mode = "v"}))
 vim.o.timeoutlen = 200
 return nil

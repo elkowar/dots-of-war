@@ -52,16 +52,16 @@
     (vim.cmd (.. "silent !xdg-open zotero://select/items/@" (str.join sel)))))
 
 
-(fn cmd [s desc] [(.. "<cmd>" s "<cr>") desc])
-(fn sel-cmd [s desc] [(.. "<cmd>'<,'>" s "<cr>") desc])
-(fn rebind [s desc] [s desc])
-
 (fn key-map [obj]
   (icollect [key val (pairs obj)]
     (utils.prepend key val)))
-(fn key [bind desc]
+(fn m [bind desc]
   {1 bind :desc desc})
 
+
+(fn cmd [s desc] (utils.prepend (.. "<cmd>" s "<cr>") {:desc desc}))
+(fn sel-cmd [s desc] (utils.prepend (.. "<cmd>'<,'>" s "<cr>") {:desc desc}))
+(fn rebind [s desc] (m s desc))
 
 
 (fn format []
@@ -84,8 +84,8 @@
 
 (wk.add
   (key-map
-    {"<leader>c" {:name "+comment out"}
-     "<leader>e" {:name "+emmet"}
+    {"<leader>c" {:group "+comment out"}
+     "<leader>e" {:group "+emmet"}
 
      "<leader>[" (cmd "HopWord" "Hop to a word")
      "<leader>h" (cmd "bprevious"              "previous buffer")
@@ -97,98 +97,81 @@
      "<leader>s" (cmd "w"                      "Save file")
      "<leader>g" (cmd "Neogit"                 "Git")
 
-     "<leader>n" [(. (require :persistence) :load) "Load last session"]}))
+     "<leader>n" (m (. (require :persistence) :load) "Load last session")
 
+     "<leader>d" {:group "+Debugging"}
+     "<leader>db" (m dap.toggle_breakpoint    "toggle breakpoint")
+     "<leader>du" (m dapui.toggle             "toggle dapui")
+     "<leader>dc" (m dap.step_into            "continue")
+     "<leader>dr" (m dap.repl.open            "open repl")
 
-(wk.register 
- {"c" {:name "+comment out"}
-  "e" {:name "+emmet"}
+     "<leader>ds" {:group "+Step"}
+     "<leader>dso" (m dap.step_over       "over")
+     "<leader>dsu" (m dap.step_out        "out")
+     "<leader>dsi" (m dap.step_into       "into")
 
-  "[" (cmd "HopWord" "Hop to a word")
-  "h" (cmd "bprevious"              "previous buffer")
-  "l" (cmd "bnext"                  "next buffer")
-  "o" (cmd "Telescope live_grep"    "Grep files")
-  "P" (cmd "Telescope frecency frecency default_text=:CWD:"     "Frecency magic")
-  "p" (cmd "Telescope find_files"   "Open file-browser")
-  ":" (cmd "Telescope commands"     "Search command with fzf")
-  "s" (cmd "w"                      "Save file")
-  "g" (cmd "Neogit"                 "Git")
+     "<leader>m" {:group "+Code actions"}
+     "<leader>m;" (m #(set vim.o.spell (not vim.o.spell))          "Toggle spell checking")
+     "<leader>md" (m vim.lsp.buf.hover                             "Show documentation") 
+     "<leader>mo" (cmd "SymbolsOutline"                          "Outline") 
+     "<leader>mS" (cmd "Telescope lsp_document_symbols"          "Symbols in document") 
+     "<leader>ms" (cmd "Telescope lsp_dynamic_workspace_symbols" "Symbols in workspace") 
+     "<leader>mT" (m vim.lsp.buf.signature_help                    "Show signature help") 
+     "<leader>mn" (m open-rename                                   "Rename") 
+     "<leader>mv" (cmd "CodeActionMenu"                          "Apply codeaction") 
+     "<leader>mA" (m #(vim.diagnostic.open_float {:scope :cursor}) "Cursor diagnostics") 
+     "<leader>ma" (m #(vim.diagnostic.open_float {})               "Line diagnostics") 
+     "<leader>mh" (cmd "RustToggleInlayHints"                    "Toggle inlay hints")
+     "<leader>mr" (cmd "Trouble lsp_references"                  "Show references") 
+     "<leader>mE" (cmd "Trouble document_diagnostics"            "List diagnostics")
+     "<leader>me" (cmd "Trouble workspace_diagnostics"           "Show diagnostics")
+     "<leader>mt" (cmd "Trouble lsp_type_definitions"            "Go to type-definition") 
+     "<leader>mi" (cmd "Trouble lsp_implementations"             "Show implementation") 
+     "<leader>mg" (cmd "Trouble lsp_definitions"                 "Go to definition") 
+     "<leader>mw" (m toggle-lsp-lines                              "Toggle LSP lines")
+     "<leader>mW" (m toggle-lsp-lines-current                      "Toggle LSP line")
+     "<leader>mf" (m format                                        "format file")
+     "<leader>m," (cmd "RustRunnables"                           "Run rust stuff")
 
-  "n" [(. (require :persistence) :load) "Load last session"]
+     "<leader>mx" {:group "+Glance"}
+     "<leader>mxd" (m #(glance.open "definitions")             "Definitions") 
+     "<leader>mxr" (m #(glance.open "references")              "References") 
+     "<leader>mxt" (m #(glance.open "type_definitions")        "Type definitions") 
+     "<leader>mxi" (m #(glance.open "implementations")         "Implementations") 
 
-  "d" {:name "+Debugging"
-       "b" [dap.toggle_breakpoint    "toggle breakpoint"]
-       "u" [dapui.toggle             "toggle dapui"]
-       "c" [dap.step_into            "continue"]
-       "r" [dap.repl.open            "open repl"]
-       "s" {:name "+Step"
-            "o" [dap.step_over       "over"]
-            "u" [dap.step_out        "out"]
-            "i" [dap.step_into       "into"]}}
+     "<leader>c" {:group "+Crates"}
+     "<leader>mcj" (m crates.show_popup "crates popup")
+     "<leader>mcf" (m crates.show_features_popup "crate features")
+     "<leader>mcv" (m crates.show_versions_popup "crate versions")
+     "<leader>mcd" (m crates.show_dependencies_popup "crate dependencies")
+     "<leader>mch" (m crates.open_documentation "crate documentation")
 
-  "m" {:name "+Code actions"
-       ";" [#(set vim.o.spell (not vim.o.spell))          "Toggle spell checking"]
-       "d" [vim.lsp.buf.hover                             "Show documentation"] 
-       "o" (cmd "SymbolsOutline"                          "Outline") 
-       "S" (cmd "Telescope lsp_document_symbols"          "Symbols in document") 
-       "s" (cmd "Telescope lsp_dynamic_workspace_symbols" "Symbols in workspace") 
-       "T" [vim.lsp.buf.signature_help                    "Show signature help"] 
-       "n" [open-rename                                   "Rename"] 
-       "v" (cmd "CodeActionMenu"                          "Apply codeaction") 
-       "A" [#(vim.diagnostic.open_float {:scope :cursor}) "Cursor diagnostics"] 
-       "a" [#(vim.diagnostic.open_float {})               "Line diagnostics"] 
-       "h" (cmd "RustToggleInlayHints"                    "Toggle inlay hints")
-       "r" (cmd "Trouble lsp_references"                  "Show references") 
-       "E" (cmd "Trouble document_diagnostics"            "List diagnostics")
-       "e" (cmd "Trouble workspace_diagnostics"           "Show diagnostics")
-       "t" (cmd "Trouble lsp_type_definitions"            "Go to type-definition") 
-       "i" (cmd "Trouble lsp_implementations"             "Show implementation") 
-       "g" (cmd "Trouble lsp_definitions"                 "Go to definition") 
-       "w" [toggle-lsp-lines                              "Toggle LSP lines"]
-       "W" [toggle-lsp-lines-current                      "Toggle LSP line"]
-       "f" [format                                        "format file"]
-       "," (cmd "RustRunnables"                           "Run rust stuff")
-       "x" {:name "+Glance"
-            "d" [#(glance.open "definitions")             "Definitions"] 
-            "r" [#(glance.open "references")              "References"] 
-            "t" [#(glance.open "type_definitions")        "Type definitions"] 
-            "i" [#(glance.open "implementations")         "Implementations"]} 
-       "c" {:name "+Crates"
-            "j" [crates.show_popup "crates popup"]
-            "f" [crates.show_features_popup "crate features"]
-            "v" [crates.show_versions_popup "crate versions"]
-            "d" [crates.show_dependencies_popup "crate dependencies"]
-            "h" [crates.open_documentation "crate documentation"]}}
-  
-
-  "f" {:name "+folds"
-       "o" (cmd "foldopen"  "open fold") 
-       "n" (cmd "foldclose" "close fold") 
-       "j" (rebind "zj"     "jump to next fold") 
-       "k" (rebind "zk"     "jump to previous fold")}
+     "<leader>f" {:group "+folds"}
+     "<leader>fo" (cmd "foldopen"  "open fold") 
+     "<leader>fn" (cmd "foldclose" "close fold") 
+     "<leader>fj" (rebind "zj"     "jump to next fold") 
+     "<leader>fk" (rebind "zk"     "jump to previous fold")
  
-  "v" {:name "+view-and-layout"
-       "n" (cmd "set relativenumber!"             "toggle relative numbers") 
-       "m" (cmd "set nonumber! norelativenumber"  "toggle numbers") 
-       "g" (cmd "ZenMode"                         "toggle zen mode") 
-       "i" (cmd "IndentGuidesToggle"              "toggle indent guides")
-       "w" (cmd "set wrap! linebreak!"            "toggle linewrapping")}
+     "<leader>v" {:group "+view-and-layout"}
+     "<leader>vn" (cmd "set relativenumber!"             "toggle relative numbers") 
+     "<leader>vm" (cmd "set nonumber! norelativenumber"  "toggle numbers") 
+     "<leader>vg" (cmd "ZenMode"                         "toggle zen mode") 
+     "<leader>vi" (cmd "IndentGuidesToggle"              "toggle indent guides")
+     "<leader>vw" (cmd "set wrap! linebreak!"            "toggle linewrapping")
 
-  "b" {:name "+buffers"
-       "b" (cmd ":Telescope buffers" "select open buffer")
-       "c" (cmd ":Bdelete!"          "close open buffer")
-       "w" (cmd ":Bwipeout!"         "wipeout open buffer")}}
+     "<leader>b" {:group "+buffers"}
+     "<leader>bb" (cmd ":Telescope buffers" "select open buffer")
+     "<leader>bc" (cmd ":Bdelete!"          "close open buffer")
+     "<leader>bw" (cmd ":Bwipeout!"         "wipeout open buffer")}))
   
-
- {:prefix "<leader>"})
 
 (wk.add
   (key-map
     {"<tab>" {:hidden true}
      "gss" {:desc "init selection"}
      "z" {:group "folds"}
-     "zc" (key "<cmd>foldclose<cr>" "close fold")
-     "zo" (key "<cmd>foldopen<cr>" "open fold")}))
+     "zc" (m "<cmd>foldclose<cr>" "close fold")
+     "zo" (m "<cmd>foldopen<cr>" "open fold")}))
 
 (wk.add
   (key-map {"<tab>" {:hidden true :mode "i"}}))
@@ -197,7 +180,7 @@
   (utils.prepend
     (key-map
       {"<leader>s" (sel-cmd "VSSplit" "keep selection visible in split")
-       "<leader>z" [open-selection-zotero "open in zotero"]
+       "<leader>z" (m open-selection-zotero "open in zotero")
 
        "gs" {:group "+Selection"}
        "gsj" {:desc "increment selection"}

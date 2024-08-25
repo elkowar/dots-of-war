@@ -153,7 +153,7 @@
          {:dependencies ["nvim-lua/plenary.nvim"]
           ;:event ["BufRead Cargo.toml"]
           ;:lazy true
-          :opts {:disable_invalid_feature_diagnostic true
+          :opts {;:disable_invalid_feature_diagnostic true
                  :enable_update_available_warning false}})
                                 
  ; temporarily using this fork that merges a few fixes, until simrat is back
