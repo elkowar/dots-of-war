@@ -153,7 +153,7 @@ local function setup()
       return previous_handler(a0, result, b, c)
     else
       local new_contents = cleanup_markdown(result.contents)
-      do end (result)["contents"] = new_contents
+      result["contents"] = new_contents
       return previous_handler(a0, result, b, c)
     end
   end
@@ -161,6 +161,6 @@ local function setup()
   return nil
 end
 local function _18_()
-  return (require("mason")).setup()
+  return require("mason").setup()
 end
 return {utils.plugin("williamboman/mason.nvim", {config = _18_}), utils.plugin("williamboman/mason-lspconfig.nvim", {config = {ensure_installed = {"rust_analyzer"}}}), utils.plugin("neovim/nvim-lspconfig", {event = "VeryLazy", lazy = true, config = setup})}

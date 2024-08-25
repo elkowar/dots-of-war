@@ -68,7 +68,7 @@ local function _4_()
 end
 vim.api.nvim_create_autocmd("FileType", {pattern = "vim", callback = _4_})
 local function _5_()
-  vim.opt_local.formatoptions = (vim.o.formatoptions):gsub("[cor]", "")
+  vim.opt_local.formatoptions = vim.o.formatoptions:gsub("[cor]", "")
   return nil
 end
 vim.api.nvim_create_autocmd("FileType", {pattern = "*", callback = _5_})

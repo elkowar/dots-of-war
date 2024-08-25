@@ -11,6 +11,11 @@ local function plugin(name, _3fopts)
     return _3fopts
   end
 end
+local function prepend(a0, list)
+  local x = list
+  table.insert(x, 1, a0)
+  return x
+end
 local function all(f)
   local function _3_(_241)
     return not f(_241)
@@ -32,20 +37,20 @@ local function contains_3f(list, elem)
   return false
 end
 local function filter_table(f, t)
-  local tbl_14_auto = {}
+  local tbl_16_auto = {}
   for k, v in pairs(t) do
-    local k_15_auto, v_16_auto = nil, nil
+    local k_17_auto, v_18_auto = nil, nil
     if f(k, v) then
-      k_15_auto, v_16_auto = k, v
+      k_17_auto, v_18_auto = k, v
     else
-      k_15_auto, v_16_auto = nil
+      k_17_auto, v_18_auto = nil
     end
-    if ((k_15_auto ~= nil) and (v_16_auto ~= nil)) then
-      tbl_14_auto[k_15_auto] = v_16_auto
+    if ((k_17_auto ~= nil) and (v_18_auto ~= nil)) then
+      tbl_16_auto[k_17_auto] = v_18_auto
     else
     end
   end
-  return tbl_14_auto
+  return tbl_16_auto
 end
 local function split_last(s, sep)
   for i = #s, 1, -1 do
@@ -102,16 +107,13 @@ local function keymap(modes, from, to, _3fopts)
   local full_opts = without_keys({"buffer"}, a.merge({noremap = true, silent = true}, (_3fopts or {})))
   for _, mode in ipairs(single_to_list(modes)) do
     local keymap_opts
-    local _14_
-    do
-      local _13_ = _3fopts
-      if (nil ~= _13_) then
-        _14_ = (_13_).buffer
-      else
-        _14_ = _13_
-      end
+    local _13_
+    if (nil ~= _3fopts) then
+      _13_ = _3fopts.buffer
+    else
+      _13_ = nil
     end
-    if _14_ then
+    if _13_ then
       keymap_opts = a.assoc(full_opts, "buffer", 0)
     else
       keymap_opts = full_opts
@@ -121,14 +123,14 @@ local function keymap(modes, from, to, _3fopts)
   return nil
 end
 local function del_keymap(mode, from, _3fbuf_local)
-  local function _17_()
+  local function _16_()
     if _3fbuf_local then
       return {buffer = 0}
     else
       return {}
     end
   end
-  return vim.keymap.del(mode, from, _17_())
+  return vim.keymap.del(mode, from, _16_())
 end
 local function buffer_content(bufnr)
   return vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
@@ -162,28 +164,28 @@ local function shorten_path(path, seg_length, shorten_after)
     local init = a.butlast(segments)
     local filename = a.last(segments)
     local shortened_segs
-    local function _19_(_241)
+    local function _18_(_241)
       return string.sub(_241, 1, seg_length)
     end
-    shortened_segs = a.map(_19_, init)
+    shortened_segs = a.map(_18_, init)
     return (str.join("/", shortened_segs) .. "/" .. filename)
   end
 end
 local function comp(f, g)
-  local function _21_(...)
+  local function _20_(...)
     return f(g(...))
   end
-  return _21_
+  return _20_
 end
 local function get_selection()
-  local _let_22_ = vim.fn.getpos("'<")
-  local _ = _let_22_[1]
-  local s_start_line = _let_22_[2]
-  local s_start_col = _let_22_[3]
-  local _let_23_ = vim.fn.getpos("'>")
-  local _0 = _let_23_[1]
-  local s_end_line = _let_23_[2]
-  local s_end_col = _let_23_[3]
+  local _let_21_ = vim.fn.getpos("'<")
+  local _ = _let_21_[1]
+  local s_start_line = _let_21_[2]
+  local s_start_col = _let_21_[3]
+  local _let_22_ = vim.fn.getpos("'>")
+  local _0 = _let_22_[1]
+  local s_end_line = _let_22_[2]
+  local s_end_col = _let_22_[3]
   local n_lines = (1 + math.abs((s_end_line - s_start_line)))
   local lines = vim.api.nvim_buf_get_lines(0, (s_start_line - 1), s_end_line, false)
   if (nil == lines[1]) then
@@ -198,4 +200,4 @@ local function get_selection()
     return s_start_line, s_end_line, lines
   end
 end
-return {plugin = plugin, all = all, ["single-to-list"] = single_to_list, ["contains?"] = contains_3f, ["filter-table"] = filter_table, ["split-last"] = split_last, ["find-where"] = find_where, ["find-map"] = find_map, ["keep-if"] = keep_if, ["map-values"] = map_values, ["without-keys"] = without_keys, keymap = keymap, ["del-keymap"] = del_keymap, ["buffer-content"] = buffer_content, ["surround-if-present"] = surround_if_present, highlight = highlight, ["highlight-add"] = highlight_add, ["shorten-path"] = shorten_path, comp = comp, ["get-selection"] = get_selection}
+return {plugin = plugin, all = all, ["single-to-list"] = single_to_list, ["contains?"] = contains_3f, ["filter-table"] = filter_table, ["split-last"] = split_last, ["find-where"] = find_where, ["find-map"] = find_map, ["keep-if"] = keep_if, ["map-values"] = map_values, ["without-keys"] = without_keys, keymap = keymap, ["del-keymap"] = del_keymap, ["buffer-content"] = buffer_content, ["surround-if-present"] = surround_if_present, highlight = highlight, ["highlight-add"] = highlight_add, ["shorten-path"] = shorten_path, prepend = prepend, comp = comp, ["get-selection"] = get_selection}

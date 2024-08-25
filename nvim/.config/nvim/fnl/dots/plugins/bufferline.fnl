@@ -71,4 +71,4 @@
        :tab {:bg colors.bright_yellow :fg colors.bright_yellow}}})))
 
 [(utils.plugin :akinsho/nvim-bufferline.lua
-               {:config setup :tag "v4.5.2"})]
+               {:config setup :tag "v4.7.0"})]

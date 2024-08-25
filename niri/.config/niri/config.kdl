@@ -26,7 +26,7 @@ environment {
 }
 
 output "DP-2" {
-    mode "3440x1440@99.98"
+    mode "3440x1440@99.982"
     //variable-refresh-rate
     scale 1
     transform "normal"
@@ -63,10 +63,11 @@ layout {
 // Note that running niri as a session supports xdg-desktop-autostart,
 // which may be more convenient to use.
 // See the binds section below for more spawn examples.
-spawn-at-startup "bash" "-c" "eww -c ~/.config/eww-bar open bar_1 --restart"
+spawn-at-startup "bash" "-c" "eww -c ~/.config/eww-bar open bar_1"
 spawn-at-startup "xwayland-satellite"
 spawn-at-startup "bash" "-c" "1password --silent"
 spawn-at-startup "wl-paste" "--watch" "xclip -in -sel c"
+spawn-at-startup "~/.config/niri/clipboardfix.sh"
 prefer-no-csd
 
 screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
@@ -160,8 +161,17 @@ window-rule {
 window-rule {
     match app-id=r#"1Password"#
     match title=r#"[gG]mail"#
+    match app-id=r#".*[mM]ako.*"#
+    match title=r#".*[Ww]hats[aA]pp.*$"#
+    // opacity 0.5
 
     block-out-from "screen-capture"
+}
+
+window-rule {
+    match app-id=r#"^[gG]edit$"#;
+    match app-id=r#"^[eE]og$"#;
+    // fake-fullscreen true
 }
 
 window-rule {

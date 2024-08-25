@@ -6,17 +6,17 @@ local lsp = autoload("lspconfig")
 local configs = autoload("lspconfig/configs")
 local lsputil = autoload("lspconfig/util")
 local function cmds(xs)
-  local tbl_17_auto = {}
-  local i_18_auto = #tbl_17_auto
+  local tbl_21_auto = {}
+  local i_22_auto = 0
   for _, x in ipairs(xs) do
-    local val_19_auto = ("\\" .. x .. "{}")
-    if (nil ~= val_19_auto) then
-      i_18_auto = (i_18_auto + 1)
-      do end (tbl_17_auto)[i_18_auto] = val_19_auto
+    local val_23_auto = ("\\" .. x .. "{}")
+    if (nil ~= val_23_auto) then
+      i_22_auto = (i_22_auto + 1)
+      tbl_21_auto[i_22_auto] = val_23_auto
     else
     end
   end
-  return tbl_17_auto
+  return tbl_21_auto
 end
 local latex_command_settings = {dummy = cmds({"texttt", "scripture", "lstref", "figref", "tblref", "secref", "personaltextcite", "personalparencite", "textcite", "parencite", "parencite[]", "game", "acsu", "enquote", "name", "item", "reqref", "gamebtn", "fs", "cs", "appref", "sorty"}), ignore = cmds({"urlfootnote", "caption", "todo"})}
 local Dictionary_file = {["de-DE"] = {(vim.fn.getenv("HOME") .. "/.config/ltex-ls/dictionary.txt")}}
@@ -146,7 +146,7 @@ local function init()
   local orig_execute_command = vim.lsp.buf.execute_command
   local function _16_(command)
     if (command.command == "_ltex.addToDictionary") then
-      local arg = (command.arguments[1]).words
+      local arg = command.arguments[1].words
       for lang, words in pairs(arg) do
         for _, word in ipairs(words) do
           local filetype = "dictionary"
@@ -155,7 +155,7 @@ local function init()
       end
       return nil
     elseif (command.command == "_ltex.disableRules") then
-      local arg = (command.arguments[1]).ruleIds
+      local arg = command.arguments[1].ruleIds
       for lang, rules in pairs(arg) do
         for _, rule in ipairs(rules) do
           local filetype = "disable"
@@ -164,7 +164,7 @@ local function init()
       end
       return nil
     elseif (command.command == "_ltex.hideFalsePositives") then
-      local arg = (command.arguments[1]).falsePositives
+      local arg = command.arguments[1].falsePositives
       for lang, rules in pairs(arg) do
         for _, rule in ipairs(rules) do
           local filetype = "falsePositive"

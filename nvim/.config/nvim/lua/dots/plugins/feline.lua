@@ -48,11 +48,11 @@ local function setup()
     local function _7_()
       local t_6_ = vim.b
       if (nil ~= t_6_) then
-        t_6_ = (t_6_).gitsigns_status_dict
+        t_6_ = t_6_.gitsigns_status_dict
       else
       end
       if (nil ~= t_6_) then
-        t_6_ = (t_6_).head
+        t_6_ = t_6_.head
       else
       end
       return t_6_
@@ -63,41 +63,21 @@ local function setup()
     return (" " .. (modes[vim.fn.mode()].text or vim.fn.mode) .. " ")
   end
   local function lsp_progress_provider()
-    local msgs = vim.lsp.util.get_progress_messages()
-    local s
-    do
-      local tbl_17_auto = {}
-      local i_18_auto = #tbl_17_auto
-      for _, msg in ipairs(msgs) do
-        local val_19_auto
-        if msg.message then
-          val_19_auto = (msg.title .. " " .. msg.message)
-        else
-          val_19_auto = nil
-        end
-        if (nil ~= val_19_auto) then
-          i_18_auto = (i_18_auto + 1)
-          do end (tbl_17_auto)[i_18_auto] = val_19_auto
-        else
-        end
-      end
-      s = tbl_17_auto
-    end
-    return or_empty(str.join(" | ", s))
+    return vim.lsp.status()
   end
   local function lsp_diagnostic_component(kind, color)
-    local function _12_()
+    local function _10_()
       return (0 ~= #vim.diagnostic.get(0, {severity = kind}))
     end
-    local function _13_()
+    local function _11_()
       return spaces(#vim.diagnostic.get(0, {severity = kind}))
     end
-    return {enabled = _12_, provider = _13_, left_sep = "", right_sep = "", hl = {fg = bar_bg, bg = color}}
+    return {enabled = _10_, provider = _11_, left_sep = "", right_sep = "", hl = {fg = bar_bg, bg = color}}
   end
   local function coordinates()
-    local _let_14_ = vim.api.nvim_win_get_cursor(0)
-    local line = _let_14_[1]
-    local col = _let_14_[2]
+    local _let_12_ = vim.api.nvim_win_get_cursor(0)
+    local line = _let_12_[1]
+    local col = _let_12_[2]
     return (" " .. line .. ":" .. col .. " ")
   end
   local function inactive_separator_provider()
@@ -108,24 +88,24 @@ local function setup()
     end
   end
   local components = {active = {}, inactive = {}}
-  local function _16_()
+  local function _14_()
     return vim_mode_hl(false)
   end
+  local function _15_()
+    return vim_mode_hl(true)
+  end
+  components.active[1] = {{provider = vim_mode, hl = _14_}, {provider = get_current_filepath, left_sep = " ", hl = {fg = colors.light4}}, {provider = git_status_provider, left_sep = " ", hl = _15_}}
+  local function _16_()
+    return (0 < #vim.lsp.buf_get_clients())
+  end
+  components.active[2] = {{provider = lsp_progress_provider, left_sep = " ", right_sep = " ", enabled = _16_}}
   local function _17_()
     return vim_mode_hl(true)
   end
-  components.active[1] = {{provider = vim_mode, hl = _16_}, {provider = get_current_filepath, left_sep = " ", hl = {fg = colors.light4}}, {provider = git_status_provider, left_sep = " ", hl = _17_}}
   local function _18_()
-    return (0 < #vim.lsp.buf_get_clients())
-  end
-  components.active[2] = {{provider = lsp_progress_provider, left_sep = " ", right_sep = " ", enabled = _18_}}
-  local function _19_()
-    return vim_mode_hl(true)
-  end
-  local function _20_()
     return vim_mode_hl(false)
   end
-  components.active[3] = {{provider = vim.bo.filetype, right_sep = " ", hl = _19_}, lsp_diagnostic_component(vim.diagnostic.severity.INFO, colors.neutral_green), lsp_diagnostic_component(vim.diagnostic.severity.HINT, colors.neutral_aqua), lsp_diagnostic_component(vim.diagnostic.severity.WARN, colors.neutral_yellow), lsp_diagnostic_component(vim.diagnostic.severity.ERROR, colors.neutral_red), {provider = coordinates, hl = _20_}}
+  components.active[3] = {{provider = vim.bo.filetype, right_sep = " ", hl = _17_}, lsp_diagnostic_component(vim.diagnostic.severity.INFO, colors.neutral_green), lsp_diagnostic_component(vim.diagnostic.severity.HINT, colors.neutral_aqua), lsp_diagnostic_component(vim.diagnostic.severity.WARN, colors.neutral_yellow), lsp_diagnostic_component(vim.diagnostic.severity.ERROR, colors.neutral_red), {provider = coordinates, hl = _18_}}
   components.inactive[1] = {{provider = inactive_separator_provider, hl = {bg = "NONE", fg = horiz_separator_color}}}
   utils["highlight-add"]("StatusLineNC", {bg = "NONE", fg = colors.light1})
   return feline.setup({theme = {fg = colors.light1, bg = colors.bg_main}, components = components})

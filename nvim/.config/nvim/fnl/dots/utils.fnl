@@ -7,6 +7,11 @@
       (tset ?opts 1 name)
       ?opts)))
 
+(fn prepend [a list]
+  (local x list)
+  (table.insert x 1 a)
+  x)
+
 (fn all [f]
   (not (a.some #(not (f $1)))))
 
@@ -86,16 +91,16 @@
   (let [default { :fg "NONE" :bg "NONE" :gui "NONE"}
         opts (a.merge default colset)]
     (each [_ group (ipairs (single-to-list group-arg))]
-      (vim.cmd (.. "hi! "group" guifg='"opts.fg"' guibg='"opts.bg"' gui='"opts.gui"'")))))
+      (vim.cmd (.. "hi! " group " guifg='" opts.fg "' guibg='" opts.bg "' gui='" opts.gui "'")))))
 
 (fn highlight-add [group-arg colset]
   (each [_ group (ipairs (single-to-list group-arg))]
     (vim.cmd
       (.. "hi! "
           group
-          (surround-if-present " guibg='"colset.bg"'")
-          (surround-if-present " guifg='"colset.fg"'")
-          (surround-if-present " gui='"colset.gui"'")))))
+          (surround-if-present " guibg='" colset.bg "'")
+          (surround-if-present " guifg='" colset.fg "'")
+          (surround-if-present " gui='" colset.gui "'")))))
 
 
 
@@ -150,5 +155,6 @@
  : highlight
  : highlight-add
  : shorten-path
+ : prepend
  : comp
  : get-selection}

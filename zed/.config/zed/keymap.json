@@ -1,5 +1,18 @@
 [
   {
+    "context": "Pane",
+    "bindings": {
+      // unbind closing the tab with this
+      "ctrl-w": null,
+      "ctrl-w ctrl-h": ["workspace::ActivatePaneInDirection", "Left"],
+      "ctrl-w ctrl-j": ["workspace::ActivatePaneInDirection", "Down"],
+      "ctrl-w ctrl-k": ["workspace::ActivatePaneInDirection", "Up"],
+      "ctrl-w ctrl-l": ["workspace::ActivatePaneInDirection", "Right"],
+      "ctrl-shift-t": "pane::ReopenClosedItem"
+      // "shift-escape": null
+    }
+  },
+  {
     "context": "os == macos && EmptyPane",
     "bindings": {
       ":": "command_palette::Toggle",
@@ -10,6 +23,12 @@
     "context": "os == macos && Editor && VimControl && !VimWaiting && !menu",
     "bindings": {
       "cmd-d": "editor::SelectNext"
+    }
+  },
+  {
+    "bindings": {
+      "ctrl-alt-shift-p": "projects::OpenRecent",
+      "ctrl-alt-shift-o": "workspace::Open"
     }
   },
   {
@@ -24,10 +43,16 @@
       "space b c": "pane::CloseActiveItem",
       ":": "command_palette::Toggle",
       "space p": "file_finder::Toggle",
+      "space o": "pane::DeploySearch",
 
       "space h": "pane::ActivatePrevItem",
       "space l": "pane::ActivateNextItem",
       "space c space": "editor::ToggleComments",
+
+      // go to search result
+      "g space": "editor::OpenExcerpts",
+      "space e j": "editor::ExpandExcerptsDown",
+      "space e k": "editor::ExpandExcerptsUp",
 
       // multi-cursor
       "cmd-shift-d": "editor::SelectPrevious",
@@ -50,7 +75,6 @@
       "space e e": "diagnostics::Deploy",
       "space e w": "diagnostics::ToggleWarnings",
       // view
-      "space v f": "project_panel::ToggleFocus",
       "space v n": "editor::ToggleLineNumbers",
       "space v i": "editor::ToggleInlayHints",
       // Git
@@ -62,6 +86,12 @@
     "bindings": {}
   },
   {
+    "context": "Editor && vim_mode == insert",
+    "bindings": {
+      "ctrl-w": "editor::DeleteToPreviousWordStart"
+    }
+  },
+  {
     "context": "os == linux && ((Editor && vim_mode == normal) || Terminal) && !VimWaiting && !menu",
     "bindings": {
       "ctrl-t ctrl-t": "terminal_panel::ToggleFocus",
@@ -70,6 +100,7 @@
       "ctrl-t ctrl-h": "pane::ActivatePrevItem",
       "ctrl-t ctrl-l": "pane::ActivateNextItem",
       "ctrl-x ctrl-c": "pane::CloseActiveItem",
+
       "alt-j": "workspace::ToggleBottomDock"
     }
   },
@@ -106,17 +137,43 @@
       ",": "editor::SplitSelectionIntoLines"
     }
   },
+
   {
-    "context": "Editor && vim_mode == insert",
+    "context": "ProjectSearchBar",
     "bindings": {
-      "ctrl-w": "editor::DeleteToPreviousWordStart"
+      "space b c": "pane::CloseActiveItem",
+      "escape escape": "pane::CloseActiveItem"
+    }
+  },
+
+  // Panel stuff
+  {
+    "context": "Editor && VimControl && !VimWaiting && !menu || OutlinePanel || ProjectPanel || Assistant",
+    "bindings": {
+      "space v h": "workspace::ToggleLeftDock",
+      "space v l": "workspace::ToggleRightDock",
+
+      "space v o": "outline_panel::ToggleFocus",
+      "space v p": "project_panel::ToggleFocus",
+      "space v a": "assistant::ToggleFocus"
     }
   },
   {
-    "context": "Pane",
+    "context": "OutlinePanel",
     "bindings": {
-      "ctrl-w": null,
-      "shift-escape": null
+      "space l": "outline_panel::ToggleFocus"
+    }
+  },
+  {
+    "context": "ProjectPanel",
+    "bindings": {
+      "space l": "project_panel::ToggleFocus"
+    }
+  },
+  {
+    "context": "Assistant",
+    "bindings": {
+      "space h": "assistant::ToggleFocus"
     }
   }
 ]

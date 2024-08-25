@@ -56,6 +56,13 @@
 (fn sel-cmd [s desc] [(.. "<cmd>'<,'>" s "<cr>") desc])
 (fn rebind [s desc] [s desc])
 
+(fn key-map [obj]
+  (icollect [key val (pairs obj)]
+    (utils.prepend key val)))
+(fn key [bind desc]
+  {1 bind :desc desc})
+
+
 
 (fn format []
   (if (a.some #$1.server_capabilities.documentFormattingProvider (vim.lsp.get_active_clients))
@@ -74,6 +81,25 @@
   (vim.diagnostic.config {:virtual_lines {:only_current_line true}}))
 
 (wk.setup {})
+
+(wk.add
+  (key-map
+    {"<leader>c" {:name "+comment out"}
+     "<leader>e" {:name "+emmet"}
+
+     "<leader>[" (cmd "HopWord" "Hop to a word")
+     "<leader>h" (cmd "bprevious"              "previous buffer")
+     "<leader>l" (cmd "bnext"                  "next buffer")
+     "<leader>o" (cmd "Telescope live_grep"    "Grep files")
+     "<leader>P" (cmd "Telescope frecency frecency default_text=:CWD:"     "Frecency magic")
+     "<leader>p" (cmd "Telescope find_files"   "Open file-browser")
+     "<leader>:" (cmd "Telescope commands"     "Search command with fzf")
+     "<leader>s" (cmd "w"                      "Save file")
+     "<leader>g" (cmd "Neogit"                 "Git")
+
+     "<leader>n" [(. (require :persistence) :load) "Load last session"]}))
+
+
 (wk.register 
  {"c" {:name "+comment out"}
   "e" {:name "+emmet"}
@@ -154,35 +180,32 @@
        "w" (cmd ":Bwipeout!"         "wipeout open buffer")}}
   
 
- {:prefix"<leader>"})
+ {:prefix "<leader>"})
 
-(wk.register
- {"<tab>" "which_key_ignore"
-  "gss" "init selection"
-  "z" {:name "+folds" 
-       "c" (cmd "foldclose" "close fold")
-       "o" (cmd "foldopen"  "open fold")}})
+(wk.add
+  (key-map
+    {"<tab>" {:hidden true}
+     "gss" {:desc "init selection"}
+     "z" {:group "folds"}
+     "zc" (key "<cmd>foldclose<cr>" "close fold")
+     "zo" (key "<cmd>foldopen<cr>" "open fold")}))
 
+(wk.add
+  (key-map {"<tab>" {:hidden true :mode "i"}}))
 
-(wk.register
- {"<tab>" "which_key_ignore"}
- {:mode "i"})
+(wk.add
+  (utils.prepend
+    (key-map
+      {"<leader>s" (sel-cmd "VSSplit" "keep selection visible in split")
+       "<leader>z" [open-selection-zotero "open in zotero"]
 
-(wk.register
- {"s" (sel-cmd "VSSplit" "keep selection visible in split")
-  "z" [open-selection-zotero "open in zotero"]}
- {:prefix "<leader>"
-  :mode "v"})
-           
-(wk.register
- {:name "+Selection"
-  "j" "increment selection"
-  "k" "decrement selection"
-  "l" "increment node"
-  "h" "decrement node"}
- {:prefix "gs"
-  :mode "v"})
-
+       "gs" {:group "+Selection"}
+       "gsj" {:desc "increment selection"}
+       "gsk" {:desc "decrement selection"}
+       "gsl" {:desc "increment node"}
+       "gsh" {:desc "decrement node"}})
+    {:mode "v"}))
+   
 
 (set vim.o.timeoutlen 200)
 

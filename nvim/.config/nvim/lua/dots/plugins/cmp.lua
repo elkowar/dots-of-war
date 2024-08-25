@@ -10,11 +10,11 @@ local function item_formatter(item, vim_item)
     do
       local t_2_ = item
       if (nil ~= t_2_) then
-        t_2_ = (t_2_).completion_item
+        t_2_ = t_2_.completion_item
       else
       end
       if (nil ~= t_2_) then
-        t_2_ = (t_2_).detail
+        t_2_ = t_2_.detail
       else
       end
       details = t_2_

@@ -1,11 +1,11 @@
 -- [nfnl] Compiled from fnl/dots/plugins/plugins.fnl by https://github.com/Olical/nfnl, do not edit.
 local function _1_()
-  do end (require("lsp_lines")).setup()
+  require("lsp_lines").setup()
   return vim.diagnostic.config({virtual_lines = false})
 end
 local function _2_()
-  do end (require("litee.lib")).setup()
-  return (require("litee.gh")).setup()
+  require("litee.lib").setup()
+  return require("litee.gh").setup()
 end
 local function _3_()
   vim.g.code_action_menu_show_details = false

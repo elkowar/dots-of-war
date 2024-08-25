@@ -48,12 +48,14 @@
   (fn vim-mode []
     (.. " " (or (. modes (vim.fn.mode) :text) vim.fn.mode) " "))
 
+  ;(fn lsp-progress-provider []
+    ;(let [msgs (vim.lsp.util.get_progress_messages)
+          ;s (icollect [_ msg (ipairs msgs)]
+                      ;(when msg.message
+                         ;(.. msg.title " " msg.message)))]
+       ;(or-empty (str.join " | " s))))
   (fn lsp-progress-provider []
-    (let [msgs (vim.lsp.util.get_progress_messages)
-          s (icollect [_ msg (ipairs msgs)]
-                      (when msg.message
-                         (.. msg.title " " msg.message)))]
-       (or-empty (str.join " | " s))))
+    (vim.lsp.status))
 
 
 
