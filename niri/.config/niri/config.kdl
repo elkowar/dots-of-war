@@ -68,103 +68,58 @@ layout {
 
 }
 
-// Add lines like this to spawn processes at startup.
-// Note that running niri as a session supports xdg-desktop-autostart,
-// which may be more convenient to use.
-// See the binds section below for more spawn examples.
 spawn-at-startup "bash" "-c" "eww -c ~/.config/eww-bar open-many bar_1 niri_scroller"
 spawn-at-startup "xwayland-satellite"
 spawn-at-startup "bash" "-c" "1password --silent"
 spawn-at-startup "wl-paste" "--watch" "xclip -in -sel c"
 spawn-at-startup "~/.config/niri/clipboardfix.sh"
 spawn-at-startup "clipse -listen"
+spawn-at-startup "wl-clip-persist" "--clipboard" "regular"
 prefer-no-csd
 
 screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 
-// Animation settings.
-// The wiki explains how to configure individual animations:
-// https://github.com/YaLTeR/niri/wiki/Configuration:-Animations
 animations {
-    //window-resize {
-        //spring damping-ratio=0.25 stiffness=300 epsilon=0.00001
-    //}
-    //window-movement {
-        //spring damping-ratio=0.4 stiffness=300 epsilon=0.00001
-    //}
-    //horizontal-view-movement {
-        //spring damping-ratio=0.6 stiffness=500 epsilon=0.00001
-    //}
     window-open {
         duration-ms 200
         curve "ease-out-quad"
-
         custom-shader r"
             float map(float value, float min1, float max1, float min2, float max2) {
                 return min2 + (value - min1) * (max2 - min2) / (max1 - min1);
             }
-            vec4 stretchy_thingy(vec3 coords_geo, vec3 size_geo) {
+                vec4 open_color(vec3 coords_geo, vec3 size_geo) {
                 float cur = niri_clamped_progress;
-                //if (coords_geo.x < 0.5 - (cur/2.0) || coords_geo.x > 0.5 + (cur/2.0)) {
                 if (coords_geo.x > cur) {
                     return vec4(0.0);
-                } else {
-                    vec3 coord = vec3(map(coords_geo.x,0.0, cur, 0.0, 1.0 ), coords_geo.y, coords_geo.z);
-                    vec3 coords_tex = niri_geo_to_tex * coord;
-                    return texture2D(niri_tex, coords_tex.st);
                 }
-            }
-
-            vec4 open_color(vec3 coords_geo, vec3 size_geo) {
-                return stretchy_thingy(coords_geo, size_geo);
+                vec3 coord = vec3(map(coords_geo.x,0.0, cur, 0.0, 1.0 ), coords_geo.y, coords_geo.z);
+                return texture2D(niri_tex, (niri_geo_to_tex * coord).st);
             }
         "
     }
     window-close {
         duration-ms 200
         curve "ease-out-quad"
-
         custom-shader r"
             float map(float value, float min1, float max1, float min2, float max2) {
                 return min2 + (value - min1) * (max2 - min2) / (max1 - min1);
             }
-            vec4 stretchy_thingy(vec3 coords_geo, vec3 size_geo) {
+            vec4 close_color(vec3 coords_geo, vec3 size_geo) {
                 float cur = 1.0-niri_clamped_progress;
                 if (coords_geo.x > cur) {
                     return vec4(0.0);
-                } else {
-                    vec3 coord = vec3(map(coords_geo.x,0.0, cur, 0.0, 1.0), coords_geo.y, coords_geo.z);
-                    vec3 coords_tex = niri_geo_to_tex * coord;
-                    return texture2D(niri_tex, coords_tex.st);
                 }
-            }
-
-            vec4 close_color(vec3 coords_geo, vec3 size_geo) {
-                return stretchy_thingy(coords_geo, size_geo);
+                vec3 coord = vec3(map(coords_geo.x,0.0, cur, 0.0, 1.0), coords_geo.y, coords_geo.z);
+                return texture2D(niri_tex, (niri_geo_to_tex * coord).st);
             }
         "
     }
-}
-
-// Window rules let you adjust behavior for individual windows.
-// Find more information on the wiki:
-// https://github.com/YaLTeR/niri/wiki/Configuration:-Window-Rules
-
-// Work around WezTerm's initial configure bug
-// by setting an empty default-column-width.
-window-rule {
-    // This regular expression is intentionally made as specific as possible,
-    // since this is the default config, and we want no false positives.
-    // You can get away with just app-id="wezterm" if you want.
-    match app-id=r#"^org\.wezfurlong\.wezterm$"#
-    default-column-width {}
 }
 
 window-rule {
     match app-id=r#"^foot$"#
     default-column-width { proportion 0.3333; }
 }
-
 
 // Example: block out two password managers from screen capture.
 // (This example rule is commented out with a "/-" in front.)
@@ -187,7 +142,6 @@ window-rule {
 window-rule {
     match title=r#"^.* is sharing your screen.$"#;
 }
-
 
 window-rule {
     clip-to-geometry true
@@ -212,61 +166,31 @@ binds {
 
     Mod+Shift+Q { close-window; }
 
-    Mod+Left  { focus-column-or-monitor-left; }
-    Mod+Down  { focus-window-down; }
-    Mod+Up    { focus-window-up; }
-    Mod+Right { focus-column-or-monitor-right; }
     Mod+H     { focus-column-or-monitor-left; }
     Mod+J     { focus-window-down; }
     Mod+K     { focus-window-up; }
     Mod+L     { focus-column-or-monitor-right; }
 
-    Mod+Shift+Left  { move-column-left; }
-    Mod+Shift+Down  { move-window-down; }
-    Mod+Shift+Up    { move-window-up; }
-    Mod+Shift+Right { move-column-right; }
     Mod+Shift+H     { move-column-left; }
     Mod+Shift+J     { move-window-down; }
     Mod+Shift+K     { move-window-up; }
     Mod+Shift+L     { move-column-right; }
-
-    // Alternative commands that move across workspaces when reaching
-    // the first or last window in a column.
-    // Mod+J     { focus-window-or-workspace-down; }
-    // Mod+K     { focus-window-or-workspace-up; }
-    // Mod+Ctrl+J     { move-window-down-or-to-workspace-down; }
-    // Mod+Ctrl+K     { move-window-up-or-to-workspace-up; }
 
     Mod+Home { focus-column-first; }
     Mod+End  { focus-column-last; }
     Mod+Ctrl+Home { move-column-to-first; }
     Mod+Ctrl+End  { move-column-to-last; }
 
-    Mod+Ctrl+Left  { focus-monitor-left; }
-    Mod+Ctrl+Down  { focus-monitor-down; }
-    Mod+Ctrl+Up    { focus-monitor-up; }
-    Mod+Ctrl+Right { focus-monitor-right; }
     Mod+Ctrl+H     { focus-monitor-left; }
     Mod+Ctrl+J     { focus-monitor-down; }
     Mod+Ctrl+K     { focus-monitor-up; }
     Mod+Ctrl+L     { focus-monitor-right; }
 
-    Mod+Shift+Ctrl+Left  { move-window-to-monitor-left; }
-    Mod+Shift+Ctrl+Down  { move-window-to-monitor-down; }
-    Mod+Shift+Ctrl+Up    { move-window-to-monitor-up; }
-    Mod+Shift+Ctrl+Right { move-window-to-monitor-right; }
     Mod+Shift+Ctrl+H     { move-window-to-monitor-left; }
     Mod+Shift+Ctrl+J     { move-window-to-monitor-down; }
     Mod+Shift+Ctrl+K     { move-window-to-monitor-up; }
     Mod+Shift+Ctrl+L     { move-window-to-monitor-right; }
 
-    // Alternatively, there are commands to move just a single window:
-    // Mod+Shift+Ctrl+Left  { move-window-to-monitor-left; }
-    // ...
-
-    // And you can also move a whole workspace to another monitor:
-    // Mod+Shift+Ctrl+Left  { move-workspace-to-monitor-left; }
-    // ...
 
     Mod+Page_Down      { focus-workspace-down; }
     Mod+Page_Up        { focus-workspace-up; }
@@ -278,21 +202,11 @@ binds {
     Mod+Shift+U         { move-column-to-workspace-down; }
     Mod+Shift+I         { move-column-to-workspace-up; }
 
-    // Alternatively, there are commands to move just a single window:
-    // Mod+Ctrl+Page_Down { move-window-to-workspace-down; }
-    // ...
-
     Mod+Shift+Page_Down { move-workspace-down; }
     Mod+Shift+Page_Up   { move-workspace-up; }
     Mod+Ctrl+U         { move-workspace-down; }
     Mod+Ctrl+I         { move-workspace-up; }
 
-    // You can bind mouse wheel scroll ticks using the following syntax.
-    // These binds will change direction based on the natural-scroll setting.
-    //
-    // To avoid scrolling through workspaces really fast, you can use
-    // the cooldown-ms property. The bind will be rate-limited to this value.
-    // You can set a cooldown on any bind, but it's most useful for the wheel.
     Mod+WheelScrollDown      cooldown-ms=150 { focus-workspace-down; }
     Mod+WheelScrollUp        cooldown-ms=150 { focus-workspace-up; }
     Mod+Ctrl+WheelScrollDown cooldown-ms=150 { move-column-to-workspace-down; }
@@ -305,8 +219,6 @@ binds {
     Mod+Ctrl+WheelScrollRight { move-column-right; }
     Mod+Ctrl+WheelScrollLeft  { move-column-left; }
 
-    // Usually scrolling up and down with Shift in applications results in
-    // horizontal scrolling; these binds replicate that.
     Mod+Shift+WheelScrollDown      { focus-column-right; }
     Mod+Shift+WheelScrollUp        { focus-column-left; }
     // Mod+Ctrl+Shift+WheelScrollDown { move-column-right; }
@@ -321,14 +233,6 @@ binds {
     // Mod+TouchpadScrollDown { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.02+"; }
     // Mod+TouchpadScrollUp   { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.02-"; }
 
-    // You can refer to workspaces by index. However, keep in mind that
-    // niri is a dynamic workspace system, so these commands are kind of
-    // "best effort". Trying to refer to a workspace index bigger than
-    // the current workspace count will instead refer to the bottommost
-    // (empty) workspace.
-    //
-    // For example, with 2 workspaces + 1 empty, indices 3, 4, 5 and so on
-    // will all refer to the 3rd workspace.
     Mod+1 { focus-workspace 1; }
     Mod+2 { focus-workspace 2; }
     Mod+3 { focus-workspace 3; }
@@ -368,31 +272,13 @@ binds {
     Mod+Shift+F { fullscreen-window; }
     Mod+C { center-column; }
 
-    // Finer width adjustments.
-    // This command can also:
-    // * set width in pixels: "1000"
-    // * adjust width in pixels: "-5" or "+5"
-    // * set width as a percentage of screen width: "25%"
-    // * adjust width as a percentage of screen width: "-10%" or "+10%"
-    // Pixel sizes use logical, or scaled, pixels. I.e. on an output with scale 2.0,
-    // set-column-width "100" will make the column occupy 200 physical screen pixels.
     Mod+Minus { set-column-width "-10%"; }
     Mod+Shift+Equal { set-column-width "+10%"; }
     Mod+Equal { set-column-width "+10%"; }
 
-    // Finer height adjustments when in column with other windows.
     Mod+Ctrl+Minus { set-window-height "-10%"; }
     Mod+Ctrl+Equal { set-window-height "+10%"; }
     Mod+Ctrl+Shift+Equal { set-window-height "+10%"; }
-
-    // Actions to switch layouts.
-    // Note: if you uncomment these, make sure you do NOT have
-    // a matching layout switch hotkey configured in xkb options above.
-    // Having both at once on the same hotkey will break the switching,
-    // since it will switch twice upon pressing the hotkey (once by xkb, once by niri).
-    // Mod+Space       { switch-layout "next"; }
-    // Mod+Shift+Space { switch-layout "prev"; }
-
     Mod+Shift+S { screenshot; }
     Ctrl+Print { screenshot-screen; }
     Alt+Print { screenshot-window; }
@@ -408,6 +294,5 @@ binds {
 
     Ctrl+Escape { spawn "killall" "-s" "SIGINT" "wf-recorder"; }
 
-    // The quit action will show a confirmation dialog to avoid accidental exits.
     Mod+Shift+E { quit; }
 }
