@@ -13,7 +13,7 @@
     }
   },
   {
-    "context": "os == macos && EmptyPane",
+    "context": "EmptyPane",
     "bindings": {
       ":": "command_palette::Toggle",
       "space p": "file_finder::Toggle"
@@ -38,7 +38,7 @@
     }
   },
   {
-    "context": "Editor && VimControl && !VimWaiting && !menu",
+    "context": "EmptyPane || Editor && VimControl && !VimWaiting && !menu",
     "bindings": {
       "space b c": "pane::CloseActiveItem",
       ":": "command_palette::Toggle",
@@ -59,6 +59,8 @@
       "cmd-shift-l": "editor::SelectAllMatches",
       "ctrl-j": "editor::AddSelectionBelow",
       "ctrl-k": "editor::AddSelectionAbove",
+      "alt-d": "editor::SelectNext",
+      "alt-j": "editor::SelectAllMatches",
       // lsp
       "space m f": "editor::Format",
       "space m /": "project_symbols::Toggle",
@@ -148,7 +150,7 @@
 
   // Panel stuff
   {
-    "context": "Editor && VimControl && !VimWaiting && !menu || OutlinePanel || ProjectPanel || Assistant",
+    "context": "Editor && VimControl && !VimWaiting && !menu || OutlinePanel || ProjectPanel || Assistant || EmptyPane",
     "bindings": {
       "space v h": "workspace::ToggleLeftDock",
       "space v l": "workspace::ToggleRightDock",
