@@ -1,0 +1,19 @@
+// Static tasks configuration.
+[
+  {
+    "label": "Cargo test",
+    "command": "cargo nextest run",
+    "env": {},
+    //"cwd": "/path/to/working/directory",
+    "use_new_terminal": false,
+    "allow_concurrent_runs": false
+  },
+  {
+    "label": "Cargo run",
+    "command": "cargo run",
+    "env": {},
+    //"cwd": "/path/to/working/directory",
+    "use_new_terminal": false,
+    "allow_concurrent_runs": false
+  }
+]

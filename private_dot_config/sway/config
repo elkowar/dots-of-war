@@ -1,0 +1,220 @@
+set $mod Mod4
+set $left h
+set $down j
+set $up k
+set $right l
+set $term foot
+# set $menu dmenu_path | dmenu | xargs swaymsg exec --
+set $rofi_cmd rofi -terminal '$term'
+set $menu $rofi_cmd -show combi -combi-modes drun#run -modes combi
+
+set $out-vert HDMI-A-1
+set $out-main DP-2
+
+    #timeout 300 'swaylock -f -c 000000' \
+exec swayidle -w \
+    timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on" && sleep 5 && eww -c "$HOME/.config/eww-bar" reload' \
+    before-sleep 'swaylock -f -c 000000'
+
+exec mako
+exec libinput-gestures-setup start
+
+set $WOBSOCK $XDG_RUNTIME_DIR/wob.sock
+exec mkfifo $WOBSOCK && tail -f $WOBSOCK | wob
+
+
+
+exec_always import-gsettings
+
+
+output * bg /home/elk/Pictures/wallpapers/lamps_window_large.jpeg fill
+#output * bg /usr/share/backgrounds/default-dark.png fill
+
+output HDMI-A-1 {
+    resolution 2560x1440@99.982Hz
+    position 0,0 
+    transform 90 
+}
+output DP-2 {
+    resolution 3440x1440
+    position 1440,0 
+}
+
+
+bindsym XF86AudioRaiseVolume exec pamixer -ui 2 && pamixer --get-volume > $WOBSOCK
+bindsym XF86AudioLowerVolume exec pamixer -ud 2 && pamixer --get-volume > $WOBSOCK
+bindsym XF86AudioMute exec pamixer --toggle-mute && ( pamixer --get-mute && echo 0 > $WOBSOCK ) || pamixer --get-volume > $WOBSOCK
+
+bindsym XF86MonBrightnessDown exec brightnessctl set 5%- | sed -En 's/.*\(([0-9]+)%\).*/\1/p' | tee /tmp/brightness > $WOBSOCK
+bindsym XF86MonBrightnessUp exec brightnessctl set +5% | sed -En 's/.*\(([0-9]+)%\).*/\1/p' | tee /tmp/brightness > $WOBSOCK
+exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK
+
+
+
+# visuals 
+gaps inner 10
+default_border pixel 1
+
+
+client.focused "#ebdbb2" "#282828" "#8ec07c" "#8ec07c" "#ebdbb2"
+client.unfocused "#1d2021" "#1d2021" "#ebdbb2" "#00000000"
+client.focused_inactive "#282828" "#282828" "#8ec07c" "#00000000"
+
+hide_edge_borders smart
+tiling_drag enable
+
+
+
+input "type:touchpad" {
+    dwt enabled
+    tap enabled
+    natural_scroll enabled
+    middle_emulation enabled
+}
+
+input "type:keyboard" {
+    xkb_options compose:ralt
+    xkb_layout "us"
+    xkb_options "compose:ralt"
+    repeat_delay 250
+    repeat_rate 40
+}
+
+input "1133:50503:Logitech_USB_Receiver" {
+    tap enabled
+    natural_scroll disabled
+    dwt enabled
+    accel_profile "adaptive"
+    pointer_accel -0.7
+}
+
+
+    bindsym $mod+t exec $term
+    bindsym $mod+Shift+q kill
+    floating_modifier $mod normal
+    bindsym $mod+Shift+c reload
+    bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
+
+    bindsym $mod+Shift+p exec rofi -show drun -theme sidebar
+
+    bindsym Ctrl+Shift+space exec 1password --quick-access
+
+    # Move your focus around
+    bindsym $mod+$left focus left
+    bindsym $mod+$down focus down
+    bindsym $mod+$up focus up
+    bindsym $mod+$right focus right
+    # Or use $mod+[up|down|left|right]
+    bindsym $mod+Left focus left
+    bindsym $mod+Down focus down
+    bindsym $mod+Up focus up
+    bindsym $mod+Right focus right
+
+    # Move the focused window with the same, but add Shift
+    bindsym $mod+Shift+$left move left
+    bindsym $mod+Shift+$down move down
+    bindsym $mod+Shift+$up move up
+    bindsym $mod+Shift+$right move right
+    # Ditto, with arrow keys
+    bindsym $mod+Shift+Left move left
+    bindsym $mod+Shift+Down move down
+    bindsym $mod+Shift+Up move up
+    bindsym $mod+Shift+Right move right
+#
+# Workspaces:
+#
+    # Switch to workspace
+    bindsym $mod+1 workspace number 1
+    bindsym $mod+2 workspace number 2
+    bindsym $mod+3 workspace number 3
+    bindsym $mod+4 workspace number 4
+    bindsym $mod+5 workspace number 5
+    bindsym $mod+6 workspace number 6
+    bindsym $mod+7 workspace number 7
+    bindsym $mod+8 workspace number 8
+    bindsym $mod+9 workspace number 9
+    bindsym $mod+0 workspace number 10
+    # Move focused container to workspace
+    bindsym $mod+Shift+1 move container to workspace number 1
+    bindsym $mod+Shift+2 move container to workspace number 2
+    bindsym $mod+Shift+3 move container to workspace number 3
+    bindsym $mod+Shift+4 move container to workspace number 4
+    bindsym $mod+Shift+5 move container to workspace number 5
+    bindsym $mod+Shift+6 move container to workspace number 6
+    bindsym $mod+Shift+7 move container to workspace number 7
+    bindsym $mod+Shift+8 move container to workspace number 8
+    bindsym $mod+Shift+9 move container to workspace number 9
+    bindsym $mod+Shift+0 move container to workspace number 10
+    # Note: workspaces can have any name you want, not just numbers.
+    # We just use 1-10 as the default.
+#
+# Layout stuff:
+#
+    # You can "split" the current object of your focus with
+    # $mod+b or $mod+v, for horizontal and vertical splits
+    # respectively.
+    bindsym $mod+Shift+b splith
+    bindsym $mod+Shift+v splitv
+
+    # Switch the current container between different layout styles
+    bindsym $mod+s layout stacking
+    bindsym $mod+w layout tabbed
+    bindsym $mod+e layout toggle split
+
+    bindsym $mod+f fullscreen
+    bindsym $mod+Shift+space floating toggle
+    bindsym $mod+space focus mode_toggle
+    bindsym $mod+a focus parent
+
+
+bindsym $mod+Shift+S exec grim -g "$(slurp)" - | wl-copy
+#bindsym $mod+Shift+S exec flameshot gui
+bindsym $mod+b exec google-chrome --enable-features=TouchpadOverscrollHistoryNavigation
+
+bindsym $mod+Shift+minus move scratchpad
+bindsym $mod+minus scratchpad show
+
+bindsym $mod+r mode "resize"
+mode "resize" {
+    bindsym $left resize shrink width 10px
+    bindsym $down resize grow height 10px
+    bindsym $up resize shrink height 10px
+    bindsym $right resize grow width 10px
+
+    # Return to default mode
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
+#
+# Status Bar:
+#
+# Read `man 5 sway-bar` for more information about this section.
+# bar {
+#     position bottom
+# 
+#     # When the status_command prints a new line to stdout, swaybar updates.
+#     # The default just shows the current date and time.
+#     status_command while echo "$(/home/leon/scripts/battery_indicator.sh) // $(date +'%Y-%m-%d - %H:%M:%S %p')"; do sleep 1; done
+#     font "cozette 8"
+#     #font "Terminus (TTF)"
+#     height 20
+# 
+# 
+#     colors {
+#         statusline #ebdbb2
+#         background #1d202100
+#         inactive_workspace #1d202100 #1d202100 #ebdbb2
+#         focused_workspace  #282828   #83c07c   #282828
+#         active_workspace   #28282800 #83c07c   #282828
+#     }
+# }
+
+# include ~/.config/sway/config.d/*
+
+# required for flameshot
+exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK
+exec hash dbus-update-activation-environment 2>/dev/null && dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK
+for_window [app_id="flameshot"] border pixel 0, floating enable, fullscreen disable, move absolute position 0 0
+
+exec eww -c ~/.config/eww-bar open bar_1 --restart &

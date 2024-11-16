@@ -109,6 +109,9 @@ if command -v luarocks >/dev/null; then
     eval "$(luarocks path)"
 fi
 
+alias chvim="chezmoi edit --watch "
+alias ch="chezmoi "
+
 export EDITOR=nvim
 export VISUAL=nvim
 
