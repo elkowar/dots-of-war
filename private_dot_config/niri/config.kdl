@@ -1,0 +1,320 @@
+input {
+    keyboard {
+        xkb {
+            layout "us"
+            options "grp:win_space_toggle,compose:ralt,ctrl:nocaps"
+        }
+
+        repeat-delay 280
+        repeat-rate 50
+    }
+    touchpad {
+        dwt
+        tap
+        natural-scroll
+        // accel-speed 0.2
+    }
+    mouse {
+        accel-speed -0.1
+    }
+    //warp-mouse-to-focus
+    focus-follows-mouse max-scroll-amount="20%"
+
+    workspace-auto-back-and-forth
+}
+
+cursor {
+    xcursor-theme "phinger-cursors-light"
+    xcursor-size 12
+}
+
+environment {
+    DISPLAY ":0"
+    // GDK_BACKEND "x11"
+}
+
+// {{ if eq .chezmoi.hostname "thinkix" }}
+output "Philips Consumer Electronics Company PHL 345B1C 0x00008E7C" {
+    mode "3440x1440@60"
+    scale 1
+    transform "normal"
+    position x=0 y=0
+}
+
+output "DP-4" {
+    off
+}
+
+output "eDP-1" {
+    mode "1920x1080@60"
+    scale 1
+    transform "normal"
+    position x=0 y=1440
+}
+// {{end}}
+// {{ else }}
+
+output "DP-2" {
+    mode "3440x1440@99.982"
+    //variable-refresh-rate
+    scale 1
+    transform "normal"
+    position x=1440 y=0
+}
+
+output "HDMI-A-1" {
+    mode "2560x1440"
+    scale 1
+    position x=0 y=0
+    transform "270"
+}
+// {{ end }}
+
+layout {
+    gaps 16
+    // center-focused-column "always" // - "never", "always" "on-overflow"
+    center-focused-column "on-overflow" // - "never", "always" "on-overflow"
+    // always-center-single-column
+    preset-column-widths {
+        proportion 0.33333
+        proportion 0.5
+        proportion 0.66667
+    }
+
+    default-column-width { proportion 0.33333; }
+    focus-ring {
+        width 2
+        active-color "#8ec07c"
+        inactive-color "#1d2021"
+    }
+
+}
+
+spawn-at-startup "bash" "-c" "eww -c ~/.config/eww-bar open-many bar_1 niri_scroller"
+spawn-at-startup "xwayland-satellite"
+spawn-at-startup "bash" "-c" "1password --silent"
+spawn-at-startup "wl-paste" "--watch" "xclip -in -sel c"
+spawn-at-startup "~/.config/niri/clipboardfix.sh"
+spawn-at-startup "clipse -listen"
+spawn-at-startup "wl-clip-persist" "--clipboard" "regular"
+prefer-no-csd
+
+screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
+
+animations {
+    window-open {
+        duration-ms 200
+        curve "ease-out-quad"
+        custom-shader r"
+            float map(float value, float min1, float max1, float min2, float max2) {
+                return min2 + (value - min1) * (max2 - min2) / (max1 - min1);
+            }
+                vec4 open_color(vec3 coords_geo, vec3 size_geo) {
+                float cur = niri_clamped_progress;
+                if (coords_geo.x > cur) {
+                    return vec4(0.0);
+                }
+                vec3 coord = vec3(map(coords_geo.x,0.0, cur, 0.0, 1.0 ), coords_geo.y, coords_geo.z);
+                return texture2D(niri_tex, (niri_geo_to_tex * coord).st);
+            }
+        "
+    }
+    window-close {
+        duration-ms 200
+        curve "ease-out-quad"
+        custom-shader r"
+            float map(float value, float min1, float max1, float min2, float max2) {
+                return min2 + (value - min1) * (max2 - min2) / (max1 - min1);
+            }
+            vec4 close_color(vec3 coords_geo, vec3 size_geo) {
+                float cur = 1.0-niri_clamped_progress;
+                if (coords_geo.x > cur) {
+                    return vec4(0.0);
+                }
+                vec3 coord = vec3(map(coords_geo.x,0.0, cur, 0.0, 1.0), coords_geo.y, coords_geo.z);
+                return texture2D(niri_tex, (niri_geo_to_tex * coord).st);
+            }
+        "
+    }
+}
+
+window-rule {
+    match app-id=r#"^foot$"#
+    default-column-width { proportion 0.3333; }
+}
+
+// Example: block out two password managers from screen capture.
+// (This example rule is commented out with a "/-" in front.)
+window-rule {
+    match app-id=r#"1Password"#
+    match title=r#"[gG]mail"#
+    match app-id=r#".*[mM]ako.*"#
+    match title=r#".*[Ww]hats[aA]pp.*$"#
+    // opacity 0.5
+
+    block-out-from "screen-capture"
+}
+
+window-rule {
+    match app-id=r#"^[gG]edit$"#;
+    match app-id=r#"^[eE]og$"#;
+    // fake-fullscreen true
+}
+
+window-rule {
+    match title=r#"^.* is sharing your screen.$"#;
+}
+
+window-rule {
+    clip-to-geometry true
+    geometry-corner-radius 8
+}
+
+binds {
+    Mod+Shift+Slash { show-hotkey-overlay; }
+
+    // Suggested binds for running programs: terminal, app launcher, screen locker.
+    Mod+T { spawn "foot"; }
+    Mod+B { spawn "bash" "-c" "unset DISPLAY && google-chrome --ozone-platform-hint=auto --enable-features=VaapiVideoDecodeLinuxGL --enable-features=TouchpadOverscrollHistoryNavigation"; }
+    Mod+Shift+P { spawn "~/.config/rofi/launchers/type-2/launcher.sh"; }
+    Mod+Shift+B { spawn "firefox"; }
+
+    // Example volume keys mappings for PipeWire & WirePlumber.
+    // The allow-when-locked=true property makes them work even when the session is locked.
+    XF86AudioRaiseVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1+"; }
+    XF86AudioLowerVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1-"; }
+    XF86AudioMute        allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
+    XF86AudioMicMute     allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle"; }
+
+    Mod+Shift+Q { close-window; }
+
+    Mod+H     { focus-column-or-monitor-left; }
+    Mod+J     { focus-window-down; }
+    Mod+K     { focus-window-up; }
+    Mod+L     { focus-column-or-monitor-right; }
+
+    Mod+Shift+H     { move-column-left; }
+    Mod+Shift+J     { move-window-down; }
+    Mod+Shift+K     { move-window-up; }
+    Mod+Shift+L     { move-column-right; }
+
+    Mod+Home { focus-column-first; }
+    Mod+End  { focus-column-last; }
+    Mod+Ctrl+Home { move-column-to-first; }
+    Mod+Ctrl+End  { move-column-to-last; }
+
+    Mod+Ctrl+H     { focus-monitor-left; }
+    Mod+Ctrl+J     { focus-monitor-down; }
+    Mod+Ctrl+K     { focus-monitor-up; }
+    Mod+Ctrl+L     { focus-monitor-right; }
+
+    Mod+Shift+Ctrl+H     { move-window-to-monitor-left; }
+    Mod+Shift+Ctrl+J     { move-window-to-monitor-down; }
+    Mod+Shift+Ctrl+K     { move-window-to-monitor-up; }
+    Mod+Shift+Ctrl+L     { move-window-to-monitor-right; }
+
+
+    Mod+Page_Down      { focus-workspace-down; }
+    Mod+Page_Up        { focus-workspace-up; }
+    Mod+U              { focus-workspace-down; }
+    Mod+I              { focus-workspace-up; }
+    //Mod+I              { focus-workspace-up create-if-first=true; }
+    Mod+Ctrl+Page_Down { move-column-to-workspace-down; }
+    Mod+Ctrl+Page_Up   { move-column-to-workspace-up; }
+    Mod+Shift+U         { move-column-to-workspace-down; }
+    Mod+Shift+I         { move-column-to-workspace-up; }
+
+    Mod+Shift+Page_Down { move-workspace-down; }
+    Mod+Shift+Page_Up   { move-workspace-up; }
+    Mod+Ctrl+U         { move-workspace-down; }
+    Mod+Ctrl+I         { move-workspace-up; }
+
+    Mod+WheelScrollDown      cooldown-ms=150 { focus-workspace-down; }
+    Mod+WheelScrollUp        cooldown-ms=150 { focus-workspace-up; }
+    Mod+Ctrl+WheelScrollDown cooldown-ms=150 { move-column-to-workspace-down; }
+    Mod+Ctrl+WheelScrollUp   cooldown-ms=150 { move-column-to-workspace-up; }
+    // Mod+Ctrl+Shift+WheelScrollDown { scroll-viewport-left amount=0.1; }
+    // Mod+Ctrl+Shift+WheelScrollUp   { scroll-viewport-right amount=0.1; }
+
+    Mod+WheelScrollRight      { focus-column-right; }
+    Mod+WheelScrollLeft       { focus-column-left; }
+    Mod+Ctrl+WheelScrollRight { move-column-right; }
+    Mod+Ctrl+WheelScrollLeft  { move-column-left; }
+
+    Mod+Shift+WheelScrollDown      { focus-column-right; }
+    Mod+Shift+WheelScrollUp        { focus-column-left; }
+    // Mod+Ctrl+Shift+WheelScrollDown { move-column-right; }
+    // Mod+Ctrl+Shift+WheelScrollUp   { move-column-left; }
+
+    // Similarly, you can bind touchpad scroll "ticks".
+    // Touchpad scrolling is continuous, so for these binds it is split into
+    // discrete intervals.
+    // These binds are also affected by touchpad's natural-scroll, so these
+    // example binds are "inverted", since we have natural-scroll enabled for
+    // touchpads by default.
+    // Mod+TouchpadScrollDown { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.02+"; }
+    // Mod+TouchpadScrollUp   { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.02-"; }
+
+    Mod+1 { focus-workspace 1; }
+    Mod+2 { focus-workspace 2; }
+    Mod+3 { focus-workspace 3; }
+    Mod+4 { focus-workspace 4; }
+    Mod+5 { focus-workspace 5; }
+    Mod+6 { focus-workspace 6; }
+    Mod+7 { focus-workspace 7; }
+    Mod+8 { focus-workspace 8; }
+    Mod+9 { focus-workspace 9; }
+    Mod+Ctrl+1 { move-column-to-workspace 1; }
+    Mod+Ctrl+2 { move-column-to-workspace 2; }
+    Mod+Ctrl+3 { move-column-to-workspace 3; }
+    Mod+Ctrl+4 { move-column-to-workspace 4; }
+    Mod+Ctrl+5 { move-column-to-workspace 5; }
+    Mod+Ctrl+6 { move-column-to-workspace 6; }
+    Mod+Ctrl+7 { move-column-to-workspace 7; }
+    Mod+Ctrl+8 { move-column-to-workspace 8; }
+    Mod+Ctrl+9 { move-column-to-workspace 9; }
+
+    // Alternatively, there are commands to move just a single window:
+    // Mod+Ctrl+1 { move-window-to-workspace 1; }
+
+    // Switches focus between the current and the previous workspace.
+    // Mod+Tab { focus-workspace-previous; }
+
+    Mod+Comma  { consume-window-into-column; }
+    Mod+Period { consume-or-expel-window-right; }
+    //Mod+Period { expel-window-from-column; }
+
+    // There are also commands that consume or expel a single window to the side.
+     Mod+BracketLeft  { consume-or-expel-window-left; }
+     Mod+BracketRight { consume-or-expel-window-right; }
+
+    Mod+R { switch-preset-column-width; }
+    Mod+Shift+R { reset-window-height; }
+    Mod+F { maximize-column; }
+    Mod+Shift+F { fullscreen-window; }
+    Mod+C { center-column; }
+
+    Mod+Minus { set-column-width "-10%"; }
+    Mod+Shift+Equal { set-column-width "+10%"; }
+    Mod+Equal { set-column-width "+10%"; }
+
+    Mod+Ctrl+Minus { set-window-height "-10%"; }
+    Mod+Ctrl+Equal { set-window-height "+10%"; }
+    Mod+Ctrl+Shift+Equal { set-window-height "+10%"; }
+    Mod+Shift+S { screenshot; }
+    Ctrl+Print { screenshot-screen; }
+    Alt+Print { screenshot-window; }
+    Mod+Shift+V { spawn "alacritty" "-e" "clipse"; }
+
+    Ctrl+Shift+Print {
+        spawn "sh" "-c" r#"
+            file=~/Videos/recordings/"$(date +%s)".mp4
+            wf-recorder -c h264_vaapi -r 60 --bframes 0 -g "$(slurp -b '#00000090' -w 0)" -f "$file"
+            wl-copy file:/"$file" -t text/uri-list
+        "#;
+    }
+
+    Ctrl+Escape { spawn "killall" "-s" "SIGINT" "wf-recorder"; }
+
+    Mod+Shift+E { quit; }
+}
