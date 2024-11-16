@@ -8,6 +8,11 @@ setopt HIST_IGNORE_ALL_DUPS
 setopt EXTENDED_HISTORY
 setopt SHARE_HISTORY
 
+if [ ! -f "$HISTFILE" ]; then
+    mkdir -p "$(dirname "$HISTFILE")"
+    touch "$HISTFILE"
+fi
+
 source "$ZDOTDIR/utils.zsh"
 
 
