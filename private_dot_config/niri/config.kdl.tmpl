@@ -1,3 +1,4 @@
+// vim:set ft=kdl:
 input {
     keyboard {
         xkb {
@@ -51,7 +52,6 @@ output "eDP-1" {
     transform "normal"
     position x=0 y=1440
 }
-// {{end}}
 // {{ else }}
 
 output "DP-2" {
@@ -97,6 +97,9 @@ spawn-at-startup "wl-paste" "--watch" "xclip -in -sel c"
 spawn-at-startup "~/.config/niri/clipboardfix.sh"
 spawn-at-startup "clipse -listen"
 spawn-at-startup "wl-clip-persist" "--clipboard" "regular"
+//{{if eq .chezmoi.hostname "thinkix" }}
+spawn-at-startup "bash" "-c" "swaybg -m fill -i ~/wallpapers/green_leaves.jpg"
+//{{end}}
 prefer-no-csd
 
 screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
