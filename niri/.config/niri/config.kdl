@@ -33,20 +33,39 @@ environment {
     // GDK_BACKEND "x11"
 }
 
-output "DP-2" {
-    mode "3440x1440@99.982"
-    //variable-refresh-rate
+output "Philips Consumer Electronics Company PHL 345B1C 0x00008E7C" {
+    mode "3440x1440@60"
     scale 1
     transform "normal"
-    position x=1440 y=0
+    position x=0 y=0
 }
 
-output "HDMI-A-1" {
-    mode "2560x1440"
-    scale 1
-    position x=0 y=0
-    transform "270"
+output "DP-4" {
+    off
 }
+
+output "eDP-1" {
+    mode "1920x1080@60"
+    scale 1
+    transform "normal"
+    position x=0 y=1440
+}
+
+
+// output "DP-2" {
+//     mode "3440x1440@99.982"
+//     //variable-refresh-rate
+//     scale 1
+//     transform "normal"
+//     position x=1440 y=0
+// }
+
+// output "HDMI-A-1" {
+//     mode "2560x1440"
+//     scale 1
+//     position x=0 y=0
+//     transform "270"
+// }
 
 layout {
     gaps 16
@@ -153,7 +172,7 @@ binds {
 
     // Suggested binds for running programs: terminal, app launcher, screen locker.
     Mod+T { spawn "foot"; }
-    Mod+B { spawn "bash" "-c" "unset DISPLAY && google-chrome --enable-features=TouchpadOverscrollHistoryNavigation"; }
+    Mod+B { spawn "bash" "-c" "unset DISPLAY && google-chrome --ozone-platform-hint=auto --enable-features=VaapiVideoDecodeLinuxGL --enable-features=TouchpadOverscrollHistoryNavigation"; }
     Mod+Shift+P { spawn "~/.config/rofi/launchers/type-2/launcher.sh"; }
     Mod+Shift+B { spawn "firefox"; }
 
