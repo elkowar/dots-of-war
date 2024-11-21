@@ -1,10 +1,11 @@
 // -*- mode: jsonc -*-
 {
     // "layer": "top", // Waybar at top layer
-    // "position": "bottom", // Waybar position (top|bottom|left|right)
-    "height": 24, // Waybar height (to be removed for auto height)
-    // "width": 1280, // Waybar width
-    "spacing": 4, // Gaps between modules (4px)
+     "position": "top", // Waybar position (top|bottom|left|right)
+    //"height": 24, // Waybar height (to be removed for auto height)
+     //"width": 24, // Waybar width
+    "spacing": 6, // Gaps between modules (4px)
+    "reload_style_on_change": true,
     // Choose the order of the modules
     "modules-left": [
         "niri/workspaces",
@@ -19,20 +20,20 @@
         "clock#date"
     ],
     "modules-right": [
-        "mpd",
-        "idle_inhibitor",
+        //"mpd",
+        //"idle_inhibitor",
         "privacy",
-        "pulseaudio",
-        "network",
-        "power-profiles-daemon",
+        //"network",
         "cpu",
         "memory",
         "temperature",
+        "custom/display-scale",
+        "power-profiles-daemon",
+        "pulseaudio",
         "backlight",
         "keyboard-state",
-        "sway/language",
         "battery",
-        "battery#bat2",
+        //"battery#bat2",
         "tray",
         "custom/power"
     ],
@@ -45,8 +46,10 @@
             "discord": "",
             "chat": "<b></b>",
             // Icons by state
-            "active": "",
-            "default": ""
+            //"focused": "◈",
+            "focused": "◆",
+            "active": "◆",
+            "default": "◆"
         }
     },
     "privacy": {
@@ -262,20 +265,8 @@
         },
         "on-click": "pavucontrol"
     },
-    "custom/media": {
-        "format": "{icon} {text}",
-        "return-type": "json",
-        "max-length": 40,
-        "format-icons": {
-            "spotify": "",
-            "default": "🎜"
-        },
-        "escape": true,
-        "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null" // Script in resources folder
-        // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
-    },
     "custom/power": {
-        "format": "⏻ ",
+        "format": "⏻",
         "tooltip": false,
         "menu": "on-click",
         "menu-file": "$HOME/.config/waybar/power_menu.xml", // Menu file in resources folder
@@ -285,5 +276,11 @@
             "suspend": "systemctl suspend",
             "hibernate": "systemctl hibernate"
         }
+    },
+    "custom/display-scale": {
+        "format": "",
+        "on-click": "niri msg output eDP-1 scale 1.0",
+        "on-click-right": "niri msg output eDP-1 scale 1.25"
+
     }
 }
