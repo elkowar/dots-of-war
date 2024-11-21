@@ -27,7 +27,7 @@
  esc    f1     f2     f3     f4     f5     f6     f7     f8     f9     f10    f11   f12            ssrq   slck   pause
  grv    1      2      3      4      5      6      7      8      9      0      -     =      bspc    ins    home   pgup
  tab    q      w      e      r      t      @cy    @cu    @ci    @co    @cp    [     +      ret     del    end    pgdn
- @cps   @ca    @cs    @cd    @cf    g      @ch    @cj    k      @cl    scln   '     \
+ @cps   @ca    @cs    @cd    @cf    g      @ch    @cj    @ck    @cl    @cscln '     \
  lsft   102d   z      x      c      v      b      n      m      ,      .      /     rsft                  up
  lctl   lmet   lalt                 spc                         bspc   ralt                        left   down   rght
  )
@@ -44,7 +44,9 @@
   ch (chord chords h)
   ci (chord chords i)
   cj (chord chords j)
+  ck (chord chords k)
   cl (chord chords l)
+  cscln (chord chords scln)
 )
 
 (defchords chords 100
@@ -60,11 +62,16 @@
   (u) u
   (o) o
   (p) p
+  (k) k
+  (scln) scln
   ;;(y p) (macro = S-.)
-  (u i o) @uml-u
-  (i o p) @uml-o
+  (i o p) @uml-u
+  (k l scln) @uml-o
   (a s d) @uml-a
   (s d f) @uml-s
+  (u i o p) @uml-U
+  (j k l scln) @uml-O
+  (a s d f) @uml-A
 
   (h j) (macro S-scln S-scln)
   ;;(j i) (macro - S-.)
@@ -84,13 +91,16 @@
   uml-o (unicode ö)
   uml-u (unicode ü)
   uml-s (unicode ß)
+  uml-A (unicode Ä)
+  uml-O (unicode Ö)
+  uml-U (unicode Ü)
 
 )
 
 
 
 (deflayer symbols
-_      _      _      _      _      _      _      _      _      _      _      _      _              _      _      _
+lrld   _      _      _      _      _      _      _      _      _      _      _      _              _      _      _
 _      _      _      _      _      _      _      _      _      _      _      _      _      _       _      _      _
 _      _      S-1    S-apos /      \      _      S-[    [      ]      S-]    _      S-8    _       _      _      _
 _      home   S-4    S-9    S-0    end    left   down   up     rght   S-7    S-5    _
