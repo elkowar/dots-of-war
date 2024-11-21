@@ -26,7 +26,7 @@
 (deflayer base
  esc    f1     f2     f3     f4     f5     f6     f7     f8     f9     f10    f11   f12            ssrq   slck   pause
  grv    1      2      3      4      5      6      7      8      9      0      -     =      bspc    ins    home   pgup
- tab    q      w      e      r      t      @cy    @cu    @ci    @co    @cp    [     +      ret     del    end    pgdn
+ @tab   q      w      e      r      t      @cy    @cu    @ci    @co    @cp    [     +      ret     del    end    pgdn
  @cps   @ca    @cs    @cd    @cf    g      @ch    @cj    @ck    @cl    @cscln '     \
  lsft   102d   z      x      c      v      b      n      m      ,      .      /     rsft                  up
  lctl   lmet   lalt                 spc                         bspc   ralt                        left   down   rght
@@ -78,10 +78,13 @@
   (j l) C-bspc)
 
 (defalias
+  tab tab
   cps   (tap-hold-release 200 200 esc (layer-toggle symbols))
+  ;;cps   (tap-hold-release 200 200 esc lctrl)
+  ;;tab   (tap-hold-release 200 200 tab (layer-toggle symbols))
   ;;tab   (tap-hold-release 200 200 tab (layer-toggle umls))
-  s-sft (tap-hold-release 150 150 s lsft)
-  l-sft (tap-hold-release 150 150 l lsft)
+  ;;s-sft (tap-hold-release 150 150 s lsft)
+  ;;l-sft (tap-hold-release 150 150 l lsft)
 
   ;;uml-a (macro ralt S-apos a)
   ;;uml-o (macro ralt S-apos o)
