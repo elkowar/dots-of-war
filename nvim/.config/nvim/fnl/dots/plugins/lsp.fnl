@@ -88,10 +88,10 @@
                                :less {:validate true}
                                :scss {:validate true}}})
 
-  (lsp.tsserver.setup {:root_dir (lsp.util.root_pattern "package.json")
-                       :on_attach (fn [client bufnr] 
-                                    (set client.resolved_capabilities.document_formatting false)
-                                    (on_attach client bufnr))})
+  (lsp.ts_ls.setup {:root_dir (lsp.util.root_pattern "package.json")
+                    :on_attach (fn [client bufnr] 
+                                 (set client.resolved_capabilities.document_formatting false)
+                                 (on_attach client bufnr))})
 
 
   (let [
