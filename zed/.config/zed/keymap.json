@@ -8,7 +8,9 @@
       "ctrl-w ctrl-j": ["workspace::ActivatePaneInDirection", "Down"],
       "ctrl-w ctrl-k": ["workspace::ActivatePaneInDirection", "Up"],
       "ctrl-w ctrl-l": ["workspace::ActivatePaneInDirection", "Right"],
-      "ctrl-shift-t": "pane::ReopenClosedItem"
+      "ctrl-shift-t": "pane::ReopenClosedItem",
+      "ctrl-o": "pane::GoBack",
+      "ctrl-i": "pane::GoForward"
       // "shift-escape": null
     }
   },

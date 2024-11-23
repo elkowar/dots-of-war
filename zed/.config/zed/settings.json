@@ -1,8 +1,8 @@
 {
   "assistant": {
     "default_model": {
-      "provider": "copilot_chat",
-      "model": "gpt-4o"
+      "provider": "anthropic",
+      "model": "claude-3-sonnet-latest"
     },
     "version": "2"
   },

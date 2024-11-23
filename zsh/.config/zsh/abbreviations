@@ -10,4 +10,4 @@ abbr gaa="git add --all"
 abbr gc="git commit"
 abbr gr="git rebase "
 abbr gs="git ss "
-
+abbr nvc="nvim ~/.config/"
