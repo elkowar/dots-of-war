@@ -1,0 +1,7 @@
+conversations
+languages
+prettier
+node
+node_modules
+
+.tmp*
