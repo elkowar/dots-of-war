@@ -23,6 +23,7 @@ input {
     }
     trackpoint {
         accel-speed -0.1
+        //accel-speed -0.1
     }
     //warp-mouse-to-focus
     focus-follows-mouse max-scroll-amount="20%"
@@ -93,7 +94,7 @@ spawn-at-startup "wl-clip-persist" "--clipboard" "regular"
 spawn-at-startup "kdeconnect-indicator"
 //
 spawn-at-startup "bash" "-c" "swaybg -m fill -i ~/wallpapers/green_leaves.jpg"
-spawn-at-startup "cosmic-panel"
+spawn-at-startup "waybar"
 spawn-at-startup "~/.config/niri/clipsync watch with-notifications"
 spawn-at-startup 
 //
@@ -189,6 +190,9 @@ binds {
     XF86AudioLowerVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1-"; }
     XF86AudioMute        allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
     XF86AudioMicMute     allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle"; }
+
+    XF86MonBrightnessUp   allow-when-locked=true { spawn "brightnessctl" "set" "5%+"; }
+    XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "set" "5%-"; }
 
     Mod+Shift+Q { close-window; }
 

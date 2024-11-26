@@ -193,8 +193,8 @@
             "",
             ""
         ],
-        "on-scroll-up": "brightnessctl s 5%+",
-        "on-scroll-down": "brightnessctl s 1%-",
+        "on-scroll-up": "brightnessctl s 2%+",
+        "on-scroll-down": "brightnessctl s 2%-",
         "on-click-right": "brightnessctl s 1%",
         "on-click": "brightnessctl s 50%"
     },
