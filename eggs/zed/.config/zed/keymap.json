@@ -40,7 +40,7 @@
     }
   },
   {
-    "context": "EmptyPane || Editor && VimControl && !VimWaiting && !menu",
+    "context": "MarkdownPreview || EmptyPane || Editor && VimControl && !VimWaiting && !menu",
     "bindings": {
       "space b c": "pane::CloseActiveItem",
       ":": "command_palette::Toggle",
@@ -75,6 +75,7 @@
       "space m E": "editor::GoToPrevDiagnostic",
       "space m v": "editor::ToggleCodeActions",
       "space m o": "outline::Toggle",
+      "space m s": "editor::ShowSignatureHelp",
       // diagnostics
       "space e e": "diagnostics::Deploy",
       "space e w": "diagnostics::ToggleWarnings",

@@ -1,2 +1,2 @@
-# {% replace /".*"/ `"${system.username}"` %}
-hostname = "canonical-username"
+# {# if true #}
+hostname = "elk"
