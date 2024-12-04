@@ -1,1 +1,0 @@
-hostname = "fedora.fritz.box" # {< replace_in(`"`, SYSTEM.hostname) >}
