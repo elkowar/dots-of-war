@@ -1,0 +1,129 @@
+entry {
+  padding: 10px;
+  background: red;
+}
+
+.main_window {
+  all: unset;
+  background: #1d2021;
+}
+
+.volume_popup {
+  &,
+  & * {
+    all: unset;
+  }
+  background: #1d2021;
+  border-radius: 50px;
+
+  scale trough {
+    padding: 10px;
+    border-radius: 50px;
+    background-color: #ebdbb2;
+
+    slider {
+      background: red;
+    }
+
+    highlight {
+      padding: 10px;
+      min-height: 30px;
+      border-bottom-left-radius: 50px;
+      border-bottom-right-radius: 50px;
+      background-color: #8ec07c;
+    }
+  }
+}
+
+.music {
+  &,
+  & * {
+    all: unset;
+  }
+
+  .data {
+    margin: 15px;
+    margin-left: 45px;
+
+    .songname {
+      color: #8ec07c;
+    }
+
+    .key {
+      color: #928374;
+    }
+  }
+
+  .buttons {
+    min-height: 50px;
+    background: #1d2021;
+    box-shadow: 0 0 10px -5px rgba(0, 0, 0, 0.5);
+  }
+}
+
+scale trough {
+  padding: 10px;
+  border-radius: 50px;
+  background-color: #ebdbb2;
+
+  highlight {
+    padding: 10px;
+    min-width: 30px;
+    border-bottom-left-radius: 50px;
+    border-bottom-right-radius: 50px;
+    background-color: #8ec07c;
+  }
+}
+
+.this {
+  border: 10px solid blue;
+}
+.shit {
+  border: 10px solid green;
+}
+.fuck {
+  border-radius: 100px;
+}
+
+.whatever {
+  border: 2px solid green;
+}
+
+.lol {
+  color: red;
+}
+
+window {
+  //background: none;
+}
+
+progressbar {
+  min-width: 1px;
+
+  trough {
+    min-width: 1px;
+    //background-color: #ebdbb255;
+  }
+
+  &, & * {
+    all: unset;
+  }
+
+  progress {
+    min-width: 1px;
+    //background-color: #8CD68F;
+    //box-shadow: 0 0 10px 3px #8CD68F22;
+  }
+}
+
+progressbar progress {
+    background: repeating-linear-gradient(0deg, #458588, #8ec07c); /*, #b8bb26, #fabd2f);*/
+    background-size: 100% 200%;
+
+    animation: AnimationName 1s linear infinite;
+}
+
+@keyframes AnimationName {
+    0%{background-position:0% 0%}
+    100%{background-position:0% 200%}
+}

@@ -1,0 +1,104 @@
+/* ==UserStyle==
+@name           Github gruvbox
+@namespace      github.com/openstyles/stylus
+@version        1.0.0
+@description    A new userstyle
+@author         Me
+==/UserStyle== */
+@-moz-document domain("github.com") {
+
+
+    [data-color-mode=dark] {
+        --color-bg-canvas: #282828 !important;
+        --color-bg-canvas-inset: #1d2021 !important;
+        --color-bg-canvas-inverse: #080808 !important;
+        --color-bg-canvas-mobile: #080808 !important;
+        --color-header-bg: #282828 !important;
+        --color-bg-primary: #1d2021 !important;
+        --color-bg-secondary: #1d2021 !important;
+        --color-bg-tertiary: #3c3836 !important;
+        --color-border-primary: transparent !important;
+        --color-border-secondary: transparent !important;
+        --color-box-header-blue-bg: transparent !important;
+        --color-box-header-blue-border: transparent !important;
+        --color-btn-bg: #ffffff10 !important;
+        --color-social-count-bg: #ffffff20 !important;
+        --color-btn-border: transparent !important;
+        --color-btn-hover-bg: #ffffff20 !important;
+        --color-btn-hover-border: transparent !important;
+        --color-topic-tag-bg: #5c8ae610 !important;
+        --color-header-search-bg: #ffffff10 !important;
+        --color-header-text: #ebdbb2 !important;
+        --color-header-logo: #ebdbb2 !important;
+        --color-header-search-border: transparent !important;
+        --color-input-contrast-bg: #ffffff10 !important;
+        --color-input-bg: #ffffff10 !important;
+        --color-input-border: transparent !important;
+        --color-text-primary: #fbf1c7 !important;
+        --color-text-secondary: #fbf1c7 !important;
+        --color-text-tertiary: #ebdbb2 !important;
+        --color-underlinenav-text: #ebdbb2 !important;
+        --color-underlinenav-text-active: #ebdbb2 !important;
+        --color-text-placeholder: #ffffff40 !important;
+        --color-underlinenav-counter-text: #ffffffAA !important;
+        --color-counter-bg: #ffffff20 !important;
+        --color-underlinenav-icon: #ffffffAA !important;
+        --color-calendar-graph-day-bg: #ffffff10 !important;
+        --color-border-overlay: transparent !important;
+        --color-shadow-large: rgb(1, 4, 9) 2px 2px 12px 0px !important;
+        --color-bg-overlay: #1c1c1c !important;
+        --color-select-menu-backdrop-bg: #1c1c1c !important;
+        --color-state-hover-secondary-bg: #ffffff10 !important;
+        --color-menu-bg-active: #ffffff10 !important;
+        --color-bg-info: #1c1c1c !important;
+        --color-btn-selected-bg: #ffffff20 !important;
+        --color-sidenav-selected-bg: #ffffff10 !important;
+        --color-auto-gray-2: #ffffff20 !important;
+        --color-state-selected-primary-bg: #835ce6 !important;
+        --color-text-link: #458588 !important;
+        --color-icon-success: #8ec07c !important;
+    }
+
+    [data-color-mode=dark] * {
+        transition-duration: 150ms !important;
+    }
+
+    [data-color-mode=dark] .markdown-body img,
+    [data-color-mode=dark] .bg-white:not(aside):not(.position-sticky) {
+        background: transparent !important;
+    }
+
+    [data-color-mode=dark] main .Box-header--blue,
+    [data-color-mode=dark] main .Box,
+    [data-color-mode=dark] .Box-row,
+    [data-color-mode=dark] .Box-header,
+    [data-color-mode=dark] .border-top .SelectMenu-item:last-child {
+        border: 0 !important;
+    }
+
+    [data-color-mode=dark] .tabnav-tab.selected,
+    [data-color-mode=dark] .tabnav-tab[aria-current]:not([aria-current=false]),
+    [data-color-mode=dark] .tabnav-tab[aria-selected=true],
+    [data-color-mode=dark] .pinned-issue-item,
+    [data-color-mode=dark] pager-flow,
+    [data-color-mode=dark] .border {
+        background: #1d2021;
+    }
+
+    [data-color-mode=dark] .SelectMenu-item {
+        border-color: #ffffff10;
+    }
+
+    [data-color-mode=dark] .Box-row--focus-gray.navigation-focus {
+        background: #ffffff03;
+    }
+
+    [data-color-mode=dark] main .Box-header,
+    [data-color-mode=dark] .Box-row {
+        margin: 0 !important;
+    }
+
+    svg {
+        color: var(--color-fg-primary) !important;
+    }
+}

@@ -1,0 +1,14 @@
+set default-bg "#1d2021"
+set recolor true
+set recolor-lightcolor "#282828"
+set recolor-lightcolor "#1d2021"
+set recolor-darkcolor "#ebdbb2"
+set recolor-keephue
+set inputbar-bg "#1d2021"
+set inputbar-fg "#ebdbb2"
+set statusbar-bg "#1d2021"
+set statusbar-fg "#ebdbb2"
+
+set synctex true
+set synctex-editor-command "nvim --headless -c \"VimtexInverseSearch %{line} '%{input}'\""
+set highlight-transparency 0.1

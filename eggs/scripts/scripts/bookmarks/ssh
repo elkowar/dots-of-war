@@ -1,0 +1,3 @@
+mosh-fin   xfce4-terminal --command "mosh --ssh='ssh -p 8888' -p 60000 docker@srv-fin.xware-gmbh.de"
+ssh-fin    xfce4-terminal --command "ssh -p 8888 docker@srv-fin.xware-gmbh.de"
+ssh-swlab  xfce4-terminal --command "ssh -l docker rundum-studium.it-stud.hs-heilbronn.de"

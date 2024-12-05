@@ -1,0 +1,148 @@
+(defwidget bar [screen]
+  (centerbox :orientation "v"
+    (box :class "segment-top"
+         :valign "start"
+      (top :screen screen))
+    (box :valign "center"
+         :class "middle"
+      (middle :screen screen))
+    (box :valign "end"
+         :class "segment-bottom"
+      (bottom :screen screen))))
+
+(defwidget top [screen]
+  (box :orientation "v"
+    ;(workspaces :screen {screen == 1 ? "DP-2" : "HDMI-A-1"})
+    (systray :orientation "v" :icon-size 15 :spacing 10)))
+  ;(workspaces :wsp_yuck {screen == 1 ? workspaces_1_yuck : workspaces_2_yuck}))
+
+(defwidget workspaces [screen]
+  (box :orientation "v" :class "workspaces"
+    (for wsp in {workspaces[screen]}
+      (button :class "${wsp.focused ? "active" : "inactive"}"
+              :onclick "swaymsg workspace ${wsp.name}"
+        {wsp.name}))))
+
+
+;(defwidget workspaces [wsp_yuck]
+  ;(literal :content wsp_yuck))
+
+(defwidget middle [] (time))
+(defwidget time []
+  (box :orientation "v"
+       :class "time"
+    hour min sec))
+
+
+(defwidget metric [icon ?font-size]
+  (box :class "metric"
+       :orientation "v"
+    (label :class "metric-icon"
+           :style {font-size != "" ? "font-size: ${font-size}rem;" : ""}
+           :text icon)
+    (children)))
+
+(defwidget bottom [screen]
+  (box :orientation "v"
+       :valign "end"
+       :space-evenly true
+       :spacing "5"
+
+    (volume)
+
+    (metric :icon ""
+            :font-size 0.8
+      "${round((1 - (EWW_DISK["/"].free / EWW_DISK["/"].total)) * 100, 0)}%")
+
+    (metric :icon "" "${round(EWW_RAM.used_mem_perc, 0)}%")
+
+    (metric :icon "" "${round(EWW_CPU.avg, 0)}%")
+
+    (box :class "metric" (date))))
+
+
+(defwidget volume []
+  (box :class "volume-metric"
+       :orientation "v"
+       :space-evenly false
+       :valign "fill"
+       :vexpand false
+    (scale :orientation "h"
+           :min 0
+           :max 100
+           :onchange "pamixer --set-volume $(echo {} | sed 's/\\..*//g')"
+           :value volume)
+    (eventbox :onscroll "if [ '{}' == 'up' ]; then pamixer -i 5; else pamixer -d 5; fi"
+              :vexpand true
+              :valign "fill"
+      (box :orientation "v"
+           :valign "fill"
+           :vexpand true
+        (button :onclick "rofi -theme ~/.config/rofi/launchers/type-4/style-2.rasi -show rofi-sound -modi 'rofi-sound:rofi-sound-output-chooser' &"
+                :onrightclick "./audio.sh toggle"
+
+
+          (label :text audio_sink))
+        (button :onclick "pavucontrol &"
+          "${volume}%")))))
+
+
+
+
+(defwidget large-sym [sym]
+  (label :class "metric-icon large-symbol" :text sym))
+
+(defwidget date []
+  (box :orientation "v"
+       :halign "center"
+    day_word day month year))
+
+
+(defwidget niri-scroller []
+  (eventbox :onscroll "if [ '{}' == 'down' ]; then niri msg action focus-column-right; else niri msg action focus-column-left; fi"
+            :vexpand true
+            :valign "fill"
+            :style "background-color: #8ec07c; border-radius: 10px;"))
+
+
+; TODO make this not hacky
+(defvar audio_sink "")
+
+(deflisten volume :initial "0" "./audio.sh volume")
+(deflisten workspaces :initial '{"DP-2": [], "HDMI-A-1": []}' "./swayspaces.py")
+
+
+(defpoll hour :interval "1s" "date +%H")
+(defpoll min  :interval "1s" "date +%M")
+(defpoll sec  :interval "1s" "date +%S")
+
+(defpoll day_word :interval "10m" "date +%a | tr [:upper:] [:lower:]")
+(defpoll day      :interval "10m" "date +%d")
+(defpoll month    :interval "1h"  "date +%m")
+(defpoll year     :interval "1h"  "date +%y")
+
+(defvar workspaces_1_yuck "")
+(defvar workspaces_2_yuck "")
+
+(defwindow niri_scroller
+  :monitor '["<primary>", "DisplayPort-0", "PHL 345B1C"]'
+  :stacking "fg"
+  :geometry (geometry :x 0 :y 0 :width "800px" :height "5px" :anchor "bottom center")
+  :reserve (struts :distance "10px" :side "bottom")
+  :exclusive false
+  (niri-scroller))
+
+(defwindow bar_1
+  :monitor '["<primary>", "DisplayPort-0", "PHL 345B1C"]'
+  ; :monitor "DisplayPort-0"
+  :stacking "fg"
+  :geometry (geometry :x 0 :y 0 :width "40px" :height "100%" :anchor "center left")
+  :reserve (struts :distance "40px" :side "left")
+  :exclusive true
+  (bar :screen 1))
+
+(defwindow bar_2
+  :monitor '[2, "HDMI-A-1"]'
+  :geometry (geometry :x 0 :y 0 :width "40px" :height "100%" :anchor "top left")
+  :reserve (struts :distance "40px" :side "left")
+  (bar :screen 2))

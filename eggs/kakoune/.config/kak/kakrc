@@ -1,0 +1,99 @@
+source "%val{config}/plugins/plug.kak/rc/plug.kak"
+
+plug "h-youhei/kakoune-surround"
+
+plug "andreyorst/fzf.kak" config %{
+    map global user -docstring 'fzf' f ': fzf-mode<ret>'
+} defer fzf %{
+    set-option global fzf_grep_command rg
+    set-option global fzf_file_command rg
+}
+
+plug "ul/kak-lsp" do %{
+    cargo install --locked --force --path .
+} config %{
+    hook global WinSetOption filetype=(rust|python|go|javascript|typescript|c|cpp) %{
+        lsp-enable-window
+        # lsp-auto-hover-enable
+        lsp-auto-hover-insert-mode-disable
+        set-option window lsp_hover_anchor true
+        set-face window DiagnosticError default+u
+        set-face window DiagnosticWarning default+u
+        set global lsp_hover_anchor true
+    }
+    hook global WinSetOption filetype=rust %{
+        # hook window -group rust-inlay-hints BufReload .* rust-analyzer-inlay-hints
+        # hook window -group rust-inlay-hints NormalIdle .* rust-analyzer-inlay-hints
+        # hook window -group rust-inlay-hints InsertIdle .* rust-analyzer-inlay-hints
+
+        # hook -once -always window WinSetOption filetype=.* %{
+        #     remove-hooks window rust-inlay-hints
+        # }
+        #
+        hook window -group semantic-tokens BufReload .* lsp-semantic-tokens
+        hook window -group semantic-tokens NormalIdle .* lsp-semantic-tokens
+        hook window -group semantic-tokens InsertIdle .* lsp-semantic-tokens
+        hook -once -always window WinSetOption filetype=.* %{
+            remove-hooks window semantic-tokens
+        }
+
+        lsp-inlay-diagnostics-enable global
+    }
+}
+
+
+plug 'delapouite/kakoune-buffers' %{
+    map global normal ^ q
+    map global normal <a-^> Q
+    map global normal q b
+    map global normal Q B
+    map global normal <a-q> <a-b>
+    map global normal <a-Q> <a-B>
+    map global user b ': enter-buffers-mode<ret>' -docstring 'buffers'
+    map global normal B ': enter-user-mode -lock buffers<ret>' -docstring 'buffers (lock)'
+}
+
+
+map global user m ':enter-user-mode lsp<ret>' -docstring 'code stuff'
+map global lsp  g ':lsp-definition<ret>' -docstring 'go to definition'
+map global lsp  d ':lsp-hover<ret>' -docstring 'lsp hover'
+map global lsp  n ':lsp-rename-prompt<ret>' -docstring 'rename symbol'
+map global lsp  m ':lsp-find-error --next<ret>' -docstring 'next error'
+
+map global normal , '<space>'
+map global normal <space> ':enter-user-mode user<ret>'
+
+map global insert <tab>   '<a-;><a-gt>'
+map global insert <s-tab> '<a-;><a-lt>'
+map global insert <c-w>   '<esc>bc'
+
+declare-user-mode surround
+map global surround s ':surround<ret>'               -docstring 'surround'
+map global surround c ':change-surround<ret>'        -docstring 'change'
+map global surround d ':delete-surround<ret>'        -docstring 'delete'
+map global surround t ':select-surrounding-tag<ret>' -docstring 'select tag'
+map global user s ':enter-user-mode surround<ret>'   -docstring 'surround mode'
+
+# map global user b ':buffer '                         -docstring 'switch buffer'
+map global normal <c-p> ':fzf-mode<ret>'
+
+declare-user-mode commenting
+map global user c ':enter-user-mode commenting<ret>' -docstring 'comment'
+map global commenting <space> ':comment-line<ret>' -docstring 'comment block'
+
+
+
+map global user y '<a-|>xsel -i -b<ret>'                -docstring 'yank to system clipboard'
+map global user P '!xsel --output --clipboard<ret>'     -docstring 'paste before from system clipboard'
+map global user p '<a-!>xsel --output --clipboard<ret>' -docstring 'paste after from system clipboard'
+
+colorscheme gruvbox
+
+add-highlighter global/ show-matching
+
+
+        # fancy rust :; shit
+hook global InsertChar ";" %{ try %{
+    exec -draft hH "<a-k>:;<ret>" d
+    exec "::"
+}}

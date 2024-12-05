@@ -1,0 +1,16 @@
+#!/bin/bash
+last_selection=$(cat /tmp/fzf-open-conf-last 2>/dev/null)
+
+config_files_path="/home/leon/scripts/bookmarks/config_files"
+config_file_count=$((2+$(cat "$config_files_path" | wc -l)))
+
+options=$(awk '{print $1}' $config_files_path)
+if [ -n "$last_selection" ] ; then
+  options="$last_selection\n$(echo "$options" | grep -v "$last_selection")"
+fi
+
+selected=$(echo -e "$options" | fzf --history=/tmp/conf-open-history --cycle --reverse --height "$config_file_count")
+test "$selected" = "" && exit 1
+echo "$selected" > /tmp/fzf-open-conf-last
+file=$(grep "$selected" "$config_files_path" | sed -r 's/^\w*\s+(.*)$/\1/g')
+echo "nvim $file"

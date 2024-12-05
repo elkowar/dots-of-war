@@ -1,0 +1,12 @@
+#!/bin/sh
+
+
+kak -clear
+
+session="${PWD##*/}"
+
+if ! kak -l | grep -q "$session"; then
+  kak -d -s "$session" &
+fi
+
+kak -c "$session" "$@"

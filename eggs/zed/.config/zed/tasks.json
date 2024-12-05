@@ -1,7 +1,7 @@
 // Static tasks configuration.
 [
   {
-    "label": "Cargo test",
+    "label": "Cargo nextest run",
     "command": "cargo nextest run",
     "env": {},
     //"cwd": "/path/to/working/directory",

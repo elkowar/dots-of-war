@@ -1,0 +1,27 @@
+<eww>
+  <definitions>
+    <def name="something">
+      <box class="{{some_var}}" halign="start">
+        <button onclick="notify-send 'test' 'message'">
+          {{some_script}}
+        </button>
+      </box>
+    </def>
+  </definitions>
+  <variables>
+    <var name="some_var">
+      foo
+    </var>
+    <script-var name="some_script" interval="1s">
+      date | sed 's/:/X/g' | rev
+    </script-var>
+  </variables>
+  <windows>
+    <window name="foo">
+      <geometry anchor="center" width="100px" height="10%"/>
+      <widget>
+        <something arg="value"/>
+      </widget>
+    </window>
+  </windows>
+</eww>

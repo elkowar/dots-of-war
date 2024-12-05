@@ -1,0 +1,52 @@
+.bar * {
+  all: unset;
+}
+
+.bar {
+  background-color: #1d2021;
+  color: #ebdbb2;
+  margin-left: 10px;
+  margin-right: 10px;
+  font-family: "CozetteVector";
+  font-size: 12px;
+
+  .current  {
+    color: #8ec07c;
+  }
+  
+}
+
+menuitem window {
+  background: #282828;
+  margin: 10px;
+}
+
+// System Tray
+.tray menu {
+	padding: 5px 5px;
+	background-color: $background;
+
+	>menuitem {
+    font-family: JetBrainsMono NF;
+    font-size: 14px;
+		padding: 2px 5px;
+    color: $foreground;
+
+		&:disabled label {
+			color: $black;
+		}
+
+		&:hover {
+			background-color: $gray;
+		}
+	}
+
+	separator {
+		background-color: $foreground;
+		padding-top: 1px;
+
+		&:last-child {
+			padding: unset;
+		}
+	}
+}
