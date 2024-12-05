@@ -1,5 +1,6 @@
 {
   "auto_signature_help": false,
+  // "unstable.ui_density": "null",
   "assistant": {
     "default_model": {
       "provider": "copilot_chat",

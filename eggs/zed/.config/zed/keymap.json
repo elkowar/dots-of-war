@@ -42,6 +42,9 @@
   {
     "context": "MarkdownPreview || EmptyPane || Editor && VimControl && !VimWaiting && !menu",
     "bindings": {
+      "z space": "editor::FoldFunctionBodies",
+      "z enter": "editor::UnfoldAll",
+
       "space b c": "pane::CloseActiveItem",
       ":": "command_palette::Toggle",
       "space p": "file_finder::Toggle",
