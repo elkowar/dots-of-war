@@ -1,14 +1,16 @@
 [user]
-email = dev@elkowar.dev
-name = elkowar
+	email = dev@elkowar.dev
+	name = elkowar
 [include]
-path = ~/.gitconfig.local
+	path = ~/.gitconfig.local
 [credential]
-helper = store
+	helper = store
 [core]
-autocrlf = input
-; {# if command_available("delta") #}
-;<yolk> pager = delta
+	autocrlf = input
+
+	; {# if command_available("delta") #}
+	;<yolk> pager = delta
+
 [pull]
 rebase = false
 [github]
@@ -19,30 +21,30 @@ user = ElKowar
 
 
 [delta]
-syntax-theme = gruvbox
-features = side-by-side line-numbers decorations navigate
+	syntax-theme = gruvbox
+	features = side-by-side line-numbers decorations navigate
 
 [delta "line-numbers"]
-line-numbers-left-style = cyan
+	line-numbers-left-style = cyan
 
 [init]
-defaultBranch = master
+	defaultBranch = master
 [filter "lfs"]
-clean = git-lfs clean -- %f
-smudge = git-lfs smudge -- %f
-process = git-lfs filter-process
-required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
 [commit]
-gpgsign = true
+	gpgsign = true
 [alias]
-c = commit --verbose
-s = status -s
-d = diff
-ds = diff --stat
-dc = diff --cached
-dn = diff --numstat
-ss = status
-a = add
+	c = commit --verbose
+	s = status -s
+	d = diff
+	ds = diff --stat
+	dc = diff --cached
+	dn = diff --numstat
+	ss = status
+	a = add
 [push]
-autoSetupRemote = true
-default = current
+	autoSetupRemote = true
+	default = current
