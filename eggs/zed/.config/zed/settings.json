@@ -1,6 +1,8 @@
 {
   "auto_signature_help": false,
-  // "unstable.ui_density": "null",
+  "use_autoclose": true,
+  // "always_treat_brackets_as_autoclosed": false,
+  // "unstable.ui_density": "compact",
   "assistant": {
     "default_model": {
       "provider": "copilot_chat",

@@ -8,7 +8,7 @@
 [core]
 	autocrlf = input
 	; {# if command_available("delta") #}
-	#<yolk> pager = delta
+	;<yolk> pager = delta
 [pull]
 	rebase = false
 [github]
