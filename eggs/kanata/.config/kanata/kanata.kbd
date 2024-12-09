@@ -11,7 +11,7 @@
 
 (defcfg
  linux-dev /dev/input/by-path/platform-i8042-serio-0-event-kbd
- fallthrough true
+ ;; fallthrough true
  )
 
 (defsrc
@@ -27,9 +27,9 @@
  esc    f1     f2     f3     f4     f5     f6     f7     f8     f9     f10    f11   f12            ssrq   slck   pause
  grv    1      2      3      4      5      6      7      8      9      0      -     =      bspc    ins    home   pgup
  @tab   q      w      e      r      t      @cy    @cu    @ci    @co    @cp    [     +      ret     del    end    pgdn
- @cps   @ca    @cs    @cd    @cf    g      @ch    @cj    k      @cl    scln   '     \
+ @cps   @ca    @cs    @cd    @cf    g      @ch    @cj    @ck    @cl    @cscln '     \
  lsft   102d   z      x      c      v      b      n      m      ,      .      /     rsft                  up
- lctl   lmet   lalt                 spc                         ralt   ralt                        left   down   rght
+ lctl   lmet   lalt                 spc                         bspc   ralt                        left   down   rght
  )
 
 (defalias
@@ -44,7 +44,9 @@
   ch (chord chords h)
   ci (chord chords i)
   cj (chord chords j)
+  ck (chord chords k)
   cl (chord chords l)
+  cscln (chord chords scln)
 )
 
 (defchords chords 100
@@ -60,35 +62,52 @@
   (u) u
   (o) o
   (p) p
-  (y p) (macro = S-.)
-  (u i o) @uml-u
-  (i o p) @uml-o
+  (k) k
+  (scln) scln
+  ;;(y p) (macro = S-.)
+  (i o p) @uml-u
+  (k l scln) @uml-o
   (a s d) @uml-a
   (s d f) @uml-s
+  (u i o p) @uml-U
+  (j k l scln) @uml-O
+  (a s d f) @uml-A
+
   (h j) (macro S-scln S-scln)
-  (j i) (macro - S-.)
+  ;;(j i) (macro - S-.)
   (j l) C-bspc)
 
 (defalias
+  tab tab
   cps   (tap-hold-release 200 200 esc (layer-toggle symbols))
-  tab   (tap-hold-release 200 200 tab (layer-toggle umls))
-  s-sft (tap-hold-release 150 150 s lsft)
-  l-sft (tap-hold-release 150 150 l lsft)
+  ;;cps   (tap-hold-release 200 200 esc lctrl)
+  ;;tab   (tap-hold-release 200 200 tab (layer-toggle symbols))
+  ;;tab   (tap-hold-release 200 200 tab (layer-toggle umls))
+  ;;s-sft (tap-hold-release 150 150 s lsft)
+  ;;l-sft (tap-hold-release 150 150 l lsft)
 
-  uml-a (macro ralt S-apos a)
-  uml-o (macro ralt S-apos o)
-  uml-u (macro ralt S-apos u)
-  uml-s (macro ralt s s)
+  ;;uml-a (macro ralt S-apos a)
+  ;;uml-o (macro ralt S-apos o)
+  ;;uml-u (macro ralt S-apos u)
+  ;;uml-s (macro ralt s s)
+  uml-a (unicode ä)
+  uml-o (unicode ö)
+  uml-u (unicode ü)
+  uml-s (unicode ß)
+  uml-A (unicode Ä)
+  uml-O (unicode Ö)
+  uml-U (unicode Ü)
+
 )
 
 
 
 (deflayer symbols
-_      _      _      _      _      _      _      _      _      _      _      _      _              _      _      _
+lrld   _      _      _      _      _      _      _      _      _      _      _      _              _      _      _
 _      _      _      _      _      _      _      _      _      _      _      _      _      _       _      _      _
 _      _      S-1    S-apos /      \      _      S-[    [      ]      S-]    _      S-8    _       _      _      _
 _      home   S-4    S-9    S-0    end    left   down   up     rght   S-7    S-5    _
-_      _      S-\    del    S-/    S-`    _      =      S-3    bspc   _      _      _                     _
+_      _      S-\    del    S-/    S-`    _      =      S-3    ralt   _      _      _                     _
 _      _      _                    _                           _      _                            _      _      _
 )
 

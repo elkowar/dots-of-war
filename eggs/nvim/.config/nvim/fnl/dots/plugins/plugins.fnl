@@ -126,6 +126,7 @@
  (plugin :eraserhd/parinfer-rust {:build "cargo build --release"})
  (plugin :kmonad/kmonad-vim)
  (plugin :elkowar/yuck.vim {:ft ["yuck"]})
+ (plugin :rhaiscript/vim-rhai {:ft ["rhai"]})
  (plugin :cespare/vim-toml {:ft ["toml"]})
  (plugin :bduggan/vim-raku {:ft ["raku"]})
  (plugin :LnL7/vim-nix {:ft ["nix"]})
