@@ -41,11 +41,18 @@ environment {
     // GDK_BACKEND "x11"
 }
 
-output "Philips Consumer Electronics Company PHL 345B1C 0x00008E7C" {
-    mode "3440x1440@60"
+//output "Philips Consumer Electronics Company PHL 345B1C 0x00008E7C" {
+    //mode "3440x1440@60"
+    //scale 1
+    //transform "normal"
+    //position x=0 y=0
+//}
+
+output "HDMI-A-1" {
+    mode "1920x1080"
     scale 1
-    transform "normal"
     position x=0 y=0
+    //off
 }
 
 //output "DP-4" {
@@ -83,7 +90,7 @@ layout {
 
 }
 
-spawn-at-startup "bash" "-c" "swayidle -w timeout 601 'niri msg action power-off-monitors' timeout 600 'swaylock -f' before-sleep 'swaylock -f'"
+spawn-at-startup "bash" "-c" "swayidle -w timeout 601 'niri msg action power-off-monitors' timeout 600 'swaylock -f' before-sleep 'swaylock -f' timeout 3600 'systemctl suspend' timeout 60000 'systemctl hibernate'"
 spawn-at-startup "bash" "-c" "eww -c ~/.config/eww-bar open-many bar_1 niri_scroller"
 spawn-at-startup "xwayland-satellite"
 spawn-at-startup "bash" "-c" "1password --silent"
