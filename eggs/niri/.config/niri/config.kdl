@@ -32,7 +32,7 @@ input {
 }
 
 cursor {
-    xcursor-size 32
+    xcursor-size 32 // {< rnum(if device.laptop() then 12 else 32) >}
     xcursor-theme "phinger-cursors-light"
 }
 
@@ -41,19 +41,29 @@ environment {
     // GDK_BACKEND "x11"
 }
 
-//output "Philips Consumer Electronics Company PHL 345B1C 0x00008E7C" {
-    //mode "3440x1440@60"
-    //scale 1
-    //transform "normal"
-    //position x=0 y=0
-//}
+// {% if device.thinkix() %}
+//<yolk> output "Philips Consumer Electronics Company PHL 345B1C 0x00008E7C" {
+    //<yolk> mode "3440x1440@60"
+    //<yolk> scale 1
+    //<yolk> transform "normal"
+    //<yolk> position x=0 y=0
+//<yolk> }
 
-output "HDMI-A-1" {
-    mode "1920x1080"
-    scale 1
-    position x=0 y=0
-    //off
-}
+//<yolk> output "HDMI-A-1" {
+    //<yolk> mode "1920x1080"
+    //<yolk> scale 1
+    //<yolk> position x=0 y=0
+    //<yolk> //off
+//<yolk> }
+
+//<yolk> output "eDP-1" {
+    //<yolk> mode "1920x1080@60"
+    //<yolk> scale 1.0
+    //<yolk> transform "normal"
+    //<yolk> position x=0 y=1440
+//<yolk> }
+
+// {% end %}
 
 //output "DP-4" {
     //mode "2560x1440"
@@ -62,12 +72,6 @@ output "HDMI-A-1" {
     //off
 //}
 
-output "eDP-1" {
-    mode "1920x1080@60"
-    scale 1.0
-    transform "normal"
-    position x=0 y=1440
-}
 
 
 layout {
@@ -83,14 +87,16 @@ layout {
 
     default-column-width { proportion 0.33333; }
     focus-ring {
-        width 2
+        width 2 // {< rnum(if device.laptop() then 1 else 2)>}
         active-color "#8ec07c"
         inactive-color "#1d2021"
     }
 
 }
 
-spawn-at-startup "bash" "-c" "swayidle -w timeout 601 'niri msg action power-off-monitors' timeout 600 'swaylock -f' before-sleep 'swaylock -f' timeout 3600 'systemctl suspend' timeout 60000 'systemctl hibernate'"
+
+// {# if device.laptop() #}
+//<yolk> spawn-at-startup "bash" "-c" "swayidle -w timeout 601 'niri msg action power-off-monitors' timeout 600 'swaylock -f' before-sleep 'swaylock -f' timeout 3600 'systemctl suspend' timeout 60000 'systemctl hibernate'"
 spawn-at-startup "bash" "-c" "eww -c ~/.config/eww-bar open-many bar_1 niri_scroller"
 spawn-at-startup "xwayland-satellite"
 spawn-at-startup "bash" "-c" "1password --silent"

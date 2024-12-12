@@ -1,6 +1,11 @@
-function canonical_data()
-    return {}
-end
-function local_data(system)
-    return canonical_data()
-end
+data = {
+}
+
+device = {
+    thinkix = function()
+        return SYSTEM.hostname == "thinkix"
+    end,
+    laptop = function()
+        return SYSTEM.hostname == "thinkix" or SYSTEM.hostname == "frissnix"
+    end,
+}
