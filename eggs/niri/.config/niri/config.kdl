@@ -96,7 +96,7 @@ layout {
 
 
 // {# if device.laptop() #}
-//<yolk> spawn-at-startup "bash" "-c" "swayidle -w timeout 601 'niri msg action power-off-monitors' timeout 600 'swaylock -f' before-sleep 'swaylock -f' timeout 3600 'systemctl suspend' timeout 60000 'systemctl hibernate'"
+//<yolk> spawn-at-startup "bash" "-c" "swayidle -w timeout 601 'niri msg action power-off-monitors' timeout 600 'hyprlock' before-sleep 'hyprlock' timeout 3600 'systemctl suspend' timeout 60000 'systemctl hibernate'"
 spawn-at-startup "bash" "-c" "eww -c ~/.config/eww-bar open-many bar_1 niri_scroller"
 spawn-at-startup "xwayland-satellite"
 spawn-at-startup "bash" "-c" "1password --silent"
