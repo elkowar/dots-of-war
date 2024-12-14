@@ -1,6 +1,6 @@
 {
   "auto_signature_help": false,
-  "use_autoclose": true,
+  // "use_autoclose": true,
   // "always_treat_brackets_as_autoclosed": false,
   // "unstable.ui_density": "compact",
   "assistant": {
@@ -12,7 +12,8 @@
   },
   "theme": "Gruvbox Dark Hard",
   "buffer_font_size": 14,
-  "buffer_font_family": "FiraCode Nerd Font",
+  "buffer_font_family": "Input",
+  // "buffer_font_family": "FiraCode Nerd Font",
   //"buffer_font_family": "JetBrainsMono Nerd Font Mono",
   // "buffer_line_height": { "custom": 1.55 },
   // "ui_font_family": "Noto Sans",

@@ -15,5 +15,21 @@
     //"cwd": "/path/to/working/directory",
     "use_new_terminal": false,
     "allow_concurrent_runs": false
+  },
+  {
+    "label": "search:project",
+    "command": "QUERY=${ZED_SELECTED_TEXT:-}; FILE=$(rg --column --hidden --line-number --no-heading --color=always --smart-case --colors match:fg:green --colors path:fg:white --colors path:style:nobold --glob '!**/.git/' '--glob' '!**/node_modules'  \"$QUERY\" . | fzf --ansi --delimiter : --preview 'bat --style=numbers,changes,header --color=always --highlight-line {2} {1}' --preview-window 'up:60%:+{2}+3/3' --layout=reverse --query \"$QUERY\" --print-query | tail -1); if [ -n \"$FILE\" ]; then LINE=$(echo $FILE | cut -d':' -f2); COL=$(echo $FILE | cut -d':' -f3); FILE=$(echo $FILE | cut -d':' -f1); zed $FILE:$LINE:$COL; fi",
+    "env": {},
+    "cwd": "${ZED_WORKTREE_ROOT}",
+    "allow_concurrent_runs": false,
+    "use_new_terminal": false,
+    "reveal": "always",
+    "hide": "on_success",
+    "shell": {
+      "with_arguments": {
+        "program": "/bin/bash",
+        "args": ["--login"]
+      }
+    }
   }
 ]

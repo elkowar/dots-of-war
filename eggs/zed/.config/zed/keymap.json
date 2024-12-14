@@ -108,6 +108,7 @@
       "ctrl-t ctrl-h": "pane::ActivatePrevItem",
       "ctrl-t ctrl-l": "pane::ActivateNextItem",
       "ctrl-x ctrl-c": "pane::CloseActiveItem",
+      "ctrl-t ctrl-c": "pane::CloseActiveItem",
 
       "alt-j": "workspace::ToggleBottomDock"
     }

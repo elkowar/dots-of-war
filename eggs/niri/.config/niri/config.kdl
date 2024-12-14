@@ -34,6 +34,11 @@ input {
 cursor {
     xcursor-size 32 // {< rnum(if device.laptop() then 12 else 32) >}
     xcursor-theme "phinger-cursors-light"
+<<<<<<< HEAD
+=======
+    xcursor-size 12
+    hide-when-typing
+>>>>>>> 6440e12 (stuff)
 }
 
 environment {
