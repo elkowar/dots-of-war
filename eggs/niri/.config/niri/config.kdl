@@ -31,7 +31,7 @@ input {
 }
 
 cursor {
-    xcursor-size 32 // {< rnum(if device.laptop() then 12 else 32) >}
+    xcursor-size 32 // {< rnum(if device.laptop { 12 } else { 32 }) >}
     xcursor-theme "phinger-cursors-light"
     hide-when-typing
 }
@@ -41,14 +41,24 @@ environment {
     // GDK_BACKEND "x11"
 }
 
-// {% if device.thinkix() %}
-//<yolk> output "Philips Consumer Electronics Company PHL 345B1C 0x00008E7C" {
-    //<yolk> mode "3440x1440@60"
+output "Philips Consumer Electronics Company PHL 345B1C 0x00008E7C" {
+    mode "3440x1440@60"
+    scale 1
+    transform "normal"
+    // {% if device.desktop %}
+    //<yolk> position x=2560 y=0
+    // {% else %}
+    position x=0 y=0
+    // {% end %}
+}
+ // {% if device.desktop %}
+ //<yolk> output "HDMI-A-1" {
+    //<yolk> mode "2560x1440"
     //<yolk> scale 1
-    //<yolk> transform "normal"
     //<yolk> position x=0 y=0
-//<yolk> }
+ //<yolk> }
 
+// {% elif device.thinkix %}
 //<yolk> output "HDMI-A-1" {
     //<yolk> mode "1920x1080"
     //<yolk> scale 1
@@ -62,22 +72,8 @@ environment {
     //<yolk> transform "normal"
     //<yolk> position x=0 y=1440
 //<yolk> }
-
-// {% elif device.desktop() %}
-//<yolk> output "Philips Consumer Electronics Company PHL 345B1C 0x00008E7C" {
-    //<yolk> mode "3440x1440@99.982"
-    //<yolk> scale 1
-    //<yolk> transform "normal"
-    //<yolk> variable-refresh-rate on-demand=true
-    //<yolk> position x=2560 y=0
-//<yolk> }
-
-//<yolk> output "HDMI-A-1" {
-    //<yolk> mode "2560x1440"
-    //<yolk> scale 1
-    //<yolk> position x=0 y=0
-//<yolk> }
 // {% end %}
+
 
 
 
@@ -94,7 +90,7 @@ layout {
 
     default-column-width { proportion 0.33333; }
     focus-ring {
-        width 2 // {< rnum(if device.laptop() then 1 else 2)>}
+        width 2 // {< rnum(if device.laptop {1} else {2})>}
         active-color "#8ec07c"
         inactive-color "#1d2021"
     }
@@ -102,7 +98,7 @@ layout {
 }
 
 
-// {% if device.laptop() %}
+// {% if device.laptop %}
 //<yolk> spawn-at-startup "bash" "-c" "swayidle -w timeout 601 'niri msg action power-off-monitors' timeout 600 'hyprlock' before-sleep 'hyprlock' timeout 3600 'systemctl suspend' timeout 60000 'systemctl hibernate'"
 //<yolk> spawn-at-startup "waybar"
 // {% end %}

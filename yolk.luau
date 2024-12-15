@@ -1,6 +1,3 @@
-data = {
-}
-
 device = {
     thinkix = function()
         return SYSTEM.hostname == "thinkix"

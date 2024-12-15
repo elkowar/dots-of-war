@@ -46,5 +46,26 @@
     "JSON": {
       "format_on_save": "off"
     }
+  },
+  "lsp": {
+    "luau-lsp": {
+      "sourcemap": {
+        "enabled": false
+      },
+      "initializationOptions": {
+        "definitions": "/home/elk/.config/yolk/globalTypes.d.luau"
+      },
+      "types": {
+        "definitionFiles": ["/home/elk/.config/yolk/globalTypes.d.luau"]
+      }
+    },
+    "rust-analyzer": {
+      "initialization_options": {
+        "typing": {
+          // Temporary workaround around round rust-analzyer wrongly inserting `|` twice
+          "excludeChars": "|<"
+        }
+      }
+    }
   }
 }
