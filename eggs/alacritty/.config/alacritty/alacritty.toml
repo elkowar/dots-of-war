@@ -1,0 +1,183 @@
+[general]
+live_config_reload = true
+
+[colors.bright]
+black = "#928374"
+blue = "#83a598"
+cyan = "#8ec07c"
+green = "#b8bb26"
+magenta = "#d3869b"
+red = "#fb4934"
+white = "#ebdbb2"
+yellow = "#fabd2f"
+
+[colors.normal]
+black = "#665c54"
+blue = "#458588"
+cyan = "#689d6a"
+green = "#98971a"
+magenta = "#b16286"
+red = "#cc241d"
+white = "#a89984"
+yellow = "#d79921"
+
+[colors.primary]
+background = "#282828"
+foreground = "#ebdbb2"
+
+[cursor]
+unfocused_hollow = true
+
+[cursor.style]
+blinking = "Never"
+shape = "Block"
+
+[env]
+TERM = "xterm-256color"
+
+[font]
+size = 14
+
+[font.normal]
+family = "Fira Code"
+
+[font.offset]
+x = 0
+y = 0
+
+[mouse]
+hide_when_typing = true
+
+[window]
+dynamic_padding = true
+dynamic_title = true
+opacity = 1
+
+[window.padding]
+x = 10
+y = 10
+
+[[keyboard.bindings]]
+action = "SpawnNewInstance"
+key = "N"
+mods = "Control|Shift"
+
+[[keyboard.bindings]]
+action = "IncreaseFontSize"
+key = "Plus"
+mods = "Control|Shift"
+
+[[keyboard.bindings]]
+action = "IncreaseFontSize"
+key = "Plus"
+mods = "Control|Shift"
+
+[[keyboard.bindings]]
+action = "IncreaseFontSize"
+key = "Plus"
+mods = "Control|Shift"
+
+[[keyboard.bindings]]
+action = "IncreaseFontSize"
+key = "Plus"
+mods = "Control|Shift"
+
+[[keyboard.bindings]]
+action = "IncreaseFontSize"
+key = "Plus"
+mods = "Control|Shift"
+
+[[keyboard.bindings]]
+action = "IncreaseFontSize"
+key = "Plus"
+mods = "Control|Shift"
+
+[[keyboard.bindings]]
+action = "IncreaseFontSize"
+key = "Plus"
+mods = "Control|Shift"
+
+[[keyboard.bindings]]
+action = "IncreaseFontSize"
+key = "Plus"
+mods = "Control|Shift"
+
+[[keyboard.bindings]]
+action = "IncreaseFontSize"
+key = "Plus"
+mods = "Control|Shift"
+
+[[keyboard.bindings]]
+action = "IncreaseFontSize"
+key = "Plus"
+mods = "Control|Shift"
+
+[[keyboard.bindings]]
+action = "IncreaseFontSize"
+key = "Plus"
+mods = "Control|Shift"
+
+[[keyboard.bindings]]
+action = "IncreaseFontSize"
+key = "Plus"
+mods = "Control|Shift"
+
+[[keyboard.bindings]]
+action = "DecreaseFontSize"
+key = "Plus"
+mods = "Control|Shift|Alt"
+
+[[keyboard.bindings]]
+action = "DecreaseFontSize"
+key = "Plus"
+mods = "Control|Shift|Alt"
+
+[[keyboard.bindings]]
+action = "DecreaseFontSize"
+key = "Plus"
+mods = "Control|Shift|Alt"
+
+[[keyboard.bindings]]
+action = "DecreaseFontSize"
+key = "Plus"
+mods = "Control|Shift|Alt"
+
+[[keyboard.bindings]]
+action = "DecreaseFontSize"
+key = "Plus"
+mods = "Control|Shift|Alt"
+
+[[keyboard.bindings]]
+action = "DecreaseFontSize"
+key = "Plus"
+mods = "Control|Shift|Alt"
+
+[[keyboard.bindings]]
+action = "DecreaseFontSize"
+key = "Plus"
+mods = "Control|Shift|Alt"
+
+[[keyboard.bindings]]
+action = "DecreaseFontSize"
+key = "Plus"
+mods = "Control|Shift|Alt"
+
+[[keyboard.bindings]]
+action = "DecreaseFontSize"
+key = "Plus"
+mods = "Control|Shift|Alt"
+
+[[keyboard.bindings]]
+action = "DecreaseFontSize"
+key = "Plus"
+mods = "Control|Shift|Alt"
+
+[[keyboard.bindings]]
+action = "DecreaseFontSize"
+key = "Plus"
+mods = "Control|Shift|Alt"
+
+[[keyboard.bindings]]
+action = "DecreaseFontSize"
+key = "Plus"
+mods = "Control|Shift|Alt"

@@ -34,7 +34,6 @@ input {
 cursor {
     xcursor-size 32 // {< rnum(if device.laptop() then 12 else 32) >}
     xcursor-theme "phinger-cursors-light"
-    xcursor-size 12
     hide-when-typing
 }
 
@@ -159,10 +158,10 @@ window-rule {
     default-column-width { proportion 0.3333; }
 }
 
-layer-rule {
-    match namespace="^notifications$"
-    block-out-from "screen-capture"
-}
+//layer-rule {
+    //match namespace="^notifications$"
+    //block-out-from "screen-capture"
+//}
 
 // Example: block out two password managers from screen capture.
 // (This example rule is commented out with a "/-" in front.)

@@ -5,7 +5,7 @@ eggs["eww"] = { enabled = true, targets = "~" }
 eggs["eww-bar"] = { enabled = true, targets = "~" }
 eggs["foot"] = { enabled = true, targets = "~", templates = { ".config/foot/foot.ini" } }
 eggs["git"] = { enabled = true, targets = "~", templates = { ".gitconfig" } }
-eggs["niri"] = { enabled = true, targets = "~", templates = { ".config/niri/config.kdl" } }
+eggs["niri"] = { enabled = true, targets = "~", templates = { ".config/niri/*" } }
 eggs["nvim"] = { enabled = true, targets = "~" }
 eggs["other-dotfiles-stuff"] = { enabled = true, targets = "~" }
 eggs["profile"] = { enabled = true, targets = "~" }
