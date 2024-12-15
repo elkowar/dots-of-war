@@ -15,7 +15,7 @@ input {
         tap
         natural-scroll
         // accel-speed 0.2
-        
+
         scroll-factor 0.7
     }
     mouse {
@@ -23,7 +23,6 @@ input {
     }
     trackpoint {
         accel-speed -0.1
-        //accel-speed -0.1
     }
     //warp-mouse-to-focus
     focus-follows-mouse max-scroll-amount="20%"
@@ -64,14 +63,21 @@ environment {
     //<yolk> position x=0 y=1440
 //<yolk> }
 
-// {% end %}
+// {% elif device.desktop() %}
+//<yolk> output "Philips Consumer Electronics Company PHL 345B1C 0x00008E7C" {
+    //<yolk> mode "3440x1440@99.982"
+    //<yolk> scale 1
+    //<yolk> transform "normal"
+    //<yolk> variable-refresh-rate on-demand=true
+    //<yolk> position x=2560 y=0
+//<yolk> }
 
-//output "DP-4" {
-    //mode "2560x1440"
-    //scale 1
-    //position x=0 y=0
-    //off
-//}
+//<yolk> output "HDMI-A-1" {
+    //<yolk> mode "2560x1440"
+    //<yolk> scale 1
+    //<yolk> position x=0 y=0
+//<yolk> }
+// {% end %}
 
 
 
@@ -110,7 +116,7 @@ spawn-at-startup "kdeconnect-indicator"
 spawn-at-startup "bash" "-c" "swaybg -m fill -i ~/wallpapers/green_leaves.jpg"
 spawn-at-startup "waybar"
 spawn-at-startup "~/.config/niri/clipsync watch with-notifications"
-spawn-at-startup 
+spawn-at-startup
 //
 prefer-no-csd
 
