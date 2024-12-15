@@ -1,7 +1,12 @@
-conversations
-languages
-prettier
+/conversations
+/languages
+/prettier
+/extensions
 node
 node_modules
+/db
+/embeddings
+/copilot
+
 
 .tmp*
