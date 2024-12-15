@@ -90,6 +90,7 @@
   "vim-nix": { "branch": "master", "commit": "e25cd0f2e5922f1f4d3cd969f92e35a9a327ffb0" },
   "vim-raku": { "branch": "master", "commit": "f4496123353cce789fc6645ceb686f5cf51acca3" },
   "vim-repeat": { "branch": "master", "commit": "65846025c15494983dafe5e3b46c8f88ab2e9635" },
+  "vim-rhai": { "branch": "main", "commit": "b0585e2c92a4a64edcd060836ae41d1e698ebc20" },
   "vim-sleuth": { "branch": "master", "commit": "1cc4557420f215d02c4d2645a748a816c220e99b" },
   "vim-smoothie": { "branch": "master", "commit": "df1e324e9f3395c630c1c523d0555a01d2eb1b7e" },
   "vim-surround": { "branch": "master", "commit": "3d188ed2113431cf8dac77be61b842acb64433d9" },

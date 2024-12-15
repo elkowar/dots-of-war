@@ -1,4 +1,3 @@
-
 const themes = #{
     gruv: "a",
     nord: "b",

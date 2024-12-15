@@ -145,6 +145,7 @@
           :config #(set vim.g.vlime_overlay "slimv")})
 
 
+ (plugin :rhaiscript/vim-rhai)
  (plugin :rust-lang/rust.vim
          {:ft ["rust"]
           :dependencies ["mattn/webapi-vim"]
