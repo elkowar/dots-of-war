@@ -7,14 +7,13 @@
 	helper = store
 [core]
 	autocrlf = input
-
-	; {# if io::command_available("delta") #}
+	; {# if io::command_available("deltar") #}
 	;<yolk> pager = delta
 
 [pull]
-rebase = false
+    rebase = false
 [github]
-user = ElKowar
+    user = ElKowar
 
 ;[diff]
 ;external = "difft"

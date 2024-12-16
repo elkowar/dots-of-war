@@ -68,7 +68,7 @@
       "alt-j": "editor::SelectAllMatches",
       // lsp
       "space m f": "editor::Format",
-      "space m /": "project_symbols::Toggle",
+      "space m s": "project_symbols::Toggle",
       "space m g": "editor::GoToDefinition",
       "space m d": "editor::Hover",
       "space m n": "editor::Rename",
@@ -78,7 +78,7 @@
       "space m E": "editor::GoToPrevDiagnostic",
       "space m v": "editor::ToggleCodeActions",
       "space m o": "outline::Toggle",
-      "space m s": "editor::ShowSignatureHelp",
+      "space m h": "editor::ShowSignatureHelp",
       // diagnostics
       "space e e": "diagnostics::Deploy",
       "space e w": "diagnostics::ToggleWarnings",

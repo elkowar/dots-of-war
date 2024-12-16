@@ -1,43 +1,38 @@
-const themes = #{
-    gruv: "a",
-    nord: "b",
-};
-
 
 export const device = #{
     thinkix: SYSTEM.hostname == "thinkix",
     desktop: SYSTEM.hostname == "fedora.fritz.box",
     laptop: SYSTEM.hostname == "thinkix" || SYSTEM.hostname == "frissnix",
-    gruv: if LOCAL { themes.gruv } else { themes.nord }
 };
 
 
-export let eggs = #{};
-eggs["alacritty"] = #{ enabled: true, targets: "~" };
-eggs["eww"] = #{ enabled: true, targets: "~" };
-eggs["eww-bar"] = #{ enabled: true, targets: "~" };
-eggs["foot"] = #{ enabled: true, targets: "~", templates: [".config/foot/foot.ini"] };
-eggs["git"] = #{ enabled: true, targets: "~", templates: [".gitconfig"] };
-eggs["niri"] = #{ enabled: true, targets: "~", templates: [".config/niri/*"] };
-eggs["nvim"] = #{ enabled: true, targets: "~" };
-eggs["other-dotfiles-stuff"] = #{ enabled: true, targets: "~" };
-eggs["profile"] = #{ enabled: true, targets: "~" };
-eggs["starship"] = #{ enabled: true, targets: "~" };
-eggs["sway"] = #{ enabled: true, targets: "~" };
-eggs["tmux"] = #{ enabled: true, targets: "~" };
-eggs["zed"] = #{ enabled: true, targets: "~" };
-eggs["zsh"] = #{ enabled: true, targets: "~" };
-eggs["rofi"] = #{ enabled: true, targets: "~" };
-eggs["gtk"] = #{ enabled: true, targets: "~" };
+export let eggs = #{
+    "alacritty": #{ enabled: true, targets: "~" },
+    "eww": #{ enabled: true, targets: "~" },
+    "eww-bar": #{ enabled: true, targets: "~" },
+    "foot": #{ enabled: true, targets: "~", templates: [".config/foot/foot.ini"] },
+    "git": #{ enabled: true, targets: "~", templates: [".gitconfig"] },
+    "niri": #{ enabled: true, targets: "~/.config/niri", templates: ["**/*.kdl"] },
+    "nvim": #{ enabled: true, targets: "~" },
+    "other-dotfiles-stuff": #{ enabled: true, targets: "~" },
+    "profile": #{ enabled: true, targets: "~" },
+    "starship": #{ enabled: true, targets: "~" },
+    "sway": #{ enabled: true, targets: "~" },
+    "tmux": #{ enabled: !device.laptop, targets: "~" },
+    "zed": #{ enabled: true, targets: "~" },
+    "zsh": #{ enabled: true, targets: "~" },
+    "rofi": #{ enabled: true, targets: "~" },
+    "gtk": #{ enabled: true, targets: "~" },
+    "scripts": #{ enabled: true, targets: "~/scripts" },
 
-eggs["powershell"] = #{ enabled: false, targets: "~" };
-eggs["scripts"] = #{ enabled: true, targets: "~" };
-eggs["sioyek"] = #{ enabled: false, targets: "~" };
-eggs["waybar"] = #{ enabled: false, targets: "~" };
-eggs["zathura"] = #{ enabled: false, targets: "~" };
-eggs["eww-laptop"] = #{ enabled: false, targets: "~" };
-eggs["hyprland"] = #{ enabled: false, targets: "~" };
-eggs["hyprlock"] = #{ enabled: false, targets: "~" };
-eggs["kakoune"] = #{ enabled: false, targets: "~" };
-eggs["kanata"] = #{ enabled: false, targets: "~" };
-eggs["karabiner"] = #{ enabled: false, targets: "~" };
+    "powershell": #{ enabled: false, targets: "~" },
+    "sioyek": #{ enabled: false, targets: "~" },
+    "waybar": #{ enabled: false, targets: "~" },
+    "zathura": #{ enabled: false, targets: "~" },
+    "eww-laptop": #{ enabled: false, targets: "~" },
+    "hyprland": #{ enabled: false, targets: "~" },
+    "hyprlock": #{ enabled: false, targets: "~" },
+    "kakoune": #{ enabled: false, targets: "~" },
+    "kanata": #{ enabled: false, targets: "~" },
+    "karabiner": #{ enabled: false, targets: "~" },
+}
