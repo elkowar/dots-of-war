@@ -31,7 +31,7 @@ input {
 }
 
 cursor {
-    xcursor-size 32 // {< rnum(if device.laptop { 12 } else { 32 }) >}
+    xcursor-size 12 // {< rnum(if device.desktop { 32 } else { 12 }) >}
     xcursor-theme "phinger-cursors-light"
     hide-when-typing
 }
