@@ -7,37 +7,41 @@ export const device = #{
 };
 
 
+private fn merge_into_home(enabled, templates) {
+    #{ enabled: enabled, targets: "~", strategy: "merge", templates: templates }
+}
+
 export let eggs = #{
-    "alacritty": #{ enabled: true, targets: "~/.config/alacritty" },
-    "eww": #{ enabled: true, targets: "~" },
-    "eww-bar": #{ enabled: true, targets: "~" },
-    "foot": #{ enabled: true, targets: "~", templates: [".config/foot/foot.ini"] },
-    "git": #{ enabled: true, targets: "~", templates: [".gitconfig"] },
-    "niri": #{ enabled: true, targets: "~/.config/niri", templates: ["**/*.kdl"] },
-    "nvim": #{ enabled: true, targets: "~", main_file: ".config/nvim/fnl/main.fnl" },
-    "profile": #{ enabled: true, targets: "~" },
-    "starship": #{ enabled: true, targets: "~" },
-    "sway": #{ enabled: true, targets: "~" },
-    "zed": #{ enabled: true, targets: "~" },
-    "zsh": #{ enabled: true, targets: "~" },
-    "rofi": #{ enabled: true, targets: "~" },
-    "gtk": #{ enabled: true, targets: "~" },
-    "scripts": #{ enabled: true, targets: "~/scripts" },
+    "alacritty": #{ targets: "~/.config/alacritty" },
+    "eww": merge_into_home(true, []),
+    "eww-bar": merge_into_home(true, []),
+    "foot": #{ strategy: "merge", targets: "~", templates: [".config/foot/foot.ini"] },
+    "git": merge_into_home(true, [".gitconfig"]),
+    "niri": #{ targets: "~/.config/niri", templates: ["**/*.kdl"] },
+    "nvim": #{ strategy: "merge", targets: "~", main_file: ".config/nvim/fnl/main.fnl" },
+    "profile": merge_into_home(true, []),
+    "starship": merge_into_home(true, []),
+    "sway": merge_into_home(true, []),
+    "zed": merge_into_home(true, []),
+    "zsh": merge_into_home(true, []),
+    "rofi": merge_into_home(true, []),
+    "gtk": merge_into_home(true, []),
+    "scripts": #{ targets: "~/scripts", strategy: "merge" },
 
-    "hyprlock": #{ enabled: device.laptop, targets: "~" },
-    "kanata": #{ enabled: device.laptop, targets: "~" },
-    "waybar": #{ enabled: device.laptop, targets: "~" },
+    "hyprlock": merge_into_home(device.laptop, []),
+    "kanata": merge_into_home(device.laptop, []),
+    "waybar": merge_into_home(device.laptop, []),
 
-    "karabiner": #{ enabled: device.macbook, targets: "~" },
+    "karabiner": merge_into_home(device.macbook, []),
 
-    "powershell": #{ enabled: false, targets: "~" },
-    "sioyek": #{ enabled: false, targets: "~" },
-    "zathura": #{ enabled: false, targets: "~" },
-    "eww-laptop": #{ enabled: false, targets: "~" },
-    "hyprland": #{ enabled: false, targets: "~" },
-    "kakoune": #{ enabled: false, targets: "~" },
-    "tmux": #{ enabled: false, targets: "~" },
+    "powershell": merge_into_home(false, []),
+    "sioyek": merge_into_home(false, []),
+    "zathura": merge_into_home(false, []),
+    "eww-laptop": merge_into_home(false, []),
+    "hyprland": merge_into_home(false, []),
+    "kakoune": merge_into_home(false, []),
+    "tmux": merge_into_home(false, []),
 
     // This is just random files that should be in the dotfiles, but shouldn't ever be deployed
-    "other-dotfiles-stuff": #{ enabled: false, targets: "~" },
+    "other-dotfiles-stuff": #{ enabled: false, targets: "~/this-shouldnt-exist" },
 }
