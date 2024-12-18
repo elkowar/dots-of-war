@@ -4,8 +4,6 @@
 (local utils (autoload :dots.utils))
 (local lazy (require :lazy))
 
-
-
 (when (vim.fn.has "termguicolors")
   (set vim.opt.termguicolors true))
 

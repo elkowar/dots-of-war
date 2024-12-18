@@ -13,15 +13,15 @@ private fn merge_into_home(enabled, templates) {
 
 export let eggs = #{
     "alacritty": #{ targets: "~/.config/alacritty" },
-    "eww": merge_into_home(true, []),
-    "eww-bar": merge_into_home(true, []),
+    "eww": merge_into_home(device.desktop, []),
+    "eww-bar": merge_into_home(device.desktop, []),
     "foot": #{ strategy: "merge", targets: "~", templates: [".config/foot/foot.ini"] },
     "git": merge_into_home(true, [".gitconfig"]),
     "niri": #{ targets: "~/.config/niri", templates: ["**/*.kdl"] },
     "nvim": #{ strategy: "merge", targets: "~", main_file: ".config/nvim/fnl/main.fnl" },
     "profile": merge_into_home(true, []),
     "starship": merge_into_home(true, []),
-    "sway": merge_into_home(true, []),
+    "sway": merge_into_home(device.desktop, []),
     "zed": merge_into_home(true, []),
     "zsh": merge_into_home(true, []),
     "rofi": merge_into_home(true, []),

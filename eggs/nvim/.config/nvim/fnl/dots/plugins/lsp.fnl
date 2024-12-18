@@ -240,7 +240,7 @@
 
   ; --------------------------------- >>>>>
 
-  (set vim.opt.signcolumn "yes")
+  (set vim.opt.signcolumn "yes" )
 
   ; Cleanup links in markdown documentation
   (fn cleanup-markdown [contents]
