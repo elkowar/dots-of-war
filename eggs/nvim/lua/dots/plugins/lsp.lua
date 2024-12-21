@@ -64,7 +64,7 @@ local function setup()
     client.resolved_capabilities.document_formatting = false
     return on_attach(client, bufnr)
   end
-  lsp.tsserver.setup({root_dir = lsp.util.root_pattern("package.json"), on_attach = _6_})
+  lsp.ts_ls.setup({root_dir = lsp.util.root_pattern("package.json"), on_attach = _6_})
   do
     local rustaceanvim = require("rustaceanvim")
     local rustaceanvim_config = require("rustaceanvim.config")
