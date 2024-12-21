@@ -1,7 +1,10 @@
+import "foo" as stuff;
+
+// stuff::stuff();
 
 export const device = #{
     thinkix: SYSTEM.hostname == "thinkix",
-    desktop: SYSTEM.hostname == "fedora.fritz.box",
+    desktop: SYSTEM.hostname == "fedora.fritz.box" ||SYSTEM.hostname == "fedora",
     laptop: SYSTEM.hostname == "thinkix" || SYSTEM.hostname == "frissnix",
     macbook: false,
 };
@@ -15,14 +18,14 @@ export let eggs = #{
     "alacritty": #{ targets: "~/.config/alacritty" },
     "eww": merge_into_home(true, []),
     "eww-bar": merge_into_home(true, []),
-    "foot": #{ strategy: "merge", targets: "~", templates: [".config/foot/foot.ini"] },
+    "foot": #{ targets: "~/.config/foot", templates: [".foot.ini"] },
     "git": merge_into_home(true, [".gitconfig"]),
     "niri": #{ targets: "~/.config/niri", templates: ["**/*.kdl"] },
-    "nvim": #{ strategy: "merge", targets: "~", main_file: ".config/nvim/fnl/main.fnl" },
-    "profile": merge_into_home(true, []),
+    "nvim": #{ strategy: "put", targets: "~/.config/nvim", main_file: "fnl/main.fnl" },
+    "profile": #{ strategy: "merge", targets: "~" },
     "starship": merge_into_home(true, []),
     "sway": merge_into_home(true, []),
-    "zed": merge_into_home(true, []),
+    "zed": #{ strategy: "put", targets: "~/.config/zed" },
     "zsh": merge_into_home(true, []),
     "rofi": merge_into_home(true, []),
     "gtk": merge_into_home(true, []),

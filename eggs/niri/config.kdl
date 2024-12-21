@@ -331,36 +331,36 @@ binds {
 
     Mod+R { switch-preset-column-width; }
     Mod+Ctrl+R { spawn "sh" "-c" r#"
-        niri msg action focus-column-right \
-        && niri msg action set-column-width 33% \
-        && niri msg action focus-column-left \
-        && niri msg action set-column-width 67%
+        niri msg action focus-column-right
+        niri msg action set-column-width 33%
+        niri msg action focus-column-left
+        niri msg action set-column-width 67%
        "#;
     }
     Mod+Ctrl+Shift+R { spawn "sh" "-c" r#"
-        niri msg action set-column-width 33% \
-        && niri msg action focus-column-right \
-        && niri msg action set-column-width 67% \
-        && niri msg action focus-column-left
+        niri msg action set-column-width 33%
+        niri msg action focus-column-right
+        niri msg action set-column-width 67%
+        niri msg action focus-column-left
        "#;
     }
     Mod+Ctrl+T { spawn "sh" "-c" r#"
-        niri msg action set-column-width 50% \
-        && niri msg action focus-column-right \
-        && niri msg action set-column-width 50% \
-        && niri msg action focus-column-left \
-        && niri msg action focus-column-right \
-        && niri msg action focus-column-left
+        niri msg action set-column-width 50%
+        niri msg action focus-column-right
+        niri msg action set-column-width 50%
+        niri msg action focus-column-left
+        niri msg action focus-column-right
+        niri msg action focus-column-left
        "#;
     }
     Mod+Ctrl+Shift+T { spawn "sh" "-c" r#"
-        niri msg action set-column-width 34% \
-        && niri msg action focus-column-right \
-        && niri msg action set-column-width 33% \
-        && niri msg action focus-column-right \
-        && niri msg action set-column-width 33% \
-        && niri msg action focus-column-left \
-        && niri msg action focus-column-left
+        niri msg action set-column-width 34%
+        niri msg action focus-column-right
+        niri msg action set-column-width 33%
+        niri msg action focus-column-right
+        niri msg action set-column-width 33%
+        niri msg action focus-column-left
+        niri msg action focus-column-left
        "#;
     }
     Mod+Shift+R { reset-window-height; }
