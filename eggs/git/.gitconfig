@@ -11,18 +11,18 @@
 	helper = store
 [core]
 	autocrlf = input
-	; {# if io::command_available("deltar") #}
+	; {% if io::command_available("delta") %}
 	;<yolk> pager = delta
+;<yolk> [delta]
+	;<yolk> syntax-theme = gruvbox
+	;<yolk> features = side-by-side line-numbers decorations navigate
+
+;<yolk> [delta "line-numbers"]
+	;<yolk> line-numbers-left-style = cyan
+	;{% end %}
 
 [pull]
     rebase = false
-
-[delta]
-	syntax-theme = gruvbox
-	features = side-by-side line-numbers decorations navigate
-
-[delta "line-numbers"]
-	line-numbers-left-style = cyan
 
 [init]
 	defaultBranch = main
