@@ -104,6 +104,10 @@ layout {
 //<yolk> spawn-at-startup "waybar"
 // {% end %}
 
+// {% if device.desktop %}
+//<yolk> spawn-at-startup "rm" "/home/elk/.config/google-chrome/SingletonLock"
+// {% end %}
+
 spawn-at-startup "bash" "-c" "eww -c ~/.config/eww-bar open-many bar_1 niri_scroller"
 spawn-at-startup "xwayland-satellite"
 spawn-at-startup "bash" "-c" "1password --silent"

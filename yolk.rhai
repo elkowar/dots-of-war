@@ -39,7 +39,7 @@ export let eggs = #{
     "karabiner": merge_into_home(device.macbook, []),
 
     "powershell": merge_into_home(false, []),
-    "sioyek": merge_into_home(false, []),
+    "sioyek": merge_into_home(true, []),
     "zathura": merge_into_home(false, []),
     "eww-laptop": merge_into_home(false, []),
     "hyprland": merge_into_home(false, []),

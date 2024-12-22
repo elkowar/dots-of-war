@@ -10,6 +10,14 @@ setopt SHARE_HISTORY
 
 source "$ZDOTDIR/utils.zsh"
 
+# pnpm
+export PNPM_HOME="$HOME/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
+
 
 ### Added by Zinit's installer
 if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
@@ -98,7 +106,7 @@ alias dots="git -C $HOME/dots-of-war"
 # load prompt
 if command -v starship >/dev/null; then
     eval "$(starship init zsh)"
-else 
+else
     source "$ZDOTDIR/prompt.zsh"
 fi
 
