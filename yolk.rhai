@@ -1,13 +1,14 @@
-import "foo" as stuff;
-
-// stuff::stuff();
-
 export const device = #{
     thinkix: SYSTEM.hostname == "thinkix",
     desktop: SYSTEM.hostname == "fedora.fritz.box" ||SYSTEM.hostname == "fedora",
     laptop: SYSTEM.hostname == "thinkix" || SYSTEM.hostname == "frissnix",
-    macbook: false,
+
+    linux: SYSTEM.platform == "Linux",
+
+    macbook: "Matthiass-MacBook-Pro" in SYSTEM.hostname,
+    kenbun: "Matthiass-MacBook-Pro" in SYSTEM.hostname,
 };
+
 
 
 private fn merge_into_home(enabled, templates) {
@@ -18,28 +19,28 @@ export let eggs = #{
     "alacritty": #{ targets: "~/.config/alacritty" },
     "eww": merge_into_home(device.desktop, []),
     "eww-bar": merge_into_home(device.desktop, []),
-    "foot": #{ targets: "~/.config/foot", templates: ["foot.ini"] },
+    "foot": #{ enabled: device.linux, targets: "~/.config/foot", templates: ["foot.ini"] },
     "git": merge_into_home(true, [".gitconfig"]),
-    "niri": #{ targets: "~/.config/niri", templates: ["**/*.kdl"] },
+    "niri": #{ enabled: device.linux, targets: "~/.config/niri", templates: ["**/*.kdl"] },
     "nvim": #{ strategy: "put", targets: "~/.config/nvim", main_file: "fnl/main.fnl" },
-    "profile": #{ strategy: "merge", targets: "~" },
+    "profile": #{ enabled: device.linux, strategy: "merge", targets: "~" },
     "starship": merge_into_home(true, []),
 
-    "sway": merge_into_home(device.desktop, []),
+    "sway": merge_into_home(device.desktop && device.linux, []),
     "zed": #{ strategy: "put", targets: "~/.config/zed" },
     "zsh": merge_into_home(true, []),
-    "rofi": merge_into_home(true, []),
-    "gtk": merge_into_home(true, []),
-    "scripts": #{ targets: "~/scripts", strategy: "merge" },
+    "rofi": merge_into_home(device.linux, []),
+    "gtk": merge_into_home(device.linux, []),
+    "scripts": #{ enabled: device.linux, targets: "~/scripts", strategy: "merge" },
 
-    "hyprlock": merge_into_home(device.laptop, []),
-    "kanata": merge_into_home(device.laptop, []),
-    "waybar": merge_into_home(device.laptop, []),
+    "hyprlock": merge_into_home(device.laptop && device.linux, []),
+    "kanata": merge_into_home(device.laptop && device.linux, []),
+    "waybar": merge_into_home(device.laptop && device.linux, []),
 
     "karabiner": merge_into_home(device.macbook, []),
+    "sioyek": merge_into_home(device.linux, []),
 
     "powershell": merge_into_home(false, []),
-    "sioyek": merge_into_home(true, []),
     "zathura": merge_into_home(false, []),
     "eww-laptop": merge_into_home(false, []),
     "hyprland": merge_into_home(false, []),

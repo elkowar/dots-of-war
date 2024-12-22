@@ -1,6 +1,10 @@
+; {% if !device.kenbun %}
 [user]
-	email = dev@elkowar.dev
 	name = elkowar
+	email = dev@elkowar.dev
+[github]
+    user = ElKowar
+; {% end %}
 [include]
 	path = ~/.gitconfig.local
 [credential]
@@ -12,12 +16,6 @@
 
 [pull]
     rebase = false
-[github]
-    user = ElKowar
-
-;[diff]
-;external = "difft"
-
 
 [delta]
 	syntax-theme = gruvbox
@@ -27,7 +25,7 @@
 	line-numbers-left-style = cyan
 
 [init]
-	defaultBranch = master
+	defaultBranch = main
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f

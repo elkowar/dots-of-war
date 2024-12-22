@@ -1,3 +1,0 @@
-fn stuff() {
-    // re "hi"
-}
