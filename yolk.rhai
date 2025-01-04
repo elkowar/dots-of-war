@@ -4,6 +4,7 @@ export const device = #{
     laptop: SYSTEM.hostname == "thinkix" || SYSTEM.hostname == "frissnix",
 
     linux: SYSTEM.platform == "Linux",
+    windows: SYSTEM.platform == "Windows",
 
     macbook: "Matthiass-MacBook-Pro" in SYSTEM.hostname,
     kenbun: "Matthiass-MacBook-Pro" in SYSTEM.hostname,
@@ -16,9 +17,9 @@ private fn merge_into_home(enabled, templates) {
 }
 
 export let eggs = #{
-    "alacritty": #{ targets: "~/.config/alacritty" },
-    "eww": merge_into_home(device.desktop, []),
-    "eww-bar": merge_into_home(device.desktop, []),
+    "alacritty": #{ enabled: !device.windows, targets: "~/.config/alacritty" },
+    "eww": merge_into_home(device.linux && device.desktop, []),
+    "eww-bar": merge_into_home(device.linux && device.desktop, []),
     "foot": #{ enabled: device.linux, targets: "~/.config/foot", templates: ["foot.ini"] },
     "git": merge_into_home(true, [".gitconfig"]),
     "niri": #{ enabled: device.linux, targets: "~/.config/niri", templates: ["**/*.kdl"] },
@@ -27,8 +28,8 @@ export let eggs = #{
     "starship": merge_into_home(true, []),
 
     "sway": merge_into_home(device.desktop && device.linux, []),
-    "zed": #{ strategy: "put", targets: "~/.config/zed" },
-    "zsh": merge_into_home(true, []),
+    "zed": #{ enabled: !device.windows, strategy: "put", targets: "~/.config/zed" },
+    "zsh": merge_into_home(!device.windows, []),
     "rofi": merge_into_home(device.linux, []),
     "gtk": merge_into_home(device.linux, []),
     "scripts": #{ enabled: device.linux, targets: "~/scripts", strategy: "merge" },
@@ -40,7 +41,7 @@ export let eggs = #{
     "karabiner": merge_into_home(device.macbook, []),
     "sioyek": merge_into_home(device.linux, []),
 
-    "powershell": merge_into_home(false, []),
+    "powershell": #{ enabled: device.windows, targets: "~/Documents/PowerShell" },
     "zathura": merge_into_home(false, []),
     "eww-laptop": merge_into_home(false, []),
     "hyprland": merge_into_home(false, []),
