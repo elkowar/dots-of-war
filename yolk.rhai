@@ -41,7 +41,7 @@ export let eggs = #{
     "karabiner": merge_into_home(device.macbook, []),
     "sioyek": merge_into_home(device.linux, []),
 
-    "powershell": #{ enabled: device.windows, targets: "~/Documents/PowerShell" },
+    "powershell": #{ enabled: device.windows, targets: if device.windows { "~/Documents/PowerShell" } else { "~/.config/powershell" } },
     "zathura": merge_into_home(false, []),
     "eww-laptop": merge_into_home(false, []),
     "hyprland": merge_into_home(false, []),
