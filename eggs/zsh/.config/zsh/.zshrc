@@ -102,6 +102,8 @@ elif command -v exa >/dev/null; then
     alias ls="exa"
 fi
 alias dots="git -C $HOME/dots-of-war"
+alias yk="yolk"
+alias ygit="yolk git"
 
 # load prompt
 if command -v starship >/dev/null; then
@@ -151,7 +153,9 @@ export PATH="$HOME/.bun/bin:$PATH"
 
 
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+if [ -s "$NVM_DIR/nvm.sh" ]; then 
+    . "$NVM_DIR/nvm.sh"
+fi
 
 if [ -d "/Applications/WezTerm.app" ]; then
     export PATH="/Applications/WezTerm.app/Contents/MacOS:$PATH"

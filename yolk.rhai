@@ -23,7 +23,7 @@ export let eggs = #{
     "foot": #{ enabled: device.linux, targets: "~/.config/foot", templates: ["foot.ini"] },
     "git": merge_into_home(true, [".gitconfig"]),
     "niri": #{ enabled: device.linux, targets: "~/.config/niri", templates: ["**/*.kdl"] },
-    "nvim": #{ strategy: "put", targets: "~/.config/nvim", main_file: "fnl/main.fnl" },
+    "nvim": #{ strategy: "put", targets: "~/.config/nvim", main_file: "init.lua" },
     "profile": #{ enabled: device.linux, strategy: "merge", targets: "~" },
     "starship": merge_into_home(true, []),
 

@@ -1,4 +1,5 @@
 {
+  "remove_trailing_whitespace_on_save": false,
   "auto_signature_help": false,
   "unnecessary_code_fade": 0.5,
   // "use_autoclose": true,
