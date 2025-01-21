@@ -14,7 +14,6 @@
 	; {% if io::command_available("delta") %}
 	;<yolk> pager = delta
 ;<yolk> [delta]
-	;<yolk> syntax-theme = gruvbox
 	;<yolk> features = side-by-side line-numbers decorations navigate
 
 ;<yolk> [delta "line-numbers"]

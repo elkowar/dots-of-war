@@ -26,6 +26,7 @@ export let eggs = #{
     "nvim": #{ strategy: "put", targets: "~/.config/nvim", main_file: "init.lua" },
     "profile": #{ enabled: device.linux, strategy: "merge", targets: "~" },
     "starship": merge_into_home(true, []),
+    "bat": #{ enabled: device.linux || device.macbook, strategy: "put", targets: "~/.config/bat", templates: ["config"]},
 
     "sway": merge_into_home(device.desktop && device.linux, []),
     "zed": #{ enabled: !device.windows, strategy: "put", targets: "~/.config/zed" },
