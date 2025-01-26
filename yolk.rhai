@@ -22,7 +22,7 @@ export let eggs = #{
     "eww-bar": merge_into_home(device.linux && device.desktop, []),
     "foot": #{ enabled: device.linux, targets: "~/.config/foot", templates: ["foot.ini"] },
     "git": merge_into_home(true, [".gitconfig"]),
-    "niri": #{ enabled: device.linux, targets: "~/.config/niri", templates: ["**/*.kdl"] },
+    "niri": #{ enabled: device.linux, targets: "~/.config/niri", templates: ["**/*.kdl"], main_file: "config.kdl" },
     "nvim": #{ strategy: "put", targets: "~/.config/nvim", main_file: "init.lua" },
     "profile": #{ enabled: device.linux, strategy: "merge", targets: "~" },
     "starship": merge_into_home(true, []),

@@ -1,4 +1,4 @@
-// vim:set ft=kdl:
+// vim:set ft=kdl shiftwidth=4 commentstring=//%s:
 input {
     keyboard {
         xkb {
@@ -52,26 +52,26 @@ output "Philips Consumer Electronics Company PHL 345B1C 0x00008E7C" {
     position x=0 y=0
     // {% end %}
 }
- // {% if device.desktop %}
- //<yolk> output "HDMI-A-1" {
+// {% if device.desktop %}
+//<yolk> output "HDMI-A-1" {
     //<yolk> mode "2560x1440"
     //<yolk> scale 1
     //<yolk> position x=0 y=0
- //<yolk> }
+//<yolk> }
 
 // {% elif device.thinkix %}
 //<yolk> output "HDMI-A-1" {
-    //<yolk> mode "1920x1080"
-    //<yolk> scale 1
-    //<yolk> position x=0 y=0
-    //<yolk> //off
+//<yolk> mode "1920x1080"
+//<yolk> scale 1
+//<yolk> position x=0 y=0
+//<yolk> //off
 //<yolk> }
 
 //<yolk> output "eDP-1" {
-    //<yolk> mode "1920x1080@60"
-    //<yolk> scale 1.0
-    //<yolk> transform "normal"
-    //<yolk> position x=0 y=1440
+//<yolk> mode "1920x1080@60"
+//<yolk> scale 1.0
+//<yolk> transform "normal"
+//<yolk> position x=0 y=1440
 //<yolk> }
 // {% end %}
 
@@ -139,15 +139,15 @@ animations {
         // duration-ms 200
         // curve "ease-out-quad"
         custom-shader r"
-            float map(float value, float min1, float max1, float min2, float max2) {
-                return min2 + (value - min1) * (max2 - min2) / (max1 - min1);
-            }
-            vec4 open_color(vec3 coords_geo, vec3 size_geo) {
-                float cur = niri_clamped_progress;
-                if (coords_geo.x > cur) { return vec4(0.0); }
-                vec3 coord = vec3(map(coords_geo.x,0.0, cur, 0.0, 1.0 ), coords_geo.y, coords_geo.z);
-                return texture2D(niri_tex, (niri_geo_to_tex * coord).st);
-            }
+        float map(float value, float min1, float max1, float min2, float max2) {
+        return min2 + (value - min1) * (max2 - min2) / (max1 - min1);
+        }
+        vec4 open_color(vec3 coords_geo, vec3 size_geo) {
+        float cur = niri_clamped_progress;
+        if (coords_geo.x > cur) { return vec4(0.0); }
+        vec3 coord = vec3(map(coords_geo.x,0.0, cur, 0.0, 1.0 ), coords_geo.y, coords_geo.z);
+        return texture2D(niri_tex, (niri_geo_to_tex * coord).st);
+        }
         "
     }
     window-close {
@@ -155,15 +155,15 @@ animations {
         // duration-ms 200
         // curve "ease-out-quad"
         custom-shader r"
-            float map(float value, float min1, float max1, float min2, float max2) {
-                return min2 + (value - min1) * (max2 - min2) / (max1 - min1);
-            }
-            vec4 close_color(vec3 coords_geo, vec3 size_geo) {
-                float cur = 1.0-niri_clamped_progress;
-                if (coords_geo.x > cur) { return vec4(0.0); }
-                vec3 coord = vec3(map(coords_geo.x,0.0, cur, 0.0, 1.0), coords_geo.y, coords_geo.z);
-                return texture2D(niri_tex, (niri_geo_to_tex * coord).st);
-            }
+        float map(float value, float min1, float max1, float min2, float max2) {
+        return min2 + (value - min1) * (max2 - min2) / (max1 - min1);
+        }
+        vec4 close_color(vec3 coords_geo, vec3 size_geo) {
+        float cur = 1.0-niri_clamped_progress;
+        if (coords_geo.x > cur) { return vec4(0.0); }
+        vec3 coord = vec3(map(coords_geo.x,0.0, cur, 0.0, 1.0), coords_geo.y, coords_geo.z);
+        return texture2D(niri_tex, (niri_geo_to_tex * coord).st);
+        }
         "
     }
 }
@@ -182,12 +182,14 @@ window-rule {
     match app-id=r#"1Password"#
     match title=r#"[gG]mail"#
     match title=r#".*[Ww]hats[aA]pp.*$"#
+    match title=r#".*Ente Photos.*"#
     block-out-from "screen-capture"
 }
 window-rule {
     match app-id=r#"^1Password$"#
     open-floating true
 }
+
 window-rule {
     match title=r#"Picture-in-Picture"#
     max-width 300
@@ -203,6 +205,7 @@ window-rule {
 
 window-rule {
     match title=r#"^.* is sharing your screen.$"#;
+    open-floating true
 }
 
 // window-rule {
@@ -213,6 +216,13 @@ window-rule {
 
 
 window-rule {
+
+    shadow {
+        on
+        spread 0
+        softness 20
+        // offset x=1 y=-1
+    }
     clip-to-geometry true
     geometry-corner-radius 8
 }
@@ -335,8 +345,8 @@ binds {
     //Mod+Period { expel-window-from-column; }
 
     // There are also commands that consume or expel a single window to the side.
-     Mod+BracketLeft  { consume-or-expel-window-left; }
-     Mod+BracketRight { consume-or-expel-window-right; }
+    Mod+BracketLeft  { consume-or-expel-window-left; }
+    Mod+BracketRight { consume-or-expel-window-right; }
 
     Mod+R { switch-preset-column-width; }
     Mod+Ctrl+R { spawn "sh" "-c" r#"
@@ -344,14 +354,14 @@ binds {
         niri msg action set-column-width 33%
         niri msg action focus-column-left
         niri msg action set-column-width 67%
-       "#;
+        "#;
     }
     Mod+Ctrl+Shift+R { spawn "sh" "-c" r#"
         niri msg action set-column-width 33%
         niri msg action focus-column-right
         niri msg action set-column-width 67%
         niri msg action focus-column-left
-       "#;
+        "#;
     }
     Mod+Ctrl+T { spawn "sh" "-c" r#"
         niri msg action set-column-width 50%
@@ -360,7 +370,7 @@ binds {
         niri msg action focus-column-left
         niri msg action focus-column-right
         niri msg action focus-column-left
-       "#;
+        "#;
     }
     Mod+Ctrl+Shift+T { spawn "sh" "-c" r#"
         niri msg action set-column-width 34%
@@ -370,7 +380,7 @@ binds {
         niri msg action set-column-width 33%
         niri msg action focus-column-left
         niri msg action focus-column-left
-       "#;
+        "#;
     }
     Mod+Shift+R { reset-window-height; }
     Mod+F { maximize-column; }
@@ -391,9 +401,9 @@ binds {
 
     Ctrl+Shift+Print {
         spawn "sh" "-c" r#"
-            file=~/Videos/recordings/"$(date +%s)".mp4
-            wf-recorder -c h264_vaapi -r 60 --bframes 0 -g "$(slurp -b '#00000090' -w 0)" -f "$file"
-            wl-copy file:/"$file" -t text/uri-list
+        file=~/Videos/recordings/"$(date +%s)".mp4
+        wf-recorder -c h264_vaapi -r 60 --bframes 0 -g "$(slurp -b '#00000090' -w 0)" -f "$file"
+        wl-copy file:/"$file" -t text/uri-list
         "#;
     }
 

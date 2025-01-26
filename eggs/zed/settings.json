@@ -89,6 +89,8 @@
 
     "panel.background": "#282828",
     "tab_bar.background": "#282828",
-    "border": "#3c3836"
+    // "border": "#3c3836",
+    "border": "#282828",
+    "title_bar.background": "#1d2021"
   }
 }
