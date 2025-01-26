@@ -26,7 +26,7 @@ return {
         enabled = false,
       },
       scroll = {
-        enabled = false,
+        enabled = true,
       },
       lazygit = {
         enabled = false,
