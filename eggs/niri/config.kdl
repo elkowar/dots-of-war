@@ -204,16 +204,29 @@ window-rule {
 
 
 window-rule {
-
     shadow {
         on
-        spread 0
-        softness 20
-        // offset x=1 y=-1
+        offset x=0 y=0
+        draw-behind-window true
     }
     clip-to-geometry true
     geometry-corner-radius 8
 }
+
+window-rule {
+    match is-active=false
+    shadow {
+        softness 20
+    }
+}
+
+window-rule {
+    match is-active=true
+    shadow {
+        softness 10
+    }
+}
+
 
 binds {
     Mod+Shift+Slash { show-hotkey-overlay; }
