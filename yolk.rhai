@@ -1,15 +1,16 @@
 export const device = #{
     thinkix: SYSTEM.hostname == "thinkix",
-    desktop: SYSTEM.hostname == "fedora.fritz.box" ||SYSTEM.hostname == "fedora",
-    laptop: SYSTEM.hostname == "thinkix" || SYSTEM.hostname == "frissnix",
+    desktop: SYSTEM.hostname == "fedora.fritz.box" || SYSTEM.hostname == "fedora",
+    laptop: SYSTEM.hostname == "thinkix"
+        || SYSTEM.hostname == "frissnix"
+        || SYSTEM.device_name == "Matthiass MacBook Pro",
 
     linux: SYSTEM.platform == "Linux",
     windows: SYSTEM.platform == "Windows",
 
-    macbook: "Matthiass-MacBook-Pro" in SYSTEM.hostname,
-    kenbun: "Matthiass-MacBook-Pro" in SYSTEM.hostname,
+    macbook: SYSTEM.device_name == "Matthiass MacBook Pro",
+    kenbun:  SYSTEM.device_name == "Matthiass MacBook Pro",
 };
-
 
 
 private fn merge_into_home(enabled, templates) {
