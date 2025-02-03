@@ -18,6 +18,7 @@ private fn merge_into_home(enabled, templates) {
 }
 
 export let eggs = #{
+    "nvim-old": #{enabled: false},
     "alacritty": #{ enabled: !device.windows, targets: "~/.config/alacritty" },
     "eww": merge_into_home(device.linux && device.desktop, []),
     "eww-bar": merge_into_home(device.linux && device.desktop, []),
