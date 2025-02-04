@@ -1,4 +1,8 @@
 {
+  "telemetry": {
+    "metrics": false,
+    "diagnostics": false
+  },
   "remove_trailing_whitespace_on_save": false,
   "auto_signature_help": false,
   "unnecessary_code_fade": 0.5,
@@ -14,8 +18,9 @@
   },
   "theme": "Gruvbox Dark Hard",
   "buffer_font_size": 14,
-  "buffer_font_family": "Input",
-  // "buffer_font_family": "FiraCode Nerd Font",
+  // "buffer_font_family": "Input Sans Compressed",
+  // "buffer_font_family": "Input",
+  "buffer_font_family": "FiraCode Nerd Font",
   // "buffer_font_family": "JetBrainsMono Nerd Font Mono",
   // "buffer_line_height": { "custom": 1.55 },
   // "ui_font_family": "Noto Sans",

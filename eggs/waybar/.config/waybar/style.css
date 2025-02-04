@@ -2,7 +2,7 @@
     /* `otf-font-awesome` is required to be installed for icons */
     font-family: Terminus, "Font awesome 6 Free", Helvetica, Arial, sans-serif;
     /*font-family: FontAwesome, Roboto, Helvetica, Arial, sans-serif;*/
-    font-size: 16px;
+    font-size: 10px;
 }
 window.eDP-1 * { font-size: 10px; }
 
@@ -19,7 +19,7 @@ window .modules-right > * > * {
   padding: 0 10px;
 }
 window .modules-left, .modules-right, .modules-center {
-  margin: 3px 0;
+  margin: 0px 0;
 }
 window.eDP-1 .modules-left, window.eDP-1 .modules-right, window.eDP-1 .modules-center {
   margin: 0px 0;

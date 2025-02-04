@@ -46,32 +46,26 @@ output "Philips Consumer Electronics Company PHL 345B1C 0x00008E7C" {
     mode "3440x1440@60"
     scale 1
     transform "normal"
-    // {% if device.desktop %}
+    // {% if device.desktop || SYSTEM.hostname == "kenbun-laptop-leon" %}
     //<yolk> position x=2560 y=0
     // {% else %}
     position x=0 y=0
     // {% end %}
 }
-// {% if device.desktop %}
-//<yolk> output "HDMI-A-1" {
+// {% if device.desktop || SYSTEM.hostname == "kenbun-laptop-leon" %}
+//<yolk> output "Fujitsu Siemens Computers GmbH P27-8 TE Pro YVBH008792" {
     //<yolk> mode "2560x1440"
     //<yolk> scale 1
     //<yolk> position x=0 y=0
 //<yolk> }
+// {% end %}
 
-// {% elif device.thinkix %}
-//<yolk> output "HDMI-A-1" {
-//<yolk> mode "1920x1080"
-//<yolk> scale 1
-//<yolk> position x=0 y=0
-//<yolk> //off
-//<yolk> }
-
+// {% if device.thinkix || SYSTEM.hostname == "kenbun-laptop-leon" %}
 //<yolk> output "eDP-1" {
-//<yolk> mode "1920x1080@60"
-//<yolk> scale 1.0
-//<yolk> transform "normal"
-//<yolk> position x=0 y=1440
+    //<yolk> mode "1920x1080@60"
+    //<yolk> scale 1.0
+    //<yolk> transform "normal"
+    //<yolk> position x=0 y=1440
 //<yolk> }
 // {% end %}
 
@@ -96,6 +90,16 @@ layout {
         inactive-color "#1d2021"
     }
 
+    tab-indicator {
+        width 6
+        // inactive-color "red"
+        length total-proportion=0.8
+        active-color "#8ec07c"
+        inactive-color "#3c3836"
+        // inactive-color "#1d2021"
+        // inactive-gradient from="#1d2021" to="#3c3836"
+    }
+
 }
 
 
@@ -117,7 +121,7 @@ spawn-at-startup "clipse -listen"
 spawn-at-startup "wl-clip-persist" "--clipboard" "regular"
 spawn-at-startup "kdeconnect-indicator"
 //
-spawn-at-startup "bash" "-c" "swaybg -m fill -i ~/wallpapers/green_leaves.jpg"
+spawn-at-startup "bash" "-c" "swaybg -m fill -i ~/.config/wallpapers/elk_gasstation_dark.jpg"
 spawn-at-startup "~/.config/niri/clipsync watch with-notifications"
 spawn-at-startup
 //
@@ -233,7 +237,11 @@ binds {
 
     // Suggested binds for running programs: terminal, app launcher, screen locker.
     Mod+T { spawn "foot"; }
+    // {% if SYSTEM.hostname == "kenbun-laptop-leon" %}
+    //<yolk> Mod+B { spawn "bash" "-c" "unset DISPLAY && microsoft-edge --ozone-platform-hint=auto --enable-features=VaapiVideoDecodeLinuxGL --enable-features=TouchpadOverscrollHistoryNavigation"; }
+    // {% else %}
     Mod+B { spawn "bash" "-c" "unset DISPLAY && google-chrome --ozone-platform-hint=auto --enable-features=VaapiVideoDecodeLinuxGL --enable-features=TouchpadOverscrollHistoryNavigation"; }
+    // {% end %}
     Mod+Shift+P { spawn "~/.config/rofi/launchers/type-2/launcher.sh"; }
     Mod+Shift+B { spawn "firefox"; }
 
@@ -248,6 +256,8 @@ binds {
     XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "set" "5%-"; }
 
     Mod+Shift+Q { close-window; }
+
+    Mod+W { toggle-column-tabbed-display; }
 
     Mod+H     { focus-column-or-monitor-left; }
     Mod+J     { focus-window-down; }
