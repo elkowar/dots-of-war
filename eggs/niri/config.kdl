@@ -185,6 +185,9 @@ window-rule {
 }
 window-rule {
     match app-id=r#"^1Password$"#
+    match app-id=r#"msedge-_.*-Default"#
+    match title=r"[bB]itwarden"
+    match title=r#"^.* is sharing your screen.$"#;
     open-floating true
 }
 
@@ -199,11 +202,6 @@ window-rule {
     match app-id=r#"^[gG]edit$"#;
     match app-id=r#"^[eE]og$"#;
     // fake-fullscreen true
-}
-
-window-rule {
-    match title=r#"^.* is sharing your screen.$"#;
-    open-floating true
 }
 
 
