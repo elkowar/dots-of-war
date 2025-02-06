@@ -1,3 +1,11 @@
+export const themes = #{
+    gruvbox: #{
+        bg: "#1d2021",
+        fg: "#ebdbb2",
+    }
+};
+export const theme = themes.gruvbox;
+
 export const device = #{
     thinkix: SYSTEM.hostname == "thinkix",
     desktop: SYSTEM.hostname == "fedora.fritz.box" || SYSTEM.hostname == "fedora",
