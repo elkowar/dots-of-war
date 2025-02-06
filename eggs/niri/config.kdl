@@ -57,7 +57,6 @@ output "Philips Consumer Electronics Company PHL 345B1C 0x00008E7C" {
     //<yolk> mode "2560x1440"
     //<yolk> scale 1
     //<yolk> position x=0 y=0
-//<yolk> <<<<<<< HEAD
 //<yolk> }
 // {% end %}
 
@@ -68,24 +67,6 @@ output "Philips Consumer Electronics Company PHL 345B1C 0x00008E7C" {
     //<yolk> transform "normal"
     //<yolk> position x=0 y=1440
 //<yolk> }
-//<yolk> =======
- //<yolk> }
-
-// {% elif device.thinkix %}
-//<yolk> output "HDMI-A-1" {
-    //<yolk> mode "1920x1080"
-    //<yolk> scale 1
-    //<yolk> position x=0 y=0
-    //<yolk> //off
-//<yolk> }
-
-//<yolk> output "eDP-1" {
-    //<yolk> mode "1920x1080@60"
-    //<yolk> scale 1.0
-    //<yolk> transform "normal"
-    //<yolk> position x=0 y=1440
-//<yolk> }
-//<yolk> >>>>>>> 4eba11c (asdf)
 // {% end %}
 
 
