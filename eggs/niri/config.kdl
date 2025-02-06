@@ -37,8 +37,9 @@ cursor {
 }
 
 environment {
-
     DISPLAY ":0"
+    XDG_CURRENT_DESKTOP "niri"
+    XDG_SESSION_TYPE "wayland"
     // GDK_BACKEND "x11"
 }
 
@@ -92,6 +93,7 @@ layout {
 
     tab-indicator {
         width 6
+        hide-when-single-tab
         // inactive-color "red"
         length total-proportion=0.8
         active-color "#8ec07c"
@@ -106,6 +108,7 @@ layout {
 // {% if device.laptop %}
 //<yolk> spawn-at-startup "bash" "-c" "swayidle -w timeout 601 'niri msg action power-off-monitors' timeout 600 'hyprlock' before-sleep 'hyprlock' timeout 3600 'systemctl suspend' timeout 60000 'systemctl hibernate'"
 //<yolk> spawn-at-startup "waybar"
+//<yolk> spawn-at-startup "kanshi"
 // {% end %}
 
 // {% if device.desktop %}
@@ -178,6 +181,7 @@ layer-rule {
 
 window-rule {
     match app-id=r#"1Password"#
+    match title="Open Folder"
     match title=r#"[gG]mail"#
     match title=r#".*[Ww]hats[aA]pp.*$"#
     match title=r#".*Ente Photos.*"#
@@ -188,6 +192,7 @@ window-rule {
     match app-id=r#"msedge-_.*-Default"#
     match title=r"[bB]itwarden"
     match title=r#"^.* is sharing your screen.$"#;
+    match title="Open Folder"
     open-floating true
 }
 
