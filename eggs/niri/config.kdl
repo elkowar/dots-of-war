@@ -170,6 +170,15 @@ animations {
 }
 
 window-rule {
+    match is-window-cast-target=true
+    border {
+        on
+        active-color "#ff5555"
+        inactive-color "#ff5555"
+        width 2
+    }
+}
+window-rule {
     match app-id=r#"^foot$"#
     default-column-width { proportion 0.3333; }
 }
