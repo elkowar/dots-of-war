@@ -169,6 +169,13 @@ animations {
     }
 }
 
+gestures {
+    dnd-edge-view-scroll {
+        trigger-width 200
+        max-speed 3500
+    }
+}
+
 window-rule {
     match is-window-cast-target=true
     border {

@@ -26,6 +26,7 @@ private fn merge_into_home(enabled, templates) {
     #{ enabled: enabled, targets: "~", strategy: "merge", templates: templates }
 }
 
+
 export let eggs = #{
     "nvim-old": #{ enabled: false },
     "wallpapers": #{ targets: "~/.config/wallpapers" },
