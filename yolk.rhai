@@ -24,6 +24,7 @@ export let eggs = #{
     "git": merge_into_home(true, [".gitconfig"]),
     "niri": #{ enabled: device.linux, targets: "~/.config/niri", templates: ["**/*.kdl"], main_file: "config.kdl" },
     "nvim": #{ strategy: "put", targets: "~/.config/nvim", main_file: "init.lua" },
+    "nvim-old": #{ enabled: false },
     "profile": #{ enabled: device.linux, strategy: "merge", targets: "~" },
     "starship": merge_into_home(true, []),
     "bat": #{ enabled: device.linux || device.macbook, strategy: "put", targets: "~/.config/bat", templates: ["config"]},
