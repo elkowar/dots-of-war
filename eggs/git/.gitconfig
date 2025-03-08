@@ -15,6 +15,7 @@
 	;<yolk> pager = delta
 ;<yolk> [delta]
 	;<yolk> features = side-by-side line-numbers decorations navigate
+	;<yolk> yntax-theme = gruvbox
 
 ;<yolk> [delta "line-numbers"]
 	;<yolk> line-numbers-left-style = cyan

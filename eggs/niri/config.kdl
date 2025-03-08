@@ -37,8 +37,9 @@ cursor {
 }
 
 environment {
-
     DISPLAY ":0"
+    XDG_CURRENT_DESKTOP "niri"
+    XDG_SESSION_TYPE "wayland"
     // GDK_BACKEND "x11"
 }
 
@@ -46,32 +47,26 @@ output "Philips Consumer Electronics Company PHL 345B1C 0x00008E7C" {
     mode "3440x1440@60"
     scale 1
     transform "normal"
-    // {% if device.desktop %}
+    // {% if device.desktop || SYSTEM.hostname == "kenbun-laptop-leon" %}
     //<yolk> position x=2560 y=0
     // {% else %}
     position x=0 y=0
     // {% end %}
 }
-// {% if device.desktop %}
-//<yolk> output "HDMI-A-1" {
+// {% if device.desktop || SYSTEM.hostname == "kenbun-laptop-leon" %}
+//<yolk> output "Fujitsu Siemens Computers GmbH P27-8 TE Pro YVBH008792" {
     //<yolk> mode "2560x1440"
     //<yolk> scale 1
     //<yolk> position x=0 y=0
 //<yolk> }
+// {% end %}
 
-// {% elif device.thinkix %}
-//<yolk> output "HDMI-A-1" {
-//<yolk> mode "1920x1080"
-//<yolk> scale 1
-//<yolk> position x=0 y=0
-//<yolk> //off
-//<yolk> }
-
+// {% if device.thinkix || SYSTEM.hostname == "kenbun-laptop-leon" %}
 //<yolk> output "eDP-1" {
-//<yolk> mode "1920x1080@60"
-//<yolk> scale 1.0
-//<yolk> transform "normal"
-//<yolk> position x=0 y=1440
+    //<yolk> mode "1920x1080@60"
+    //<yolk> scale 1.0
+    //<yolk> transform "normal"
+    //<yolk> position x=0 y=1440
 //<yolk> }
 // {% end %}
 
@@ -96,12 +91,24 @@ layout {
         inactive-color "#1d2021"
     }
 
+    tab-indicator {
+        width 6
+        hide-when-single-tab
+        // inactive-color "red"
+        length total-proportion=0.8
+        active-color "#8ec07c"
+        inactive-color "#3c3836"
+        // inactive-color "#1d2021"
+        // inactive-gradient from="#1d2021" to="#3c3836"
+    }
+
 }
 
 
 // {% if device.laptop %}
 //<yolk> spawn-at-startup "bash" "-c" "swayidle -w timeout 601 'niri msg action power-off-monitors' timeout 600 'hyprlock' before-sleep 'hyprlock' timeout 3600 'systemctl suspend' timeout 60000 'systemctl hibernate'"
 //<yolk> spawn-at-startup "waybar"
+//<yolk> spawn-at-startup "kanshi"
 // {% end %}
 
 // {% if device.desktop %}
@@ -117,7 +124,7 @@ spawn-at-startup "clipse -listen"
 spawn-at-startup "wl-clip-persist" "--clipboard" "regular"
 spawn-at-startup "kdeconnect-indicator"
 //
-spawn-at-startup "bash" "-c" "swaybg -m fill -i ~/wallpapers/green_leaves.jpg"
+spawn-at-startup "bash" "-c" "swaybg -m fill -i ~/.config/wallpapers/elk_gasstation_dark.jpg"
 spawn-at-startup "~/.config/niri/clipsync watch with-notifications"
 spawn-at-startup
 //
@@ -162,6 +169,22 @@ animations {
     }
 }
 
+gestures {
+    dnd-edge-view-scroll {
+        trigger-width 200
+        max-speed 3500
+    }
+}
+
+window-rule {
+    match is-window-cast-target=true
+    border {
+        on
+        active-color "#ff5555"
+        inactive-color "#ff5555"
+        width 2
+    }
+}
 window-rule {
     match app-id=r#"^foot$"#
     default-column-width { proportion 0.3333; }
@@ -174,6 +197,7 @@ layer-rule {
 
 window-rule {
     match app-id=r#"1Password"#
+    match title="Open Folder"
     match title=r#"[gG]mail"#
     match title=r#".*[Ww]hats[aA]pp.*$"#
     match title=r#".*Ente Photos.*"#
@@ -181,6 +205,10 @@ window-rule {
 }
 window-rule {
     match app-id=r#"^1Password$"#
+    match app-id=r#"msedge-_.*-Default"#
+    match title=r"[bB]itwarden"
+    match title=r#"^.* is sharing your screen.$"#;
+    match title="Open Folder"
     open-floating true
 }
 
@@ -195,11 +223,6 @@ window-rule {
     match app-id=r#"^[gG]edit$"#;
     match app-id=r#"^[eE]og$"#;
     // fake-fullscreen true
-}
-
-window-rule {
-    match title=r#"^.* is sharing your screen.$"#;
-    open-floating true
 }
 
 
@@ -233,7 +256,11 @@ binds {
 
     // Suggested binds for running programs: terminal, app launcher, screen locker.
     Mod+T { spawn "foot"; }
+    // {% if SYSTEM.hostname == "kenbun-laptop-leon" %}
+    //<yolk> Mod+B { spawn "bash" "-c" "unset DISPLAY && microsoft-edge --ozone-platform-hint=auto --enable-features=VaapiVideoDecodeLinuxGL --enable-features=TouchpadOverscrollHistoryNavigation"; }
+    // {% else %}
     Mod+B { spawn "bash" "-c" "unset DISPLAY && google-chrome --ozone-platform-hint=auto --enable-features=VaapiVideoDecodeLinuxGL --enable-features=TouchpadOverscrollHistoryNavigation"; }
+    // {% end %}
     Mod+Shift+P { spawn "~/.config/rofi/launchers/type-2/launcher.sh"; }
     Mod+Shift+B { spawn "firefox"; }
 
@@ -248,6 +275,8 @@ binds {
     XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "set" "5%-"; }
 
     Mod+Shift+Q { close-window; }
+
+    Mod+W { toggle-column-tabbed-display; }
 
     Mod+H     { focus-column-or-monitor-left; }
     Mod+J     { focus-window-down; }

@@ -1,4 +1,12 @@
 {
+  "features": {
+    "inline_completion_provider": "zed"
+  },
+  "icon_theme": "Material Icon Theme",
+  "telemetry": {
+    "metrics": false,
+    "diagnostics": false
+  },
   "remove_trailing_whitespace_on_save": false,
   "auto_signature_help": false,
   "unnecessary_code_fade": 0.5,
@@ -10,11 +18,13 @@
       "provider": "copilot_chat",
       "model": "claude-3-5-sonnet"
     },
+    "enable_experimental_live_diffs": true,
     "version": "2"
   },
   "theme": "Gruvbox Dark Hard",
-  "buffer_font_size": 14,
+  "buffer_font_size": 14.0,
   "buffer_font_family": "Input",
+  // "buffer_font_family": "Input",
   // "buffer_font_family": "FiraCode Nerd Font",
   // "buffer_font_family": "JetBrainsMono Nerd Font Mono",
   // "buffer_line_height": { "custom": 1.55 },
@@ -54,7 +64,7 @@
   },
 
   "terminal": {
-    "font_family": "JetBrainsMono Nerd Font",
+    "font_family": "FiraCode Nerd Font",
     "font_size": 14
   },
   "vim_mode": true,

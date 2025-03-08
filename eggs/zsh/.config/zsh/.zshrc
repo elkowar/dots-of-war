@@ -10,6 +10,11 @@ setopt SHARE_HISTORY
 
 source "$ZDOTDIR/utils.zsh"
 
+if [ ! -f "$HISTFILE" ]; then
+  mkdir -p "$(dirname "$HISTFILE")"
+  touch "$HISTFILE"
+fi
+
 # pnpm
 export PNPM_HOME="$HOME/.local/share/pnpm"
 case ":$PATH:" in

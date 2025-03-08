@@ -1,0 +1,9 @@
+profile {
+  output "Philips Consumer Electronics Company PHL 345B1C 0x00008E7C" mode 3440x1440@99.982 position 2560,0
+  output "Fujitsu Siemens Computers GmbH P27-8 TE Pro YVBH008792" mode 2560x1440 position 0,0
+  output eDP-1 mode 1920x1200 position 2560,1440
+}
+
+profile {
+  output eDP-1 mode 1920x1200 position 0,0
+}
