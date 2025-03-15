@@ -415,6 +415,7 @@ binds {
     Mod+Shift+R { reset-window-height; }
     Mod+F { maximize-column; }
     Mod+Shift+F { fullscreen-window; }
+    Mod+Ctrl+F { expand-column-to-available-width; }
     Mod+C { center-column; }
 
     Mod+Minus { set-column-width "-10%"; }
