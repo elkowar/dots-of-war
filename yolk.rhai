@@ -31,7 +31,7 @@ export let eggs = #{
     "nvim-old": #{ enabled: false },
     "wallpapers": #{ targets: "~/.config/wallpapers" },
     "alacritty": #{ enabled: !device.windows, targets: "~/.config/alacritty" },
-    "eww": merge_into_home(device.linux && device.desktop, []),
+    "eww": merge_into_home(device.linux && device.desktop || device.thinkix, []),
     "eww-bar": merge_into_home(device.linux && device.desktop, []),
     "foot": #{ enabled: device.linux, targets: "~/.config/foot", templates: ["foot.ini"] },
     "git": merge_into_home(true, [".gitconfig"]),
