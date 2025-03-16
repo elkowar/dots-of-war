@@ -421,7 +421,6 @@ binds {
     Mod+Minus { set-column-width "-10%"; }
     Mod+Shift+Equal { set-column-width "+10%"; }
     Mod+Equal { set-column-width "+10%"; }
-
     Mod+Ctrl+Minus { set-window-height "-10%"; }
     Mod+Ctrl+Equal { set-window-height "+10%"; }
     Mod+Ctrl+Shift+Equal { set-window-height "+10%"; }
@@ -439,6 +438,8 @@ binds {
     }
 
     Ctrl+Escape { spawn "killall" "-s" "SIGINT" "wf-recorder"; }
+
+    Mod+Shift+Y { spawn "niri" "msg" "action" "set-dynamic-cast-window"; }
 
     Mod+Shift+E { quit; }
 }
