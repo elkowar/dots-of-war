@@ -1,4 +1,8 @@
 // vim:set ft=kdl shiftwidth=4 commentstring=//%s:
+debug {
+    keep-laptop-panel-on-when-lid-is-closed
+}
+
 input {
     keyboard {
         xkb {
@@ -66,7 +70,7 @@ output "Philips Consumer Electronics Company PHL 345B1C 0x00008E7C" {
     //<yolk> mode "1920x1080@60"
     //<yolk> scale 1.0
     //<yolk> transform "normal"
-    //<yolk> position x=0 y=1440
+    //<yolk> position x=2560 y=1440
 //<yolk> }
 // {% end %}
 
@@ -106,9 +110,9 @@ layout {
 
 
 // {% if device.laptop %}
-//<yolk> spawn-at-startup "bash" "-c" "swayidle -w timeout 601 'niri msg action power-off-monitors' timeout 600 'hyprlock' before-sleep 'hyprlock' timeout 3600 'systemctl suspend' timeout 60000 'systemctl hibernate'"
+//<yolk> spawn-at-startup "bash" "-c" "swayidle -w timeout 601 'niri msg action power-off-monitors' timeout 1200 'hyprlock' before-sleep 'hyprlock' timeout 3600 'systemctl suspend'"
 //<yolk> spawn-at-startup "waybar"
-//<yolk> spawn-at-startup "kanshi"
+//<yolk> // spawn-at-startup "kanshi"
 // {% end %}
 
 // {% if device.desktop %}
@@ -124,7 +128,8 @@ spawn-at-startup "clipse -listen"
 spawn-at-startup "wl-clip-persist" "--clipboard" "regular"
 spawn-at-startup "kdeconnect-indicator"
 //
-spawn-at-startup "bash" "-c" "swaybg -m fill -i ~/.config/wallpapers/elk_gasstation_dark.jpg"
+spawn-at-startup "bash" "-c" "swaybg -m fill -i ~/.config/wallpapers/elk_gasstation_lights.jpg"
+// spawn-at-startup "bash" "-c" "swaybg -m fill -i ~/.config/wallpapers/elk_gasstation_dark.jpg"
 spawn-at-startup "~/.config/niri/clipsync watch with-notifications"
 spawn-at-startup
 //
@@ -149,7 +154,7 @@ animations {
                 float cur = niri_clamped_progress;
                 if (coords_geo.x > cur) { return vec4(0.0); }
                 vec3 coord = vec3(map(coords_geo.x,0.0, cur, 0.0, 1.0 ), coords_geo.y, coords_geo.z);
-                return texture2d(niri_tex, (niri_geo_to_tex * coord).st);
+                return texture2D(niri_tex, (niri_geo_to_tex * coord).st);
             }
         "
     }
@@ -171,8 +176,8 @@ animations {
 
 gestures {
     dnd-edge-view-scroll {
-        trigger-width 200
-        max-speed 3500
+        trigger-width 20
+        max-speed 2000
     }
 }
 

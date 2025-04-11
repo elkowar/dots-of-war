@@ -15,13 +15,6 @@
     }
   },
   {
-    "context": "EmptyPane",
-    "bindings": {
-      ":": "command_palette::Toggle",
-      "space p": "file_finder::Toggle"
-    }
-  },
-  {
     "context": "os == macos && Editor && VimControl && !VimWaiting && !menu",
     "bindings": {
       "cmd-d": "editor::SelectNext"
@@ -40,7 +33,17 @@
     }
   },
   {
-    "context": "MarkdownPreview || EmptyPane || Diagnostics || Editor && VimControl && !VimWaiting && !menu",
+    "context": "EmptyPane || Diagnostics && !vim_mode && !VimWaiting && !menu",
+    "bindings": {
+      "space b c": "pane::CloseActiveItem",
+      "space p": "file_finder::Toggle",
+      "space o": "pane::DeploySearch",
+      "space h": "pane::ActivatePrevItem",
+      "space l": "pane::ActivateNextItem"
+    }
+  },
+  {
+    "context": "MarkdownPreview || EmptyPane || (Editor && VimControl && !VimWaiting && !menu)",
     "bindings": {
       "z space": "editor::FoldAll",
       "z backspace": "editor::FoldFunctionBodies",

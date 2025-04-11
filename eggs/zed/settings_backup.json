@@ -1,4 +1,8 @@
 {
+  "edit_predictions": {
+    "disabled_globs": [],
+    "mode": "eager_preview"
+  },
   "features": {
     "inline_completion_provider": "zed"
   },

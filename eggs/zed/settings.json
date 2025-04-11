@@ -1,6 +1,13 @@
 {
+  "git_panel": {
+    "status_style": "label_color"
+  },
+  "edit_predictions": {
+    "disabled_globs": [],
+    "mode": "eager"
+  },
   "features": {
-    "inline_completion_provider": "zed"
+    "edit_prediction_provider": "zed"
   },
   "icon_theme": "Material Icon Theme",
   "telemetry": {
@@ -16,17 +23,17 @@
   "assistant": {
     "default_model": {
       "provider": "copilot_chat",
-      "model": "claude-3-5-sonnet"
+      "model": "claude-3-7-sonnet"
     },
     "enable_experimental_live_diffs": true,
     "version": "2"
   },
   "theme": "Gruvbox Dark Hard",
   "buffer_font_size": 14.0,
-  "buffer_font_family": "Input",
+  // "buffer_font_family": "Input",
   // "buffer_font_family": "Input",
   // "buffer_font_family": "FiraCode Nerd Font",
-  // "buffer_font_family": "JetBrainsMono Nerd Font Mono",
+  "buffer_font_family": "JetBrains Mono",
   // "buffer_line_height": { "custom": 1.55 },
   // "ui_font_family": "Noto Sans",
   // "buffer_font_family": "Zed Mono",
@@ -79,7 +86,18 @@
   },
   "lsp": {
     "rust-analyzer": {
+      "cargo": {
+        "features": "all"
+      },
       "initialization_options": {
+        // "diagnostics": {
+        //   "experimental": {
+        //     "enable": true
+        //   }
+        // },
+        // "cargo": {
+        //   "features": "all"
+        // },
         "typing": {
           // Temporary workaround around round rust-analzyer wrongly inserting `|` twice
           "excludeChars": "|<"

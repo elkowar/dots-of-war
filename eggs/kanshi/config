@@ -1,9 +1,22 @@
 profile {
   output "Philips Consumer Electronics Company PHL 345B1C 0x00008E7C" mode 3440x1440@99.982 position 2560,0
   output "Fujitsu Siemens Computers GmbH P27-8 TE Pro YVBH008792" mode 2560x1440 position 0,0
-  output eDP-1 mode 1920x1200 position 2560,1440
+  output "Sharp Corporation 0x1515 Unknown" mode 1920x1200 position 2560,1440
 }
+
+# profile {
+#   output "DP-5" mode 3440x1440@99.982 position 2560,0
+#   output "DP-6" mode 2560x1440 position 0,0
+#   output eDP-1 mode 1920x1200 position 2560,1440
+# }
 
 profile {
   output eDP-1 mode 1920x1200 position 0,0
+}
+
+profile {
+  output "HP Inc. HP E27u G4 CN4114303X" mode 2560x1440@59.951 position 0,0
+  #output "HP Inc. HP Z27k G3 CN414018RC" mode 3840x2160@30 position 2560,0 scale 1.5
+  output "HP Inc. HP Z27k G3 CN414018RC" mode 2560x1440@59.951 position 2560,0 scale 1
+  output eDP-1 mode 1920x1200@59.950 position 2560,1440
 }

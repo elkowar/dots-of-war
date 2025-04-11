@@ -4,21 +4,14 @@
     "bindings": {
       // unbind closing the tab with this
       "ctrl-w": null,
-      "ctrl-w ctrl-h": ["workspace::ActivatePaneInDirection", "Left"],
-      "ctrl-w ctrl-j": ["workspace::ActivatePaneInDirection", "Down"],
-      "ctrl-w ctrl-k": ["workspace::ActivatePaneInDirection", "Up"],
-      "ctrl-w ctrl-l": ["workspace::ActivatePaneInDirection", "Right"],
+      "ctrl-w ctrl-h": "workspace::ActivatePaneLeft",
+      "ctrl-w ctrl-j": "workspace::ActivatePaneDown",
+      "ctrl-w ctrl-k": "workspace::ActivatePaneUp",
+      "ctrl-w ctrl-l": "workspace::ActivatePaneRight",
       "ctrl-shift-t": "pane::ReopenClosedItem",
       "ctrl-o": "pane::GoBack",
       "ctrl-i": "pane::GoForward"
       // "shift-escape": null
-    }
-  },
-  {
-    "context": "EmptyPane",
-    "bindings": {
-      ":": "command_palette::Toggle",
-      "space p": "file_finder::Toggle"
     }
   },
   {
@@ -40,7 +33,17 @@
     }
   },
   {
-    "context": "MarkdownPreview || EmptyPane || Diagnostics || Editor && VimControl && !VimWaiting && !menu",
+    "context": "EmptyPane || Diagnostics && !vim_mode && !VimWaiting && !menu",
+    "bindings": {
+      "space b c": "pane::CloseActiveItem",
+      "space p": "file_finder::Toggle",
+      "space o": "pane::DeploySearch",
+      "space h": "pane::ActivatePrevItem",
+      "space l": "pane::ActivateNextItem"
+    }
+  },
+  {
+    "context": "MarkdownPreview || EmptyPane || (Editor && VimControl && !VimWaiting && !menu)",
     "bindings": {
       "z space": "editor::FoldAll",
       "z backspace": "editor::FoldFunctionBodies",
@@ -93,8 +96,8 @@
   {
     "context": "Editor && vim_mode == normal && !VimWaiting && !menu",
     "bindings": {
-      "backspace": ["vim::PushOperator", { "Sneak": {} }],
-      "return": ["vim::PushOperator", { "SneakBackward": {} }]
+      "backspace": ["vim::PushSneak", {}],
+      "return": ["vim::PushSneakBackward", {}]
     }
   },
   {
