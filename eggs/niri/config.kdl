@@ -420,6 +420,7 @@ binds {
     Mod+Shift+R { reset-window-height; }
     Mod+F { maximize-column; }
     Mod+Shift+F { fullscreen-window; }
+    Mod+Ctrl+Shift+F { toggle-windowed-fullscreen; }
     Mod+Ctrl+F { expand-column-to-available-width; }
     Mod+C { center-column; }
 
@@ -445,6 +446,8 @@ binds {
     Ctrl+Escape { spawn "killall" "-s" "SIGINT" "wf-recorder"; }
 
     Mod+Shift+Y { spawn "niri" "msg" "action" "set-dynamic-cast-window"; }
+    Mod+Ctrl+Alt+Shift+Y { spawn "niri" "msg" "action" "set-dynamic-cast-monitor"; }
+    Mod+Ctrl+Y { spawn "niri" "msg" "action" "clear-dynamic-cast-target"; }
 
     Mod+Shift+E { quit; }
 }
