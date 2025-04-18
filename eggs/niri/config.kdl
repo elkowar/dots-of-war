@@ -203,6 +203,7 @@ layer-rule {
 window-rule {
     match app-id=r#"1Password"#
     match title="Open Folder"
+    match title="Element.*"
     match title=r#"[gG]mail"#
     match title=r#".*[Ww]hats[aA]pp.*$"#
     match title=r#".*Ente Photos.*"#

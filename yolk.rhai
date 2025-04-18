@@ -8,11 +8,13 @@ export const theme = themes.gruvbox;
 
 export const device = #{
     thinkix: SYSTEM.hostname == "thinkix",
+    crabbix: SYSTEM.hostname == "crabbix",
     desktop: SYSTEM.hostname == "fedora.fritz.box" || SYSTEM.hostname == "fedora",
     laptop: SYSTEM.hostname == "thinkix"
         || SYSTEM.hostname == "frissnix"
         || SYSTEM.device_name == "Matthiass MacBook Pro"
-        || SYSTEM.hostname == "kenbun-laptop-leon",
+        || SYSTEM.hostname == "kenbun-laptop-leon"
+        || SYSTEM.hostname == "crabbix",
 
     linux: SYSTEM.platform == "Linux",
     windows: SYSTEM.platform == "Windows",
@@ -20,6 +22,8 @@ export const device = #{
     macbook: SYSTEM.device_name == "Matthiass MacBook Pro",
     kenbun:  SYSTEM.device_name == "Matthiass MacBook Pro" || SYSTEM.hostname == "kenbun-laptop-leon",
 };
+
+device.linux_laptop = device.laptop && device.linux;
 
 
 private fn merge_into_home(enabled, templates) {

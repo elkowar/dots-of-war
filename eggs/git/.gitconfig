@@ -3,7 +3,7 @@
 	name = elkowar
 	email = dev@elkowar.dev
 [github]
-    user = ElKowar
+  user = ElKowar
 ; {% end %}
 [include]
 	path = ~/.gitconfig.local
