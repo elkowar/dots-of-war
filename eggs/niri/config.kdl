@@ -65,7 +65,7 @@ output "Philips Consumer Electronics Company PHL 345B1C 0x00008E7C" {
 //<yolk> }
 // {% end %}
 
-// {% if device.thinkix || SYSTEM.hostname == "kenbun-laptop-leon" %}
+// {% if device.thinkix || device.crabbix || SYSTEM.hostname == "kenbun-laptop-leon" %}
 //<yolk> output "eDP-1" {
     //<yolk> mode "1920x1080@60"
     //<yolk> scale 1.0
