@@ -453,4 +453,5 @@ binds {
     Mod+Escape { spawn "niri" "msg" "action" "toggle-overview"; }
 
     Mod+Shift+E { quit; }
+    Mod+Escape { toggle-overview; }
 }
