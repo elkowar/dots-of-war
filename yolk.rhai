@@ -49,7 +49,7 @@ export let eggs = #{
     "sway": merge_into_home(device.desktop && device.linux, []),
     "zed": #{ enabled: !device.windows, strategy: "put", targets: "~/.config/zed" },
     "zsh": merge_into_home(!device.windows, []),
-    "rofi": merge_into_home(device.linux, []),
+    "rofi": #{ enabled: device.linux, targets: "~/.config/rofi" },
     "gtk": merge_into_home(device.linux, []),
     "scripts": #{ enabled: device.linux, targets: "~/scripts", strategy: "merge" },
 
