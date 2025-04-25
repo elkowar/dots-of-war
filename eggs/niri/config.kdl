@@ -451,4 +451,5 @@ binds {
     Mod+Ctrl+Y { spawn "niri" "msg" "action" "clear-dynamic-cast-target"; }
 
     Mod+Shift+E { quit; }
+    Mod+Escape { toggle-overview; }
 }
