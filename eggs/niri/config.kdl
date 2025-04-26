@@ -450,5 +450,7 @@ binds {
     Mod+Ctrl+Alt+Shift+Y { spawn "niri" "msg" "action" "set-dynamic-cast-monitor"; }
     Mod+Ctrl+Y { spawn "niri" "msg" "action" "clear-dynamic-cast-target"; }
 
+    Mod+Escape { spawn "niri" "msg" "action" "toggle-overview"; }
+
     Mod+Shift+E { quit; }
 }
