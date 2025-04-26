@@ -10,6 +10,13 @@ setopt SHARE_HISTORY
 
 source "$ZDOTDIR/utils.zsh"
 
+if [ "$(hostname)" = "crabbix" ]; then
+  if command -v nu; then
+    exec nu
+  fi
+fi
+
+
 if [ ! -f "$HISTFILE" ]; then
   mkdir -p "$(dirname "$HISTFILE")"
   touch "$HISTFILE"
