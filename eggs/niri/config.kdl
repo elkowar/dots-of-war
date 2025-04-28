@@ -128,7 +128,8 @@ spawn-at-startup "clipse -listen"
 spawn-at-startup "wl-clip-persist" "--clipboard" "regular"
 spawn-at-startup "kdeconnect-indicator"
 //
-spawn-at-startup "bash" "-c" "swaybg -m fill -i ~/.config/wallpapers/elk_gasstation_lights.jpg"
+// spawn-at-startup "bash" "-c" "swaybg -m fill -i ~/.config/wallpapers/elk_gasstation_lights.jpg"
+spawn-at-startup "bash" "-c" "swaybg -m fill -i ~/.config/wallpapers/luxembourg-villa.jpg"
 // spawn-at-startup "bash" "-c" "swaybg -m fill -i ~/.config/wallpapers/elk_gasstation_dark.jpg"
 spawn-at-startup "~/.config/niri/clipsync watch with-notifications"
 spawn-at-startup
