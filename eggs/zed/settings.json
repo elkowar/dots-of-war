@@ -22,6 +22,64 @@
   // "always_treat_brackets_as_autoclosed": false,
   // "unstable.ui_density": "compact",
   "assistant": {
+    "always_allow_tool_actions": true,
+    "default_profile": "code",
+    "profiles": {
+      "code": {
+        "name": "Code",
+        "tools": {
+                    "rename": false,
+                    "thinking": true,
+                    "terminal": true,
+                    "symbol_info": true,
+                    "read_file": true,
+                    "open": true,
+                    "now": true,
+                    "list_directory": true,
+                    "grep": true,
+                    "find_path": true,
+                    "fetch": true,
+                    "edit_file": true,
+                    "diagnostics": true,
+                    "create_file": true,
+                    "contents": true,
+                    "code_symbols": true,
+                    "code_actions": true,
+                    "batch_tool": true
+                },
+        "enable_all_context_servers": false,
+        "context_servers": {}
+      },
+      "write": {
+        "name": "Write",
+        "tools": {
+          "open": true,
+          "batch_tool": true,
+          "code_actions": true,
+          "code_symbols": true,
+          "contents": false,
+          "copy_path": false,
+          "create_file": true,
+          "delete_path": false,
+          "diagnostics": true,
+          "edit_file": true,
+          "fetch": true,
+          "list_directory": true,
+          "move_path": false,
+          "now": true,
+          "find_path": true,
+          "read_file": true,
+          "grep": true,
+          "rename": false,
+          "symbol_info": true,
+          "terminal": true,
+          "thinking": true,
+          "web_search": true
+        },
+        "enable_all_context_servers": true,
+        "context_servers": {}
+      }
+    },
     "default_model": {
       "provider": "copilot_chat",
       "model": "claude-3-7-sonnet"

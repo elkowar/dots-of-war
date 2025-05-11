@@ -10,12 +10,6 @@ setopt SHARE_HISTORY
 
 source "$ZDOTDIR/utils.zsh"
 
-if [ "$(hostname)" = "crabbix" ]; then
-  if command -v nu; then
-    exec nu
-  fi
-fi
-
 
 if [ ! -f "$HISTFILE" ]; then
   mkdir -p "$(dirname "$HISTFILE")"
@@ -164,6 +158,7 @@ export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.bun/bin:$PATH"
 
 
+
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 if [ -s "$NVM_DIR/nvm.sh" ]; then 
     . "$NVM_DIR/nvm.sh"
@@ -188,3 +183,12 @@ if [ -f '~/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '~/Downloads
 
 [[ -f '/Applications/Tailscale.app/Contents/MacOS/Tailscale' ]] && alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
 command -v jless >/dev/null && alias yless="jless --yaml"
+
+
+## SWITCH TO NU SHELL
+# if [ "$(hostname)" = "crabbix" ]; then
+#   if command -v nu; then
+#     exec nu
+#   fi
+# fi
+

@@ -1,6 +1,6 @@
 // vim:set ft=kdl shiftwidth=4 commentstring=//%s:
 debug {
-    keep-laptop-panel-on-when-lid-is-closed
+    // keep-laptop-panel-on-when-lid-is-closed
 }
 
 input {
@@ -26,7 +26,7 @@ input {
         accel-speed -0.1
     }
     trackpoint {
-        accel-speed -0.1
+        accel-speed -0.4
     }
     //warp-mouse-to-focus
     focus-follows-mouse max-scroll-amount="20%"
