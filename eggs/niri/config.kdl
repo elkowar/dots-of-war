@@ -75,8 +75,6 @@ output "Philips Consumer Electronics Company PHL 345B1C 0x00008E7C" {
 // {% end %}
 
 
-
-
 layout {
     gaps 16
     // center-focused-column "always" // - "never", "always" "on-overflow"
@@ -191,6 +189,7 @@ window-rule {
         width 2
     }
 }
+
 window-rule {
     match app-id=r#"^foot$"#
     default-column-width { proportion 0.3333; }
