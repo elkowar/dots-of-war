@@ -21,32 +21,32 @@
   // "use_autoclose": true,
   // "always_treat_brackets_as_autoclosed": false,
   // "unstable.ui_density": "compact",
-  "assistant": {
+  /* Duplicated key auto-commented: "agent": {
     "always_allow_tool_actions": true,
     "default_profile": "code",
     "profiles": {
       "code": {
         "name": "Code",
         "tools": {
-                    "rename": false,
-                    "thinking": true,
-                    "terminal": true,
-                    "symbol_info": true,
-                    "read_file": true,
-                    "open": true,
-                    "now": true,
-                    "list_directory": true,
-                    "grep": true,
-                    "find_path": true,
-                    "fetch": true,
-                    "edit_file": true,
-                    "diagnostics": true,
-                    "create_file": true,
-                    "contents": true,
-                    "code_symbols": true,
-                    "code_actions": true,
-                    "batch_tool": true
-                },
+          "rename": false,
+          "thinking": true,
+          "terminal": true,
+          "symbol_info": true,
+          "read_file": true,
+          "open": true,
+          "now": true,
+          "list_directory": true,
+          "grep": true,
+          "find_path": true,
+          "fetch": true,
+          "edit_file": true,
+          "diagnostics": true,
+          "create_file": true,
+          "contents": true,
+          "code_symbols": true,
+          "code_actions": true,
+          "batch_tool": true
+        },
         "enable_all_context_servers": false,
         "context_servers": {}
       },
@@ -79,12 +79,13 @@
         "enable_all_context_servers": true,
         "context_servers": {}
       }
-    },
+    }
+  }, */
+  "agent": {
     "default_model": {
       "provider": "copilot_chat",
-      "model": "claude-3-7-sonnet"
+      "model": "claude-3.7-sonnet"
     },
-    "enable_experimental_live_diffs": true,
     "version": "2"
   },
   "theme": "Gruvbox Dark Hard",
@@ -96,7 +97,6 @@
   // "buffer_line_height": { "custom": 1.55 },
   // "ui_font_family": "Noto Sans",
   // "buffer_font_family": "Zed Mono",
-
   // "active_pane_magnification": 1.3,
   "tab_bar": {
     "show_nav_history_buttons": false
@@ -124,11 +124,9 @@
     "enable_preview_from_file_finder": true,
     "enable_preview_from_code_navigation": true
   },
-
   "message_editor": {
     "auto_replace_emoji_shortcode": true
   },
-
   "terminal": {
     "font_family": "FiraCode Nerd Font",
     "font_size": 14
@@ -173,7 +171,6 @@
     "panel.indent_guide": "#ffffff08",
     "panel.indent_guide_active": "#ffffff11",
     "panel.indent_guide_hover": "#ffffff13",
-
     "panel.background": "#282828",
     "tab_bar.background": "#282828",
     // "border": "#3c3836",

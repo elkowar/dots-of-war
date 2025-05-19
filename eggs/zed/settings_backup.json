@@ -1,10 +1,14 @@
 {
+  "git_panel": {
+    "status_style": "label_color"
+  },
   "edit_predictions": {
     "disabled_globs": [],
-    "mode": "eager_preview"
+    "mode": "eager"
   },
   "features": {
-    "inline_completion_provider": "zed"
+    "edit_prediction_provider": "copilot"
+    // "edit_prediction_provider": "zed"
   },
   "icon_theme": "Material Icon Theme",
   "telemetry": {
@@ -18,23 +22,81 @@
   // "always_treat_brackets_as_autoclosed": false,
   // "unstable.ui_density": "compact",
   "assistant": {
+    "always_allow_tool_actions": true,
+    "default_profile": "code",
+    "profiles": {
+      "code": {
+        "name": "Code",
+        "tools": {
+          "rename": false,
+          "thinking": true,
+          "terminal": true,
+          "symbol_info": true,
+          "read_file": true,
+          "open": true,
+          "now": true,
+          "list_directory": true,
+          "grep": true,
+          "find_path": true,
+          "fetch": true,
+          "edit_file": true,
+          "diagnostics": true,
+          "create_file": true,
+          "contents": true,
+          "code_symbols": true,
+          "code_actions": true,
+          "batch_tool": true
+        },
+        "enable_all_context_servers": false,
+        "context_servers": {}
+      },
+      "write": {
+        "name": "Write",
+        "tools": {
+          "open": true,
+          "batch_tool": true,
+          "code_actions": true,
+          "code_symbols": true,
+          "contents": false,
+          "copy_path": false,
+          "create_file": true,
+          "delete_path": false,
+          "diagnostics": true,
+          "edit_file": true,
+          "fetch": true,
+          "list_directory": true,
+          "move_path": false,
+          "now": true,
+          "find_path": true,
+          "read_file": true,
+          "grep": true,
+          "rename": false,
+          "symbol_info": true,
+          "terminal": true,
+          "thinking": true,
+          "web_search": true
+        },
+        "enable_all_context_servers": true,
+        "context_servers": {}
+      }
+    }
+  },
+  "agent": {
     "default_model": {
       "provider": "copilot_chat",
-      "model": "claude-3-5-sonnet"
+      "model": "claude-3.7-sonnet"
     },
-    "enable_experimental_live_diffs": true,
     "version": "2"
   },
   "theme": "Gruvbox Dark Hard",
   "buffer_font_size": 14.0,
-  "buffer_font_family": "Input",
+  // "buffer_font_family": "Input",
   // "buffer_font_family": "Input",
   // "buffer_font_family": "FiraCode Nerd Font",
-  // "buffer_font_family": "JetBrainsMono Nerd Font Mono",
+  "buffer_font_family": "JetBrains Mono",
   // "buffer_line_height": { "custom": 1.55 },
   // "ui_font_family": "Noto Sans",
   // "buffer_font_family": "Zed Mono",
-
   // "active_pane_magnification": 1.3,
   "tab_bar": {
     "show_nav_history_buttons": false
@@ -62,11 +124,9 @@
     "enable_preview_from_file_finder": true,
     "enable_preview_from_code_navigation": true
   },
-
   "message_editor": {
     "auto_replace_emoji_shortcode": true
   },
-
   "terminal": {
     "font_family": "FiraCode Nerd Font",
     "font_size": 14
@@ -83,7 +143,18 @@
   },
   "lsp": {
     "rust-analyzer": {
+      "cargo": {
+        "features": "all"
+      },
       "initialization_options": {
+        // "diagnostics": {
+        //   "experimental": {
+        //     "enable": true
+        //   }
+        // },
+        // "cargo": {
+        //   "features": "all"
+        // },
         "typing": {
           // Temporary workaround around round rust-analzyer wrongly inserting `|` twice
           "excludeChars": "|<"
@@ -100,7 +171,6 @@
     "panel.indent_guide": "#ffffff08",
     "panel.indent_guide_active": "#ffffff11",
     "panel.indent_guide_hover": "#ffffff13",
-
     "panel.background": "#282828",
     "tab_bar.background": "#282828",
     // "border": "#3c3836",

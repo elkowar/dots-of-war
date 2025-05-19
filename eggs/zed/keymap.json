@@ -33,13 +33,15 @@
     }
   },
   {
-    "context": "EmptyPane || Diagnostics && !vim_mode && !VimWaiting && !menu",
+    "context": "Welcome || EmptyPane || Diagnostics && !vim_mode && !VimWaiting && !menu",
     "bindings": {
       "space b c": "pane::CloseActiveItem",
       "space p": "file_finder::Toggle",
       "space o": "pane::DeploySearch",
-      "space h": "pane::ActivatePrevItem",
-      "space l": "pane::ActivateNextItem"
+      "space h": "pane::ActivatePreviousItem",
+      "space l": "pane::ActivateNextItem",
+      "space e w": "diagnostics::ToggleWarnings",
+      "alt-j": "workspace::ToggleBottomDock"
     }
   },
   {
@@ -54,7 +56,7 @@
       "space p": "file_finder::Toggle",
       "space o": "pane::DeploySearch",
 
-      "space h": "pane::ActivatePrevItem",
+      "space h": "pane::ActivatePreviousItem",
       "space l": "pane::ActivateNextItem",
       "space c space": "editor::ToggleComments",
 
@@ -69,7 +71,7 @@
       "ctrl-j": "editor::AddSelectionBelow",
       "ctrl-k": "editor::AddSelectionAbove",
       "alt-d": "editor::SelectNext",
-      "alt-j": "editor::SelectAllMatches",
+      "alt-shift-d": "editor::SelectAllMatches",
       // lsp
       "space m f": "editor::Format",
       "space m s": "project_symbols::Toggle",
@@ -79,7 +81,7 @@
       "space m r": "editor::FindAllReferences",
       "space m t": "editor::GoToTypeDefinition",
       "space m e": "editor::GoToDiagnostic",
-      "space m E": "editor::GoToPrevDiagnostic",
+      "space m E": "editor::GoToPreviousDiagnostic",
       "space m v": "editor::ToggleCodeActions",
       "space m o": "outline::Toggle",
       "space m h": "editor::ShowSignatureHelp",
@@ -90,7 +92,7 @@
       "space v n": "editor::ToggleLineNumbers",
       "space v i": "editor::ToggleInlayHints",
       // Git
-      "space g b": "editor::ToggleGitBlame"
+      "space g b": "git::Blame"
     }
   },
   {
@@ -114,7 +116,7 @@
       "ctrl-t ctrl-t": "terminal_panel::ToggleFocus",
       "ctrl-t ctrl-n": "workspace::NewTerminal",
       "ctrl-t ctrl-shift-n": "workspace::NewCenterTerminal",
-      "ctrl-t ctrl-h": "pane::ActivatePrevItem",
+      "ctrl-t ctrl-h": "pane::ActivatePreviousItem",
       "ctrl-t ctrl-l": "pane::ActivateNextItem",
       "ctrl-x ctrl-c": "pane::CloseActiveItem",
       "ctrl-t ctrl-c": "pane::CloseActiveItem",
@@ -128,7 +130,7 @@
       "cmd-t cmd-t": "terminal_panel::ToggleFocus",
       "cmd-t cmd-n": "workspace::NewTerminal",
       "cmd-t cmd-shift-n": "workspace::NewCenterTerminal",
-      "cmd-t cmd-h": "pane::ActivatePrevItem",
+      "cmd-t cmd-h": "pane::ActivatePreviousItem",
       "cmd-t cmd-l": "pane::ActivateNextItem",
       "cmd-x cmd-c": "pane::CloseActiveItem"
     }
@@ -140,7 +142,7 @@
       "alt-t alt-t": "terminal_panel::ToggleFocus",
       "alt-t alt-n": "workspace::NewTerminal",
       "alt-t alt-shift-n": "workspace::NewCenterTerminal",
-      "alt-t alt-h": "pane::ActivatePrevItem",
+      "alt-t alt-h": "pane::ActivatePreviousItem",
       "alt-t alt-l": "pane::ActivateNextItem",
       "alt-x alt-c": "pane::CloseActiveItem"
     }
@@ -166,14 +168,15 @@
 
   // Panel stuff
   {
-    "context": "Editor && VimControl && !VimWaiting && !menu || OutlinePanel || ProjectPanel || Assistant || EmptyPane",
+    "context": "Editor && VimControl && !VimWaiting && !menu || OutlinePanel || ProjectPanel || Assistant || EmptyPane || Welcome",
     "bindings": {
       "space v h": "workspace::ToggleLeftDock",
       "space v l": "workspace::ToggleRightDock",
 
       "space v o": "outline_panel::ToggleFocus",
       "space v p": "project_panel::ToggleFocus",
-      "space v a": "assistant::ToggleFocus"
+      "space v a": "agent::ToggleFocus",
+      "alt-j": "workspace::ToggleBottomDock"
     }
   },
   {
@@ -191,7 +194,7 @@
   {
     "context": "Assistant",
     "bindings": {
-      "space h": "assistant::ToggleFocus"
+      "space h": "agent::ToggleFocus"
     }
   }
 ]
