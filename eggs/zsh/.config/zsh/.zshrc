@@ -1,10 +1,10 @@
 # history config
-HISTSIZE=50000
-SAVEHIST=50000
+HISTSIZE=50000000
+SAVEHIST=50000000
 HISTFILE="$HOME/.cache/zsh/history"
 setopt HIST_SAVE_NO_DUPS
 setopt HIST_IGNORE_ALL_DUPS
-#setopt INC_APPEND_HISTORY
+# setopt INC_APPEND_HISTORY
 setopt EXTENDED_HISTORY
 setopt SHARE_HISTORY
 
@@ -156,6 +156,7 @@ fi
 export PATH="$HOME/.volta/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.bun/bin:$PATH"
+export PATH="$HOME/go/bin:$PATH"
 
 
 

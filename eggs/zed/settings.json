@@ -1,4 +1,42 @@
 {
+  "agent": {
+    "inline_assistant_model": {
+      "provider": "copilot_chat",
+      "model": "gpt-4o"
+    },
+    "default_model": {
+      "provider": "copilot_chat",
+      "model": "claude-3.5-sonnet"
+    },
+    "model_parameters": []
+  },
+  "ssh_connections": [
+    {
+      "host": "docker",
+      "username": "root",
+      "args": [],
+      "projects": [
+        {
+          "paths": ["/root"]
+        }
+      ]
+    },
+    {
+      "host": "todesstern",
+      "args": [],
+      "projects": [
+        {
+          "paths": ["/data/home/leon/repos/kensa"]
+        },
+        {
+          "paths": ["/data/home/leon/repos/kidou-one"]
+        },
+        {
+          "paths": ["/data/home/leon/repos/kidou_datascience"]
+        }
+      ]
+    }
+  ],
   "git_panel": {
     "status_style": "label_color"
   },
@@ -28,25 +66,25 @@
       "code": {
         "name": "Code",
         "tools": {
-                    "rename": false,
-                    "thinking": true,
-                    "terminal": true,
-                    "symbol_info": true,
-                    "read_file": true,
-                    "open": true,
-                    "now": true,
-                    "list_directory": true,
-                    "grep": true,
-                    "find_path": true,
-                    "fetch": true,
-                    "edit_file": true,
-                    "diagnostics": true,
-                    "create_file": true,
-                    "contents": true,
-                    "code_symbols": true,
-                    "code_actions": true,
-                    "batch_tool": true
-                },
+          "rename": false,
+          "thinking": true,
+          "terminal": true,
+          "symbol_info": true,
+          "read_file": true,
+          "open": true,
+          "now": true,
+          "list_directory": true,
+          "grep": true,
+          "find_path": true,
+          "fetch": true,
+          "edit_file": true,
+          "diagnostics": true,
+          "create_file": true,
+          "contents": true,
+          "code_symbols": true,
+          "code_actions": true,
+          "batch_tool": true
+        },
         "enable_all_context_servers": false,
         "context_servers": {}
       },
