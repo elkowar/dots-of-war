@@ -1,15 +1,18 @@
 {
-  "agent": {
-    "inline_assistant_model": {
-      "provider": "copilot_chat",
-      "model": "gpt-4o"
-    },
-    "default_model": {
-      "provider": "copilot_chat",
-      "model": "claude-3.5-sonnet"
-    },
-    "model_parameters": []
+  "inlay_hints": {
+    "enabled": false,
+    "toggle_on_modifiers_press": {
+      "alt": true
+    }
   },
+  "minimap": {
+    "show": "never"
+  },
+  "show_signature_help_after_edits": true,
+  "sticky_scroll": {
+    "enabled": true
+  },
+  "colorize_brackets": true,
   "ssh_connections": [
     {
       "host": "docker",
@@ -45,13 +48,13 @@
     "mode": "eager"
   },
   "features": {
-    "edit_prediction_provider": "copilot"
+    "edit_prediction_provider": "zed"
     // "edit_prediction_provider": "zed"
   },
   "icon_theme": "Material Icon Theme",
   "telemetry": {
-    "metrics": false,
-    "diagnostics": false
+    "metrics": true,
+    "diagnostics": true
   },
   "remove_trailing_whitespace_on_save": false,
   "auto_signature_help": false,
@@ -59,7 +62,11 @@
   // "use_autoclose": true,
   // "always_treat_brackets_as_autoclosed": false,
   // "unstable.ui_density": "compact",
-  "assistant": {
+  "agent": {
+    "inline_assistant_model": {
+      "provider": "copilot_chat",
+      "model": "gpt-4.1"
+    },
     "always_allow_tool_actions": true,
     "default_profile": "code",
     "profiles": {
@@ -120,17 +127,16 @@
     },
     "default_model": {
       "provider": "copilot_chat",
-      "model": "claude-3-7-sonnet"
-    },
-    "enable_experimental_live_diffs": true,
-    "version": "2"
+      "model": "gpt-5-mini"
+    }
   },
-  "theme": "Gruvbox Dark Hard",
+  "theme": "Gruvbox Dark",
   "buffer_font_size": 14.0,
   // "buffer_font_family": "Input",
   // "buffer_font_family": "Input",
   // "buffer_font_family": "FiraCode Nerd Font",
-  "buffer_font_family": "JetBrains Mono",
+  "buffer_font_family": "Input Sans Narrow",
+  "buffer_font_fallbacks": ["Input Sans", "FiraCode Nerd Font Mono"],
   // "buffer_line_height": { "custom": 1.55 },
   // "ui_font_family": "Noto Sans",
   // "buffer_font_family": "Zed Mono",
@@ -147,6 +153,7 @@
     "folds": false
   },
   "toolbar": {
+    "code_actions": false,
     "quick_actions": false
     // "selections_menu": false
   },
@@ -160,7 +167,7 @@
   "preview_tabs": {
     "enabled": true,
     "enable_preview_from_file_finder": true,
-    "enable_preview_from_code_navigation": true
+    "enable_keep_preview_on_code_navigation": true
   },
 
   "message_editor": {
@@ -204,6 +211,8 @@
   },
   "drop_target_size": 0.3,
   "indent_guides": {
+    "enabled": true,
+    "background_coloring": "disabled",
     "coloring": "fixed"
   },
   "experimental.theme_overrides": {
