@@ -54,7 +54,7 @@ export let eggs = #{
     "scripts": #{ enabled: device.linux, targets: "~/scripts", strategy: "merge" },
 
     "hyprlock": merge_into_home(device.laptop && device.linux, []),
-    "kanata": merge_into_home(device.laptop, []),
+    "kanata": #{ enabled: device.linux, targets: "~/.config/kanata" },
     "waybar": merge_into_home(device.laptop && device.linux, ["*"]),
     "kanshi": #{ enabled: device.laptop && device.linux, targets: "~/.config/kanshi" },
 

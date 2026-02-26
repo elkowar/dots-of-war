@@ -9,7 +9,6 @@ fi
 export PATH="$HOME/.local/bin/scripts:$PATH"
 export PATH="$HOME/.emacs.d/bin/:$PATH"
 export PATH="$HOME/.npm-global/bin:$PATH"
-export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$HOME/.cpm/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.nimble/bin:$PATH"
@@ -66,3 +65,4 @@ export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 
 [ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
+. "$HOME/.cargo/env"
