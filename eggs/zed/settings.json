@@ -1,4 +1,17 @@
 {
+  "ssh_connections": [
+    {
+      "host": "todesstern",
+      "args": [],
+      "projects": [
+        {
+          "paths": [
+            "/data/home/leon/repos/kidou_datascience"
+          ]
+        }
+      ]
+    }
+  ],
   "text_rendering_mode": "platform_default",
   "git_panel": {
     "status_style": "label_color",
@@ -82,14 +95,46 @@
   "agent": {
     "tool_permissions": {
       "tools": {
+        "save_file": {
+          "default": "allow"
+        },
+        "delete_path": {
+          "default": "allow",
+          "always_allow": [
+            {
+              "pattern": "^kensa/flutter/kensa/rust/src/api/"
+            }
+          ]
+        },
+        "edit_file": {
+          "default": "allow"
+        },
+        "create_directory": {
+          "default": "allow"
+        },
+        "fetch": {
+          "always_allow": [
+            {
+              "pattern": "^https?://github\\.com"
+            },
+            {
+              "pattern": "^https?://copr\\.fedorainfracloud\\.org"
+            }
+          ]
+        },
+        "restore_file_from_disk": {
+          "default": "allow"
+        },
         "terminal": {
           "default": "allow",
         },
       },
     },
     "default_model": {
+      "effort": "medium",
+      "enable_thinking": true,
       "provider": "copilot_chat",
-      "model": "claude-sonnet-4.5",
+      "model": "claude-sonnet-4.6",
     },
   },
   "theme": "Gruvbox Dark Hard",

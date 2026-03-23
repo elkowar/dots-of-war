@@ -268,7 +268,7 @@ binds {
     Mod+B { spawn "bash" "-c" "unset DISPLAY && google-chrome --ozone-platform-hint=auto --enable-features=VaapiVideoDecodeLinuxGL --enable-features=TouchpadOverscrollHistoryNavigation"; }
     // {% end %}
     Mod+Shift+P { spawn "~/.config/rofi/launchers/type-2/launcher.sh"; }
-    Mod+Shift+B { spawn "firefox"; }
+    Mod+Shift+B { spawn "zen"; }
 
     // Example volume keys mappings for PipeWire & WirePlumber.
     // The allow-when-locked=true property makes them work even when the session is locked.
