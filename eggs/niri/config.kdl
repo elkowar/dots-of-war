@@ -106,22 +106,30 @@ layout {
     }
 
 }
+// Apps: blur them all without xray for a better look
+window-rule {
+  background-effect {
+    blur true
+    xray false
+  }
+}
 
-
-// {% if device.laptop %}
-//<yolk> spawn-at-startup "bash" "-c" "swayidle -w timeout 601 'niri msg action power-off-monitors' timeout 1200 'hyprlock' before-sleep 'hyprlock' timeout 3600 'systemctl suspend'"
-//<yolk> spawn-at-startup "waybar"
-//<yolk> // spawn-at-startup "kanshi"
-// {% end %}
-
-// {% if device.desktop %}
-//<yolk> spawn-at-startup "rm" "/home/elk/.config/google-chrome/SingletonLock"
-// {% end %}
-//
+// Noctalia: blur everywhere without xray for a better look 
+layer-rule {
+  match namespace="^noctalia-(background|launcher-overlay|dock)-.*$"
+  background-effect {
+    xray false
+  }
+}
 
 // {% if settings.use_noctalia %}
-//<yolk> //<yolk>spawn-at-startup "qs" "-c" "noctalia-shell"
+//<yolk> spawn-at-startup "qs" "-c" "noctalia-shell"
+// {% elif device.laptop %}
+//<yolk> spawn-at-startup "bash" "-c" "swayidle -w timeout 601 'niri msg action power-off-monitors' timeout 1200 'hyprlock' before-sleep 'hyprlock' timeout 3600 'systemctl suspend'"
+//<yolk> spawn-at-startup "waybar"
 // {% end %}
+
+
 
 
 spawn-at-startup "bash" "-c" "eww -c ~/.config/eww-bar open-many bar_1 niri_scroller"
@@ -274,7 +282,12 @@ binds {
     // {% else %}
     Mod+B { spawn-sh "unset DISPLAY && google-chrome --ozone-platform-hint=auto --enable-features=VaapiVideoDecodeLinuxGL --enable-features=TouchpadOverscrollHistoryNavigation"; }
     // {% end %}
-    Mod+Shift+P { spawn "~/.config/rofi/launchers/type-2/launcher.sh"; }
+    // {% if settings.use_noctalia %}
+    //<yolk> Mod+Shift+P { spawn "~/.config/rofi/launchers/type-2/launcher.sh"; }
+    // {% else %}
+    Mod+Shift+P { spawn-sh "qs -c noctalia-shell ipc call launcher toggle"; }
+    // {% end %}
+
     Mod+Shift+B { spawn "zen"; }
 
     // Example volume keys mappings for PipeWire & WirePlumber.

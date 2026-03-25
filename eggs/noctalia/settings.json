@@ -42,20 +42,20 @@
     "bar": {
         "autoHideDelay": 500,
         "autoShowDelay": 150,
-        "backgroundOpacity": 0.93,
-        "barType": "floating",
+        "backgroundOpacity": 0.84,
+        "barType": "simple",
         "capsuleColorKey": "none",
         "capsuleOpacity": 1,
-        "contentPadding": 2,
+        "contentPadding": 3,
         "density": "comfortable",
         "displayMode": "always_visible",
         "enableExclusionZoneInset": true,
-        "fontScale": 1,
+        "fontScale": 0.89,
         "frameRadius": 12,
         "frameThickness": 8,
         "hideOnOverview": false,
-        "marginHorizontal": 6,
-        "marginVertical": 6,
+        "marginHorizontal": 10,
+        "marginVertical": 16,
         "middleClickAction": "none",
         "middleClickCommand": "",
         "middleClickFollowMouse": false,
@@ -71,11 +71,11 @@
         "rightClickFollowMouse": true,
         "screenOverrides": [
         ],
-        "showCapsule": true,
+        "showCapsule": false,
         "showOnWorkspaceSwitch": true,
         "showOutline": false,
         "useSeparateOpacity": false,
-        "widgetSpacing": 6,
+        "widgetSpacing": 5,
         "widgets": {
             "center": [
                 {
@@ -202,13 +202,30 @@
                     "textColor": "none"
                 },
                 {
+                    "defaultSettings": {
+                        "colorHistory": [
+                        ],
+                        "installedLangs": [
+                            "eng"
+                        ],
+                        "paletteColors": [
+                        ],
+                        "selectedOcrLang": "eng",
+                        "transAvailable": false
+                    },
                     "id": "plugin:screen-toolkit"
+                },
+                {
+                    "id": "plugin:clipper"
+                },
+                {
+                    "id": "plugin:screen-recorder"
                 },
                 {
                     "colorizeDistroLogo": false,
                     "colorizeSystemIcon": "none",
                     "customIconPath": "",
-                    "enableColorization": false,
+                    "enableColorization": true,
                     "icon": "noctalia",
                     "id": "ControlCenter",
                     "useDistroLogo": false
@@ -241,7 +258,7 @@
     },
     "colorSchemes": {
         "darkMode": true,
-        "generationMethod": "tonal-spot",
+        "generationMethod": "content",
         "manualSunrise": "06:30",
         "manualSunset": "18:30",
         "monitorForColors": "",
@@ -310,7 +327,7 @@
         }
     },
     "desktopWidgets": {
-        "enabled": true,
+        "enabled": false,
         "gridSnap": true,
         "gridSnapScale": false,
         "monitorWidgets": [
@@ -345,7 +362,7 @@
     },
     "dock": {
         "animationSpeed": 1,
-        "backgroundOpacity": 1,
+        "backgroundOpacity": 0,
         "colorizeIcons": true,
         "deadOpacity": 0.6,
         "displayMode": "auto_hide",
@@ -378,22 +395,22 @@
     },
     "general": {
         "allowPanelsOnScreenWithoutBar": true,
-        "allowPasswordWithFprintd": false,
-        "animationDisabled": true,
-        "animationSpeed": 1,
-        "autoStartAuth": false,
+        "allowPasswordWithFprintd": true,
+        "animationDisabled": false,
+        "animationSpeed": 2,
+        "autoStartAuth": true,
         "avatarImage": "/home/leon/.face",
         "boxRadiusRatio": 1,
-        "clockFormat": "hh\\nmm",
+        "clockFormat": "HH:mm:ss ",
         "clockStyle": "custom",
-        "compactLockScreen": false,
-        "dimmerOpacity": 0.2,
+        "compactLockScreen": true,
+        "dimmerOpacity": 0.15,
         "enableBlurBehind": true,
         "enableLockScreenCountdown": true,
         "enableLockScreenMediaControls": false,
         "enableShadows": true,
-        "forceBlackScreenCorners": false,
-        "iRadiusRatio": 1,
+        "forceBlackScreenCorners": true,
+        "iRadiusRatio": 0.68,
         "keybinds": {
             "keyDown": [
                 "Down"
@@ -420,23 +437,23 @@
         },
         "language": "",
         "lockOnSuspend": true,
-        "lockScreenAnimations": false,
-        "lockScreenBlur": 0,
+        "lockScreenAnimations": true,
+        "lockScreenBlur": 0.22,
         "lockScreenCountdownDuration": 10000,
         "lockScreenMonitors": [
         ],
         "lockScreenTint": 0,
-        "passwordChars": false,
-        "radiusRatio": 0.58,
+        "passwordChars": true,
+        "radiusRatio": 0.51,
         "reverseScroll": false,
         "scaleRatio": 1,
-        "screenRadiusRatio": 1,
+        "screenRadiusRatio": 0.72,
         "shadowDirection": "bottom_right",
         "shadowOffsetX": 2,
         "shadowOffsetY": 3,
         "showChangelogOnStartup": true,
         "showHibernateOnLockScreen": false,
-        "showScreenCorners": false,
+        "showScreenCorners": true,
         "showSessionButtonsOnLockScreen": true,
         "telemetryEnabled": false
     },
@@ -454,8 +471,8 @@
     },
     "idle": {
         "customCommands": "[]",
-        "enabled": false,
-        "fadeDuration": 5,
+        "enabled": true,
+        "fadeDuration": 10,
         "lockCommand": "",
         "lockTimeout": 660,
         "resumeLockCommand": "",
@@ -469,9 +486,9 @@
     "location": {
         "analogClockInCalendar": false,
         "firstDayOfWeek": -1,
-        "hideWeatherCityName": false,
+        "hideWeatherCityName": true,
         "hideWeatherTimezone": false,
-        "name": "Tokyo",
+        "name": "Karlsruhe, DE",
         "showCalendarEvents": true,
         "showCalendarWeather": true,
         "showWeekNumberInCalendar": false,
@@ -614,8 +631,8 @@
                 "action": "userspaceReboot",
                 "command": "",
                 "countdownEnabled": true,
-                "enabled": false,
-                "keybind": ""
+                "enabled": true,
+                "keybind": "8"
             }
         ],
         "showHeader": true,
@@ -656,19 +673,19 @@
         "fontDefaultScale": 1,
         "fontFixed": "monospace",
         "fontFixedScale": 1,
-        "panelBackgroundOpacity": 0.93,
+        "panelBackgroundOpacity": 0.71,
         "panelsAttachedToBar": true,
-        "scrollbarAlwaysVisible": false,
-        "settingsPanelMode": "attached",
-        "settingsPanelSideBarCardStyle": false,
+        "scrollbarAlwaysVisible": true,
+        "settingsPanelMode": "window",
+        "settingsPanelSideBarCardStyle": true,
         "tooltipsEnabled": true,
         "translucentWidgets": false
     },
     "wallpaper": {
         "automationEnabled": false,
-        "directory": "/home/leon/Pictures/Wallpapers",
+        "directory": "/home/leon/.config/wallpapers",
         "enableMultiMonitorDirectories": false,
-        "enabled": false,
+        "enabled": true,
         "favorites": [
         ],
         "fillColor": "#000000",
@@ -676,7 +693,7 @@
         "hideWallpaperFilenames": false,
         "monitorDirectories": [
             {
-                "directory": "/home/leon/Pictures/Wallpapers",
+                "directory": "/home/leon/.config/wallpapers",
                 "name": "eDP-1",
                 "wallpaper": ""
             }
@@ -690,7 +707,7 @@
         "showHiddenFiles": false,
         "skipStartupTransition": false,
         "solidColor": "#1a1a2e",
-        "sortOrder": "name",
+        "sortOrder": "date_asc",
         "transitionDuration": 1500,
         "transitionEdgeSmoothness": 0.05,
         "transitionType": [
@@ -704,7 +721,7 @@
         "useOriginalImages": false,
         "useSolidColor": false,
         "useWallhaven": false,
-        "viewMode": "single",
+        "viewMode": "browse",
         "wallhavenApiKey": "",
         "wallhavenCategories": "111",
         "wallhavenOrder": "desc",

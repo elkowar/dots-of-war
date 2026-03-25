@@ -1,0 +1,25 @@
+{
+  "id": "unicode-picker",
+  "name": "Unicode Picker",
+  "version": "1.0.2",
+  "description": "Browse and search Unicode characters from the launcher",
+  "tags": [
+    "Launcher",
+    "Utility"
+  ],
+  "minNoctaliaVersion": "4.4.1",
+  "author": "Daddeffe",
+  "license": "MIT",
+  "repository": "https://github.com/noctalia-dev/noctalia-plugins",
+  "entryPoints": {
+    "main": "Main.qml",
+    "launcherProvider": "LauncherProvider.qml"
+  },
+  "dependencies": {
+    "plugins": []
+  },
+  "metadata": {
+    "commandPrefix": "unicode",
+    "defaultSettings": {}
+  }
+}
