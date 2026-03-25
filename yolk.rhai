@@ -1,35 +1,34 @@
 export const themes = #{
-    gruvbox: #{
-        bg: "#1d2021",
-        fg: "#ebdbb2",
-    }
+    gruvbox: #{ bg: "#1d2021", fg: "#ebdbb2" }
 };
 export const theme = themes.gruvbox;
 
-export const device = #{
-    thinkix: SYSTEM.hostname == "thinkix",
-    crabbix: SYSTEM.hostname == "crabbix",
-    desktop: SYSTEM.hostname == "fedora.fritz.box" || SYSTEM.hostname == "fedora",
-    laptop: SYSTEM.hostname == "thinkix"
-        || SYSTEM.hostname == "frissnix"
-        || SYSTEM.device_name == "Matthiass MacBook Pro"
-        || SYSTEM.hostname == "kenbun-laptop-leon"
-        || SYSTEM.hostname == "kenbun-old-matze"
-        || SYSTEM.hostname == "crabbix",
 
+// device config
+export const device = #{
     linux: SYSTEM.platform == "Linux",
     windows: SYSTEM.platform == "Windows",
 
-    macbook: SYSTEM.device_name == "Matthiass MacBook Pro",
-    kenbun:  SYSTEM.device_name == "Matthiass MacBook Pro" || SYSTEM.hostname == "kenbun-laptop-leon" || SYSTEM.hostname == "kenbun-old-matze",
-};
+    thinkix: SYSTEM.hostname == "thinkix",
+    crabbix: SYSTEM.hostname == "crabbix",
+    frissnix: SYSTEM.hostname == "frissnix",
+    kenbun_dell: SYSTEM.hostname in ["kenbun-laptop-leon", "kenbun-old-matze"],
+    fedora_desktop: SYSTEM.hostname in ["fedora.fritz.box", "fedora"],
+    matthiass_mac: SYSTEM.device_name == "Matthiass MacBook Pro",
 
-export const settings = #{
-  use_noctalia: device.laptop && device.kenbun && device.linux
 };
-
+device.desktop = device.fedora_desktop;
+device.laptop = device.thinkix || device.crabbix || device.frissnix || device.kenbun_dell || device.matthiass_mac;
+device.macbook = device.matthiass_mac;
+device.kenbun = device.matthiass_mac || device.kenbun_dell;
 
 device.linux_laptop = device.laptop && device.linux;
+
+
+export const settings = #{
+    use_noctalia: device.laptop && device.kenbun && device.linux
+};
+
 
 
 private fn merge_into_home(enabled, templates) {
