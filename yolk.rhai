@@ -14,14 +14,20 @@ export const device = #{
         || SYSTEM.hostname == "frissnix"
         || SYSTEM.device_name == "Matthiass MacBook Pro"
         || SYSTEM.hostname == "kenbun-laptop-leon"
+        || SYSTEM.hostname == "kenbun-old-matze"
         || SYSTEM.hostname == "crabbix",
 
     linux: SYSTEM.platform == "Linux",
     windows: SYSTEM.platform == "Windows",
 
     macbook: SYSTEM.device_name == "Matthiass MacBook Pro",
-    kenbun:  SYSTEM.device_name == "Matthiass MacBook Pro" || SYSTEM.hostname == "kenbun-laptop-leon",
+    kenbun:  SYSTEM.device_name == "Matthiass MacBook Pro" || SYSTEM.hostname == "kenbun-laptop-leon" || SYSTEM.hostname == "kenbun-old-matze",
 };
+
+export const settings = #{
+  use_noctalia: device.laptop && device.kenbun && device.linux
+};
+
 
 device.linux_laptop = device.laptop && device.linux;
 
@@ -45,6 +51,8 @@ export let eggs = #{
     "starship": merge_into_home(true, []),
     "bat": #{ enabled: device.linux || device.macbook, strategy: "put", targets: "~/.config/bat", templates: ["config"]},
     "nushell": #{ enabled: device.linux, strategy: "put", targets: "~/.config/nushell" },
+
+    "noctalia": #{ enabled: settings.use_noctalia, strategy: "put", targets: "~/.config/noctalia", templates: [] },
 
     "sway": merge_into_home(device.desktop && device.linux, []),
     "zed": #{ enabled: !device.windows, strategy: "put", targets: "~/.config/zed" },

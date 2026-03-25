@@ -1,6 +1,7 @@
 // vim:set ft=kdl shiftwidth=4 commentstring=//%s:
 debug {
     // keep-laptop-panel-on-when-lid-is-closed
+    honor-xdg-activation-with-invalid-serial
 }
 
 input {
@@ -116,6 +117,12 @@ layout {
 // {% if device.desktop %}
 //<yolk> spawn-at-startup "rm" "/home/elk/.config/google-chrome/SingletonLock"
 // {% end %}
+//
+
+// {% if settings.use_noctalia %}
+//<yolk> //<yolk>spawn-at-startup "qs" "-c" "noctalia-shell"
+// {% end %}
+
 
 spawn-at-startup "bash" "-c" "eww -c ~/.config/eww-bar open-many bar_1 niri_scroller"
 spawn-at-startup "xwayland-satellite"
@@ -265,20 +272,20 @@ binds {
     // {% if SYSTEM.hostname == "kenbun-laptop-leon" %}
     //<yolk> Mod+B { spawn "bash" "-c" "unset DISPLAY && microsoft-edge --ozone-platform-hint=auto --enable-features=VaapiVideoDecodeLinuxGL --enable-features=TouchpadOverscrollHistoryNavigation"; }
     // {% else %}
-    Mod+B { spawn "bash" "-c" "unset DISPLAY && google-chrome --ozone-platform-hint=auto --enable-features=VaapiVideoDecodeLinuxGL --enable-features=TouchpadOverscrollHistoryNavigation"; }
+    Mod+B { spawn-sh "unset DISPLAY && google-chrome --ozone-platform-hint=auto --enable-features=VaapiVideoDecodeLinuxGL --enable-features=TouchpadOverscrollHistoryNavigation"; }
     // {% end %}
     Mod+Shift+P { spawn "~/.config/rofi/launchers/type-2/launcher.sh"; }
     Mod+Shift+B { spawn "zen"; }
 
     // Example volume keys mappings for PipeWire & WirePlumber.
     // The allow-when-locked=true property makes them work even when the session is locked.
-    XF86AudioRaiseVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1+"; }
-    XF86AudioLowerVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1-"; }
-    XF86AudioMute        allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
-    XF86AudioMicMute     allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle"; }
+    XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+"; }
+    XF86AudioLowerVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-"; }
+    XF86AudioMute        allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"; }
+    XF86AudioMicMute     allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"; }
 
-    XF86MonBrightnessUp   allow-when-locked=true { spawn "brightnessctl" "set" "5%+"; }
-    XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "set" "5%-"; }
+    XF86MonBrightnessUp   allow-when-locked=true { spawn-sh "brightnessctl set 5%+"; }
+    XF86MonBrightnessDown allow-when-locked=true { spawn-sh "brightnessctl set 5%-"; }
 
     Mod+Shift+Q { close-window; }
 
@@ -434,7 +441,7 @@ binds {
     Mod+Shift+S { screenshot; }
     Ctrl+Print { screenshot-screen; }
     Alt+Print { screenshot-window; }
-    Mod+Shift+V { spawn "alacritty" "-e" "clipse"; }
+    Mod+Shift+V { spawn-sh "foot -e clipse"; }
 
     Ctrl+Shift+Print {
         spawn "sh" "-c" r#"
@@ -444,12 +451,21 @@ binds {
         "#;
     }
 
-    Ctrl+Escape { spawn "killall" "-s" "SIGINT" "wf-recorder"; }
+    Ctrl+Escape { spawn-sh "killall -s SIGINT wf-recorder"; }
 
-    Mod+Shift+Y { spawn "niri" "msg" "action" "set-dynamic-cast-window"; }
-    Mod+Ctrl+Alt+Shift+Y { spawn "niri" "msg" "action" "set-dynamic-cast-monitor"; }
-    Mod+Ctrl+Y { spawn "niri" "msg" "action" "clear-dynamic-cast-target"; }
+    Mod+Shift+Y { spawn-sh "niri msg action set-dynamic-cast-window"; }
+    Mod+Ctrl+Alt+Shift+Y { spawn-sh "niri msg action set-dynamic-cast-monitor"; }
+    Mod+Ctrl+Y { spawn-sh "niri msg action clear-dynamic-cast-target"; }
 
     Mod+Shift+E { quit; }
     Mod+Escape { toggle-overview; }
+
+
+    // Noctalia binds
+    // {% if settings.use_noctalia %}
+    //<yolk> Mod+p { spawn-sh "qs -c noctalia-shell ipc call launcher toggle"; }
+    //<yolk> Mod+s { spawn-sh "qs -c noctalia-shell ipc call controlCenter toggle"; }
+    //<yolk> Mod+Ctrl+S { spawn-sh "qs -c noctalia-shell ipc call settings toggle"; }
+    // {% end %}
+
 }
