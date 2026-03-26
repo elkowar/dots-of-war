@@ -52,26 +52,19 @@ output "Philips Consumer Electronics Company PHL 345B1C 0x00008E7C" {
     mode "3440x1440@60"
     scale 1
     transform "normal"
-    // {% if device.desktop || SYSTEM.hostname == "kenbun-laptop-leon" %}
+    // {% if device.desktop %}
     //<yolk> position x=2560 y=0
     // {% else %}
     position x=0 y=0
     // {% end %}
 }
-// {% if device.desktop || SYSTEM.hostname == "kenbun-laptop-leon" %}
-//<yolk> output "Fujitsu Siemens Computers GmbH P27-8 TE Pro YVBH008792" {
-    //<yolk> mode "2560x1440"
-    //<yolk> scale 1
-    //<yolk> position x=0 y=0
-//<yolk> }
-// {% end %}
 
-// {% if device.thinkix || device.crabbix || SYSTEM.hostname == "kenbun-laptop-leon" %}
+// {% if device.thinkix || device.crabbix || device.kenbun_dell %}
 //<yolk> output "eDP-1" {
     //<yolk> mode "1920x1080@60"
     //<yolk> scale 1.0
     //<yolk> transform "normal"
-    //<yolk> position x=2560 y=1440
+    //<yolk> position x=0 y=1440
 //<yolk> }
 // {% end %}
 

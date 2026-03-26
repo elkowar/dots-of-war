@@ -6,7 +6,7 @@
         "clipboardWrapText": true,
         "customLaunchPrefix": "",
         "customLaunchPrefixEnabled": false,
-        "density": "default",
+        "density": "comfortable",
         "enableClipPreview": true,
         "enableClipboardChips": true,
         "enableClipboardHistory": true,
@@ -20,7 +20,7 @@
         "pinnedApps": [
         ],
         "position": "center",
-        "screenshotAnnotationTool": "",
+        "screenshotAnnotationTool": "flatpak run be.alexandervanhee.gradia",
         "showCategories": true,
         "showIconBackground": false,
         "sortByMostUsed": true,
@@ -42,7 +42,7 @@
     "bar": {
         "autoHideDelay": 500,
         "autoShowDelay": 150,
-        "backgroundOpacity": 0.84,
+        "backgroundOpacity": 0.66,
         "barType": "simple",
         "capsuleColorKey": "none",
         "capsuleOpacity": 1,
@@ -100,20 +100,20 @@
                 },
                 {
                     "characterCount": 2,
-                    "colorizeIcons": false,
+                    "colorizeIcons": true,
                     "emptyColor": "secondary",
-                    "enableScrollWheel": true,
-                    "focusedColor": "primary",
+                    "enableScrollWheel": false,
+                    "focusedColor": "none",
                     "followFocusedScreen": false,
-                    "fontWeight": "bold",
-                    "groupedBorderOpacity": 1,
-                    "hideUnoccupied": false,
-                    "iconScale": 0.8,
+                    "fontWeight": "regular",
+                    "groupedBorderOpacity": 0.25,
+                    "hideUnoccupied": true,
+                    "iconScale": 0.65,
                     "id": "Workspace",
-                    "labelMode": "index",
+                    "labelMode": "none",
                     "occupiedColor": "secondary",
                     "pillSize": 0.6,
-                    "showApplications": false,
+                    "showApplications": true,
                     "showApplicationsHover": false,
                     "showBadge": true,
                     "showLabelsOnlyWhenOccupied": true,
@@ -126,7 +126,7 @@
                     "id": "SystemMonitor",
                     "showCpuCores": false,
                     "showCpuFreq": false,
-                    "showCpuTemp": true,
+                    "showCpuTemp": false,
                     "showCpuUsage": true,
                     "showDiskAvailable": false,
                     "showDiskUsage": false,
@@ -202,26 +202,6 @@
                     "textColor": "none"
                 },
                 {
-                    "defaultSettings": {
-                        "colorHistory": [
-                        ],
-                        "installedLangs": [
-                            "eng"
-                        ],
-                        "paletteColors": [
-                        ],
-                        "selectedOcrLang": "eng",
-                        "transAvailable": false
-                    },
-                    "id": "plugin:screen-toolkit"
-                },
-                {
-                    "id": "plugin:clipper"
-                },
-                {
-                    "id": "plugin:screen-recorder"
-                },
-                {
                     "colorizeDistroLogo": false,
                     "colorizeSystemIcon": "none",
                     "customIconPath": "",
@@ -285,7 +265,7 @@
                 "id": "brightness-card"
             },
             {
-                "enabled": false,
+                "enabled": true,
                 "id": "weather-card"
             },
             {
@@ -307,7 +287,10 @@
                     "id": "WallpaperSelector"
                 },
                 {
-                    "id": "NoctaliaPerformance"
+                    "id": "PowerProfile"
+                },
+                {
+                    "id": "NightLight"
                 }
             ],
             "right": [
@@ -315,13 +298,51 @@
                     "id": "Notifications"
                 },
                 {
-                    "id": "PowerProfile"
+                    "defaultSettings": {
+                        "audioCodec": "opus",
+                        "audioSource": "default_output",
+                        "colorRange": "limited",
+                        "copyToClipboard": false,
+                        "customReplayDuration": "30",
+                        "directory": "",
+                        "filenamePattern": "recording_yyyyMMdd_HHmmss",
+                        "frameRate": "60",
+                        "hideInactive": false,
+                        "iconColor": "none",
+                        "quality": "very_high",
+                        "replayDuration": "30",
+                        "replayEnabled": false,
+                        "replayStorage": "ram",
+                        "resolution": "original",
+                        "restorePortalSession": false,
+                        "showCursor": true,
+                        "videoCodec": "h264",
+                        "videoSource": "portal"
+                    },
+                    "id": "plugin:screen-recorder"
                 },
                 {
-                    "id": "KeepAwake"
+                    "defaultSettings": {
+                        "colorHistory": [
+                        ],
+                        "installedLangs": [
+                            "eng"
+                        ],
+                        "paletteColors": [
+                        ],
+                        "selectedOcrLang": "eng",
+                        "transAvailable": false
+                    },
+                    "id": "plugin:screen-toolkit"
                 },
                 {
-                    "id": "NightLight"
+                    "defaultSettings": {
+                        "enableTodoIntegration": false,
+                        "notecardsEnabled": true,
+                        "pincardsEnabled": true,
+                        "showCloseButton": true
+                    },
+                    "id": "plugin:clipper"
                 }
             ]
         }
@@ -399,7 +420,7 @@
         "animationDisabled": false,
         "animationSpeed": 2,
         "autoStartAuth": true,
-        "avatarImage": "/home/leon/.face",
+        "avatarImage": "/home/leon/Downloads/elkspair.png",
         "boxRadiusRatio": 1,
         "clockFormat": "HH:mm:ss ",
         "clockStyle": "custom",
@@ -453,7 +474,7 @@
         "shadowOffsetY": 3,
         "showChangelogOnStartup": true,
         "showHibernateOnLockScreen": false,
-        "showScreenCorners": true,
+        "showScreenCorners": false,
         "showSessionButtonsOnLockScreen": true,
         "telemetryEnabled": false
     },
@@ -522,20 +543,20 @@
         "disableWallpaper": true
     },
     "notifications": {
-        "backgroundOpacity": 1,
+        "backgroundOpacity": 0.88,
         "clearDismissed": true,
         "criticalUrgencyDuration": 15,
         "density": "default",
         "enableBatteryToast": true,
         "enableKeyboardLayoutToast": true,
-        "enableMarkdown": false,
+        "enableMarkdown": true,
         "enableMediaToast": false,
         "enabled": true,
         "location": "top_right",
         "lowUrgencyDuration": 3,
         "monitors": [
         ],
-        "normalUrgencyDuration": 8,
+        "normalUrgencyDuration": 5,
         "overlayLayer": true,
         "respectExpireTimeout": false,
         "saveToHistory": {
