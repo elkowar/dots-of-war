@@ -125,20 +125,19 @@ layer-rule {
 
 
 
-spawn-at-startup "bash" "-c" "eww -c ~/.config/eww-bar open-many bar_1 niri_scroller"
-spawn-at-startup "xwayland-satellite"
-spawn-at-startup "bash" "-c" "1password --silent"
-spawn-at-startup "wl-paste" "--watch" "xclip -in -sel c"
-spawn-at-startup "~/.config/niri/clipboardfix.sh"
-spawn-at-startup "clipse -listen"
-spawn-at-startup "wl-clip-persist" "--clipboard" "regular"
-spawn-at-startup "kdeconnect-indicator"
+spawn-sh-at-startup "eww -c ~/.config/eww-bar open-many bar_1 niri_scroller"
+spawn-sh-at-startup "xwayland-satellite"
+spawn-sh-at-startup "1password --silent"
+spawn-sh-at-startup "wl-paste --watch xclip -in -sel c"
+spawn-sh-at-startup "~/.config/niri/clipboardfix.sh"
+spawn-sh-at-startup "clipse -listen"
+spawn-sh-at-startup "wl-clip-persist --clipboard regular"
+spawn-sh-at-startup "kdeconnect-indicator"
 //
-// spawn-at-startup "bash" "-c" "swaybg -m fill -i ~/.config/wallpapers/elk_gasstation_lights.jpg"
-spawn-at-startup "bash" "-c" "swaybg -m fill -i ~/.config/wallpapers/luxembourg-villa.jpg"
-// spawn-at-startup "bash" "-c" "swaybg -m fill -i ~/.config/wallpapers/elk_gasstation_dark.jpg"
-spawn-at-startup "~/.config/niri/clipsync watch with-notifications"
-spawn-at-startup
+// spawn-sh-at-startup "swaybg -m fill -i ~/.config/wallpapers/elk_gasstation_lights.jpg"
+spawn-sh-at-startup "swaybg -m fill -i ~/.config/wallpapers/luxembourg-villa.jpg"
+// spawn-sh-at-startup "swaybg -m fill -i ~/.config/wallpapers/elk_gasstation_dark.jpg"
+spawn-sh-at-startup "~/.config/niri/clipsync watch with-notifications"
 //
 prefer-no-csd
 
@@ -276,9 +275,9 @@ binds {
     Mod+B { spawn-sh "unset DISPLAY && google-chrome --ozone-platform-hint=auto --enable-features=VaapiVideoDecodeLinuxGL --enable-features=TouchpadOverscrollHistoryNavigation"; }
     // {% end %}
     // {% if settings.use_noctalia %}
-    //<yolk> Mod+Shift+P { spawn "~/.config/rofi/launchers/type-2/launcher.sh"; }
+    //<yolk> Mod+Shift+P { spawn-sh "qs -c noctalia-shell ipc call launcher toggle"; }
     // {% else %}
-    Mod+Shift+P { spawn-sh "qs -c noctalia-shell ipc call launcher toggle"; }
+    Mod+Shift+P { spawn "~/.config/rofi/launchers/type-2/launcher.sh"; }
     // {% end %}
 
     Mod+Shift+B { spawn "zen"; }

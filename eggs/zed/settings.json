@@ -210,7 +210,7 @@
         // },
         "typing": {
           // Temporary workaround around round rust-analzyer wrongly inserting `|` twice
-          "excludeChars": "|<",
+          // "excludeChars": "|<",
         },
       },
     },

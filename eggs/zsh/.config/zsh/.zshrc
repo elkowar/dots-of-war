@@ -48,7 +48,7 @@ zinit light-mode for \
 
 ### End of Zinit's installer chunk
 
-fpath=(~/.local/$hare/zsh/completions $fpath)
+fpath=(~/.local/share/zsh/completions $fpath)
 # some magic to run compinit stuff only once a day, which should speed up zsh startup a good bit
 autoload -Uz compinit
 for dump in $ZSHDOTDIR/.zcompdump(N.mh+24); do

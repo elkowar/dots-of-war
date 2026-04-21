@@ -4,6 +4,7 @@ export const themes = #{
 export const theme = themes.gruvbox;
 
 
+
 // device config
 export const device = #{
     linux: SYSTEM.platform == "Linux",
