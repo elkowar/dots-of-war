@@ -16,12 +16,13 @@ export const device = #{
     kenbun_dell: SYSTEM.hostname in ["kenbun-laptop-leon", "kenbun-old-matze"],
     fedora_desktop: SYSTEM.hostname in ["fedora.fritz.box", "fedora"],
     matthiass_mac: SYSTEM.device_name == "Matthiass MacBook Pro",
+    kenbun_mac: SYSTEM.device_name == "Leons-MacBook-Pro.local",
 
 };
 device.desktop = device.fedora_desktop;
-device.laptop = device.thinkix || device.crabbix || device.frissnix || device.kenbun_dell || device.matthiass_mac;
-device.macbook = device.matthiass_mac;
-device.kenbun = device.matthiass_mac || device.kenbun_dell;
+device.laptop = device.thinkix || device.crabbix || device.frissnix || device.kenbun_dell || device.matthiass_mac || device.kenbun_mac;
+device.macbook = device.matthiass_mac || device.kenbun_mac;
+device.kenbun = device.matthiass_mac || device.kenbun_dell || device.kenbun_mac;
 
 device.linux_laptop = device.laptop && device.linux;
 
