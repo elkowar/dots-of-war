@@ -2,12 +2,10 @@
 -- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
 -- Add any additional keymaps here
 
-
 -- TODO: these come from my old fennel config. I should definitely give them a second look
 -- Disable command history
 -- vim.keymap.set("n", "q:", ":q")  -- creates a "wait time" if we plan to use q as quit
 -- Remap q (record macro) to Q
-
 
 local map = vim.keymap.set
 
@@ -19,8 +17,6 @@ map("n", "<S-K>", "<Nop>")
 local function cmd_string(s)
   return "<cmd>" .. s .. "<cr>"
 end
-
-
 
 -- Buffer navigation
 map("n", "<leader>h", cmd_string("bprevious"), { desc = "Previous buffer" })
@@ -118,12 +114,12 @@ vim.keymap.del("n", "<C-s>")
 vim.keymap.del("i", "<C-s>")
 vim.keymap.del("v", "<C-s>")
 
-
-
-
 -- diagnostic
 local diagnostic_goto = function(next, severity)
-  local go = next and vim.diagnostic.goto_next or vim.diagnostic.goto_prev
+  local go = function(x)
+    return next and vim.diagnostic.jump({ count = 1, severity = x })
+      or vim.diagnostic.jump({ count = -1, severity = x })
+  end
   severity = severity and vim.diagnostic.severity[severity] or nil
   return function()
     go({ severity = severity })
@@ -137,15 +133,10 @@ map("n", "[e", diagnostic_goto(false, "ERROR"), { desc = "Prev Error" })
 map("n", "]w", diagnostic_goto(true, "WARN"), { desc = "Next Warning" })
 map("n", "[w", diagnostic_goto(false, "WARN"), { desc = "Prev Warning" })
 
-
-map("n", "<leader>C",
-  function()
-    local result = vim.treesitter.get_captures_at_cursor(0)
-    print(vim.inspect(result))
-  end,
-  { noremap = true, silent = false, desc = "Get highlight group under cursor" }
-)
-
+map("n", "<leader>C", function()
+  local result = vim.treesitter.get_captures_at_cursor(0)
+  print(vim.inspect(result))
+end, { noremap = true, silent = false, desc = "Get highlight group under cursor" })
 
 -- Fix for Telescope"s race condition with default C-F
 map("n", "<C-F>", LazyVim.pick("files"), { noremap = true, silent = false })

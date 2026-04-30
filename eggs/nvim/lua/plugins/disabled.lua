@@ -27,9 +27,9 @@ return {
   -- ??
   { "Bilal2453/luvit-meta",                enabled = false },
 
-  -- { "echasnovski/mini.ai",                 enabled = false }, -- a / i text objects like a( a) a'...
-  -- { "echasnovski/mini.icons",              enabled = false },
-  { "echasnovski/mini.pairs",              enabled = false }, -- [({})] kind of thing
+  -- { "nvim-mini/mini.ai",                 enabled = false }, -- a / i text objects like a( a) a'...
+  -- { "nvim-mini/mini.icons",              enabled = false },
+  { "nvim-mini/mini.pairs",                enabled = false }, -- [({})] kind of thing
   -- { "stevearc/dressing.nvim",              enabled = false }, -- used tor lsp popups and pickers
   { "stevearc/conform.nvim",               enabled = false }, -- formatter
   -- { "MagicDuck/grug-far.nvim",             enabled = false }, -- find and replace

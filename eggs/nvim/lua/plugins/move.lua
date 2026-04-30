@@ -4,7 +4,7 @@ end
 
 
 return {
-  "echasnovski/mini.move",
+  "nvim-mini/mini.move",
   --opts = {
   -- TODO: figure out which mappings to use that do not conflict with popup menus, or tmux (no alt)
   --   mappings = {
