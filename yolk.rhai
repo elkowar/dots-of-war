@@ -16,7 +16,7 @@ export const device = #{
     kenbun_dell: SYSTEM.hostname in ["kenbun-laptop-leon", "kenbun-old-matze"],
     fedora_desktop: SYSTEM.hostname in ["fedora.fritz.box", "fedora"],
     matthiass_mac: SYSTEM.device_name == "Matthiass MacBook Pro",
-    kenbun_mac: SYSTEM.device_name == "Leons-MacBook-Pro.local",
+    kenbun_mac: SYSTEM.device_name == "Leon’s MacBook Pro",
 
 };
 device.desktop = device.fedora_desktop;

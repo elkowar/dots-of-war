@@ -4,9 +4,18 @@
 	email = dev@elkowar.dev
 [github]
   user = ElKowar
+; {% else %}
+;<yolk> [user]
+  ;<yolk> name = Leon Kowarschick
+  ;<yolk> email = leon.kowarschick@kenbun.de
+  ;<yolk> signingkey = ~/.ssh/kenbun
+;<yolk> [github]
+  ;<yolk> user = LeonKowarschickKenbun
 ; {% end %}
+[commit]
+  gpgsign = true
 [include]
-	path = ~/.gitconfig.local
+  path = ~/.gitconfig.local
 [credential]
 	helper = store
 [core]
@@ -21,8 +30,17 @@
 	;<yolk> line-numbers-left-style = cyan
 	;{% end %}
 
+[gpg]
+  format = ssh
+
+; {% if device.macbook %}
+;<yolk> [gpg "ssh"]
+  ;<yolk> program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+	;<yolk> allowedSignersFile = /Users/leon/.ssh/allowed_signers
+; {% end %}
+
 [pull]
-    rebase = false
+  rebase = true
 
 [init]
 	defaultBranch = main
@@ -31,8 +49,6 @@
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
-[commit]
-	gpgsign = true
 [alias]
 	c = commit --verbose
 	s = status -s

@@ -1,4 +1,19 @@
 {
+  "agent_servers": {
+    "claude-acp": {
+      "type": "registry"
+    },
+    "github-copilot-cli": {
+      "type": "registry"
+    }
+  },
+  "cli_default_open_behavior": "new_window",
+  "collaboration_panel": {
+    "dock": "left"
+  },
+  "project_panel": {
+    "dock": "left"
+  },
   "ssh_connections": [
     {
       "host": "todesstern",
@@ -12,6 +27,7 @@
   ],
   "text_rendering_mode": "platform_default",
   "git_panel": {
+    "dock": "left",
     "status_style": "label_color",
   },
   "edit_predictions": {
@@ -91,6 +107,8 @@
     }
   }, */
   "agent": {
+    "sidebar_side": "right",
+    "dock": "right",
     "tool_permissions": {
       "tools": {
         "save_file": {

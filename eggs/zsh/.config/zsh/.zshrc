@@ -152,6 +152,13 @@ if [ -s "$NVM_DIR/nvm.sh" ]; then
     . "$NVM_DIR/nvm.sh"
 fi
 
+
+# Set the SSH_AUTH_SOCK, if 1password ssh agent is active on a mac
+if [ -d "$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t" ]; then
+  export SSH_AUTH_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+fi
+
+
 if [ -d "/Applications/WezTerm.app" ]; then
     export PATH="/Applications/WezTerm.app/Contents/MacOS:$PATH"
 fi
