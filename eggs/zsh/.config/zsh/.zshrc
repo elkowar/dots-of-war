@@ -1,9 +1,6 @@
-# ----------------------------------------------------------------------------
-# .zshrc -- sourced for interactive zsh shells only.
 # Pure env vars and PATH live in .zshenv.
-# ----------------------------------------------------------------------------
 
-# -------- history -----------------------------------------------------------
+# history
 HISTSIZE=50000
 SAVEHIST=50000
 HISTFILE="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/history"
@@ -19,7 +16,7 @@ setopt SHARE_HISTORY          # implies INC_APPEND_HISTORY
 
 source "$ZDOTDIR/utils.zsh"
 
-# -------- zinit (plugin manager) -------------------------------------------
+# zinit (plugin manager)
 if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
     print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
     command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
@@ -38,7 +35,7 @@ zinit light-mode for \
     zdharma-continuum/zinit-annex-patch-dl \
     zdharma-continuum/zinit-annex-rust
 
-# -------- completion --------------------------------------------------------
+# completion
 # compinit must run before fzf-tab, but fzf-tab must come before syntax
 # highlighting. Run a full compinit at most once every 24 hours; otherwise
 # use the cached dump for fast startup.
@@ -50,7 +47,7 @@ else
   compinit -C
 fi
 
-# -------- plugins -----------------------------------------------------------
+# plugins
 zinit light Aloxaf/fzf-tab
 
 # Defer history-substring-search and bind its widgets *after* it loads,
@@ -74,11 +71,11 @@ source "$ZDOTDIR/keybinds.zsh"
 
 unalias zi 2>/dev/null
 
-# -------- options -----------------------------------------------------------
+# options
 setopt NOBEEP
 setopt INTERACTIVE_COMMENTS
 
-# -------- prompt ------------------------------------------------------------
+# prompt
 autoload -Uz colors && colors
 autoload -Uz promptinit && promptinit
 
@@ -88,7 +85,7 @@ else
     source "$ZDOTDIR/prompt.zsh"
 fi
 
-# -------- tool integrations -------------------------------------------------
+# tool integrations
 eval "$(zoxide init zsh)"
 command -v direnv   >/dev/null && eval "$(direnv hook zsh)"
 command -v luarocks >/dev/null && eval "$(luarocks path)"
@@ -96,8 +93,21 @@ command -v luarocks >/dev/null && eval "$(luarocks path)"
 # fzf keybindings (installed via the fzf install script)
 [ -f $HOME/.fzf/shell/key-bindings.zsh ] && . $HOME/.fzf/shell/key-bindings.zsh
 
-# nvm (heavy; consider lazy-loading if startup feels sluggish)
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+# nvm -- lazy-loaded. Sourcing nvm.sh adds ~150-300ms to startup, so we
+# define stub functions that source nvm on first invocation, then re-exec the
+# real command. Add more names here (yarn, corepack, ...) if you use them
+# before nvm has been loaded in a session.
+if [ -s "$NVM_DIR/nvm.sh" ]; then
+  _nvm_lazy_load() {
+    unfunction nvm node npm npx 2>/dev/null
+    . "$NVM_DIR/nvm.sh"
+    [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
+  }
+  nvm()  { _nvm_lazy_load; nvm  "$@"; }
+  node() { _nvm_lazy_load; node "$@"; }
+  npm()  { _nvm_lazy_load; npm  "$@"; }
+  npx()  { _nvm_lazy_load; npx  "$@"; }
+fi
 
 # sdkman
 [[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
@@ -111,7 +121,7 @@ if [ -d "$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t" ]; then
   export SSH_AUTH_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
 fi
 
-# -------- aliases -----------------------------------------------------------
+# aliases
 if command -v lsd >/dev/null; then
     alias ls="lsd"
 elif command -v eza >/dev/null; then
@@ -125,3 +135,8 @@ alias yk="yolk"
 alias ygit="yolk git"
 [[ -f '/Applications/Tailscale.app/Contents/MacOS/Tailscale' ]] && alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
 command -v jless >/dev/null && alias yless="jless --yaml"
+
+# Make sure .zshrc itself always exits 0 -- otherwise tools like starship
+# will display "1" on the very first prompt when, e.g., `jless` isn't
+# installed and the `command -v jless && ...` line above short-circuits.
+true
