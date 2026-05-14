@@ -33,6 +33,7 @@ brew "tinymist"
 brew "restic"
 brew "resticprofile"
 brew "rustic"
+brew "dua-cli"
 
 brew "yolk"
 
