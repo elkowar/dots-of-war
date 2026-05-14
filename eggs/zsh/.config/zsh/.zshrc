@@ -1,31 +1,25 @@
-# history config
+# ----------------------------------------------------------------------------
+# .zshrc -- sourced for interactive zsh shells only.
+# Pure env vars and PATH live in .zshenv.
+# ----------------------------------------------------------------------------
+
+# -------- history -----------------------------------------------------------
 HISTSIZE=50000
 SAVEHIST=50000
-HISTFILE="$HOME/.cache/zsh/history"
+HISTFILE="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/history"
 setopt HIST_SAVE_NO_DUPS
 setopt HIST_IGNORE_ALL_DUPS
-#setopt INC_APPEND_HISTORY
+setopt HIST_IGNORE_SPACE      # commands prefixed with a space are NOT saved
+setopt HIST_REDUCE_BLANKS     # strip superfluous blanks before saving
+setopt HIST_VERIFY            # show !!-style expansions before running
 setopt EXTENDED_HISTORY
-setopt SHARE_HISTORY
+setopt SHARE_HISTORY          # implies INC_APPEND_HISTORY
+
+[[ -d ${HISTFILE:h} ]] || mkdir -p "${HISTFILE:h}"
 
 source "$ZDOTDIR/utils.zsh"
 
-
-if [ ! -f "$HISTFILE" ]; then
-  mkdir -p "$(dirname "$HISTFILE")"
-  touch "$HISTFILE"
-fi
-
-# pnpm
-export PNPM_HOME="$HOME/.local/share/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-# pnpm end
-
-
-### Added by Zinit's installer
+# -------- zinit (plugin manager) -------------------------------------------
 if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
     print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
     command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
@@ -38,152 +32,96 @@ source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 
-# Load a few important annexes, without Turbo
-# (this is currently required for annexes)
 zinit light-mode for \
     zdharma-continuum/zinit-annex-as-monitor \
     zdharma-continuum/zinit-annex-bin-gem-node \
     zdharma-continuum/zinit-annex-patch-dl \
     zdharma-continuum/zinit-annex-rust
 
-### End of Zinit's installer chunk
-
+# -------- completion --------------------------------------------------------
+# compinit must run before fzf-tab, but fzf-tab must come before syntax
+# highlighting. Run a full compinit at most once every 24 hours; otherwise
+# use the cached dump for fast startup.
 fpath=(~/.local/share/zsh/completions $fpath)
-# some magic to run compinit stuff only once a day, which should speed up zsh startup a good bit
 autoload -Uz compinit
-for dump in $ZDOTDIR/.zcompdump(N.mh+24); do
+if [[ -n $ZDOTDIR/.zcompdump(#qN.mh+24) ]]; then
   compinit
-done
-compinit -C
+else
+  compinit -C
+fi
 
-# this would be the regular version of the above compinit code:
-# compinit must be ran before fzf-tab, but fzf-tab must be before syntax highlighting etc
-#autoload -Uz compinit
-#compinit
+# -------- plugins -----------------------------------------------------------
+zinit light Aloxaf/fzf-tab
 
-zinit light "Aloxaf/fzf-tab"
+# Defer history-substring-search and bind its widgets *after* it loads,
+# otherwise the bindkey calls run before the widgets exist.
+zinit ice wait lucid atload'bindkey "^[[A" history-substring-search-up; bindkey "^[[B" history-substring-search-down'
+zinit light zsh-users/zsh-history-substring-search
 
 zinit wait lucid for \
-    "zsh-users/zsh-history-substring-search" \
-    "zdharma-continuum/fast-syntax-highlighting" \
-    "zsh-users/zsh-autosuggestions" \
-    "olets/zsh-abbr" \
-    "sudosubin/zsh-github-cli" \
-    "wfxr/forgit" \
-    "pkulev/zsh-rustup-completion"
+    zdharma-continuum/fast-syntax-highlighting \
+    zsh-users/zsh-autosuggestions \
+    olets/zsh-abbr \
+    sudosubin/zsh-github-cli \
+    wfxr/forgit \
+    pkulev/zsh-rustup-completion
 
-
-# clear the default keybinds, from utils.zsh
+# Clear default keybinds (clear-keybinds is defined in utils.zsh).
 clear-keybinds
 
-# load more stuff
 source "$ZDOTDIR/fzf-tab.zsh"
 source "$ZDOTDIR/keybinds.zsh"
 
 unalias zi 2>/dev/null
 
-eval "$(zoxide init zsh)"
-
-
-# fzf keybindings
-[ -f $HOME/.fzf/shell/key-bindings.zsh ] && . $HOME/.fzf/shell/key-bindings.zsh
-
-
-# some more options
+# -------- options -----------------------------------------------------------
 setopt NOBEEP
 setopt INTERACTIVE_COMMENTS
 
-
-# ET nvim as manpager
-export MANPAGER='nvim +Man! +"set nocul" +"set noshowcmd" +"set noruler" +"set noshowmode" +"set laststatus=0"'
-
-
+# -------- prompt ------------------------------------------------------------
 autoload -Uz colors && colors
 autoload -Uz promptinit && promptinit
 
-
-# alias
-if command -v lsd >/dev/null; then
-    alias ls="lsd"
-elif command -v exa >/dev/null; then
-    alias ls="exa"
-fi
-alias dots="git -C $HOME/dots-of-war"
-alias yk="yolk"
-alias ygit="yolk git"
-
-# load prompt
 if command -v starship >/dev/null; then
     eval "$(starship init zsh)"
 else
     source "$ZDOTDIR/prompt.zsh"
 fi
 
-if command -v direnv >/dev/null; then
-    eval "$(direnv hook zsh)"
-fi
-if command -v luarocks >/dev/null; then
-    eval "$(luarocks path)"
-fi
+# -------- tool integrations -------------------------------------------------
+eval "$(zoxide init zsh)"
+command -v direnv   >/dev/null && eval "$(direnv hook zsh)"
+command -v luarocks >/dev/null && eval "$(luarocks path)"
 
-export EDITOR=nvim
-export VISUAL=nvim
+# fzf keybindings (installed via the fzf install script)
+[ -f $HOME/.fzf/shell/key-bindings.zsh ] && . $HOME/.fzf/shell/key-bindings.zsh
 
+# nvm (heavy; consider lazy-loading if startup feels sluggish)
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 
+# sdkman
+[[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
 
-export ANDROID_HOME="$HOME/Android/Sdk"
-export ANDROID_NDK="$HOME/Android/Sdk/ndk/21.4.7075529"
-export JAVA_HOME="/usr/lib/jvm/java-1.19.0-openjdk-amd64/"
+# google cloud sdk
+[ -f "$HOME/Downloads/google-cloud-sdk/path.zsh.inc" ]       && . "$HOME/Downloads/google-cloud-sdk/path.zsh.inc"
+[ -f "$HOME/Downloads/google-cloud-sdk/completion.zsh.inc" ] && . "$HOME/Downloads/google-cloud-sdk/completion.zsh.inc"
 
-
-
-export PATH="$HOME/.volta/bin:$PATH"
-export PATH="$HOME/.local/bin:$PATH"
-export PATH="$HOME/.bun/bin:$PATH"
-
-if [ -d "$HOME/fvm" ]; then
-  export PATH="$HOME/fvm/bin:$PATH"
-fi
-
-
-
-export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-if [ -s "$NVM_DIR/nvm.sh" ]; then 
-    . "$NVM_DIR/nvm.sh"
-fi
-
-
-# Set the SSH_AUTH_SOCK, if 1password ssh agent is active on a mac
+# 1Password SSH agent (macOS)
 if [ -d "$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t" ]; then
   export SSH_AUTH_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
 fi
 
-
-if [ -d "/Applications/WezTerm.app" ]; then
-    export PATH="/Applications/WezTerm.app/Contents/MacOS:$PATH"
+# -------- aliases -----------------------------------------------------------
+if command -v lsd >/dev/null; then
+    alias ls="lsd"
+elif command -v eza >/dev/null; then
+    alias ls="eza"
+elif command -v exa >/dev/null; then
+    alias ls="exa"
 fi
-
-if command -v flutter >/dev/null; then
-    export PATH="$HOME/.pub-cache/bin:$PATH"
-fi
-[[ -d "$HOME/.deno/bin" ]] && export PATH="$HOME/.deno/bin:$PATH"
-
-
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="$HOME/.sdkman"
-[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
-
-if [ -f "$HOME/Downloads/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/Downloads/google-cloud-sdk/path.zsh.inc"; fi
-if [ -f "$HOME/Downloads/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/Downloads/google-cloud-sdk/completion.zsh.inc"; fi
-
+alias ll="ls -lah"
+alias dots="git -C $HOME/dots-of-war"
+alias yk="yolk"
+alias ygit="yolk git"
 [[ -f '/Applications/Tailscale.app/Contents/MacOS/Tailscale' ]] && alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
 command -v jless >/dev/null && alias yless="jless --yaml"
-
-
-## SWITCH TO NU SHELL
-# if [ "$(hostname)" = "crabbix" ]; then
-#   if command -v nu; then
-#     exec nu
-#   fi
-# fi
-

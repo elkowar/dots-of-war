@@ -64,8 +64,6 @@ bindkey "^[."     insert-last-word        # alt-.
 bindkey "^[[3~"   delete-char             # DEL
 bindkey "^R"      history-incremental-search-backward # C-R
 
-bindkey '^[[A' history-substring-search-up
-bindkey '^[[B' history-substring-search-down
 
 # C-Q to edit command in $EDITOR
 autoload -U edit-command-line
