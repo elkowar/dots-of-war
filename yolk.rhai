@@ -53,6 +53,8 @@ export let eggs = #{
     "bat": #{ enabled: device.linux || device.macbook, strategy: "put", targets: "~/.config/bat", templates: ["config"]},
     "nushell": #{ enabled: device.linux, strategy: "put", targets: "~/.config/nushell" },
 
+    "homebrew": #{ enabled: device.macbook, strategy: "put", targets: "~/.config/homebrew", templates: ["*"] },
+
     "noctalia": #{ enabled: settings.use_noctalia, strategy: "put", targets: "~/.config/noctalia", templates: [] },
 
     "sway": merge_into_home(device.desktop && device.linux, []),

@@ -51,7 +51,7 @@ zinit light-mode for \
 fpath=(~/.local/share/zsh/completions $fpath)
 # some magic to run compinit stuff only once a day, which should speed up zsh startup a good bit
 autoload -Uz compinit
-for dump in $ZDOTDIR/.zcompdump(N.mh+24); do
+for dump in $ZSHDOTDIR/.zcompdump(N.mh+24); do
   compinit
 done
 compinit -C
@@ -80,7 +80,7 @@ clear-keybinds
 source "$ZDOTDIR/fzf-tab.zsh"
 source "$ZDOTDIR/keybinds.zsh"
 
-unalias zi 2>/dev/null
+unalias zi
 
 eval "$(zoxide init zsh)"
 
@@ -173,8 +173,8 @@ fi
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
-if [ -f "$HOME/Downloads/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/Downloads/google-cloud-sdk/path.zsh.inc"; fi
-if [ -f "$HOME/Downloads/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/Downloads/google-cloud-sdk/completion.zsh.inc"; fi
+if [ -f '~/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '~/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+if [ -f '~/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '~/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
 
 [[ -f '/Applications/Tailscale.app/Contents/MacOS/Tailscale' ]] && alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
 command -v jless >/dev/null && alias yless="jless --yaml"

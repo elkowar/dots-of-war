@@ -8,7 +8,7 @@
 ;<yolk> [user]
   ;<yolk> name = Leon Kowarschick
   ;<yolk> email = leon.kowarschick@kenbun.de
-  ;<yolk> signingkey = ~/.ssh/kenbun
+  ;<yolk> signingkey = ~/.ssh/kenbun.pub
 ;<yolk> [github]
   ;<yolk> user = LeonKowarschickKenbun
 ; {% end %}

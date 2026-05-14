@@ -20,10 +20,17 @@
       "args": [],
       "projects": [
         {
-          "paths": ["/data/home/leon/repos/kidou_datascience"],
+          "paths": [
+            "/data/home/leon/repos/kidou-cloud-pocs/./"
+          ]
         },
-      ],
-    },
+        {
+          "paths": [
+            "/data/home/leon/repos/kidou_datascience"
+          ]
+        }
+      ]
+    }
   ],
   "text_rendering_mode": "platform_default",
   "git_panel": {

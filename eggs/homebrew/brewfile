@@ -1,0 +1,49 @@
+# use with:
+# brew update &&
+# brew bundle install --cleanup --file ~/.config/homebrew/brewfile
+#
+#
+# {% if device.kenbun %}
+#<yolk> brew "cmake"
+#<yolk> brew "cocoapods"
+#<yolk> brew "fvm"
+#<yolk> brew "uv"
+# {% end %}
+
+brew "colima"
+brew "docker"
+brew "docker-compose"
+brew "docker-credential-helper"
+
+brew "bat"
+brew "espeak"
+brew "fd"
+brew "fzf"
+brew "gh"
+brew "git"
+brew "gnupg"
+brew "just"
+brew "neovim"
+brew "mosh"
+brew "ripgrep"
+brew "zoxide"
+
+brew "typst"
+brew "tinymist"
+brew "restic"
+brew "resticprofile"
+brew "rustic"
+
+brew "yolk"
+
+cask "1password"
+cask "1password-cli"
+
+cask "zed"
+
+cask "bambu-studio"
+
+cask "raycast"
+cask "unnaturalscrollwheels"
+cask "iterm2"
+cask "karabiner-elements"
