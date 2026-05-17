@@ -1,36 +1,38 @@
 {
   "agent_servers": {
     "claude-acp": {
-      "type": "registry"
+      "type": "registry",
     },
     "github-copilot-cli": {
-      "type": "registry"
-    }
+      "type": "registry",
+    },
   },
   "cli_default_open_behavior": "new_window",
   "collaboration_panel": {
-    "dock": "left"
+    "dock": "left",
   },
   "project_panel": {
-    "dock": "left"
+    "dock": "left",
   },
   "ssh_connections": [
     {
       "host": "todesstern",
       "args": [],
+      "port_forwards": [
+        { "local_port": 40405, "remote_port": 40405 },
+        { "local_port": 30030, "remote_port": 3030 },
+      ],
       "projects": [
-        {
-          "paths": [
-            "/data/home/leon/repos/kidou-cloud-pocs/./"
-          ]
-        },
-        {
-          "paths": [
-            "/data/home/leon/repos/kidou_datascience"
-          ]
-        }
-      ]
-    }
+        { "paths": ["/data/home/leon/repos/kidou-cloud-pocs/"] },
+        { "paths": ["/data/home/leon/repos/kidou_datascience"] },
+        { "paths": ["/root"] },
+      ],
+    },
+    {
+      "host": "newt-quartz",
+      "args": [],
+      "projects": [],
+    },
   ],
   "text_rendering_mode": "platform_default",
   "git_panel": {

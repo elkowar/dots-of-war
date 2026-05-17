@@ -1,0 +1,17 @@
+# vim: set filetype=sshconfig :
+Host github-elk
+  HostName github.com
+  User git
+  IdentityFile ~/.ssh/elkowar.pub
+
+Host pve1
+  HostName 192.168.10.220
+  User root
+
+Host docker
+  HostName docker.fritz.box
+  User root
+
+Host rabbithole
+  HostName rabbithole.cloud.elkowar.de
+  User root
