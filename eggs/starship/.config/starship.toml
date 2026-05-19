@@ -80,7 +80,7 @@ vimcmd_visual_symbol = "V"
 disabled = false
 format = ' [$symbol $status]($style)'
 style = "red"
-symbol = 'REEEEEEE'
+symbol = 'mist. '
 
 
 [aws]

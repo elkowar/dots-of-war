@@ -223,10 +223,13 @@
       },
     },
     "rust-analyzer": {
-      "cargo": {
-        "features": "all",
-      },
       "initialization_options": {
+        "cargo": {
+          "features": "all",
+        },
+        "check": {
+          "command": "clippy",
+        },
         // "diagnostics": {
         //   "experimental": {
         //     "enable": true

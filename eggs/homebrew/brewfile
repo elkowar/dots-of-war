@@ -1,6 +1,5 @@
 # use with:
-# brew update &&
-# brew bundle install --cleanup --file ~/.config/homebrew/brewfile
+# brew update && brew bundle install --cleanup --file ~/.config/homebrew/brewfile
 #
 #
 # {% if device.kenbun %}
@@ -27,6 +26,7 @@ brew "neovim"
 brew "mosh"
 brew "ripgrep"
 brew "zoxide"
+brew "starship"
 
 brew "typst"
 brew "tinymist"
@@ -44,6 +44,7 @@ cask "zed"
 
 cask "bambu-studio"
 
+cask "sanesidebuttons"
 cask "raycast"
 cask "unnaturalscrollwheels"
 cask "iterm2"

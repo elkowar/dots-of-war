@@ -15,3 +15,8 @@ Host docker
 Host rabbithole
   HostName rabbithole.cloud.elkowar.de
   User root
+
+Host upvm
+  HostName upvm.elkowar.de
+  User mod
+  Port 8888
